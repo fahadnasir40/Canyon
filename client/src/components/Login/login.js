@@ -56,7 +56,7 @@ class Login extends Component {
 
                                         </div>
                                     </form>
-                                    <div class="form-note-s2 text-center pt-4"> New on our platform? <a href="html/pages/auths/auth-register-v2.html">Create an account</a>
+                                    <div class="form-note-s2 text-center pt-4"> New on our platform? <a href="#">Contact Canyon Pty Ltd.</a>
                                     </div>
                                
                                 </div>

@@ -44,10 +44,10 @@ const SideNavItems = (props) => {
     const element = (item,i) => (
           <div key={i} className={item.type}>
               {/* <!-- .nk-menu-item --> */}
-            <li class="nk-menu-item">    
+            <li className="nk-menu-item">    
               <Link to={item.link} className="nk-menu-link">
-                    <span class="nk-menu-icon"><em className= {item.icon}></em></span>
-                    <span class="nk-menu-text">{item.text}</span>
+                    <span className="nk-menu-icon"><em className= {item.icon}></em></span>
+                    <span className="nk-menu-text">{item.text}</span>
               </Link>
             </li>
          </div>
