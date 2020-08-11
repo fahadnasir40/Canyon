@@ -5,6 +5,12 @@
  * Author: Softnio
  * Author URI: http://themeforest.net/user/softnio
 **/
+
+@media only screen and (min-width: 1200px) {
+  .custom-dashboard {
+      margin-left: 15em;
+  }
+}
 .nk-sidebar.is-dark { background: #0f192a; border-right-color: #1c2f50; }
 
 .nk-sidebar.is-theme { background: #0a2d6c; border-right-color: #0f419a; }

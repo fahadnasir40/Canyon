@@ -2,6 +2,9 @@ import React from 'react';
 import { Switch, Route} from 'react-router-dom';
 import Login from './components/Login/login';
 import Dashboard from './components/Dashboard/dashboard'
+import ErrorPage from './components/Errors/error'
+import Users from './components/Users/users'
+import AddUser from './components/Users/Auth/add'
 // import Document from './components/Document/document'
 // import Auth from './hoc/auth';
 // import BookView from './components/Books/index';
@@ -21,7 +24,10 @@ const routes = () => {
     
             <Switch>
                 <Route path="/" exact component = {Login}/>
-                <Route path="/home" exact component = {Dashboard}/>
+                <Route path="/dashboard" exact component = {Dashboard}/>
+                <Route path="/users" exact component = {Users}/>
+                <Route path="/users/add" exact component = {AddUser}/>
+                <Route component={ErrorPage}/>      
                 {/* <Route path="/" exact component = {Auth(Home,null)} />
                 <Route path="/documents"  component ={Auth(Dashboard,true)} />
                 <Route path="/user/logout" exact component = {Auth(Logout,true)} />
@@ -35,8 +41,8 @@ const routes = () => {
                 <Route path="/user/user-reviews" exact component = {Auth(UserPosts,true)} />
                 <Route path="/user/add" exact component = {Auth(AddReview,true)} />
                 <Route path="/user/register" exact component = {Auth(Register,true)} />
-                <Route path="/user/edit-post/:id" exact component = {Auth(EditReview,true)} />   
-                <Route render ={()=><h3>Error 404. Page not found</h3>}/>      */} */}
+    <Route path="/user/edit-post/:id" exact component = {Auth(EditReview,true)} />  */ }
+                
             </Switch>
        
     );

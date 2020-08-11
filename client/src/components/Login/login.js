@@ -49,7 +49,7 @@ class Login extends Component {
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <Link to="/home">
+                                            <Link to="/dashboard">
 
                                             <button class="btn btn-lg btn-primary btn-block">Sign in</button>
                                             </Link>
