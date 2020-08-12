@@ -1,9 +1,39 @@
 import React,{Component} from 'react'
 import {Link} from 'react-router-dom'
+import { connect } from 'react-redux';
+import { loginUser } from '../../actions'
 
 class Login extends Component {
 
-    LoginScreen =()=>{
+    state ={
+        email:'',
+        password:'',
+      
+        error:'',
+        validated: false,
+    }
+
+    handleInputEmail = (event) => {
+        this.setState({email:event.target.value})
+    } 
+
+    handleInputPassword = (event) => {
+        this.setState({password:event.target.value})
+    } 
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.user.login.isAuth){
+            this.props.history.push('/dashboard')
+        }
+    }
+
+
+    submitForm = (e) =>{
+        e.preventDefault();
+        this.props.dispatch(loginUser(this.state))
+    }
+
+    LoginScreen =(user)=>{
         return (
             <div class="nk-app-root">
             {/* <!-- main @s --> */}
@@ -28,16 +58,16 @@ class Login extends Component {
                                             </div>
                                         </div>
                                     </div>
-                                    <form>
+                                    <form noValidate validated={this.state.validated} onSubmit={this.submitForm}>
                                         <div class="form-group">
                                             <div class="form-label-group">
-                                                <label class="form-label" for="default-01">Email or Username</label>
+                                                <label class="form-label" for="default-01">Email</label>
                                             </div>
-                                            <input type="text" class="form-control form-control-lg" id="default-01" placeholder="Enter your email address or username"/>
+                                            <input type="text" value={this.state.email} onChange={this.handleInputEmail} class="form-control form-control-lg" id="default-01" placeholder="Enter your email address"/>
                                         </div>
                                         <div class="form-group">
                                             <div class="form-label-group">
-                                                <label class="form-label" for="password">Passcode</label>
+                                                <label class="form-label" for="password">Password</label>
                                                 <a class="link link-primary link-sm" href="html/pages/auths/auth-reset-v2.html">Forgot Code?</a>
                                             </div>
                                             <div class="form-control-wrap">
@@ -45,20 +75,20 @@ class Login extends Component {
                                                     <em class="passcode-icon icon-show icon ni ni-eye"></em>
                                                     <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
                                                 </a>
-                                                <input type="password" class="form-control form-control-lg" id="password" placeholder="Enter your passcode"/>
+                                                <input type="password" value={this.state.password} onChange={this.handleInputPassword} class="form-control form-control-lg" id="password" placeholder="Enter your password"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <Link to="/dashboard">
-
-                                            <button class="btn btn-lg btn-primary btn-block">Sign in</button>
-                                            </Link>
-
+                                            <button type="submit" class="btn btn-lg btn-primary btn-block">Sign in</button>
                                         </div>
                                     </form>
                                     <div class="form-note-s2 text-center pt-4"> New on our platform? <a href="#">Contact Canyon Pty Ltd.</a>
                                     </div>
-                               
+                                    <div className="text-danger  mt-2 text-center">
+                                        {user.login ? 
+                                            <span className="ff-bold"><strong>{user.login.message}</strong></span>
+                                        :null}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -99,11 +129,17 @@ class Login extends Component {
 
     state = {  }
     render() {
-        return (
-            
-            this.LoginScreen()
+        let user = this.props.user;
+        return (    
+            this.LoginScreen(user)
         );
     }
 }
 
-export default Login;
+function mapStateToProps(state){
+    return {
+        user:state.user
+    }
+}
+
+export default connect(mapStateToProps)(Login)
