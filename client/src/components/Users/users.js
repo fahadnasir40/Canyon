@@ -3,7 +3,16 @@ import Sidebar from '../Sidebar/sidebar'
 import Header from './../Header/header'
 import Footer from '../Footer/footer'
 import Content from './Content/content'
+import { getUsers } from '../../actions';
+import { connect } from 'react-redux';
+
 class Users extends Component {
+
+    
+
+    componentWillMount(){
+        this.props.dispatch(getUsers());
+    }
 
     renderUsers = ()=>{
         return(
@@ -13,14 +22,10 @@ class Users extends Component {
                     <Sidebar/>         
                     <div className="wrap container-fluid">
                         <Header/>   
-                        <div className="custom-dashboard">
-                        <div class="nk-block-head-content ml-5">
-                                <h3 class="nk-block-title page-title">Users Lists</h3>
-                                <div class="nk-block-des text-soft">
-                                    <p>You have total 2,595 users.</p>
-                                </div>
-                            </div>
-                            <Content/>
+                        <div className="custom-dashboard mt-5">
+
+                            <Content userList={this.props.userList}/>
+
                             <Footer/>
                         </div>
                     </div>  
@@ -29,7 +34,9 @@ class Users extends Component {
         )
     }
 
+   
     render() {
+      
         return (
             <div>
                 {this.renderUsers()}
@@ -38,4 +45,10 @@ class Users extends Component {
     }
 }
 
-export default Users;
+function mapStateToProps(state){
+    return{
+        userList:state.user.userList
+    }
+  }
+  
+  export default connect(mapStateToProps)(Users)
