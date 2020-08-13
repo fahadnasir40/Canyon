@@ -21,7 +21,7 @@ class Users extends Component {
                     <div class="nk-main"></div>
                     <Sidebar/>         
                     <div className="wrap container-fluid">
-                        <Header/>   
+                        <Header user = {this.props.user}/>   
                         <div className="custom-dashboard mt-5">
 
                             <Content userList={this.props.userList}/>

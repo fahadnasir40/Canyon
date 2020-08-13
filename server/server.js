@@ -27,7 +27,7 @@ app.get('/api/auth',auth,(req,res)=>{
         id: req.user.id,
         email: req.user.email,
         name: req.user.name,
-        lastname: req.user.lastname
+        role:req.user.role
     })
 })
 

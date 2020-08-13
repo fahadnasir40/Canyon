@@ -1,7 +1,8 @@
 import React,{Component} from 'react'
-import {Link} from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 import { connect } from 'react-redux';
 import { loginUser } from '../../actions'
+
 
 class Login extends Component {
 
@@ -68,7 +69,7 @@ class Login extends Component {
                                         <div class="form-group">
                                             <div class="form-label-group">
                                                 <label class="form-label" for="password">Password</label>
-                                                <a class="link link-primary link-sm" href="html/pages/auths/auth-reset-v2.html">Forgot Code?</a>
+                                                <a class="link link-primary link-sm" href="#">Forgot Code?</a>
                                             </div>
                                             <div class="form-control-wrap">
                                                 <a href="#" class="form-icon form-icon-right passcode-switch" data-target="password">
@@ -130,6 +131,13 @@ class Login extends Component {
     state = {  }
     render() {
         let user = this.props.user;
+
+        if(user.login){
+            if(user.login.message == 'Request failed with status code 504'){
+                return <Redirect to="/error"/>
+            }    
+        }
+
         return (    
             this.LoginScreen(user)
         );
