@@ -279,8 +279,6 @@ class DashboardContent extends Component {
                 </div>
              
         </div>
-
-                
             
         )
     }

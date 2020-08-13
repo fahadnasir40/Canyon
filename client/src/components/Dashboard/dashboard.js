@@ -13,7 +13,7 @@ class Dashboard extends Component {
                     <div className="nk-main "></div>
                     <Sidebar/>         
                     <div className="wrap container-fluid">
-                        <Header/>   
+                        <Header user = {this.props.user}/>   
                         <div className="custom-dashboard">
                             <Content/>    
                             <Footer/>
@@ -24,7 +24,8 @@ class Dashboard extends Component {
         )
     }
 
-    render() {
+
+    render() {    
         return (
             <div>
                 {this.renderDashboard()}

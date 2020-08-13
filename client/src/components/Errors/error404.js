@@ -19,9 +19,7 @@ const Error=()=>{
                             </div>
                         </div>
                     </div>
-                
                 </div>
-            
             </div>
          </div>
         </div>
