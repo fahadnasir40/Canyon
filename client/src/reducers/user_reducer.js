@@ -12,6 +12,7 @@ export default function(state={},action){
             return {
                 ...state,
                 success:action.payload.success,
+                error:action.payload.error
             }
         default:
             return state;

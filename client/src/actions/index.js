@@ -234,10 +234,7 @@ export function getUsers(){
 
 export function userRegister(user){
     const request = axios.post(`/api/register`,user)
-
-    
     return (dispatch) =>{
-        console.log("Returning")
         request.then(({data})=>{
             let response = {
                 success:data.success,

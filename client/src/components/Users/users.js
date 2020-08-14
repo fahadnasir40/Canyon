@@ -17,8 +17,8 @@ class Users extends Component {
     renderUsers = ()=>{
         return(
             <div className="nk-body bg-lighter npc-default has-sidebar ">
-                <div class="nk-app-root">
-                    <div class="nk-main"></div>
+                <div className="nk-app-root">
+                    <div className="nk-main"></div>
                     <Sidebar/>         
                     <div className="wrap container-fluid">
                         <Header user = {this.props.user}/>   

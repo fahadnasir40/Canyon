@@ -72,10 +72,10 @@ class Login extends Component {
                                                 <a class="link link-primary link-sm" href="#">Forgot Code?</a>
                                             </div>
                                             <div class="form-control-wrap">
-                                                <a href="#" class="form-icon form-icon-right passcode-switch" data-target="password">
+                                                {/* <a href="#" class="form-icon form-icon-right passcode-switch" data-target="password">
                                                     <em class="passcode-icon icon-show icon ni ni-eye"></em>
                                                     <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
-                                                </a>
+                                                </a> */}
                                                 <input type="password" value={this.state.password} onChange={this.handleInputPassword} class="form-control form-control-lg" id="password" placeholder="Enter your password"/>
                                             </div>
                                         </div>
@@ -133,7 +133,7 @@ class Login extends Component {
         let user = this.props.user;
 
         if(user.login){
-            if(user.login.message == 'Request failed with status code 504'){
+            if(user.login.message === 'Request failed with status code 504'){
                 return <Redirect to="/error"/>
             }    
         }
