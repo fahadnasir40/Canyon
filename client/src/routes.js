@@ -6,6 +6,7 @@ import ErrorPage404 from './components/Errors/error404'
 import ErrorPage504 from './components/Errors/error504'
 import Users from './components/Users/users'
 import AddUser from './components/Users/Auth/add'
+import Profile from './components/Profile/profile'
 // import Document from './components/Document/document'
 import Auth from './hoc/auth';
 // import BookView from './components/Books/index';
@@ -28,6 +29,7 @@ const routes = () => {
                 <Route path="/dashboard" exact component ={Auth(Dashboard,true)}/>
                 <Route path="/users" exact component ={Auth(Users,true)}/>
                 <Route path="/add" exact component ={Auth(AddUser,true)}/>
+                <Route path="/profile" exact component ={Auth(Profile,true)}/>
                 <Route path="/error" component={ErrorPage504}/> 
                 <Route component={ErrorPage404}/>  
                   

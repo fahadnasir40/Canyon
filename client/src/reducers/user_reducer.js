@@ -8,6 +8,10 @@ export default function(state={},action){
             return {...state,userDocuments:action.payload}    
         case 'GET_USERS':
             return {...state,userList:action.payload}
+        case 'USER_PROFILE':
+            return {...state,data:action.payload}
+        case 'UPDATE_USER':
+                return {...state,data:action.payload}
         case 'USER_REGISTER':
             return {
                 ...state,

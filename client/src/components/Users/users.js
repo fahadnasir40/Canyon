@@ -6,11 +6,9 @@ import Content from './Content/content'
 import { getUsers } from '../../actions';
 import { connect } from 'react-redux';
 
-class Users extends Component {
+class Users extends Component {    
 
-    
-
-    componentWillMount(){
+    UNSAFE_componentWillMount(){
         this.props.dispatch(getUsers());
     }
 
@@ -35,8 +33,7 @@ class Users extends Component {
     }
 
    
-    render() {
-      
+    render() {      
         return (
             <div>
                 {this.renderUsers()}

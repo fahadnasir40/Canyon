@@ -13,7 +13,7 @@ export default function(ComposedClass,reload){
             this.props.dispatch(auth())
         }
 
-        componentWillReceiveProps(nextProps){
+        UNSAFE_componentWillReceiveProps(nextProps){
             this.setState({loading:false})
 
             if(!nextProps.user.login.isAuth){

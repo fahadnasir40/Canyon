@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import {Redirect} from 'react-router-dom'
+import {Redirect,Link} from 'react-router-dom'
 
 class Header extends Component{
     
@@ -36,11 +36,12 @@ class Header extends Component{
         }
 
         return(
+            user?
             <div className="nk-header nk-header-fixed is-light">
                 <div className="container-fluid">
                     <div className="nk-header-wrap">
                         <div className="nk-menu-trigger d-xl-none ml-n1">
-                            <a href="#" className="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em className="icon ni ni-menu"></em></a>
+                            <div className="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenuId"><em className="icon ni ni-menu"></em></div>
                         </div>
                         <div className="nk-header-brand d-xl-none">
                             <a href="html/index.html" className="logo-link">
@@ -283,7 +284,7 @@ class Header extends Component{
                                         </div>
                                         <div className="dropdown-inner">
                                             <ul className="link-list">
-                                                <li><a href="html/ecommerce/user-profile.html"><em className="icon ni ni-user-alt"></em><span>View Profile</span></a></li>
+                                                <li><Link to="/profile"><em className="icon ni ni-user-alt"></em><span>View Profile</span></Link></li>
                                                 <li><a href="html/ecommerce/user-profile.html"><em className="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li>
                                                 <li><a href="html/ecommerce/user-profile.html"><em className="icon ni ni-activity-alt"></em><span>Login Activity</span></a></li>
                                             </ul>
@@ -299,7 +300,7 @@ class Header extends Component{
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>: null
         
         );
     }

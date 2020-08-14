@@ -16,7 +16,7 @@ class SideBar extends Component{
         return (
             <div>
                 {/* <!-- sidebar @s --> */}
-                <div className="nk-sidebar nk-sidebar-fixed is-light" id="sidebarMenu">
+                <div className="nk-sidebar nk-sidebar-fixed is-light" id="sidebarMenuId">
                     <div className="nk-sidebar-element nk-sidebar-head">
                         <div className="nk-sidebar-brand">
                             <Link to="/dashboard" className="logo-link nk-sidebar-logo">
@@ -26,8 +26,8 @@ class SideBar extends Component{
                             </Link>
                         </div>
                         <div className="nk-menu-trigger mr-n2">
-                            <div  className="nk-nav-toggle nk-quick-nav-icon d-xl-none " data-target="sidebarMenu"><em className="icon ni ni-arrow-left"></em></div>
-                            <div className="nk-nav-compact nk-quick-nav-icon d-none d-xl-inline-flex" data-target="sidebarMenu"><em className="icon ni ni-menu"></em></div>
+                            <div  className="nk-nav-toggle nk-quick-nav-icon d-xl-none " data-target="sidebarMenuId"><em className="icon ni ni-arrow-left"></em></div>
+                            <div className="nk-nav-compact nk-quick-nav-icon d-none d-xl-inline-flex" data-target="sidebarMenuId"><em className="icon ni ni-menu"></em></div>
                         </div>
                     </div>
                     {/* <!-- .nk-sidebar-element --> */}
