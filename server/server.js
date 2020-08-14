@@ -31,6 +31,20 @@ app.get('/api/auth',auth,(req,res)=>{
     })
 })
 
+app.get('/api/profile',auth,(req,res)=>{
+    res.json({
+        id: req.user.id,
+        email: req.user.email,
+        name: req.user.name,
+        role:req.user.role,
+        phone:req.user.phone,
+        address:req.user.address,
+        city:req.user.city,
+        dob:req.user.dob,
+
+    })
+})
+
 
 app.get('/api/logout',auth,(req,res)=>{
     
@@ -49,13 +63,17 @@ app.get('/api/users',(req,res)=>{
 })
 
 
+//POST
+
 app.post('/api/register',(req,res)=>{
 
     const user = new User(req.body);
     
     user.save((err,doc)=>{
-        if(err) return res.json({success:false});
-
+        if(err){
+            // console.log("Error");
+            return res.json({success:false,error:err});
+        } 
         res.status(200).json({
             success:true,
             user:doc
@@ -87,6 +105,18 @@ app.post('/api/login',(req,res)=>{
                     email:user.email
                 })
             })
+        })
+    })
+})
+
+
+// UPDATE //
+app.post('/api/update',(req,res)=>{
+    User.findByIdAndUpdate(req.body._id,req.body,{new:true},(err,user)=>{
+        if(err) return res.status(400).send(err);
+        res.json({
+            success:true,
+            user
         })
     })
 })

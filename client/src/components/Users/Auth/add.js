@@ -55,24 +55,22 @@ class AddUser extends Component {
         this.setState({role:event.target.value})
     } 
 
-    submitForm = (e) => {
+    submitForm = (event) => {
 
-        const form = e.currentTarget;
-        if (form.checkValidity() === false) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
+        const form = event.currentTarget;
+
+        event.preventDefault();
     
         this.setValidated(true);
       
-        e.preventDefault();
+        // e.preventDefault();
       
         this.props.dispatch(userRegister({
             email:this.state.email,
             password:this.state.password,
             name:this.state.name,
             role:this.state.role,
-            dob: this.state.dob,
+            // dob: this.state.dob,
             address:this.state.address,
             phone:this.state.phone,
             city:this.state.city,
@@ -90,20 +88,7 @@ class AddUser extends Component {
     }
 
 
-    componentWillReceiveProps(prevProps){
-       if(this.props != prevProps){
-           if(this.props.user != null){
-                if(this.props.user.success){
-                    this.setState({error:'',success: true})
-                }
-                else{
-                    this.setState({
-                        error:'Error registering the user'
-                    })
-                }
-           }
-       }
-    }
+   
 
     renderBody = ()=> (
             <div className="container mt-5">
@@ -114,13 +99,13 @@ class AddUser extends Component {
                              Add User
                         </h4>
                     </div>
-                    <form  noValidate validated={this.state.validated} onSubmit={this.submitForm}>
+                    <form  className="form-validate"  onSubmit={this.submitForm}>
                         <div className="row g-4">
                             <div className="col-lg-4">
                                 <div className="form-group">
                                     <label className="form-label" htmlFor="full-name-1">Full Name</label>
                                     <div className="form-control-wrap">
-                                        <input type="text" value={this.state.name} onChange={this.handleInputName} className="form-control" id="full-name-1"/>
+                                        <input type="text" required  value={this.state.name} onChange={this.handleInputName} className="form-control" id="full-name-1"/>
                                     </div>
                                 </div>
                             </div>
@@ -142,7 +127,7 @@ class AddUser extends Component {
                                 <div class="form-control-wrap">
                                    
                                     <input type="date" value={this.state.dob}   onFocus={this.handleInputDob}
-     onChange={this.handleInputDob} class="form-control date-picker" data-date-format="dd-mm-yyyy"/>
+                                          onChange={this.handleInputDob} class="form-control date-picker" data-date-format="dd-mm-yyyy"/>
                                 </div>
                                 <div class="form-note">Date format <code>dd-mm-yyyy</code></div>
                             </div>
@@ -153,7 +138,7 @@ class AddUser extends Component {
                             <div className="form-group">
                                 <label className="form-label">Role</label>
                                     <div className="form-control-wrap ">
-                                        <select onChange={this.handleInputRole}  className="form-control form-control-md">
+                                        <select required onChange={this.handleInputRole}  className="form-control form-control-md">
                                             <option  value="worker">Worker</option>
                                             <option value="adminsitrator">Administrator</option>
                                         </select>
@@ -167,7 +152,7 @@ class AddUser extends Component {
                                 <div className="form-group">
                                     <label className="form-label" htmlFor="phone-no-1">Phone No</label>
                                     <div className="form-control-wrap">
-                                        <input type="text" value={this.state.phone} onChange={this.handleInputPhone} className="form-control" id="phone-no-1"/>
+                                        <input required type="phone" value={this.state.phone} onChange={this.handleInputPhone} className="form-control" id="phone-no-1"/>
                                     </div>
                                 </div>
                             </div>
@@ -225,43 +210,53 @@ class AddUser extends Component {
                         </div>
                     </form>
 
-                    <div>
-                        {this.state.error}
+                    <div className="text-danger  mt-2">
+                        {this.state.error ? 
+                            <span className="ff-bold"><strong>{this.state.error}</strong></span>
+                        :null}
                     </div>
                 </div>
              </div>
              </div>
     )
       
+    componentDidUpdate(prevProps){
+        if(this.props != prevProps){
+            if(this.props.user){
+                if(this.props.user.success == false){
+                    this.setState({error:'Error registering the account.'})
+                }
+            }
+        }
+    }
 
     render() {
-      
-        if(this.state.success){
-           return <Redirect
-                    to={{
-                        pathname: "/users",
-                        state: { registerToast: this.state.success}
-                    }}
-                 />
+
+        if(this.props.user.success){
+            return <Redirect
+            to={{
+                pathname: "/users",
+                // state: { registerToast: this.state.success}
+            }}
+         />
         }
 
         return (
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                
             <div className="nk-app-root">
-        
                     <div className="nk-main"></div>
                     <Sidebar/>        
                     
                     <div className="wrap container-fluid">
-                        <Header/>   
+                        <Header user = {this.props.user}/>   
                         <div className="custom-dashboard">
                               {this.renderBody()}
                           <div className="mt-5">
                               <Footer/>
                           </div>
                         </div>
-                </div>
+                 </div>
                 </div>
             </div>
         )
@@ -269,6 +264,7 @@ class AddUser extends Component {
 }
 
 function mapStateToProps(state){
+
     return{
         user:state.user
     }

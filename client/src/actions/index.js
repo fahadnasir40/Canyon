@@ -219,6 +219,16 @@ export function auth(){
         payload: request
     }
 }
+export function getProfile(){
+    const request = axios.get('/api/profile')
+        .then(response => response.data);
+    
+    return {
+        type: 'USER_PROFILE',
+        payload: request
+    }
+}
+
 
 export function getUsers(){
 
@@ -234,10 +244,7 @@ export function getUsers(){
 
 export function userRegister(user){
     const request = axios.post(`/api/register`,user)
-
-    
     return (dispatch) =>{
-        console.log("Returning")
         request.then(({data})=>{
             let response = {
                 success:data.success,
@@ -251,6 +258,15 @@ export function userRegister(user){
     }
 }
 
+export function updateUser(user){
+    const request = axios.post(`/api/document_update`,user)
+                    .then(response => response.data);
+
+    return{
+        type: 'UPDATE_USER',
+        payload: request
+    }
+}
 // export function createAndDownloadPdf(){
    
 //     const request = axios.post('/api/create-pdf', "<p>Hello</p><h1>World</h1>")

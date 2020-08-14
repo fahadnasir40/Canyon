@@ -6,19 +6,17 @@ import Content from './Content/content'
 import { getUsers } from '../../actions';
 import { connect } from 'react-redux';
 
-class Users extends Component {
+class Users extends Component {    
 
-    
-
-    componentWillMount(){
+    UNSAFE_componentWillMount(){
         this.props.dispatch(getUsers());
     }
 
     renderUsers = ()=>{
         return(
             <div className="nk-body bg-lighter npc-default has-sidebar ">
-                <div class="nk-app-root">
-                    <div class="nk-main"></div>
+                <div className="nk-app-root">
+                    <div className="nk-main"></div>
                     <Sidebar/>         
                     <div className="wrap container-fluid">
                         <Header user = {this.props.user}/>   
@@ -35,8 +33,7 @@ class Users extends Component {
     }
 
    
-    render() {
-      
+    render() {      
         return (
             <div>
                 {this.renderUsers()}

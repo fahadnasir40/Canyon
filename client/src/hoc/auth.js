@@ -9,11 +9,11 @@ export default function(ComposedClass,reload){
             loading:true
         }
 
-        componentWillMount(){
+        componentDidMount(){
             this.props.dispatch(auth())
         }
 
-        componentWillReceiveProps(nextProps){
+        UNSAFE_componentWillReceiveProps(nextProps){
             this.setState({loading:false})
 
             if(!nextProps.user.login.isAuth){
@@ -26,14 +26,16 @@ export default function(ComposedClass,reload){
                 }
             }
         }
-
+      
         render(){
             if(this.state.loading){
-                return <div></div>
+                return null;
             }
+          
             return(
                 <ComposedClass {...this.props} user={this.props.user}/>
             )
+            
         }
     }
 
