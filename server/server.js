@@ -111,19 +111,19 @@ app.post('/api/login',(req,res)=>{
 })
 
 
-app.post('/api/change_password',auth,(req,res)=>{
+// app.post('/api/change_password',auth,(req,res)=>{
     
-        req.user.comparePassword(req.body.oldPassword,(err,isMatch)=>{
-        if(!isMatch){
-            return res.json({
-                success:false,
-                message:'Password is incorrect'
-            })
-        }
-        else{
-               
-        }
-    });
+//         req.user.comparePassword(req.body.oldPassword,(err,isMatch)=>{
+//         if(!isMatch){
+//             return res.json({
+//                 success:false,
+//                 message:'Password is incorrect'
+//             })
+//         }
+//         else{
+//             req.user.    
+//         }
+//     });
 
 
     // User.findOne({'email':req.body.email},(err,user)=>{
@@ -144,7 +144,7 @@ app.post('/api/change_password',auth,(req,res)=>{
     //         })
     //     })
     // })
-})
+
 
 // UPDATE //
 app.post('/api/user_update',(req,res)=>{

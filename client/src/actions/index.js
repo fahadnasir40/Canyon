@@ -267,21 +267,21 @@ export function userRegister(user){
     }
 }
 
-export function userRegister(data){
-    const request = axios.post(`/api/changePassword`,data);
-    // return (dispatch) =>{
-    //     request.then(({data})=>{
-    //         let response = {
-    //             success:data.success,
-    //             user
-    //         }
-    //         dispatch({
-    //             type:'USER_PASSCHANGE',
-    //             payload:response
-    //         })
-    //     })
-    // }
-}
+// export function userRegister(data){
+//     const request = axios.post(`/api/changePassword`,data);
+//     // return (dispatch) =>{
+//     //     request.then(({data})=>{
+//     //         let response = {
+//     //             success:data.success,
+//     //             user
+//     //         }
+//     //         dispatch({
+//     //             type:'USER_PASSCHANGE',
+//     //             payload:response
+//     //         })
+//     //     })
+//     // }
+// }
 
 
 export function updateUser(user){
