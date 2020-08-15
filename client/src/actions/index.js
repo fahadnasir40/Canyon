@@ -229,6 +229,15 @@ export function getProfile(){
     }
 }
 
+export function clearProfile(){
+    return {
+        type: 'CLEAR_PROFILE',
+        payload: {
+            success: false,
+            user: ''
+        }
+    }
+}
 
 export function getUsers(){
 
@@ -258,14 +267,40 @@ export function userRegister(user){
     }
 }
 
-export function updateUser(user){
-    const request = axios.post(`/api/document_update`,user)
-                    .then(response => response.data);
+export function userRegister(data){
+    const request = axios.post(`/api/changePassword`,data);
+    // return (dispatch) =>{
+    //     request.then(({data})=>{
+    //         let response = {
+    //             success:data.success,
+    //             user
+    //         }
+    //         dispatch({
+    //             type:'USER_PASSCHANGE',
+    //             payload:response
+    //         })
+    //     })
+    // }
+}
 
-    return{
-        type: 'UPDATE_USER',
-        payload: request
+
+export function updateUser(user){
+    console.log("User obj",user);
+    const request = axios.post(`/api/user_update`,user);
+
+    return (dispatch) =>{
+        request.then(({data})=>{
+            let response = {
+                success:data.success,
+                user
+            }
+            dispatch({
+                type:'UPDATE_USER',
+                payload:response
+            })
+        })
     }
+   
 }
 // export function createAndDownloadPdf(){
    

@@ -11,7 +11,7 @@ export default function(state={},action){
         case 'USER_PROFILE':
             return {...state,data:action.payload}
         case 'UPDATE_USER':
-                return {...state,data:action.payload}
+                return {...state,data:action.payload.user}
         case 'USER_REGISTER':
             return {
                 ...state,

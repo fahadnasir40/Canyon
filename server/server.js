@@ -13,6 +13,7 @@ mongoose.Promise = global.Promise;
 mongoose.connect(config.DATABASE, {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false });
 
 const { User } = require('./models/user');
+const user = require("./models/user");
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -110,9 +111,44 @@ app.post('/api/login',(req,res)=>{
 })
 
 
+app.post('/api/change_password',auth,(req,res)=>{
+    
+        req.user.comparePassword(req.body.oldPassword,(err,isMatch)=>{
+        if(!isMatch){
+            return res.json({
+                success:false,
+                message:'Password is incorrect'
+            })
+        }
+        else{
+               
+        }
+    });
+
+
+    // User.findOne({'email':req.body.email},(err,user)=>{
+    //     if(!user) return res.json({
+    //         isAuth:false,
+    //         message: 'Login Failed. Email not found'
+    //     })
+
+  
+
+    //         user.generateToken((err,user)=>{
+    //             if(err) return res.status(400).send(err);
+    //             res.cookie('auth',user.token).json({
+    //                 isAuth:true,
+    //                 id:user._id,
+    //                 email:user.email
+    //             })
+    //         })
+    //     })
+    // })
+})
+
 // UPDATE //
-app.post('/api/update',(req,res)=>{
-    User.findByIdAndUpdate(req.body._id,req.body,{new:true},(err,user)=>{
+app.post('/api/user_update',(req,res)=>{
+    User.findByIdAndUpdate(req.body.id,req.body,{new:true},(err,user)=>{
         if(err) return res.status(400).send(err);
         res.json({
             success:true,
@@ -120,6 +156,8 @@ app.post('/api/update',(req,res)=>{
         })
     })
 })
+
+
 
 
 if(process.env.NODE_ENV === 'production'){

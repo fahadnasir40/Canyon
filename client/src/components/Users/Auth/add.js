@@ -70,11 +70,10 @@ class AddUser extends Component {
             password:this.state.password,
             name:this.state.name,
             role:this.state.role,
-            // dob: this.state.dob,
+            dob: this.state.dob,
             address:this.state.address,
             phone:this.state.phone,
             city:this.state.city,
-            
         }))
         // // perform all neccassary validations
         // if (this.state.password !== this.state.cpassword) {
