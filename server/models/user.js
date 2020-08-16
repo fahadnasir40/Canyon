@@ -25,7 +25,7 @@ const userSchema = mongoose.Schema({
         default: 0
     },
     dob:{
-        type: Date
+        type: String
     },
     
     city:{

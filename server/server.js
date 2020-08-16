@@ -13,6 +13,7 @@ mongoose.Promise = global.Promise;
 mongoose.connect(config.DATABASE, {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false });
 
 const { User } = require('./models/user');
+const user = require("./models/user");
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -28,6 +29,20 @@ app.get('/api/auth',auth,(req,res)=>{
         email: req.user.email,
         name: req.user.name,
         role:req.user.role
+    })
+})
+
+app.get('/api/profile',auth,(req,res)=>{
+    res.json({
+        id: req.user.id,
+        email: req.user.email,
+        name: req.user.name,
+        role:req.user.role,
+        phone:req.user.phone,
+        address:req.user.address,
+        city:req.user.city,
+        dob:req.user.dob,
+
     })
 })
 
@@ -49,13 +64,17 @@ app.get('/api/users',(req,res)=>{
 })
 
 
+//POST
+
 app.post('/api/register',(req,res)=>{
 
     const user = new User(req.body);
     
     user.save((err,doc)=>{
-        if(err) return res.json({success:false});
-
+        if(err){
+            // console.log("Error");
+            return res.json({success:false,error:err});
+        } 
         res.status(200).json({
             success:true,
             user:doc
@@ -90,6 +109,55 @@ app.post('/api/login',(req,res)=>{
         })
     })
 })
+
+
+// app.post('/api/change_password',auth,(req,res)=>{
+    
+//         req.user.comparePassword(req.body.oldPassword,(err,isMatch)=>{
+//         if(!isMatch){
+//             return res.json({
+//                 success:false,
+//                 message:'Password is incorrect'
+//             })
+//         }
+//         else{
+//             req.user.    
+//         }
+//     });
+
+
+    // User.findOne({'email':req.body.email},(err,user)=>{
+    //     if(!user) return res.json({
+    //         isAuth:false,
+    //         message: 'Login Failed. Email not found'
+    //     })
+
+  
+
+    //         user.generateToken((err,user)=>{
+    //             if(err) return res.status(400).send(err);
+    //             res.cookie('auth',user.token).json({
+    //                 isAuth:true,
+    //                 id:user._id,
+    //                 email:user.email
+    //             })
+    //         })
+    //     })
+    // })
+
+
+// UPDATE //
+app.post('/api/user_update',(req,res)=>{
+    User.findByIdAndUpdate(req.body.id,req.body,{new:true},(err,user)=>{
+        if(err) return res.status(400).send(err);
+        res.json({
+            success:true,
+            user
+        })
+    })
+})
+
+
 
 
 if(process.env.NODE_ENV === 'production'){

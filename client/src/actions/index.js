@@ -219,6 +219,25 @@ export function auth(){
         payload: request
     }
 }
+export function getProfile(){
+    const request = axios.get('/api/profile')
+        .then(response => response.data);
+    
+    return {
+        type: 'USER_PROFILE',
+        payload: request
+    }
+}
+
+export function clearProfile(){
+    return {
+        type: 'CLEAR_PROFILE',
+        payload: {
+            success: false,
+            user: ''
+        }
+    }
+}
 
 export function getUsers(){
 
@@ -234,10 +253,7 @@ export function getUsers(){
 
 export function userRegister(user){
     const request = axios.post(`/api/register`,user)
-
-    
     return (dispatch) =>{
-        console.log("Returning")
         request.then(({data})=>{
             let response = {
                 success:data.success,
@@ -251,6 +267,41 @@ export function userRegister(user){
     }
 }
 
+// export function userRegister(data){
+//     const request = axios.post(`/api/changePassword`,data);
+//     // return (dispatch) =>{
+//     //     request.then(({data})=>{
+//     //         let response = {
+//     //             success:data.success,
+//     //             user
+//     //         }
+//     //         dispatch({
+//     //             type:'USER_PASSCHANGE',
+//     //             payload:response
+//     //         })
+//     //     })
+//     // }
+// }
+
+
+export function updateUser(user){
+    console.log("User obj",user);
+    const request = axios.post(`/api/user_update`,user);
+
+    return (dispatch) =>{
+        request.then(({data})=>{
+            let response = {
+                success:data.success,
+                user
+            }
+            dispatch({
+                type:'UPDATE_USER',
+                payload:response
+            })
+        })
+    }
+   
+}
 // export function createAndDownloadPdf(){
    
 //     const request = axios.post('/api/create-pdf', "<p>Hello</p><h1>World</h1>")
