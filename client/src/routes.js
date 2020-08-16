@@ -30,7 +30,7 @@ const routes = () => {
                 <Route path="/users" exact component ={Auth(Users,true)}/>
                 <Route path="/add" exact component ={Auth(AddUser,true)}/>
                 <Route path="/profile" exact component ={Auth(Profile,true)}/>
-                <Route path="/error" component={ErrorPage504}/> 
+                <Route path="/error" exact component={ErrorPage504}/> 
                 <Route component={ErrorPage404}/>  
                   
                 {/* <Route path="/" exact component = {Auth(Home,null)} />
