@@ -5,7 +5,7 @@ class DashboardContent extends Component {
     render() {
         return (
             <div>
-                <div className="nk-content mt-5 ">
+                <div className="nk-content mt-5 ml-md-2">
                     <div className="ml-md-5">
                         <div className="nk-content-inner">
                             <div className="nk-content-body">
