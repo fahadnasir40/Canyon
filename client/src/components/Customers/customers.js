@@ -4,7 +4,7 @@ import Header from '../Header/header'
 import Footer from '../Footer/footer'
 import Content from './Content/content'
 
-class Products extends Component {
+class Customers extends Component {
         render(){
             return(
                 <div className="nk-body bg-lighter npc-default has-sidebar ">
@@ -26,4 +26,4 @@ class Products extends Component {
         }
 }
 
-export default Products
+export default Customers
