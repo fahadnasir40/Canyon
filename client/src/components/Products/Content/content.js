@@ -5,34 +5,33 @@ class Content extends Component {
 
     render(){
         return (
-            <div >
-                <div className="nk-content ml-5">
-                    <div className="container-fluid">
-                        <div className="nk-content-inner">
-                            <div className="nk-content-body">
-                                <div className="nk-block-head nk-block-head-sm">
-                                    <div className="nk-block-between">
-                                        <div className="nk-block-head-content">
-                                            <h3 className="nk-block-title page-title">Products</h3>
+            <div class="nk-content ml-5 ">
+                    <div class="container-fluid">
+                        <div class="nk-content-inner">
+                            <div class="nk-content-body">
+                                <div class="nk-block-head nk-block-head-sm">
+                                    <div class="nk-block-between">
+                                        <div class="nk-block-head-content">
+                                            <h3 class="nk-block-title page-title">Products</h3>
                                         </div>
-                                        <div className="nk-block-head-content">
-                                            <div className="toggle-wrap nk-block-tools-toggle">
-                                                <a href="#" className="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em className="icon ni ni-more-v"></em></a>
-                                                <div className="toggle-expand-content" data-content="pageMenu">
-                                                    <ul className="nk-block-tools g-3">
+                                        <div class="nk-block-head-content">
+                                            <div class="toggle-wrap nk-block-tools-toggle">
+                                                <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
+                                                <div class="toggle-expand-content" data-content="pageMenu">
+                                                    <ul class="nk-block-tools g-3">
                                                         <li>
-                                                            <div className="form-control-wrap">
-                                                                <div className="form-icon form-icon-right">
-                                                                    <em className="icon ni ni-search"></em>
+                                                            <div class="form-control-wrap">
+                                                                <div class="form-icon form-icon-right">
+                                                                    <em class="icon ni ni-search"></em>
                                                                 </div>
-                                                                <input type="text" className="form-control" id="default-04" placeholder="Quick search by id"/>
+                                                                <input type="text" class="form-control" id="default-04" placeholder="Quick search by id"/>
                                                             </div>
                                                         </li>
                                                         <li>
-                                                            <div className="drodown">
-                                                                <a href="#" className="dropdown-toggle dropdown-indicator btn btn-outline-light btn-white" data-toggle="dropdown">Status</a>
-                                                                <div className="dropdown-menu dropdown-menu-right">
-                                                                    <ul className="link-list-opt no-bdr">
+                                                            <div class="drodown">
+                                                                <a href="#" class="dropdown-toggle dropdown-indicator btn btn-outline-light btn-white" data-toggle="dropdown">Status</a>
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    <ul class="link-list-opt no-bdr">
                                                                         <li><a href="#"><span>New Items</span></a></li>
                                                                         <li><a href="#"><span>Featured</span></a></li>
                                                                         <li><a href="#"><span>Out of Stock</span></a></li>
@@ -40,9 +39,9 @@ class Content extends Component {
                                                                 </div>
                                                             </div>
                                                         </li>
-                                                        <li className="nk-block-tools-opt">
-                                                            <a href="#" data-target="addProduct" className="toggle btn btn-icon btn-primary d-md-none"><em className="icon ni ni-plus"></em></a>
-                                                            <a href="#" data-target="addProduct" className="toggle btn btn-primary d-none d-md-inline-flex"><em className="icon ni ni-plus"></em><span>Add Product</span></a>
+                                                        <li class="nk-block-tools-opt">
+                                                            <button data-toggle="modal" data-target="#addmodal" class="toggle btn btn-icon btn-primary d-md-none"><em class="icon ni ni-plus"></em></button>
+                                                            <button data-toggle="modal" data-target="#addmodal" class="toggle btn btn-primary d-none d-md-inline-flex"><em class="icon ni ni-plus"></em><span>Add Product</span></button>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -50,32 +49,32 @@ class Content extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="nk-block">
-                                    <div className="nk-tb-list is-separate mb-3">
-                                        <div className="nk-tb-item nk-tb-head">
-                                            <div className="nk-tb-col nk-tb-col-check">
-                                                <div className="custom-control custom-control-sm custom-checkbox notext">
-                                                    <input type="checkbox" className="custom-control-input" id="uid"/>
-                                                    <label className="custom-control-label" for="uid"></label>
+                                <div class="nk-block">
+                                    <div class="nk-tb-list is-separate mb-3">
+                                        <div class="nk-tb-item nk-tb-head">
+                                            <div class="nk-tb-col nk-tb-col-check">
+                                                <div class="custom-control custom-control-sm custom-checkbox notext">
+                                                    <input type="checkbox" class="custom-control-input" id="uid"/>
+                                                    <label class="custom-control-label" for="uid"></label>
                                                 </div>
                                             </div>
-                                            <div className="nk-tb-col tb-col-sm"><span>Name</span></div>
-                                            <div className="nk-tb-col"><span>SKU</span></div>
-                                            <div className="nk-tb-col"><span>Price</span></div>
-                                            <div className="nk-tb-col"><span>Stock</span></div>
-                                            <div className="nk-tb-col tb-col-md"><span>Category</span></div>
-                                            <div className="nk-tb-col tb-col-md"><em className="tb-asterisk icon ni ni-star-round"></em></div>
-                                            <div className="nk-tb-col nk-tb-col-tools">
-                                                <ul className="nk-tb-actions gx-1 my-n1">
-                                                    <li className="mr-n1">
-                                                        <div className="dropdown">
-                                                            <a href="#" className="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
-                                                            <div className="dropdown-menu dropdown-menu-right">
-                                                                <ul className="link-list-opt no-bdr">
-                                                                    <li><a href="#"><em className="icon ni ni-edit"></em><span>Edit Selected</span></a></li>
-                                                                    <li><a href="#"><em className="icon ni ni-trash"></em><span>Remove Selected</span></a></li>
-                                                                    <li><a href="#"><em className="icon ni ni-bar-c"></em><span>Update Stock</span></a></li>
-                                                                    <li><a href="#"><em className="icon ni ni-invest"></em><span>Update Price</span></a></li>
+                                            <div class="nk-tb-col tb-col-sm"><span>Name</span></div>
+                                            <div class="nk-tb-col"><span>SKU</span></div>
+                                            <div class="nk-tb-col"><span>Price</span></div>
+                                            <div class="nk-tb-col"><span>Stock</span></div>
+                                            <div class="nk-tb-col tb-col-md"><span>Category</span></div>
+                                            <div class="nk-tb-col tb-col-md"><em class="tb-asterisk icon ni ni-star-round"></em></div>
+                                            <div class="nk-tb-col nk-tb-col-tools">
+                                                <ul class="nk-tb-actions gx-1 my-n1">
+                                                    <li class="mr-n1">
+                                                        <div class="dropdown">
+                                                            <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <ul class="link-list-opt no-bdr">
+                                                                    <li><a href="#"><em class="icon ni ni-edit"></em><span>Edit Selected</span></a></li>
+                                                                    <li><a href="#"><em class="icon ni ni-trash"></em><span>Remove Selected</span></a></li>
+                                                                    <li><a href="#"><em class="icon ni ni-bar-c"></em><span>Update Stock</span></a></li>
+                                                                    <li><a href="#"><em class="icon ni ni-invest"></em><span>Update Price</span></a></li>
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -83,47 +82,47 @@ class Content extends Component {
                                                 </ul>
                                             </div>
                                         </div>
-                                        <div className="nk-tb-item">
-                                            <div className="nk-tb-col nk-tb-col-check">
-                                                <div className="custom-control custom-control-sm custom-checkbox notext">
-                                                    <input type="checkbox" className="custom-control-input" id="uid1"/>
-                                                    <label className="custom-control-label" for="uid1"></label>
+                                        <div class="nk-tb-item">
+                                            <div class="nk-tb-col nk-tb-col-check">
+                                                <div class="custom-control custom-control-sm custom-checkbox notext">
+                                                    <input type="checkbox" class="custom-control-input" id="uid1"/>
+                                                    <label class="custom-control-label" for="uid1"></label>
                                                 </div>
                                             </div>
-                                            <div className="nk-tb-col tb-col-sm">
-                                                <span className="tb-product">
-                                                    <img src="./images/product/a.png" alt="" className="thumb"/>
-                                                    <span className="title">Pink Fitness Tracker</span>
+                                            <div class="nk-tb-col tb-col-sm">
+                                                <span class="tb-product">
+                                                    <img src="./images/product/a.png" alt="" class="thumb"/>
+                                                    <span class="title">Pink Fitness Tracker</span>
                                                 </span>
                                             </div>
-                                            <div className="nk-tb-col">
-                                                <span className="tb-sub">UY3749</span>
+                                            <div class="nk-tb-col">
+                                                <span class="tb-sub">UY3749</span>
                                             </div>
-                                            <div className="nk-tb-col">
-                                                <span className="tb-lead">$ 99.49</span>
+                                            <div class="nk-tb-col">
+                                                <span class="tb-lead">$ 99.49</span>
                                             </div>
-                                            <div className="nk-tb-col">
-                                                <span className="tb-sub">49</span>
+                                            <div class="nk-tb-col">
+                                                <span class="tb-sub">49</span>
                                             </div>
-                                            <div className="nk-tb-col tb-col-md">
-                                                <span className="tb-sub">Fitbit, Tracker</span>
+                                            <div class="nk-tb-col tb-col-md">
+                                                <span class="tb-sub">Active</span>
                                             </div>
-                                            <div className="nk-tb-col tb-col-md">
-                                                <div className="asterisk tb-asterisk">
-                                                    <a href="#"><em className="asterisk-off icon ni ni-star"></em><em className="asterisk-on icon ni ni-star-fill"></em></a>
+                                            <div class="nk-tb-col tb-col-md">
+                                                <div class="asterisk tb-asterisk">
+                                                    <a href="#"><em class="asterisk-off icon ni ni-star"></em><em class="asterisk-on icon ni ni-star-fill"></em></a>
                                                 </div>
                                             </div>
-                                            <div className="nk-tb-col nk-tb-col-tools">
-                                                <ul className="nk-tb-actions gx-1 my-n1">
-                                                    <li className="mr-n1">
-                                                        <div className="dropdown">
-                                                            <a href="#" className="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
-                                                            <div className="dropdown-menu dropdown-menu-right">
-                                                                <ul className="link-list-opt no-bdr">
-                                                                    <li><a href="#"><em className="icon ni ni-edit"></em><span>Edit Product</span></a></li>
-                                                                    <li><a href="#"><em className="icon ni ni-eye"></em><span>View Product</span></a></li>
-                                                                    <li><a href="#"><em className="icon ni ni-activity-round"></em><span>Product Orders</span></a></li>
-                                                                    <li><a href="#"><em className="icon ni ni-trash"></em><span>Remove Product</span></a></li>
+                                            <div class="nk-tb-col nk-tb-col-tools">
+                                                <ul class="nk-tb-actions gx-1 my-n1">
+                                                    <li class="mr-n1">
+                                                        <div class="dropdown">
+                                                            <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <ul class="link-list-opt no-bdr">
+                                                                    <li><a href="#"><em class="icon ni ni-edit"></em><span>Edit Product</span></a></li>
+                                                                    <li><a href="#"><em class="icon ni ni-eye"></em><span>View Product</span></a></li>
+                                                                    <li><a href="#"><em class="icon ni ni-activity-round"></em><span>Product Orders</span></a></li>
+                                                                    <li><a href="#"><em class="icon ni ni-trash"></em><span>Remove Product</span></a></li>
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -131,26 +130,26 @@ class Content extends Component {
                                                 </ul>
                                             </div>
                                         </div>
-                                        
-                                    <div className="card">
-                                        <div className="card-inner">
-                                            <div className="nk-block-between-md g-3">
-                                                <div className="g">
-                                                    <ul className="pagination justify-content-center justify-content-md-start">
-                                                        <li className="page-item"><a className="page-link" href="#"><em className="icon ni ni-chevrons-left"></em></a></li>
-                                                        <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                                        <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                                        <li className="page-item"><span className="page-link"><em className="icon ni ni-more-h"></em></span></li>
-                                                        <li className="page-item"><a className="page-link" href="#">6</a></li>
-                                                        <li className="page-item"><a className="page-link" href="#">7</a></li>
-                                                        <li className="page-item"><a className="page-link" href="#"><em className="icon ni ni-chevrons-right"></em></a></li>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-inner">
+                                            <div class="nk-block-between-md g-3">
+                                                <div class="g">
+                                                    <ul class="pagination justify-content-center justify-content-md-start">
+                                                        <li class="page-item"><a class="page-link" href="#"><em class="icon ni ni-chevrons-left"></em></a></li>
+                                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                        <li class="page-item"><span class="page-link"><em class="icon ni ni-more-h"></em></span></li>
+                                                        <li class="page-item"><a class="page-link" href="#">6</a></li>
+                                                        <li class="page-item"><a class="page-link" href="#">7</a></li>
+                                                        <li class="page-item"><a class="page-link" href="#"><em class="icon ni ni-chevrons-right"></em></a></li>
                                                     </ul>
                                                 </div>
-                                                <div className="g">
-                                                    <div className="pagination-goto d-flex justify-content-center justify-content-md-start gx-3">
+                                                <div class="g">
+                                                    <div class="pagination-goto d-flex justify-content-center justify-content-md-start gx-3">
                                                         <div>Page</div>
                                                         <div>
-                                                            <select className="form-select form-select-sm" data-search="on" data-dropdown="xs center">
+                                                            <select class="form-select form-select-sm" data-search="on" data-dropdown="xs center">
                                                                 <option value="page-1">1</option>
                                                                 <option value="page-2">2</option>
                                                                 <option value="page-4">4</option>
@@ -179,91 +178,202 @@ class Content extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="nk-add-product toggle-slide toggle-slide-right" data-content="addProduct" data-toggle-screen="any" data-toggle-overlay="true" data-toggle-body="true" data-simplebar>
-                                    <div className="nk-block-head">
-                                        <div className="nk-block-head-content">
-                                            <h5 className="nk-block-title">New Product</h5>
-                                            <div className="nk-block-des">
-                                                <p>Add information and add new product.</p>
+
+                    {/* <!-- Modal Content Code - to add product--> */}
+                    <div class="modal fade" tabindex="-1" id="addmodal">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                                    <em class="icon ni ni-cross"></em>
+                                </a>
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Add Product</h5>
+                                </div>
+                                <div class="modal-body">
+                                <div class="nk-block">
+                                        <div class="row g-3">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="product-title">Product Title</label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" id="product-title"/>
+                                                    </div>
+                                                </div>
                                             </div>
+                                            <div class="col-mb-4">
+                                            <div class="form-group">
+                                                    <label class="form-label" for="uom">Unit of Measure</label>
+                                                    <div class="form-control-wrap ">
+                                                        <div class="form-control-select">
+                                                            <select class="form-control" id="uom">
+                                                            <option value="default_option">PC</option>
+                                                                <option value="KG">KG</option>
+                                                                <option value="Pet">Pet</option>
+                                                                <option value="Ltr">Ltr</option>
+                                                                <option value="Number">Number</option>
+                                                                <option value="Others">Others</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-mb-8">
+                                            <div class="form-group">
+                                                    <label class="form-label" for="brand">Brand</label>
+                                                    <div class="form-control-wrap ">
+                                                        <div class="form-control-select">
+                                                            <select class="form-control" id="brand">
+                                                                <option value="default_option">Canyon</option>
+                                                                <option value="option_select_name">Others</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-4">
+
+                                            <div class="form-group">
+                                                    <label class="form-label" for="status">Status</label>
+                                                    <div class="form-control-wrap ">
+                                                        <div class="form-control-select">
+                                                            <select class="form-control" id="status">
+                                                                <option value="default_option">Active</option>
+                                                                <option value="option_select_name">Inactive</option>
+                                                            </select>
+                                                        </div>  
+                                                    </div>
+                                                </div>
+
+                                                </div>  
+                                            <div class="col-mb-8">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="SKU">SKU</label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" id="SKU"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row g-4" id="addmodal">
+                                            <div class="col-12 mt-3 justify-text-center">
+                                                    <li class="nk-block-tools-opt">
+                                                        <button data-toggle="modal" data-target="#addmodal" class="toggle btn btn-icon btn-primary d-md-none"><em class="icon ni ni-plus"></em></button>
+                                                        <button data-toggle="modal" data-target="#addmodalcost" class="toggle btn btn-primary d-none d-md-inline-flex"><em class="icon ni ni-plus"></em><span>Define cost</span></button>
+                                                        <button  data-dismiss="modal" class="btn btn-info">Cancel</button>
+                                                    </li>
+                                            </div>
+
                                         </div>
                                     </div>
-                                    <div className="nk-block">
-                                        <div className="row g-3">
-                                            <div className="col-12">
-                                                <div className="form-group">
-                                                    <label className="form-label" for="product-title">Product Title</label>
-                                                    <div className="form-control-wrap">
-                                                        <input type="text" className="form-control" id="product-title"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-mb-6">
-                                                <div className="form-group">
-                                                    <label className="form-label" for="regular-price">Regular Price</label>
-                                                    <div className="form-control-wrap">
-                                                        <input type="text" className="form-control" id="regular-price"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-mb-6">
-                                                <div className="form-group">
-                                                    <label className="form-label" for="sale-price">Sale Price</label>
-                                                    <div className="form-control-wrap">
-                                                        <input type="text" className="form-control" id="sale-price"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-mb-6">
-                                                <div className="form-group">
-                                                    <label className="form-label" for="stock">Stock</label>
-                                                    <div className="form-control-wrap">
-                                                        <input type="text" className="form-control" id="stock"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-mb-6">
-                                                <div className="form-group">
-                                                    <label className="form-label" for="SKU">SKU</label>
-                                                    <div className="form-control-wrap">
-                                                        <input type="text" className="form-control" id="SKU"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-12">
-                                                <div className="form-group">
-                                                    <label className="form-label" for="category">Category</label>
-                                                    <div className="form-control-wrap">
-                                                        <input type="text" className="form-control" id="category"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-12">
-                                                <div className="form-group">
-                                                    <label className="form-label" for="tags">Tags</label>
-                                                    <div className="form-control-wrap">
-                                                        <input type="text" className="form-control" id="tags"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-12">
-                                                <div className="upload-zone small bg-lighter my-2">
-                                                    <div className="dz-message">
-                                                        <span className="dz-message-text">Drag and drop file</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-12">
-                                                <button className="btn btn-primary"><em className="icon ni ni-plus"></em><span>Add New</span></button>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> 
                     </div>
+
+                    {/* <!-- Modal Content Code - to define cost --> */}
+                    
+                    <div class="modal fade" tabindex="-1" id="addmodalcost">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                                    <em class="icon ni ni-cross"></em>
+                                </a>
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Define Cost</h5>
+                                </div>
+                                <div class="modal-body">
+                                <div class="nk-block">
+                                        <div class="row g-3">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="product-title">Product Title</label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" id="product-title"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-mb-8">
+                                            <div class="form-group">
+                                                    <label class="form-label" for="brand">Brand</label>
+                                                    <div class="form-control-wrap ">
+                                                        <div class="form-control-select">
+                                                            <select class="form-control" id="brand">
+                                                                <option value="default_option">Canyon</option>
+                                                                <option value="option_select_name">Others</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-4">
+                                            <div class="form-group">
+                                                    <label class="form-label" for="status">Status</label>
+                                                    <div class="form-control-wrap ">
+                                                        <div class="form-control-select">
+                                                            <select class="form-control" id="status">
+                                                                <option value="default_option">Active</option>
+                                                                <option value="option_select_name">Inactive</option>
+                                                            </select>
+                                                        </div>  
+                                                    </div>
+                                                </div>
+
+                                                </div>  
+                                            <div class="col-mb-8">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="seal">Seal</label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" id="seal"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-mb-8">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="wrapper">wrapper</label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" id="wrapper"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-mb-8">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="others">Others</label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" id="others"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-mb-8">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="flat">Flat Rate</label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" id="flat"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row g-4" id="addmodalcost">
+                                            <div class="col-12 mt-3 justify-text-center">
+                                                    <li class="nk-block-tools-opt">
+                                                        <button data-toggle="modal" data-target="#addmodal" class="toggle btn btn-icon btn-primary d-md-none"><em class="icon ni ni-plus"></em></button>
+                                                        <button data-toggle="modal" data-target="#addmodal" class="toggle btn btn-primary d-none d-md-inline-flex"><span>Save Price</span></button>
+                                                        <button  data-dismiss="modal" class="btn btn-info">Cancel</button>
+                                                    </li>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+
                 </div>
             </div>
+        
+        
         )}
 }
 
