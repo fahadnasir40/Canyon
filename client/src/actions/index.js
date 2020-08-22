@@ -233,8 +233,8 @@ export function clearProfile(){
     return {
         type: 'CLEAR_PROFILE',
         payload: {
-            success: false,
-            user: ''
+            data: {},
+            changePassword: {}
         }
     }
 }
@@ -245,7 +245,7 @@ export function getUsers(){
     .then(response => response.data);
 
     return {
-       type: 'GET_USERS',
+        type: 'GET_USERS',
         payload: request
     }
 
@@ -267,25 +267,30 @@ export function userRegister(user){
     }
 }
 
-// export function userRegister(data){
-//     const request = axios.post(`/api/changePassword`,data);
-//     // return (dispatch) =>{
-//     //     request.then(({data})=>{
-//     //         let response = {
-//     //             success:data.success,
-//     //             user
-//     //         }
-//     //         dispatch({
-//     //             type:'USER_PASSCHANGE',
-//     //             payload:response
-//     //         })
-//     //     })
-//     // }
-// }
+export function changePassword(data){
+    const request = axios.post(`/api/change_password`,data)
+    .then(response=>response.data);
+
+    return {
+        type: 'CHANGE_PASSWORD',
+        payload: request
+    }
+    // return (dispatch) =>{
+    //     request.then(({data})=>{
+    //         let response = {
+    //             success:data.success,
+    //             user
+    //         }
+    //         dispatch({
+    //             type:'USER_PASSCHANGE',
+    //             payload:response
+    //         })
+    //     })
+    // }
+}
 
 
 export function updateUser(user){
-    console.log("User obj",user);
     const request = axios.post(`/api/user_update`,user);
 
     return (dispatch) =>{
