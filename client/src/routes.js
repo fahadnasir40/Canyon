@@ -27,10 +27,12 @@ import Purchases from './components/Purchases/purchases';
 const routes = () => {
 
     return (
-    
             <Switch>
-                <Route path="/" exact  component = {Auth(Login,false)}/>
-                <Route path="/dashboard" exact component ={Auth(Dashboard,true)}/>
+          
+   
+
+            <Route path="/dashboard" exact component ={Auth(Dashboard,true)}/>
+            <Route path="/" exact  component = {Auth(Login,false)}/>
                 <Route path="/users" exact component ={Auth(Users,true)}/>
                 <Route path="/add" exact component ={Auth(AddUser,true)}/>
                 <Route path="/products" exact component ={Auth(Products,true)}/>
@@ -40,6 +42,11 @@ const routes = () => {
                 <Route path="/profile" exact component ={Auth(Profile,true)}/>
                 <Route path="/error" exact component={ErrorPage504}/> 
                 <Route component={ErrorPage404}/>  
+       </Switch>
+
+      
+    )
+        
                   
                 {/* <Route path="/" exact component = {Auth(Home,null)} />
                 <Route path="/documents"  component ={Auth(Dashboard,true)} />
@@ -56,9 +63,9 @@ const routes = () => {
                 <Route path="/user/register" exact component = {Auth(Register,true)} />
     <Route path="/user/edit-post/:id" exact component = {Auth(EditReview,true)} />  */ }
                 
-            </Switch>
+            
        
-    );
+    
 }
 
 export default routes;

@@ -111,20 +111,30 @@ app.post('/api/login',(req,res)=>{
 })
 
 
-// app.post('/api/change_password',auth,(req,res)=>{
+app.post('/api/change_password',auth,(req,res)=>{
     
-//         req.user.comparePassword(req.body.oldPassword,(err,isMatch)=>{
-//         if(!isMatch){
-//             return res.json({
-//                 success:false,
-//                 message:'Password is incorrect'
-//             })
-//         }
-//         else{
-//             req.user.    
-//         }
-//     });
-
+        req.user.comparePassword(req.body.oldPassword,(err,isMatch)=>{
+            console.log("Error Compare",err); 
+        if(!isMatch){
+            return res.json({
+                success:false,
+                message:'Password is incorrect'
+            })
+        }
+        else{
+            req.user.password = req.body.newPassword;
+            req.user.save((err,doc)=>{
+                if(err){
+                    return res.json({success:false,error:err});
+                } 
+                res.status(200).json({
+                    success:true,
+                    message: 'Password changed successfully. Please sign in with your new password.'
+                })
+        
+            })
+        }
+    });
 
     // User.findOne({'email':req.body.email},(err,user)=>{
     //     if(!user) return res.json({
@@ -143,7 +153,7 @@ app.post('/api/login',(req,res)=>{
     //             })
     //         })
     //     })
-    // })
+    })
 
 
 // UPDATE //
