@@ -11,6 +11,12 @@ const SideNavItems = (props) => {
         },
         {
             icon: 'icon ni ni-bag-fill',
+            text: 'Purchases',
+            link: '/purchases',
+            login: ''
+        },
+        {
+            icon: 'icon ni ni-bag-fill',
             text: 'Orders',
             link: '/news',
             login: ''
@@ -25,6 +31,13 @@ const SideNavItems = (props) => {
             icon: 'icon ni ni-users-fill',
             text: 'Customers',
             link: '/customers',
+            login: false
+        },
+        ,
+        {
+            icon: 'icon ni ni-users-fill',
+            text: 'Suppliers',
+            link: '/suppliers',
             login: false
         },
         {

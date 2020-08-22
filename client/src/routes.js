@@ -5,10 +5,14 @@ import Dashboard from './components/Dashboard/dashboard'
 import ErrorPage404 from './components/Errors/error404'
 import ErrorPage504 from './components/Errors/error504'
 import Users from './components/Users/users'
+import Products from './components/Products/products'
 import AddUser from './components/Users/Auth/add'
 import Profile from './components/Profile/profile'
 // import Document from './components/Document/document'
 import Auth from './hoc/auth';
+import Customers from './components/Customers/customers';
+import Suppliers from './components/Suppliers/suppliers';
+import Purchases from './components/Purchases/purchases';
 // import BookView from './components/Books/index';
 // import Login from './containers/Admin/login';
 // import User from './components/Admin';
@@ -29,6 +33,10 @@ const routes = () => {
                 <Route path="/dashboard" exact component ={Auth(Dashboard,true)}/>
                 <Route path="/users" exact component ={Auth(Users,true)}/>
                 <Route path="/add" exact component ={Auth(AddUser,true)}/>
+                <Route path="/products" exact component ={Auth(Products,true)}/>
+                <Route path="/customers" exact component ={Auth(Customers,true)}/>
+                <Route path="/suppliers" exact component ={Auth(Suppliers,true)}/>
+                <Route path="/purchases" exact component ={Auth(Purchases,true)}/>
                 <Route path="/profile" exact component ={Auth(Profile,true)}/>
                 <Route path="/error" exact component={ErrorPage504}/> 
                 <Route component={ErrorPage404}/>  
