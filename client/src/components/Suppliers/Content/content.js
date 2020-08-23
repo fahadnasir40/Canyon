@@ -195,6 +195,14 @@ class Content extends Component {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div className="col-md-6">
+                                                <div className="form-group">
+                                                    <label className="form-label" for="cnic">CNIC</label>
+                                                        <div className="form-control-wrap">
+                                                            <input type="text" data-msg="Required" className="form-control required" id="cnic" name="cnic" required/>
+                                                        </div>
+                                                </div>
+                                            </div>
                                             <div class="col-mb-4">
                                                 <div class="form-group">
                                                     <label class="form-label" for="brand">Brand</label>

@@ -1,90 +1,106 @@
 import React, { Component } from 'react'
-import {Link} from 'react-router-dom'
-import Purchases from '../purchases'
+import { Link } from 'react-router-dom'
+import ItemRow from '../itemsreturn'
 
 class WizardFormSecondPage extends Component {
 
-    render(){
-      const handleSubmit = this.props.onSubmit;
-      const previousPage = this.props.previousPage;
+    state = {
+        itemsList: [],
+        count: 0
+    }
 
-      return (
-            <div className="nk-content ml-5 ">
-                    <div className="container-fluid">
-                        <div className="nk-content-inner">
-                            <div className="nk-content-body">
-                                <div className="components-preview wide-md mx-auto">
-                                <div class="nk-block-head nk-block-head-lg wide-sm">
-                                        <div class="nk-block-head-content">
-                                            <h2 class="nk-block-title fw-normal">Purchase</h2>
+    addItemRow = () =>{
+        var itemsList = [...this.state.itemsList];
+        itemsList.push(<ItemRow/>)
+        this.setState({
+            count: this.state.count + 1,
+            itemsList
+        })
+    }
+
+    removeItem = (index) =>{
+
+        var itemsList = this.state.itemsList;
+        itemsList.splice(index,1);
+        
+        this.setState(
+            {itemsList}
+        )
+    }
+
+    render() {
+        const handleSubmit = this.props.onSubmit;
+        const previousPage = this.props.previousPage;
+
+        return (
+
+            <div className="nk-content ml-5">
+                <div className="container-fluid">
+                    <div className="nk-content-inner">
+                        <div className="nk-content-body">
+                            <div className="components-preview wide-md mx-auto">
+                                <div className="nk-block-head nk-block-head-lg wide-sm"></div>
+                                <div className="nk-block nk-block-lg">
+                                    <div className="nk-block-head">
+                                        <div className="nk-block-head-content">
+                                            <h4 className="nk-block-title">Order Details</h4>
+                                            <ul class="nk-block-tools-opt">
+                                                {/* <Link to = "/addpurchases"><button class="btn btn-primary"><em class="icon ni ni-plus"></em><span>Add Line</span></button></Link> */}
+                                                <button onClick={this.addItemRow} class="btn btn-primary"><em class="icon ni ni-plus"></em><span>Add Line</span></button>
+                                            </ul>
                                         </div>
                                     </div>
-                                    <div className="nk-block nk-block-lg">
-                                        <div className="card">
-                                            <div className="card-inner">
-                                                <form  className="nk-wizard nk-wizard-simple is-alter wizard clearfix" role="application" id="steps-uid-0" novalidate="novalidate" >
-                                                    <div className="steps clearfix">
-                                                        <ul role="tablist">
-                                                            <li role="tab" className="disabled first" aria-disabled="true" ><span className="number">1.</span><h5>Supplier</h5></li>
-                                                            <li role="tab" className="second current" aria-disabled="true" aria-selected="true"><span className="current-info audible">current step: </span><span className="number">2.</span><h5>Order Detail</h5></li>
-                                                            <li role="tab" className="disabled last" aria-disabled="true"><span className="number">3.</span><h5>Bill Payment</h5></li>
-                                                        </ul>
-                                                    </div>
-                                                    <div className="content clearfix">
-                                                    <div className="nk-wizard-content body current" id="steps-uid-0-p-0" role="tabpanel" aria-labelledby="steps-uid-0-h-0" aria-hidden="false"></div>
-                                                     <div className="nk-wizard-head title" id="steps-uid-0-h-1" tabindex="-1"><h5>Order Detail</h5></div>
-                                                     <div className="nk-wizard-content body" id="steps-uid-0-p-1" role="tabpanel" aria-labelledby="steps-uid-0-h-1" aria-hidden="true" >
-                                                        <div className="row gy-3">
-                                                            <div className="col-md-6">
-                                                                <div className="form-group">
-                                                                    <label className="form-label" for="fw-username">Username</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="text" data-msg="Required" className="form-control required" id="fw-username" name="fw-username" required=""/>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="row gy-3">
-                                                            <div className="col-md-6">
-                                                                <div className="form-group">
-                                                                    <label className="form-label" for="fw-password">Password</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="password" data-msg="Required" className="form-control required" id="fw-password" name="fw-password" required=""/>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-md-6">
-                                                                <div className="form-group">
-                                                                    <label className="form-label" for="fw-re-password">Re-Password</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="password" data-msg="Required" className="form-control required" id="fw-re-password" name="fw-re-password" required=""/>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                    <div className="card card-preview">
+                                        <table className="table table-tranx">
+                                        <thead>
+                                                    <tr class="tb-tnx-head">
+                                                        <th class="tb-tnx-id"><span class="">#</span></th>
+                                                        <th class="tb-tnx-info">
+                                                            <span class="tb-tnx-desc d-none d-sm-inline-block">
+                                                                <span>Bill For</span>
+                                                            </span>
+                                                            <span class="tb-tnx-date d-md-inline-block d-none">
+                                                                <span class="d-md-none">Date</span>
+                                                                <span class="d-none d-md-block">
+                                                                    <span>Issue Date</span>
+                                                                    <span>Due Date</span>
+                                                                </span>
+                                                            </span>
+                                                        </th>
+                                                        <th class="tb-tnx-amount is-alt">
+                                                            <span class="tb-tnx-total">Total</span>
+                                                            <span class="tb-tnx-status d-none d-md-inline-block">Status</span>
+                                                        </th>
+                                                        <th class="tb-tnx-action">
+                                                            <span>&nbsp;</span>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            <tbody>
+                                                {
+                                                    this.state.itemsList.map((item,i)=>(
+                                                        <ItemRow  remove={this.removeItem} item={item} index={i}/>
+                                                    ))
                                                     
-                                                </div>
-                                                <div className="actions clearfix">
-                                                    <ul role="menu" aria-label="Pagination">
-                                                       
-                                                        <li aria-hidden="false" aria-disabled="false"><button className="btn btn-primary " onClick={handleSubmit} role="menuitem">Next</button></li>
-                                                        <li  aria-disabled="false"><button  className="btn " onClick={previousPage} role="menuitem">Prev</button></li>
-                                                        {/* <li aria-hidden="true" style="display: none;"><a href="#finish" role="menuitem">Submit</a></li> */}
-                                                    </ul>
-                                                </div> 
-                                                </form>
-                                            </div>
-                                        </div>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div className="actions clearfix">
+                                        <ul role="menu" aria-label="Pagination">
+                                            <li aria-disabled="false"><button className="btn " onClick={previousPage} role="menuitem">Prev</button></li>
+                                            <li aria-hidden="false" aria-disabled="false"><button onClick={this.props.onSubmit} className="btn btn-primary" role="menuitem">Next</button></li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-        
-        
-        )}
+            </div>
+
+        )
+    }
 }
 
 export default WizardFormSecondPage

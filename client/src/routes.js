@@ -13,6 +13,7 @@ import Auth from './hoc/auth';
 import Customers from './components/Customers/customers';
 import Suppliers from './components/Suppliers/suppliers';
 import Purchases from './components/Purchases/purchases';
+import AddPurchases from './components/Purchases/Wizards/WizardFormFirstPage';
 // import BookView from './components/Books/index';
 // import Login from './containers/Admin/login';
 // import User from './components/Admin';
@@ -37,6 +38,7 @@ const routes = () => {
                 <Route path="/customers" exact component ={Auth(Customers,true)}/>
                 <Route path="/suppliers" exact component ={Auth(Suppliers,true)}/>
                 <Route path="/purchases" exact component ={Auth(Purchases,true)}/>
+                <Route path="/addpurchases" exact component ={Auth(AddPurchases,true)}/>
                 <Route path="/profile" exact component ={Auth(Profile,true)}/>
                 <Route path="/error" exact component={ErrorPage504}/> 
                 <Route component={ErrorPage404}/>  
