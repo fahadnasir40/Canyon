@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 class SuppliersContent extends Component {
 
     getInitials = (name) => {
@@ -18,6 +19,30 @@ class SuppliersContent extends Component {
         return (this.bg[this.count++]);
     }
 
+
+    deleteAlert = () =>{
+  
+          Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.value) {
+                // this.props.dipatch()
+              Swal.fire(
+                'Deleted!',
+                'Supplier has been deleted.',
+                'success'
+              )
+            }
+          })
+    }
+
+
     renderSuppliersList = (suppliersList) => {
 
         return suppliersList.map((supplier, i) => {
@@ -25,8 +50,8 @@ class SuppliersContent extends Component {
                 <div className="nk-tb-item" key={i}>
                     <div className="nk-tb-col nk-tb-col-check">
                         <div className="custom-control custom-control-sm custom-checkbox notext">
-                            <input type="checkbox" className="custom-control-input" id="uid1" />
-                            <label className="custom-control-label" htmlFor="uid1"></label>
+                            <input type="checkbox" className="custom-control-input" id={"uid-" + i} />
+                            <label className="custom-control-label" htmlFor={"uid-" + i}></label>
                         </div>
                     </div>
                     <div className="nk-tb-col">
@@ -93,7 +118,8 @@ class SuppliersContent extends Component {
                                                 }
                                             }}>
                                             <em className="icon ni ni-pen"></em><span>Edit details</span></Link></li>
-                                            <li><a href="#"><em className="icon ni ni-na"></em><span>Suspend</span></a></li>
+                                            <li><a href="#"><em className="icon ni ni-na"></em><span className="text-warning">Suspend</span></a></li>
+                                            <li><Link onClick={this.deleteAlert}><em class="icon ni ni-trash"></em><span className="text-danger ">Remove Supplier</span></Link></li>
                                         </ul>
                                     </div>
                                 </div>

@@ -8,7 +8,7 @@ import {getProfile} from '../../actions'
 
 class Profile extends Component {
 
-    UNSAFE_componentWillMount(){
+    componentDidMount(){
         this.props.dispatch(getProfile());
     }
 
