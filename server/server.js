@@ -164,6 +164,19 @@ app.post('/api/addSupplier', (req, res) => {
 
 
 // UPDATE //
+
+app.post('/api/supplier_update',(req,res)=>{
+    Supplier.findByIdAndUpdate(req.body._id,req.body,{new: true},(err,doc)=>{
+        if(err) return res.status(400).send(err);
+        res.json({
+            success:true,
+            doc
+        })
+    });
+})
+
+
+
 app.post("/api/user_update", (req, res) => {
     User.findByIdAndUpdate(req.body.id, req.body, { new: true }, (err, user) => {
         if (err) return res.status(400).send(err);

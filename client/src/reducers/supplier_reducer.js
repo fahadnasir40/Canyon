@@ -4,16 +4,16 @@ export default function(state={},action){
             return { ...state, supplierList: action.payload }
         case 'GET_SHARED_DOCUMENT':
             return { ...state, sharedDocument: action.payload }
-        case 'UPDATE_DOCUMENT':
+        case 'UPDATE_SUPPLIER':
             return {
                 ...state,
-                documentUpdated:action.payload.success,
-                newDocument:action.payload.doc
+                post:action.payload.success,
+                supplier:action.payload.doc
             }
         case 'ADD_SUPPLIER':
             return {...state,supplier:action.payload}
         case 'CLEAR_SUPPLIER':
-            return {...state,supplier:action.payload}
+            return {...state,supplier:action.payload,post: action.payload}
         case 'DOWNLOAD_DOCUMENT':
             return {...state,downloadStatus:action.payload}
     

@@ -150,15 +150,16 @@ export function updateDocument(data){
     }
 }
 
-export function updateBook(data){
-    const request = axios.post(`/api/book_update`,data)
+export function updateSupplier(data){
+    const request = axios.post(`/api/supplier_update`,data)
                     .then(response =>response.data);
 
     return{
-        type: 'UPDATE_BOOK',
+        type: 'UPDATE_SUPPLIER',
         payload: request
     }
 }
+
 
 export function deleteBook(id){
     const request = axios.delete(`/api/delete_book?id=${id}`)
