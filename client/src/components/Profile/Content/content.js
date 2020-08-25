@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import {updateUser,clearProfile} from '../../../actions'
+import {updateUser,changePassword} from '../../../actions'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom';
+import axios from 'axios' 
+import $ from 'jquery'
 
 class ProfileContent extends Component {
     
@@ -19,6 +21,9 @@ class ProfileContent extends Component {
         confirmPassword: '',
         oldPassword: '',
         newPassword: '',
+        pwstatus: '',
+        pwmessage: '',
+        logout: false
     }
 
     setValidated(value){
@@ -26,6 +31,15 @@ class ProfileContent extends Component {
             validated: value
         })
     }
+
+    signOut = ()=>{
+
+        let request = axios.get(`/api/logout`)
+        .then(request =>{
+            this.setState({logout:true})
+        });    
+    }
+
 
 
     handleInputName = (event) => {
@@ -86,8 +100,10 @@ class ProfileContent extends Component {
         //     this.setState({error:''});
     
           
-        
+     
     }
+
+  
 
     submitPasswordChange = (event) => {
 
@@ -111,22 +127,44 @@ class ProfileContent extends Component {
         // window.location.reload(false);
         // perform all neccassary validations
         if (this.state.newPassword !== this.state.confirmPassword) {
-            this.setState({error:'Confirm password does not match with new password'})
+            this.setState({pwmessage:'Confirm password does not match with new password'})
         } else {
             // make API call        
-            this.setState({error:''})
+            this.props.dispatch(changePassword({
+                oldPassword: this.state.oldPassword,
+                newPassword: this.state.newPassword
+            }));
+            this.setState({
+                pwstatus:'',
+                pwmessage:'',
+                oldPassword:'',
+                newPassword:'',
+                confirmPassword: ''})
+
         };
-    
-          
-        
+     
     }
 
 
     componentWillReceiveProps(nextProps){
 
         if(this.props != nextProps){
-            if(nextProps.profile.data.success){
-               
+            console.log("Props",nextProps);
+        
+            if(nextProps.changePassword){
+                if(!nextProps.changePassword.success){
+                    this.setState({
+                        pwstatus: false,
+                        pwmessage: nextProps.changePassword.message
+                    })
+                }
+                else{
+                    this.setState({
+                        pwstatus: true,
+                        pwmessage: nextProps.changePassword.message
+                    })
+                    this.signOut();
+                }
             }
             if(nextProps.profile.data){
                 this.setState({
@@ -397,10 +435,13 @@ class ProfileContent extends Component {
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
-                <div class="modal-body modal-body-lg">
-                    <h5 class="title">Change Password</h5>
-                  
-                        <div class="row mt-4 gy-4">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Change Password</h5>
+                 </div>
+                <div class="modal-body modal-body-md">
+               
+                        <div class="row  gy-4">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-label" for="old-password">Old Password</label>
@@ -418,13 +459,13 @@ class ProfileContent extends Component {
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label" for="birth-day">Confirm New Password</label>
-                                        <input required type="password" value={this.state.confirmPassword} onChange={this.handleInputConfirmNewPassword} class="form-control form-control-lg date-picker" id="birth-day" placeholder="Confirm new password"/>
+                                        <label class="form-label" for="confirm-password">Confirm New Password</label>
+                                        <input required type="password" value={this.state.confirmPassword} onChange={this.handleInputConfirmNewPassword} class="form-control form-control-lg" id="confirm-password" placeholder="Confirm new password"/>
                                     </div>
                                 </div>
                               
                               <div className="text-center text-danger ml-2">
-                                  <span>{this.state.error}</span>
+                                  <span>{(!this.state.pwstatus)? this.state.pwmessage:null}</span>
                               </div>
 
                                 <div class="col-12 mt-2">
@@ -450,7 +491,19 @@ class ProfileContent extends Component {
 
     render() {
         let user = this.props.profile.data;
-    
+
+        if(this.state.logout === true){
+            $('body').removeClass('modal-open');
+            $('#change-password-modal').hide();
+            $('.modal-backdrop').remove();
+            console.log("State before redirect",this.state);
+        
+            return <Redirect to={{
+                pathname: '/',
+                redirect: { message: this.state.pwmessage}
+              }} />
+        }
+     
       return (
             user? this.renderProfile(user): null
         )
@@ -461,7 +514,8 @@ class ProfileContent extends Component {
 function mapStateToProps(state){
 
     return{
-        register: state.user.profile
+        register: state.user.profile,
+        changePassword: state.user.changePassword
     }
   }
   
