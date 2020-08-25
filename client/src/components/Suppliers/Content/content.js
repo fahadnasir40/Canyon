@@ -162,6 +162,7 @@ class SuppliersContent extends Component {
                                                 <input type="checkbox" className="custom-control-input" id="uid" />
                                                 <label className="custom-control-label" htmlFor="uid"></label>
                                             </div>
+
                                         </div>
                                         <div className="nk-tb-col"><span className="sub-text">Name</span></div>
                                         <div className="nk-tb-col tb-col-mb"><span className="sub-text">Email</span></div>
