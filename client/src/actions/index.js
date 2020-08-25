@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-export function getBooks(
+export function getSuppliers(
     start = 0,
-    limit = 10,
-    order = 'asc',
+    limit = 20,
+    order = 'desc',
     list = ''
 ){
 
-    const request = axios.get(`api/books?skip=${start}&limit=${limit}&order=${order}`)
+    const request = axios.get(`api/getSuppliers?skip=${start}&limit=${limit}&order=${order}`)
     .then(response => {
         if(list){
             return [...list,...response.data];
@@ -19,7 +19,7 @@ export function getBooks(
 
 
     return {
-        type: 'GET_BOOKS',
+        type: 'GET_SUPPLIERS',
         payload: request
     }
 }
@@ -65,21 +65,20 @@ export function clearBookWithReviewer(){
 
 
 
-export function addBook(book){
-    const request = axios.post('/api/book',book)
+export function saveSupplier(document){
+    console.log("Save Supplier Called");
+    const request = axios.post('/api/addSupplier',document)
         .then(response => response.data);
     return {
-        type:'ADD_BOOK',
+        type:'ADD_SUPPLIER',
         payload:request
     }
 }
 
-export function addDocument(document){
-    const request = axios.post('/api/document',document)
-        .then(response => response.data);
+export function clearNewSupplier() {
     return {
-        type:'ADD_DOCUMENT',
-        payload:request
+        type:'CLEAR_SUPPLIER',
+        payload:{}
     }
 }
 
@@ -151,15 +150,16 @@ export function updateDocument(data){
     }
 }
 
-export function updateBook(data){
-    const request = axios.post(`/api/book_update`,data)
+export function updateSupplier(data){
+    const request = axios.post(`/api/supplier_update`,data)
                     .then(response =>response.data);
 
     return{
-        type: 'UPDATE_BOOK',
+        type: 'UPDATE_SUPPLIER',
         payload: request
     }
 }
+
 
 export function deleteBook(id){
     const request = axios.delete(`/api/delete_book?id=${id}`)
