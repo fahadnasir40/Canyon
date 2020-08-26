@@ -19,7 +19,15 @@ const supplierSchema = mongoose.Schema({
         name:{
             type: String
         }
-    }]
+    }],
+    brand:{
+        type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        default: 'active'
+    }
 },{timestamps:true})
 
 const Supplier = mongoose.model('Supplier',supplierSchema);

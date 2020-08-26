@@ -137,9 +137,7 @@ class addSupplier extends Component {
     return <div className="row col-lg-8 g-4" >
       {rows}
     </div>;
-
   }
-
   addAddressField = () => {
     if (this.state.addressCount < 5) {
       this.setState({
@@ -321,7 +319,7 @@ class addSupplier extends Component {
   render() {
 
     if (this.state.redirect === true) {
-      return <Redirect to="/suppliers" />
+      this.props.history.push('/suppliers')
     }
 
     return (

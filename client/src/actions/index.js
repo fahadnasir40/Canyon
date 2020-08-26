@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export function getSuppliers(
     start = 0,
-    limit = 20,
+    limit = 0,
     order = 'desc',
     list = ''
 ){
@@ -78,6 +78,13 @@ export function saveSupplier(document){
 export function clearNewSupplier() {
     return {
         type:'CLEAR_SUPPLIER',
+        payload:{}
+    }
+}
+
+export function clearSupplierList() {
+    return {
+        type:'CLEAR_SUPPLIER_LIST',
         payload:{}
     }
 }
@@ -161,12 +168,12 @@ export function updateSupplier(data){
 }
 
 
-export function deleteBook(id){
-    const request = axios.delete(`/api/delete_book?id=${id}`)
+export function deleteSupplier(id){
+    const request = axios.delete(`/api/delete_supplier?id=${id}`)
     .then(response =>response.data);
 
     return{
-        type: 'DELETE_BOOK',
+        type: 'DELETE_SUPPLIER',
         payload: request
     }
 }

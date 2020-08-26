@@ -1,7 +1,81 @@
-import React, { Component } from 'react'
+import React, {Component } from 'react'
 import { Link } from 'react-router-dom'
-import Swal from 'sweetalert2'
+import ReactPaginate from 'react-paginate'
+
 class SuppliersContent extends Component {
+
+
+    state = {
+        suppliersList: '',
+        offset: 0,
+        perPage: 8,
+        currentPage: 0,
+    }
+
+
+
+    componentDidMount() {
+        this.setState({
+            suppliersList: this.props.suppliersList,
+            pageCount: Math.ceil(this.props.suppliersList.length / this.state.perPage)
+        })
+    }
+
+    componentWillUpdate(nextProps,nextState){
+        if(this.props!=nextProps){
+            if(this.props.suppliersList.length < nextProps.suppliersList){
+                nextState = {
+                    suppliersList: nextProps.suppliersList
+                }
+            }
+        }
+    }
+
+    handlePageClick = (e) => {
+        const selectedPage = e.selected;
+        const offset = selectedPage * this.state.perPage;
+
+        this.setState({
+            currentPage: selectedPage,
+            offset: offset
+        }, () => {
+            // this.receivedData()
+        });
+    };
+
+    handleChange = (e) => {
+        // Variable to hold the original version of the list
+        let currentList = [];
+        // Variable to hold the filtered list before putting into state
+        let newList = [];
+
+        // If the search bar isn't empty
+        if (e.target.value !== "") {
+            // Assign the original list to currentList
+            currentList = this.props.suppliersList;
+
+            // Use .filter() to determine which items should be displayed
+            // based on the search terms
+            newList = currentList.filter(item => {
+                // change current item to lowercase
+                const lc = item.name.toLowerCase();
+                // change search term to lowercase
+                const filter = e.target.value.toLowerCase();
+                // check to see if the current list item includes the search term
+                // If it does, it will be added to newList. Using lowercase eliminates
+                // issues with capitalization in search terms and search content
+                return lc.includes(filter);
+            });
+        } else {
+            // If the search bar is empty, set newList to original task list
+            newList = this.props.suppliersList;
+        }
+        // Set the filtered state based on what our rules added to newList
+        this.setState({
+            suppliersList: newList
+        });
+    }
+
 
     getInitials = (name) => {
         var initials = name.match(/\b\w/g) || [];
@@ -10,6 +84,7 @@ class SuppliersContent extends Component {
     }
 
     bg = ["bg-primary", "bg-warning", "bg-info", "bg-secondary", "bg-danger", "bg-dark"];
+
     count = 0;
 
     getCustomBg = () => {
@@ -20,123 +95,141 @@ class SuppliersContent extends Component {
     }
 
 
-    deleteAlert = () =>{
-  
-          Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-          }).then((result) => {
-            if (result.value) {
-                // this.props.dipatch()
-              Swal.fire(
-                'Deleted!',
-                'Supplier has been deleted.',
-                'success'
-              )
-            }
-          })
+    getColText = (value) => {
+        if (value)
+            return (<span className="tb-text">{value}</span>)
+        return (<span className="tb-text ff-italic text-muted">Not added yet</span>)
     }
 
+    renderSuppliersList = () => {
 
-    renderSuppliersList = (suppliersList) => {
+        let suppliersList = this.state.suppliersList;
 
-        return suppliersList.map((supplier, i) => {
-            return (
-                <div className="nk-tb-item" key={i}>
-                    <div className="nk-tb-col nk-tb-col-check">
-                        <div className="custom-control custom-control-sm custom-checkbox notext">
-                            <input type="checkbox" className="custom-control-input" id={"uid-" + i} />
-                            <label className="custom-control-label" htmlFor={"uid-" + i}></label>
-                        </div>
-                    </div>
-                    <div className="nk-tb-col">
-                        <Link to={{
-                            pathname: "/supplierInfo",
-                            state: {
-                                supplierInfo: supplier
-                            }
-                        }}
-                        >
-                            <div className="user-card">
-                                <div className={"user-avatar " + this.getCustomBg()}>
-                                    <span>{this.getInitials(supplier.name)}</span>
-                                </div>
-                                <div className="user-info">
-                                    <span className="tb-lead">{supplier.name} <span className="dot dot-success d-md-none ml-1"></span></span>
+        if (suppliersList) {
 
-                                </div>
+            const slice = suppliersList.slice(this.state.offset, this.state.offset + this.state.perPage)
+
+            return slice.map((supplier, i) => {
+                return (
+                    <div className="nk-tb-item" key={i}>
+                        <div className="nk-tb-col nk-tb-col-check">
+                            <div className="custom-control custom-control-sm custom-checkbox notext">
+                                <input type="checkbox" className="custom-control-input" id={"uid-" + i} />
+                                <label className="custom-control-label" htmlFor={"uid-" + i}></label>
                             </div>
-                        </Link>
-                    </div>
-                    <div className="nk-tb-col tb-col-mb">
-                        <span className="tb-text">{supplier.email}</span>
-                    </div>
-                    <div className="nk-tb-col tb-col-md">
-                        <span>{supplier.phone}</span>
-                    </div>
-                    <div className="nk-tb-col tb-col-lg">
-                        <span>Lahore</span>
-                    </div>
-                    <div className="nk-tb-col tb-col-md">
-                        <span className="tb-status text-success">Active</span>
-                    </div>
-                    <div className="nk-tb-col nk-tb-col-tools">
-                        <ul className="nk-tb-actions gx-1">
-                            <li className="nk-tb-action-hidden">
-                                <a href="#" className="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Send Email">
-                                    <em className="icon ni ni-mail-fill"></em>
-                                </a>
-                            </li>
-                            <li className="nk-tb-action-hidden">
-                                <a href="#" className="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Suspend">
-                                    <em className="icon ni ni-user-cross-fill"></em>
-                                </a>
-                            </li>
-                            <li>
-                                <div className="drodown">
-                                    <a href="#" className="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
-                                    <div className="dropdown-menu dropdown-menu-right">
-                                        <ul className="link-list-opt no-bdr">
-                                            <li>    <Link to={{
-                                                pathname: "/supplierInfo",
-                                                state: {
-                                                    supplierInfo: supplier
-                                                }
-                                            }}
-                                            ><em className="icon ni ni-eye"></em><span>View Details</span></Link></li>
-                                            <li className="divider"></li>
-                                            <li><a href="#"><em className="icon ni ni-activity-round"></em><span>View Orders</span></a></li>
-                                            <li> <Link to={{
-                                                pathname: "/editSupplier",
-                                                state: {
-                                                    supplierInfo: supplier
-                                                }
-                                            }}>
-                                            <em className="icon ni ni-pen"></em><span>Edit details</span></Link></li>
-                                            <li><a href="#"><em className="icon ni ni-na"></em><span className="text-warning">Suspend</span></a></li>
-                                            <li><Link onClick={this.deleteAlert}><em class="icon ni ni-trash"></em><span className="text-danger ">Remove Supplier</span></Link></li>
-                                        </ul>
+                        </div>
+                        <div className="nk-tb-col">
+                            <Link to={{
+                                pathname: "/supplierInfo",
+                                state: {
+                                    supplierInfo: supplier
+                                }
+                            }}
+                            >
+                                <div className="user-card">
+                                    <div className={"user-avatar " + this.getCustomBg()}>
+                                        <span>{this.getInitials(supplier.name)}</span>
+                                    </div>
+                                    <div className="user-info">
+                                        <span className="tb-lead">{supplier.name}
+                                        {
+                                            supplier.status === "active"?
+                                                <span className="dot dot-success d-md-none ml-1"></span>
+                                            :
+                                              <span className="dot dot-danger d-md-none ml-1"></span>
+                                        } </span>
+
                                     </div>
                                 </div>
-                            </li>
-                        </ul>
+                            </Link>
+                        </div>
+                        <div className="nk-tb-col tb-col-mb">
+                            {this.getColText(supplier.email)}
+                        </div>
+                        <div className="nk-tb-col tb-col-md">
+                            {this.getColText(supplier.phone)}
+                        </div>
+                        <div className="nk-tb-col tb-col-lg">
+                            <span>Lahore</span>
+                        </div>
+                        <div className="nk-tb-col tb-col-md">
+                            {
+                                supplier.status === 'active' ?
+                                    <span className="tb-status text-success ccap">{supplier.status}</span>
+                                    : <span className="tb-status text-danger ccap">{supplier.status}</span>
+                            }
+
+                        </div>
+                        <div className="nk-tb-col nk-tb-col-tools">
+                            <ul className="nk-tb-actions gx-1">
+                                {
+                                    supplier.email?
+                                    <li className="nk-tb-action-hidden">
+                                    <a href ={"mailto:"+supplier.email}  className="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Send Email">
+                                        <em className="icon ni ni-mail-fill"></em>
+                                    </a>
+                                    </li>
+                                    
+                                    :null
+                                }
+                                
+                     
+                                <li>
+                                    <div className="drodown">
+                                        <a href="#" className="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
+                                        <div className="dropdown-menu dropdown-menu-right">
+                                            <ul className="link-list-opt no-bdr">
+                                                <li>    <Link to={{
+                                                    pathname: "/supplierInfo",
+                                                    state: {
+                                                        supplierInfo: supplier
+                                                    }
+                                                }}
+                                                ><em className="icon ni ni-eye"></em><span>View Details</span></Link></li>
+                                                <li className="divider"></li>
+                                                <li><a href="#"><em className="icon ni ni-activity-round"></em><span>View Orders</span></a></li>
+                                                <li> <Link to={{
+                                                    pathname: "/editSupplier",
+                                                    state: {
+                                                        supplierInfo: supplier
+                                                    }
+                                                }}>
+                                                    <em className="icon ni ni-pen"></em><span>Edit details</span></Link></li>
+                                                {
+                                                    supplier.status === "active" ?
+                                                        <li><a onClick={() => { this.props.changeStatus(supplier) }}>
+                                                            <em className="icon ni ni-na"></em><span style={{ cursor: "pointer" }} className="text-warning">Suspend</span>
+                                                        </a></li>
+                                                        :
+                                                        <li><a onClick={() => { this.props.changeStatus(supplier) }}>
+                                                            <em className="icon ni ni-user-check"></em><span style={{ cursor: "pointer" }} className="text-info">Active Supplier</span>
+                                                        </a></li>
+                                                }
+
+                                                <li><a onClick={() => { this.props.deleteSupplier(supplier) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }} className="text-danger ">Remove Supplier</span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            )
-        })
+                )
+            })
+        }
     }
+
+    componentDidUpdate(prevProps) {
+        if(prevProps.suppliersList !== this.props.suppliersList) {
+          this.setState({suppliersList: this.props.suppliersList});
+        }
+      }
 
 
     render() {
-        let suppliersList = this.props.suppliersList;
 
         return (
-            <div className="nk-content ml-5">
+            <div className="nk-content ml-md-5">
                 <div className="container-fluid">
                     <div className="nk-content-inner">
                         <div className="nk-content-body">
@@ -155,21 +248,10 @@ class SuppliersContent extends Component {
                                                             <div className="form-icon form-icon-right">
                                                                 <em className="icon ni ni-search"></em>
                                                             </div>
-                                                            <input type="text" className="form-control" id="default-04" placeholder="Search by name" />
+                                                            <input type="text" onChange={this.handleChange} className="form-control" id="default-04" placeholder="Search by name" />
                                                         </div>
                                                     </li>
-                                                    <li>
-                                                        <div className="drodown">
-                                                            <a href="#" className="dropdown-toggle dropdown-indicator btn btn-outline-light btn-white" data-toggle="dropdown">Status</a>
-                                                            <div className="dropdown-menu dropdown-menu-right">
-                                                                <ul className="link-list-opt no-bdr">
-                                                                    <li><a href="#"><span>Actived</span></a></li>
-                                                                    <li><a href="#"><span>Inactived</span></a></li>
-                                                                    <li><a href="#"><span>Blocked</span></a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </li>
+                                                  
                                                     <li className="nk-block-tools-opt">
                                                         <a href="#" className="btn btn-icon btn-primary d-md-none"><em className="icon ni ni-plus"></em></a>
                                                         <Link to={"/addSupplier"}><button className="toggle btn btn-primary d-none d-md-inline-flex"><em className="icon ni ni-plus"></em><span>Add Supplier</span></button></Link>
@@ -183,60 +265,45 @@ class SuppliersContent extends Component {
                             <div className="nk-block">
                                 <div className="nk-tb-list is-separate mb-3">
                                     <div className="nk-tb-item nk-tb-head">
-                                        <div className="nk-tb-col nk-tb-col-check">
-                                            <div className="custom-control custom-control-sm custom-checkbox notext">
-                                                <input type="checkbox" className="custom-control-input" id="uid" />
-                                                <label className="custom-control-label" htmlFor="uid"></label>
-                                            </div>
+                                        <div className="nk-tb-col " />
 
-                                        </div>
                                         <div className="nk-tb-col"><span className="sub-text">Name</span></div>
                                         <div className="nk-tb-col tb-col-mb"><span className="sub-text">Email</span></div>
                                         <div className="nk-tb-col tb-col-md"><span className="sub-text">Phone</span></div>
                                         <div className="nk-tb-col tb-col-lg"><span className="sub-text">Address</span></div>
                                         <div className="nk-tb-col tb-col-md"><span className="sub-text">Status</span></div>
-                                        <div className="nk-tb-col nk-tb-col-tools">
-                                            <ul className="nk-tb-actions gx-1 my-n1">
-                                                <li>
-                                                    <div className="drodown">
-                                                        <a href="#" className="dropdown-toggle btn btn-icon btn-trigger mr-n1" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
-                                                        <div className="dropdown-menu dropdown-menu-right">
-                                                            <ul className="link-list-opt no-bdr">
-                                                                <li><a href="#"><em className="icon ni ni-mail"></em><span>Send Email to All</span></a></li>
-                                                                <li><a href="#"><em className="icon ni ni-na"></em><span>Suspend Selected</span></a></li>
-                                                                <li><a href="#"><em className="icon ni ni-trash"></em><span>Remove Seleted</span></a></li>
-                                                                <li><a href="#"><em className="icon ni ni-shield-star"></em><span>Reset Password</span></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
+
                                     </div>
-                                    {this.renderSuppliersList(suppliersList)}
+                                    {this.renderSuppliersList()}
                                 </div>
                                 <div className="card">
                                     <div className="card-inner">
                                         <div className="nk-block-between-md g-3">
                                             <div className="g">
-                                                <ul className="pagination justify-content-center justify-content-md-start">
+                                                <ReactPaginate
+                                                    previousLabel={"prev"}
+                                                    nextLabel={"next"}
+                                                    breakLabel={"..."}
+                                                    breakClassName={"page-item"}
+                                                    breakLinkClassName={"page-link"}
+                                                    pageClassName={"page-item"}
+                                                    pageLinkClassName={"page-link"}
+
+                                                    pageCount={this.state.pageCount}
+                                                    marginPagesDisplayed={2}
+                                                    pageRangeDisplayed={5}
+                                                    onPageChange={this.handlePageClick}
+                                                    containerClassName={"pagination-goto pagination-sm d-flex justify-content-center justify-content-md-start gx-1 "}
+                                                    previousClassName={"page-item"}
+                                                    nextClassName={"page-item"}
+                                                    activeClassName={"active"}
+                                                    disabledClassName={"disabled"} />
+                                                {/* <ul className="pagination jpagination">
                                                     <li className="page-item"><a className="page-link" href="#"><em className="icon ni ni-chevrons-left"></em></a></li>
                                                     <li className="page-item"><a className="page-link" href="#">1</a></li>
                                                     <li className="page-item"><span className="page-link"><em className="icon ni ni-more-h"></em></span></li>
                                                     <li className="page-item"><a className="page-link" href="#"><em className="icon ni ni-chevrons-right"></em></a></li>
-                                                </ul>
-                                            </div>
-                                            <div className="g">
-                                                <div className="pagination-goto d-flex justify-content-center justify-content-md-start gx-3">
-                                                    <div>Page</div>
-                                                    <div>
-                                                        <select className="form-select form-select-sm" data-search="on" data-dropdown="xs center">
-                                                            <option value="page-1">1</option>
-                                                            <option value="page-2">2</option>
-                                                        </select>
-                                                    </div>
-                                                    <div>OF 102</div>
-                                                </div>
+                                                </ul> */}
                                             </div>
                                         </div>
                                     </div>

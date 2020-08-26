@@ -17,6 +17,12 @@ class supplierInfo extends Component {
         return initials;
     }
 
+    getColText=(value)=>{
+        if(value)
+            return ( <span className="profile-ud-value">{value}</span>)
+        return ( <span className="profile-ud-value ff-italic text-muted">Not added yet</span>)
+    }
+
     componentDidMount() {
         if (!this.props.location.state) {
             this.props.history.push('/suppliers')
@@ -72,22 +78,29 @@ class supplierInfo extends Component {
                                                     <div className="profile-ud-item">
                                                         <div className="profile-ud wider">
                                                             <span className="profile-ud-label">Full Name</span>
-                                                            <span className="profile-ud-value">{supplier.name}</span>
+                                                            {this.getColText(supplier.name)}
+                                                        </div>
+                                                    </div>
+                                                    <div className="profile-ud-item">
+                                                        <div className="profile-ud wider">
+                                                            <span className="profile-ud-label">Brand</span>
+                                                            <span className="profile-ud-value ccap">{supplier.brand}</span>
                                                         </div>
                                                     </div>
 
                                                     <div className="profile-ud-item">
                                                         <div className="profile-ud wider">
-                                                            <span className="profile-ud-label">Mobile Number</span>
-                                                            <span className="profile-ud-value">{supplier.phone}</span>
+                                                            <span className="profile-ud-label">Email Address</span>
+                                                            {this.getColText(supplier.email)}
                                                         </div>
                                                     </div>
                                                     <div className="profile-ud-item">
                                                         <div className="profile-ud wider">
-                                                            <span className="profile-ud-label">Email Address</span>
-                                                            <span className="profile-ud-value">{supplier.email}</span>
+                                                            <span className="profile-ud-label">Mobile Number</span>
+                                                            {this.getColText(supplier.phone)}
                                                         </div>
                                                     </div>
+                                                  
                                                 </div>
                                             </div>
                                             <div className="nk-block">

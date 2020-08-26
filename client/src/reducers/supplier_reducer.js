@@ -1,5 +1,5 @@
-export default function(state={},action){
-    switch(action.type){
+export default function (state = {}, action) {
+    switch (action.type) {
         case 'GET_SUPPLIERS':
             return { ...state, supplierList: action.payload }
         case 'GET_SHARED_DOCUMENT':
@@ -7,18 +7,26 @@ export default function(state={},action){
         case 'UPDATE_SUPPLIER':
             return {
                 ...state,
-                post:action.payload.success,
-                supplier:action.payload.doc
+                post: action.payload.success,
+                supplier: action.payload.doc
             }
         case 'ADD_SUPPLIER':
-            return {...state,supplier:action.payload}
+            return { ...state, supplier: action.payload }
+
+        case 'DELETE_SUPPLIER':
+            return {
+                ...state,
+                postDeleted: action.payload
+            }
         case 'CLEAR_SUPPLIER':
-            return {...state,supplier:action.payload,post: action.payload}
+            return { ...state, supplier: action.payload, post: action.payload}
+        case 'CLEAR_SUPPLIER_LIST':
+            return { ...state, supplierList: action.payload}
+
         case 'DOWNLOAD_DOCUMENT':
-            return {...state,downloadStatus:action.payload}
-    
+            return { ...state, downloadStatus: action.payload }
         case 'INVITE_USER':
-            return {...state,userInvited:action.payload}
+            return { ...state, userInvited: action.payload }
         default:
             return state;
     }

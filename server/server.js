@@ -187,6 +187,26 @@ app.post("/api/user_update", (req, res) => {
     });
 });
 
+
+
+
+
+
+// DELETE //
+
+app.delete('/api/delete_supplier',auth,(req,res)=>{
+    let id = req.query.id;
+
+    Supplier.findByIdAndRemove(id,(err,doc)=>{
+        if(err) return res.status(400).send(err);
+        res.json(true)
+    })
+})
+
+
+
+
+
 if (process.env.NODE_ENV === "production") {
     const path = require("path");
     app.get("/*", (req, res) => {
