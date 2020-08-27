@@ -24,6 +24,30 @@ export function getSuppliers(
     }
 }
 
+export function getCustomers(
+    start = 0,
+    limit = 0,
+    order = 'desc',
+    list = ''
+){
+
+    const request = axios.get(`api/getCustomers?skip=${start}&limit=${limit}&order=${order}`)
+    .then(response => {
+        if(list){
+            return [...list,...response.data];
+        }
+        else{
+            return response.data;
+        }
+    } );
+
+
+    return {
+        type: 'GET_CUSTOMERS',
+        payload: request
+    }
+}
+
 export function getBookWithReviewer(id){
     const request = axios.get(`/api/getBook?id=${id}`)
 
@@ -66,7 +90,6 @@ export function clearBookWithReviewer(){
 
 
 export function saveSupplier(document){
-    console.log("Save Supplier Called");
     const request = axios.post('/api/addSupplier',document)
         .then(response => response.data);
     return {
@@ -75,7 +98,24 @@ export function saveSupplier(document){
     }
 }
 
+export function saveCustomer(document){
+    const request = axios.post('/api/addCustomer',document)
+        .then(response => response.data);
+    return {
+        type:'ADD_COSTUMER',
+        payload:request
+    }
+}
+
+
 export function clearNewSupplier() {
+    return {
+        type:'CLEAR_SUPPLIER',
+        payload:{}
+    }
+}
+
+export function clearNewCustomer() {
     return {
         type:'CLEAR_SUPPLIER',
         payload:{}
@@ -85,6 +125,13 @@ export function clearNewSupplier() {
 export function clearSupplierList() {
     return {
         type:'CLEAR_SUPPLIER_LIST',
+        payload:{}
+    }
+}
+
+export function clearCustomerList() {
+    return {
+        type:'CLEAR_CUSTOMER_LIST',
         payload:{}
     }
 }
@@ -167,6 +214,15 @@ export function updateSupplier(data){
     }
 }
 
+export function updateCustomer(data){
+    const request = axios.post(`/api/customer_update`,data)
+                    .then(response =>response.data);
+
+    return{
+        type: 'UPDATE_CUSTOMER',
+        payload: request
+    }
+}
 
 export function deleteSupplier(id){
     const request = axios.delete(`/api/delete_supplier?id=${id}`)
@@ -174,6 +230,16 @@ export function deleteSupplier(id){
 
     return{
         type: 'DELETE_SUPPLIER',
+        payload: request
+    }
+}
+
+export function deleteCustomer(id){
+    const request = axios.delete(`/api/delete_customer?id=${id}`)
+    .then(response =>response.data);
+
+    return{
+        type: 'DELETE_CUSTOMER',
         payload: request
     }
 }

@@ -16,8 +16,10 @@ import Purchases from './components/Purchases/purchases';
 import AddPurchases from './components/Purchases/Wizards/WizardFormFirstPage';
 import AddSupplier from './components/Suppliers/AddSupplier/add';
 import EditSupplier from './components/Suppliers/AddSupplier/edit';
-import SupplierDetails from './components/Suppliers/SupplierInfo/supplierInfo'
-
+import SupplierDetails from './components/Customers/CustomerInfo/customerInfo'
+import AddCustomer from './components/Customers/AddCustomer/add';
+import EditCustomer from './components/Customers/AddCustomer/edit';
+import CustomerDetails from './components/Customers/CustomerInfo/customerInfo'
 
 
 const routes = () => {
@@ -30,6 +32,9 @@ const routes = () => {
                 <Route path="/add" exact component ={Auth(AddUser,true)}/>
                 <Route path="/products" exact component ={Auth(Products,true)}/>
                 <Route path="/customers" exact component ={Auth(Customers,true)}/>
+                <Route path="/customerInfo" exact component ={Auth(CustomerDetails,true)}/>                
+                <Route path="/addCustomer" exact component ={Auth(AddCustomer,true)}/>                
+                <Route path="/editCustomer" exact component ={Auth(EditCustomer,true)}/>
                 <Route path="/suppliers/" exact component ={Auth(Suppliers,true)}/>
                 <Route path="/supplierInfo" exact component ={Auth(SupplierDetails,true)}/>
                 <Route path="/addSupplier" exact component ={Auth(AddSupplier,true)}/>
