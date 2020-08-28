@@ -14,6 +14,7 @@ import Customers from './components/Customers/customers';
 import Suppliers from './components/Suppliers/suppliers';
 import Purchases from './components/Purchases/purchases';
 import AddPurchases from './components/Purchases/Wizards/WizardFormFirstPage';
+import Transactions from './components/Transactions/Transactions';
 // import BookView from './components/Books/index';
 // import Login from './containers/Admin/login';
 // import User from './components/Admin';
@@ -39,6 +40,7 @@ const routes = () => {
                 <Route path="/suppliers" exact component ={Auth(Suppliers,true)}/>
                 <Route path="/purchases" exact component ={Auth(Purchases,true)}/>
                 <Route path="/addpurchases" exact component ={Auth(AddPurchases,true)}/>
+                <Route path="/transactions" exact component ={Auth(Transactions,true)}/>
                 <Route path="/profile" exact component ={Auth(Profile,true)}/>
                 <Route path="/error" exact component={ErrorPage504}/> 
                 <Route component={ErrorPage404}/>  

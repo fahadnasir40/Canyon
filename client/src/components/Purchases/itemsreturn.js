@@ -45,7 +45,7 @@ class Itemsreturn extends Component {
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-xs">
                             <ul class="link-list-plain">
                                 {/* <li><a href="#">View</a></li> */}
-                                {/* <li><a href="#">Edit</a></li> */}
+                                <li><a href="#">Edit</a></li>
                                 <li><a onClick={() => { console.log("Remove Called", this.props.index); this.props.remove(this.props.item.key) }}>Remove</a></li>
                             </ul>
                         </div>

@@ -42,6 +42,12 @@ const SideNavItems = (props) => {
         },
         {
             icon: 'icon ni ni-chat-fill',
+            text: 'Transactions',
+            link: '/transactions',
+            login: true
+        },
+        {
+            icon: 'icon ni ni-chat-fill',
             text: 'Users',
             link: '/users',
             login: true
