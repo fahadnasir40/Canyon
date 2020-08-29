@@ -18,7 +18,7 @@ const SideNavItems = (props) => {
         {
             icon: 'icon ni ni-bag-fill',
             text: 'Orders',
-            link: '/news',
+            link: '/sales',
             login: ''
         },
         {
