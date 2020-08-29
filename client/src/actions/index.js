@@ -102,7 +102,7 @@ export function saveCustomer(document){
     const request = axios.post('/api/addCustomer',document)
         .then(response => response.data);
     return {
-        type:'ADD_COSTUMER',
+        type:'ADD_CUSTOMER',
         payload:request
     }
 }
@@ -117,7 +117,7 @@ export function clearNewSupplier() {
 
 export function clearNewCustomer() {
     return {
-        type:'CLEAR_SUPPLIER',
+        type:'CLEAR_CUSTOMER',
         payload:{}
     }
 }

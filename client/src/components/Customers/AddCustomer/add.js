@@ -37,7 +37,7 @@ class AddCustomer extends Component {
   }
 
   componentWillUnmount() {
-    // this.props.dispatch(clearNewCustomer());
+    this.props.dispatch(clearNewCustomer());
   }
 
 

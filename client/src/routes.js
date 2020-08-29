@@ -16,10 +16,10 @@ import Purchases from './components/Purchases/purchases';
 import AddPurchases from './components/Purchases/Wizards/WizardFormFirstPage';
 import AddSupplier from './components/Suppliers/AddSupplier/add';
 import EditSupplier from './components/Suppliers/AddSupplier/edit';
-import SupplierDetails from './components/Customers/CustomerInfo/customerInfo'
+import SupplierDetails from './components/Suppliers/SupplierInfo/supplierInfo';
 import AddCustomer from './components/Customers/AddCustomer/add';
 import EditCustomer from './components/Customers/AddCustomer/edit';
-import CustomerDetails from './components/Customers/CustomerInfo/customerInfo'
+import CustomerDetails from './components/Customers/CustomerInfo/customerInfo';
 
 
 const routes = () => {
