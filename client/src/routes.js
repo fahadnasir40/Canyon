@@ -17,6 +17,7 @@ import AddPurchases from './components/Purchases/Wizards/WizardFormFirstPage';
 import Transactions from './components/Transactions/Transactions';
 import Sales from './components/Sales/sales';
 import AddSupplier from './components/Suppliers/AddSupplier/add';
+import AddProduct from './components/Products/Add/addProduct';
 import EditSupplier from './components/Suppliers/AddSupplier/edit';
 import SupplierDetails from './components/Suppliers/SupplierInfo/supplierInfo';
 import AddCustomer from './components/Customers/AddCustomer/add';
@@ -33,6 +34,7 @@ const routes = () => {
                 <Route path="/users" exact component ={Auth(Users,true)}/>
                 <Route path="/add" exact component ={Auth(AddUser,true)}/>
                 <Route path="/products" exact component ={Auth(Products,true)}/>
+                <Route path="/addProduct" exact component ={Auth(AddProduct,true)}/>
                 <Route path="/customers" exact component ={Auth(Customers,true)}/>
                 <Route path="/customerInfo" exact component ={Auth(CustomerDetails,true)}/>                
                 <Route path="/addCustomer" exact component ={Auth(AddCustomer,true)}/>                
