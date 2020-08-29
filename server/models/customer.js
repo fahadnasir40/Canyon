@@ -4,6 +4,7 @@ const supplierSchema = mongoose.Schema({
     name:{
         type: String,
         required: true,
+        trim: true
     },
     addedBy:{
         type: String,
@@ -11,9 +12,11 @@ const supplierSchema = mongoose.Schema({
     },
     email:{
         type: String,
+        trim: true
     },
     phone:{
         type: String,
+        trim: true
     },
     address:[{
         name:{

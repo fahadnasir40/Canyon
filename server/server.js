@@ -20,6 +20,8 @@ mongoose.connect(config.DATABASE, {
 const { User } = require("./models/user");
 const { Supplier } = require("./models/supplier");
 const { Customer } = require("./models/customer");
+const { Product } = require("./models/product");
+
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -63,6 +65,20 @@ app.get('/api/getCustomers', auth, (req, res) => {
         res.send(doc);
     })
 })
+
+app.get('/api/getProducts', auth, (req, res) => {
+    // locahost:3001/api/books?skip=3&limit=2&order=asc
+    let skip = parseInt(req.query.skip);
+    let limit = parseInt(req.query.limit);
+    let order = req.query.order;
+
+    // ORDER = asc || desc
+    Product.find().skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.send(doc);
+    })
+})
+
 
 app.get("/api/profile", auth, (req, res) => {
     res.json({
@@ -186,6 +202,25 @@ app.post('/api/addCustomer', (req, res) => {
     });
 })
 
+app.post('/api/addProduct',auth,(req, res) => {
+
+    const product = new Product(req.body);
+    const total = Number(product.price.cost_seal) + Number(product.price.cost_wrapper) + 
+    Number(product.price.cost_others);
+    
+    product.price.total = total;
+    console.log("Product",product)
+
+    product.save((error, product) => {
+        if (error) {
+            return res.status(400).send(error);
+        }
+        return res.status(200).json({
+            post: true,
+            productId: product._id
+        })
+    });
+})
 
 // UPDATE //
 
