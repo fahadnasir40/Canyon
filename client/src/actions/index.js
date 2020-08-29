@@ -48,6 +48,33 @@ export function getCustomers(
     }
 }
 
+
+export function getProducts(
+    start = 0,
+    limit = 0,
+    order = 'desc',
+    list = ''
+){
+
+    const request = axios.get(`api/getProducts?skip=${start}&limit=${limit}&order=${order}`)
+    .then(response => {
+        if(list){
+            return [...list,...response.data];
+        }
+        else{
+            return response.data;
+        }
+    } );
+
+
+    return {
+        type: 'GET_PRODUCTS',
+        payload: request
+    }
+}
+
+
+
 export function getBookWithReviewer(id){
     const request = axios.get(`/api/getBook?id=${id}`)
 
@@ -107,6 +134,15 @@ export function saveCustomer(document){
     }
 }
 
+export function saveProduct(document){
+    const request = axios.post('/api/addProduct',document)
+        .then(response => response.data);
+    return {
+        type:'ADD_PRODUCT',
+        payload:request
+    }
+}
+
 
 export function clearNewSupplier() {
     return {
@@ -118,6 +154,13 @@ export function clearNewSupplier() {
 export function clearNewCustomer() {
     return {
         type:'CLEAR_CUSTOMER',
+        payload:{}
+    }
+}
+
+export function clearProduct() {
+    return {
+        type:'CLEAR_PRODUCT',
         payload:{}
     }
 }
