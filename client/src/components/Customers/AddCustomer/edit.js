@@ -2,43 +2,65 @@ import React, { Component } from "react";
 import Header from "../../Header/header";
 import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
-import { saveSupplier, clearNewSupplier } from '../../../actions';
+import { updateCustomer, clearNewCustomer } from '../../../actions';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 
 
-class addSupplier extends Component {
+class EditCustomer extends Component {
 
   state = {
     addressCount: 2,
     name: '',
     email: '',
     phone: '',
-    brand: 'canyon',
     address: [{ name: "" }],
     redirect: false,
     error: ''
   }
 
+
+
+  componentDidMount() {
+
+    if (this.props.location.state) {
+      if (this.props.location.state.customerInfo) {
+        let customer = this.props.location.state.customerInfo;
+        this.setState({
+          name: customer.name,
+          email: customer.email,
+          phone: customer.phone,
+          addressCount: customer.address.length,
+          address: customer.address
+        })
+      }
+    }
+    else {
+      this.setState({
+        redirect: true
+      })
+    }
+  }
+
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.addSupplier.supplier) {
-      if (nextProps.addSupplier.supplier.post === true) {
+
+    if (nextProps.editCustomer) {
+      if (nextProps.editCustomer.post === true) {
         return {
           redirect: true
         }
       }
-      else if (nextProps.addSupplier.supplier.post === false) {
+      else if (nextProps.editCustomer.post === false) {
         return {
-          error: 'Error registering the supplier'
+          error: 'Error registering the customer'
         }
       }
     }
-
     return null;
   }
 
   componentWillUnmount() {
-    this.props.dispatch(clearNewSupplier());
+    // this.props.dispatch(clearNewCustomer());
   }
 
 
@@ -83,75 +105,25 @@ class addSupplier extends Component {
     this.setState({ phone: event.target.value })
   }
 
-
-  handleInputBrand = (event) => {
-    this.setState({ brand: event.target.value })
-  }
-
   submitForm = (event) => {
 
     const form = event.currentTarget;
 
     event.preventDefault();
 
-    this.props.dispatch(saveSupplier({
-      email: this.state.email,
-      name: this.state.name,
-      brand: this.state.brand,
-      address: this.state.address,
-      phone: this.state.phone,
-      city: this.state.city,
-      addedBy: this.props.user.login.id
-    }))
+    let customer = this.props.location.state.customerInfo;
+
+    customer.name = this.state.name;
+    customer.email = this.state.email;
+    customer.phone = this.state.phone;
+    customer.address = this.state.address;
+
+    this.props.dispatch(updateCustomer(customer));
   }
 
-
-  addressRow = (i) => (
-
-    <div className="col-lg-6 " key={i}>
-      <div className="form-group" key={i}>
-        <label className="form-label" htmlFor={"address-line-" + i}>
-          Address Line {i + 1}
-        </label>
-        <div className="form-control-wrap">
-          <input
-            key={i}
-            onChange={this.handleInputAddress}
-            type="text"
-            className="form-control"
-            id={"address-line-" + i}
-          />
-        </div>
-      </div>
-    </div>
-  )
-
-  getAddressField = () => {
-    var rows = [];
-    for (var i = 0; i < this.state.addressCount; i++) {
-      // note: we add a key prop here to allow react to uniquely identify each
-      // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
-      rows.push(this.addressRow(i));
-    }
-
-    return <div className="row col-lg-8 g-4" >
-      {rows}
-    </div>;
+  componentWillUnmount() {
+    this.props.dispatch(clearNewCustomer());
   }
-  addAddressField = () => {
-    if (this.state.addressCount < 5) {
-      this.setState({
-        addressCount: this.state.addressCount + 1
-      })
-    }
-  }
-
-  resetAddressField = () => {
-    this.setState({
-      addressCount: 1
-    })
-  }
-
 
   getButton = () => {
     if (this.state.addressCount < 5) {
@@ -194,13 +166,13 @@ class addSupplier extends Component {
         <div className="card">
           <div className="card-inner">
             <div className="card-head mt-1">
-              <h4 className="ff-base fw-medium">Add Supplier</h4>
+              <h4 className="ff-base fw-medium">Edit Customer</h4>
             </div>
             <form className="form-validate">
               <div className="row g-4">
                 <div className="col-lg-4">
                   <div className="form-group">
-                    <label className="form-label" htmlFor="full-name-1">
+                    <label className="form-label" htmlFor="full-name-2">
                       Full Name
                     </label>
                     <div className="form-control-wrap">
@@ -208,24 +180,10 @@ class addSupplier extends Component {
                         type="text"
                         value={this.state.name}
                         onChange={this.handleInputName}
+                        required
                         className="form-control"
-                        id="full-name-1"
+                        id="full-name-2"
                       />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-4">
-                  <div className="form-group">
-                    <label className="form-label" htmlFor="brand">
-                      Brand
-                    </label>
-                    <div className="form-control-wrap ">
-                      <div className="form-control-select">
-                        <select required onChange={this.handleInputBrand} className="form-control" id="brand">
-                          <option value="canyon">Canyon</option>
-                          <option value="others">Others</option>
-                        </select>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -263,8 +221,8 @@ class addSupplier extends Component {
                     this.state.address.map((address, idx) => (
                       <div className="col-lg-4" key={idx}>
 
-                        <div className="form-group ">
-                          <label className="form-label" htmlFor={"address-line-" + idx}>
+                        <div className="form-group " >
+                          <label className="form-label" htmlFor={"address-line-" + idx} >
                             Address Line {idx + 1}
                           </label>
                           <div className="form-control-wrap">
@@ -280,7 +238,6 @@ class addSupplier extends Component {
                           </div>
                         </div>
                       </div>
-
                     ))
                   }
                 </div>
@@ -293,13 +250,14 @@ class addSupplier extends Component {
                 </div> : null
               }
 
-
               <div className="row g-4">
                 <div className="col-12 mt-4 mb-2">
                   <div className="form-group">
+
                     <button onClick={this.submitForm} className="btn btn-lg btn-primary">
-                      Save Informations
+                      Update Information
                     </button>
+
                   </div>
                 </div>
               </div>
@@ -319,7 +277,7 @@ class addSupplier extends Component {
   render() {
 
     if (this.state.redirect === true) {
-      this.props.history.push('/suppliers')
+      return <Redirect to="/customers" />
     }
 
     return (
@@ -342,8 +300,8 @@ class addSupplier extends Component {
 
 function mapStateToProps(state) {
   return {
-    addSupplier: state.supplier
+    editCustomer: state.customer
   }
 }
 
-export default connect(mapStateToProps)(addSupplier)
+export default connect(mapStateToProps)(EditCustomer)

@@ -1,27 +1,27 @@
 export default function (state = {}, action) {
     switch (action.type) {
-        case 'GET_SUPPLIERS':
-            return { ...state, supplierList: action.payload }
+        case 'GET_CUSTOMERS':
+            return { ...state, customerList: action.payload }
         case 'GET_SHARED_DOCUMENT':
             return { ...state, sharedDocument: action.payload }
-        case 'UPDATE_SUPPLIER':
+        case 'UPDATE_CUSTOMER':
             return {
                 ...state,
                 post: action.payload.success,
-                supplier: action.payload.doc
+                customer: action.payload.doc
             }
-        case 'ADD_SUPPLIER':
-            return { ...state, supplier: action.payload }
+        case 'ADD_CUSTOMER':
+            return { ...state, customer: action.payload }
 
-        case 'DELETE_SUPPLIER':
+        case 'DELETE_CUSTOMER':
             return {
                 ...state,
                 postDeleted: action.payload
             }
-        case 'CLEAR_SUPPLIER':
-            return { ...state, supplier: action.payload, post: action.payload}
-        case 'CLEAR_SUPPLIER_LIST':
-            return { ...state, supplierList: action.payload}
+        case 'CLEAR_CUSTOMER':
+            return { ...state, customer: action.payload, post: action.payload}
+        case 'CLEAR_CUSTOMER_LIST':
+            return { ...state, customerList: action.payload}
 
         case 'DOWNLOAD_DOCUMENT':
             return { ...state, downloadStatus: action.payload }

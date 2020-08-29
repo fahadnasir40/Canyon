@@ -20,16 +20,12 @@ const supplierSchema = mongoose.Schema({
             type: String
         }
     }],
-    brand:{
-        type: String,
-        required: true
-    },
     status: {
         type: String,
         default: 'active'
     }
 },{timestamps:true})
 
-const Supplier = mongoose.model('Supplier',supplierSchema);
+const Customer = mongoose.model('Customer',supplierSchema);
 
-module.exports = { Supplier }
+module.exports = { Customer }

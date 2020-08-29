@@ -2,34 +2,33 @@ import React, { Component } from "react";
 import Header from "../../Header/header";
 import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
-import { saveSupplier, clearNewSupplier } from '../../../actions';
+import { saveCustomer, clearNewCustomer } from '../../../actions';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom'
 
 
-class addSupplier extends Component {
+class AddCustomer extends Component {
 
   state = {
     addressCount: 2,
     name: '',
     email: '',
     phone: '',
-    brand: 'canyon',
     address: [{ name: "" }],
     redirect: false,
     error: ''
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.addSupplier.supplier) {
-      if (nextProps.addSupplier.supplier.post === true) {
+    if (nextProps.addCustomer.customer) {
+      if (nextProps.addCustomer.customer.post === true) {
         return {
           redirect: true
         }
       }
-      else if (nextProps.addSupplier.supplier.post === false) {
+      else if (nextProps.addCustomer.customer.post === false) {
         return {
-          error: 'Error registering the supplier'
+          error: 'Error registering the customer'
         }
       }
     }
@@ -38,7 +37,7 @@ class addSupplier extends Component {
   }
 
   componentWillUnmount() {
-    this.props.dispatch(clearNewSupplier());
+    this.props.dispatch(clearNewCustomer());
   }
 
 
@@ -84,9 +83,6 @@ class addSupplier extends Component {
   }
 
 
-  handleInputBrand = (event) => {
-    this.setState({ brand: event.target.value })
-  }
 
   submitForm = (event) => {
 
@@ -94,13 +90,11 @@ class addSupplier extends Component {
 
     event.preventDefault();
 
-    this.props.dispatch(saveSupplier({
+    this.props.dispatch(saveCustomer({
       email: this.state.email,
       name: this.state.name,
-      brand: this.state.brand,
       address: this.state.address,
       phone: this.state.phone,
-      city: this.state.city,
       addedBy: this.props.user.login.id
     }))
   }
@@ -194,7 +188,7 @@ class addSupplier extends Component {
         <div className="card">
           <div className="card-inner">
             <div className="card-head mt-1">
-              <h4 className="ff-base fw-medium">Add Supplier</h4>
+              <h4 className="ff-base fw-medium">Add Customer</h4>
             </div>
             <form className="form-validate">
               <div className="row g-4">
@@ -211,21 +205,6 @@ class addSupplier extends Component {
                         className="form-control"
                         id="full-name-1"
                       />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-4">
-                  <div className="form-group">
-                    <label className="form-label" htmlFor="brand">
-                      Brand
-                    </label>
-                    <div className="form-control-wrap ">
-                      <div className="form-control-select">
-                        <select required onChange={this.handleInputBrand} className="form-control" id="brand">
-                          <option value="canyon">Canyon</option>
-                          <option value="others">Others</option>
-                        </select>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -319,7 +298,7 @@ class addSupplier extends Component {
   render() {
 
     if (this.state.redirect === true) {
-      this.props.history.push('/suppliers')
+      this.props.history.push('/customers')
     }
 
     return (
@@ -342,8 +321,8 @@ class addSupplier extends Component {
 
 function mapStateToProps(state) {
   return {
-    addSupplier: state.supplier
+    addCustomer: state.customer
   }
 }
 
-export default connect(mapStateToProps)(addSupplier)
+export default connect(mapStateToProps)(AddCustomer)

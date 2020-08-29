@@ -19,6 +19,7 @@ mongoose.connect(config.DATABASE, {
 
 const { User } = require("./models/user");
 const { Supplier } = require("./models/supplier");
+const { Customer } = require("./models/customer");
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -37,19 +38,31 @@ app.get("/api/auth", auth, (req, res) => {
     });
 });
 
-app.get('/api/getSuppliers',auth,(req,res)=>{
+app.get('/api/getSuppliers', auth, (req, res) => {
     // locahost:3001/api/books?skip=3&limit=2&order=asc
     let skip = parseInt(req.query.skip);
     let limit = parseInt(req.query.limit);
     let order = req.query.order;
 
     // ORDER = asc || desc
-    Supplier.find().skip(skip).sort({_id:order}).limit(limit).exec((err,doc)=>{
-        if(err) return res.status(400).send(err);
+    Supplier.find().skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+        if (err) return res.status(400).send(err);
         res.send(doc);
     })
 })
 
+app.get('/api/getCustomers', auth, (req, res) => {
+    // locahost:3001/api/books?skip=3&limit=2&order=asc
+    let skip = parseInt(req.query.skip);
+    let limit = parseInt(req.query.limit);
+    let order = req.query.order;
+
+    // ORDER = asc || desc
+    Customer.find().skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.send(doc);
+    })
+})
 
 app.get("/api/profile", auth, (req, res) => {
     res.json({
@@ -149,8 +162,7 @@ app.post('/api/addSupplier', (req, res) => {
     const supplier = new Supplier(req.body);
 
     supplier.save((error, supplier) => {
-        if (error){
-            console.log(error)
+        if (error) {
             return res.status(400).send(error);
         }
         return res.status(200).json({
@@ -160,22 +172,42 @@ app.post('/api/addSupplier', (req, res) => {
     });
 })
 
+app.post('/api/addCustomer', (req, res) => {
+    const customer = new Customer(req.body);
 
-
-
-// UPDATE //
-
-app.post('/api/supplier_update',(req,res)=>{
-    Supplier.findByIdAndUpdate(req.body._id,req.body,{new: true},(err,doc)=>{
-        if(err) return res.status(400).send(err);
-        res.json({
-            success:true,
-            doc
+    customer.save((error, customer) => {
+        if (error) {
+            return res.status(400).send(error);
+        }
+        return res.status(200).json({
+            post: true,
+            customerId: customer._id
         })
     });
 })
 
 
+// UPDATE //
+
+app.post('/api/supplier_update', (req, res) => {
+    Supplier.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.json({
+            success: true,
+            doc
+        })
+    });
+})
+
+app.post('/api/customer_update', (req, res) => {
+    Customer.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.json({
+            success: true,
+            doc
+        })
+    });
+})
 
 app.post("/api/user_update", (req, res) => {
     User.findByIdAndUpdate(req.body.id, req.body, { new: true }, (err, user) => {
@@ -186,6 +218,34 @@ app.post("/api/user_update", (req, res) => {
         });
     });
 });
+
+
+
+
+
+
+// DELETE //
+
+app.delete('/api/delete_supplier', auth, (req, res) => {
+    let id = req.query.id;
+
+    Supplier.findByIdAndRemove(id, (err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.json(true)
+    })
+})
+
+app.delete('/api/delete_customer', auth, (req, res) => {
+    let id = req.query.id;
+
+    Customer.findByIdAndRemove(id, (err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.json(true)
+    })
+})
+
+
+
 
 if (process.env.NODE_ENV === "production") {
     const path = require("path");

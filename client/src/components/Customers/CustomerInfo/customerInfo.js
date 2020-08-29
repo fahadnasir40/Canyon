@@ -5,10 +5,10 @@ import Footer from '../../Footer/footer'
 import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
 
-class supplierInfo extends Component {
+class CustomerInfo extends Component {
 
     state = {
-        supplier: null
+        customer: null
     }
 
     getInitials = (name) => {
@@ -25,16 +25,16 @@ class supplierInfo extends Component {
 
     componentDidMount() {
         if (!this.props.location.state) {
-            this.props.history.push('/suppliers')
+            this.props.history.push('/customers')
         }
         else {
             this.setState({
-                supplier: this.props.location.state.supplierInfo
+                customer: this.props.location.state.customerInfo
             })
         }
     }
 
-    renderSupplierInfo = (supplier) => (
+    renderCustomerInfo = (customer) => (
 
         <div className="nk-content ml-5">
             <div className="container-fluid">
@@ -43,11 +43,11 @@ class supplierInfo extends Component {
                         <div className="nk-block-head nk-block-head-sm">
                             <div className="nk-block-between g-3">
                                 <div className="nk-block-head-content">
-                                    <h3 className="nk-block-title page-title">Supplier / <strong className="text-primary small">{supplier.name}</strong></h3>
+                                    <h3 className="nk-block-title page-title">Customer / <strong className="text-primary small">{customer.name}</strong></h3>
                                 </div>
                                 <div className="nk-block-head-content">
-                                    <Link to="/suppliers" className="btn btn-outline-light bg-white d-none d-sm-inline-flex"><em className="icon ni ni-arrow-left"></em><span>Back</span></Link>
-                                    <Link to="/suppliers" className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none"><em className="icon ni ni-arrow-left"></em></Link>
+                                    <Link to="/customers" className="btn btn-outline-light bg-white d-none d-sm-inline-flex"><em className="icon ni ni-arrow-left"></em><span>Back</span></Link>
+                                    <Link to="/customers" className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none"><em className="icon ni ni-arrow-left"></em></Link>
                                 </div>
                             </div>
                         </div>
@@ -71,33 +71,27 @@ class supplierInfo extends Component {
                                             <div className="nk-block">
                                                 <div className="nk-block-head">
                                                     <h5 className="title">Personal Information</h5>
-                                                    <p>Basic supplier info, like name and address that you use on your platform.</p>
+                                                    <p>Basic customer info, like name and address that you use on your platform.</p>
                                                 </div>
                                                 <div className="profile-ud-list">
 
                                                     <div className="profile-ud-item">
                                                         <div className="profile-ud wider">
                                                             <span className="profile-ud-label">Full Name</span>
-                                                            {this.getColText(supplier.name)}
-                                                        </div>
-                                                    </div>
-                                                    <div className="profile-ud-item">
-                                                        <div className="profile-ud wider">
-                                                            <span className="profile-ud-label">Brand</span>
-                                                            <span className="profile-ud-value ccap">{supplier.brand}</span>
+                                                            {this.getColText(customer.name)}
                                                         </div>
                                                     </div>
 
                                                     <div className="profile-ud-item">
                                                         <div className="profile-ud wider">
                                                             <span className="profile-ud-label">Email Address</span>
-                                                            {this.getColText(supplier.email)}
+                                                            {this.getColText(customer.email)}
                                                         </div>
                                                     </div>
                                                     <div className="profile-ud-item">
                                                         <div className="profile-ud wider">
                                                             <span className="profile-ud-label">Mobile Number</span>
-                                                            {this.getColText(supplier.phone)}
+                                                            {this.getColText(customer.phone)}
                                                         </div>
                                                     </div>
                                                   
@@ -110,7 +104,7 @@ class supplierInfo extends Component {
                                                 <div className="profile-ud-list">
                                                     {
 
-                                                        supplier.address.map((item, i) => {
+                                                        customer.address.map((item, i) => {
                                                             return (<div className="profile-ud-item" key={i}>
                                                                 <div className="profile-ud wider">
                                                                     <span className="profile-ud-label">Address {i + 1}</span>
@@ -159,12 +153,12 @@ class supplierInfo extends Component {
                                             <div className="card-inner">
                                                 <div className="user-card user-card-s2">
                                                     <div className="user-avatar lg bg-primary">
-                                                        <span>{this.getInitials(supplier.name)}</span>
+                                                        <span>{this.getInitials(customer.name)}</span>
                                                     </div>
                                                     <div className="user-info">
-                                                        <div className="badge badge-outline-light badge-pill ucap">Supplier</div>
-                                                        <h5>{supplier.name}</h5>
-                                                        <span className="sub-text">{supplier.email}</span>
+                                                        <div className="badge badge-outline-light badge-pill ucap">Customer</div>
+                                                        <h5>{customer.name}</h5>
+                                                        <span className="sub-text">{customer.email}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -174,9 +168,9 @@ class supplierInfo extends Component {
                                                     <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-mail"></em></a></li>
                                                     <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-download-cloud"></em></a></li>
                                                     <li> <Link to={{
-                                                        pathname: "/editSupplier",
+                                                        pathname: "/editCustomer",
                                                         state: {
-                                                            supplierInfo: supplier
+                                                            customerInfo: customer
                                                         }
 
                                                     }} className="btn btn-trigger btn-icon">
@@ -225,13 +219,13 @@ class supplierInfo extends Component {
                                                 <div className="row g-3">
                                                     <div className="col-6">
                                                         <span className="sub-text">User ID:</span>
-                                                        <span className="sub-text-sm">{supplier._id}</span>
+                                                        <span className="sub-text-sm">{customer._id}</span>
                                                     </div>
 
                                                     <div className="col-6">
                                                         <span className="sub-text">Register At:</span>
                                                         <span>    <Moment format="MMM DD, YYYY">
-                                                            {supplier.createdAt}
+                                                            {customer.createdAt}
                                                         </Moment></span>
                                                     </div>
                                                 </div>
@@ -259,8 +253,8 @@ class supplierInfo extends Component {
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
                             {
-                                this.state.supplier ?
-                                    this.renderSupplierInfo(this.state.supplier)
+                                this.state.customer ?
+                                    this.renderCustomerInfo(this.state.customer)
                                     : null
                             }
                             <Footer />
@@ -272,4 +266,4 @@ class supplierInfo extends Component {
     }
 }
 
-export default supplierInfo;
+export default CustomerInfo;
