@@ -57,22 +57,24 @@ class WizardFormSecondPage extends Component {
                                                         <th class="tb-tnx-id"><span class="">#</span></th>
                                                         <th class="tb-tnx-info">
                                                             <span class="tb-tnx-desc d-none d-sm-inline-block">
-                                                                <span>Bill For</span>
+                                                                <span>Item</span>
                                                             </span>
                                                             <span class="tb-tnx-date d-md-inline-block d-none">
-                                                                <span class="d-md-none">Date</span>
                                                                 <span class="d-none d-md-block">
-                                                                    <span>Issue Date</span>
-                                                                    <span>Due Date</span>
+                                                                    <span>Quantity</span>
                                                                 </span>
+                                                            </span>
+                                                        </th>
+                                                        <th class="tb-tnx-info">
+                                                            <span class="tb-tnx-desc d-none d-sm-inline-block">
+                                                                <span>Rate</span>
                                                             </span>
                                                         </th>
                                                         <th class="tb-tnx-amount is-alt">
                                                             <span class="tb-tnx-total">Total</span>
-                                                            <span class="tb-tnx-status d-none d-md-inline-block">Status</span>
                                                         </th>
                                                         <th class="tb-tnx-action">
-                                                            <span>&nbsp;</span>
+                                                            <span>Action&nbsp;</span>
                                                         </th>
                                                     </tr>
                                                 </thead>
