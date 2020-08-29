@@ -4,8 +4,6 @@ import Header from '../../Header/header'
 import Footer from '../../Footer/footer'
 import WizardSecondPage from './WizardFormSecondPage'
 import WizardFormThirdPage from './WizardFormThirdPage'
-// import Purchases from '../purchases'
-// import {Link} from 'react-router-dom'
 
 class WizardFormFirstPage extends Component {
 
@@ -15,17 +13,27 @@ class WizardFormFirstPage extends Component {
         email: '',
         brand: '',
         phone: '',
-        page: 1
+        page: 1,
+        activityLabel: ''
     }
 
-    nextPage=()=> {
-      this.setState({ page: this.state.page + 1 })
+    componentDidMount() {
+        if (this.props.location.state)
+            this.setState({
+                activityLabel: this.props.location.state.activityName
+            })
+        else this.props.history.push('/dashboard')
     }
-  
-    previousPage=()=> {
-      this.setState({ page: this.state.page - 1 })
+
+
+    nextPage = () => {
+        this.setState({ page: this.state.page + 1 })
     }
-  
+
+    previousPage = () => {
+        this.setState({ page: this.state.page - 1 })
+    }
+
 
     renderWizard = () => (
         <div className="nk-content ml-5 ">
@@ -35,7 +43,7 @@ class WizardFormFirstPage extends Component {
                         <div className="components-preview wide-md mx-auto">
                             <div class="nk-block-head nk-block-head-lg wide-sm">
                                 <div class="nk-block-head-content">
-                                    <h2 class="nk-block-title fw-normal">Purchase</h2>
+                                    <h2 class="nk-block-title fw-normal">{this.state.activityLabel}</h2>
                                 </div>
                             </div>
                             <div className="nk-block nk-block-lg">
@@ -44,7 +52,7 @@ class WizardFormFirstPage extends Component {
                                         <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix" id="steps-uid-0" >
                                             <div className="steps clearfix">
                                                 <ul role="tablist">
-                                                    <li role="tab" className="first current" aria-disabled="false" aria-selected="true"><a id="steps-uid-0-t-0" href="#steps-uid-0-h-0" aria-controls="steps-uid-0-p-0"><span className="current-info audible">current step: </span><span className="number">1.</span><h5>Supplier</h5></a></li>
+    <li role="tab" className="first current" aria-disabled="false" aria-selected="true"><a id="steps-uid-0-t-0" href="#steps-uid-0-h-0" aria-controls="steps-uid-0-p-0"><span className="current-info audible">current step: </span><span className="number">1.</span><h5> {this.state.activityLabel === 'Orders'?'Customer':'Supplier'}</h5></a></li>
                                                     <li role="tab" className="disabled" aria-disabled="true"><a id="steps-uid-0-t-1" href="#steps-uid-0-h-1" aria-controls="steps-uid-0-p-1"><span className="number">2.</span><h5>Order Detail</h5></a></li>
                                                     <li role="tab" className="disabled last" aria-disabled="true"><a id="steps-uid-0-t-2" href="#steps-uid-0-h-2" aria-controls="steps-uid-0-p-2"><span className="number">3.</span><h5>Bill Payment</h5></a></li>
                                                 </ul>
@@ -131,8 +139,8 @@ class WizardFormFirstPage extends Component {
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
                             {this.state.page === 1 && this.renderWizard()}
-                            {this.state.page === 2 && ( <WizardSecondPage    previousPage={this.previousPage} onSubmit={this.nextPage}/>)}
-                            {this.state.page === 3 && ( <WizardFormThirdPage previousPage={this.previousPage} onSubmit={this.nextPage}/>)}
+                            {this.state.page === 2 && (<WizardSecondPage previousPage={this.previousPage} onSubmit={this.nextPage} />)}
+                            {this.state.page === 3 && (<WizardFormThirdPage previousPage={this.previousPage} onSubmit={this.nextPage} />)}
                             <Footer />
                         </div>
                     </div>

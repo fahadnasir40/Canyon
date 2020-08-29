@@ -13,14 +13,23 @@ class Content extends Component {
                             <div class="components-preview wide-md mx-auto">
                                 <div class="nk-block-head nk-block-head-lg wide-sm">
                                     <div class="nk-block-head-content">
-                                        <h2 class="nk-block-title fw-normal">Purchase</h2>
+                                        <h2 class="nk-block-title fw-normal">Sale Orders</h2>
                                     </div>
                                     <div class="nk-header-search ml-3 ml-xl-0">
                                         <em class="icon ni ni-search"></em>
                                         <input type="text" class="form-control border-transparent form-focus-none" placeholder="Search" />
                                     </div>
                                     <ul class="nk-block-tools-opt">
-                                        <Link to="/addpurchases"><button class="btn btn-primary"><em class="icon ni ni-plus"></em><span>New Purchase</span></button></Link>
+                                        <Link to={{
+                                            pathname: "/addpurchases",
+                                            state:
+                                            {
+                                                activityName: 'Orders'
+                                            }
+                                        }}
+                                        >
+                                        <button class="btn btn-primary"><em class="icon ni ni-plus"></em><span>New Sale</span></button>
+                                        </Link>
                                     </ul>
                                 </div>
                                 <div class="nk-block nk-block-lg">
@@ -35,9 +44,9 @@ class Content extends Component {
                                                                 <label class="custom-control-label" for="uid"></label>
                                                             </div>
                                                         </th>
-                                                        <th class="nk-tb-col"><span class="sub-text">Supplier</span></th>
-                                                        <th class="nk-tb-col tb-col-mb"><span class="sub-text">Total Purchase</span></th>
-                                                        <th class="nk-tb-col tb-col-md"><span class="sub-text">Last Purchase</span></th>
+                                                        <th class="nk-tb-col"><span class="sub-text">Customers</span></th>
+                                                        <th class="nk-tb-col tb-col-mb"><span class="sub-text">Total Sales</span></th>
+                                                        <th class="nk-tb-col tb-col-md"><span class="sub-text">Last Sale</span></th>
                                                         <th class="nk-tb-col nk-tb-col-tools text-right">Action</th>
                                                     </tr>
                                                 </thead>
@@ -52,7 +61,7 @@ class Content extends Component {
                                                         <td class="nk-tb-col">
                                                             <div class="user-card">
                                                                 <div class="user-info">
-                                                                    <span class="tb-lead">Canyon Supplier<span class="dot dot-success d-md-none ml-1"></span></span>
+                                                                    <span class="tb-lead">Canyon Customer<span class="dot dot-success d-md-none ml-1"></span></span>
                                                                 </div>
                                                             </div>
                                                         </td>

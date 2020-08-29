@@ -59,16 +59,16 @@ class Transactions extends Component {
                                         </div>
                                     </div>
                                     <div className="card card-preview">
-                                        <table className="table table-tranx">
+                                        <table className="table table-tranx" >
                                             <thead>
                                                 <tr className="tb-tnx-head">
                                                     {/* <th className="tb-tnx-id"><span className="">#</span></th> */}
-                                                    <th className="tb-tnx-info" width="20%">
+                                                    <th className="tb-tnx-info" >
                                                         <span className="d-none d-sm-block">
                                                             <span>Date</span>
                                                         </span>
                                                     </th>
-                                                    <th className="tb-tnx-info" width = "10%">
+                                                    <th className="tb-tnx-info">
                                                         {/* <span className="tb-tnx-desc d-none d-sm-inline-block"> */}
                                                             <span>Source</span>
                                                         {/* </span> */}
@@ -112,14 +112,14 @@ class Transactions extends Component {
                                                         </div>
                                                         {/* <div className="form-note">Date format <code>yyyy-mm-dd</code></div> */}
                                                     </td>
-                                                    <td className="tb-tnx-info" width="13%">
-                                                        <select className="form-select form-control form-control-sm" data-search="on">
+                                                    <td className="tb-tnx-info">
+                                                        <select className="form-select form-control form-control" data-search="on">
                                                             <option value="employees">Employees</option>
                                                             <option value="customers">Customers</option>
                                                             <option value="suppliers">Suppliers</option>
                                                         </select>
                                                     </td>
-                                                    <td className="tb-tnx-info" width="15%">
+                                                    <td className="tb-tnx-info" >
                                                         <div className="form-control-wrap">
                                                             <select className="form-select form-control form-control-md" data-search="on">
                                                                 <option value="employees">Saad Khan</option>
@@ -128,7 +128,7 @@ class Transactions extends Component {
                                                             </select>
                                                         </div>
                                                     </td>
-                                                    <td className="tb-tnx-info" width="13%">
+                                                    <td className="tb-tnx-info" >
                                                         <div className="form-control-wrap">
                                                             <select className="form-select form-control form-control-md" data-search="on">
                                                                 <option value="otherexpense">Expense</option>
@@ -140,7 +140,7 @@ class Transactions extends Component {
                                                         </div>
                                                     </td>
                                                     
-                                                    <td className="tb-tnx-info" width="14%">
+                                                    <td className="tb-tnx-info" >
                                                         <div className="form-control-wrap">
                                                             <select className="form-select form-control form-control-md" data-search="on">
                                                                 <option value="pay salary">Pay Salary</option>
@@ -150,13 +150,13 @@ class Transactions extends Component {
                                                         </div>
                                                     </td>
                                                    
-                                                     <td className="tb-tnx-info" width = "10%">
+                                                     <td className="tb-tnx-info">
                                                         <div className="tb-tnx-info">
                                                             <input type="text" className="form-control" id="quantity" placeholder="10" />
                                                         </div>
                                                     </td>
                                                    
-                                                    <td className="tb-tnx-info" width = "10%">
+                                                    <td className="tb-tnx-info" >
                                                         <div className="tb-tnx-info">
                                                             <input type="text" className="form-control" id="rate" placeholder="150" />
                                                         </div>
