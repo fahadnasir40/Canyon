@@ -5,7 +5,7 @@ class Content extends Component {
 
     render(){
         return (
-            <div class="nk-content ml-5 ">
+            <div class="nk-content ml-md-5 ">
                     <div class="container-fluid">
                         <div class="nk-content-inner">
                             <div class="nk-content-body">
@@ -58,12 +58,13 @@ class Content extends Component {
                                                     <label class="custom-control-label" for="uid"></label>
                                                 </div>
                                             </div>
-                                            <div class="nk-tb-col tb-col-sm"><span>Name</span></div>
+                                            <div class="nk-tb-col "><span>Name</span></div>
                                             <div class="nk-tb-col"><span>SKU</span></div>
                                             <div class="nk-tb-col"><span>Price</span></div>
                                             <div class="nk-tb-col"><span>Stock</span></div>
-                                            <div class="nk-tb-col tb-col-md"><span>Category</span></div>
-                                            <div class="nk-tb-col tb-col-md"><em class="tb-asterisk icon ni ni-star-round"></em></div>
+                                            <div class="nk-tb-col tb-col-md"><span>Brand</span></div>
+                                            <div class="nk-tb-col tb-col-md"><span>UOM</span></div>
+                                            <div class="nk-tb-col tb-col-md"><span>Status</span></div>
                                             <div class="nk-tb-col nk-tb-col-tools">
                                                 <ul class="nk-tb-actions gx-1 my-n1">
                                                     <li class="mr-n1">
@@ -89,29 +90,31 @@ class Content extends Component {
                                                     <label class="custom-control-label" for="uid1"></label>
                                                 </div>
                                             </div>
-                                            <div class="nk-tb-col tb-col-sm">
+                                            <div class="nk-tb-col">
                                                 <span class="tb-product">
-                                                    <img src="./images/product/a.png" alt="" class="thumb"/>
-                                                    <span class="title">Pink Fitness Tracker</span>
+                                                    <span class="title">19 Ltr. Water Bottle</span>
                                                 </span>
                                             </div>
                                             <div class="nk-tb-col">
-                                                <span class="tb-sub">UY3749</span>
+                                                <span class="tb-sub">CN19L</span>
                                             </div>
                                             <div class="nk-tb-col">
-                                                <span class="tb-lead">$ 99.49</span>
+                                                <span class="tb-lead">Rs. 150</span>
                                             </div>
                                             <div class="nk-tb-col">
-                                                <span class="tb-sub">49</span>
+                                                <span class="tb-sub">10</span>
                                             </div>
+                                            <div class="nk-tb-col tb-col-md">
+                                                <span class="tb-sub">Canyon</span>
+                                            </div>
+                                            <div class="nk-tb-col tb-col-md">
+                                                <span class="tb-sub">Pcs.</span>
+                                            </div>
+
                                             <div class="nk-tb-col tb-col-md">
                                                 <span class="tb-sub">Active</span>
                                             </div>
-                                            <div class="nk-tb-col tb-col-md">
-                                                <div class="asterisk tb-asterisk">
-                                                    <a href="#"><em class="asterisk-off icon ni ni-star"></em><em class="asterisk-on icon ni ni-star-fill"></em></a>
-                                                </div>
-                                            </div>
+                                          
                                             <div class="nk-tb-col nk-tb-col-tools">
                                                 <ul class="nk-tb-actions gx-1 my-n1">
                                                     <li class="mr-n1">

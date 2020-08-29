@@ -8,7 +8,7 @@ import {getProfile} from '../../actions'
 
 class Profile extends Component {
 
-    UNSAFE_componentWillMount(){
+    componentDidMount(){
         this.props.dispatch(getProfile());
     }
 
@@ -43,7 +43,7 @@ class Profile extends Component {
 }
 
 function mapStateToProps(state){
-    console.log("State Props",state);
+ 
     return{
         profile: state.user.profile
     }

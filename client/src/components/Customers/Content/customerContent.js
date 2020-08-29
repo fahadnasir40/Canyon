@@ -2,11 +2,11 @@ import React, {Component } from 'react'
 import { Link } from 'react-router-dom'
 import ReactPaginate from 'react-paginate'
 
-class SuppliersContent extends Component {
+class CustomersContent extends Component {
 
 
     state = {
-        suppliersList: '',
+        customersList: '',
         offset: 0,
         perPage: 8,
         currentPage: 0,
@@ -16,16 +16,16 @@ class SuppliersContent extends Component {
 
     componentDidMount() {
         this.setState({
-            suppliersList: this.props.suppliersList,
-            pageCount: Math.ceil(this.props.suppliersList.length / this.state.perPage)
+            customersList: this.props.customersList,
+            pageCount: Math.ceil(this.props.customersList.length / this.state.perPage)
         })
     }
 
     componentWillUpdate(nextProps,nextState){
         if(this.props!=nextProps){
-            if(this.props.suppliersList.length < nextProps.suppliersList){
+            if(this.props.customersList.length < nextProps.customersList){
                 nextState = {
-                    suppliersList: nextProps.suppliersList
+                    customersList: nextProps.customersList
                 }
             }
         }
@@ -52,7 +52,7 @@ class SuppliersContent extends Component {
         // If the search bar isn't empty
         if (e.target.value !== "") {
             // Assign the original list to currentList
-            currentList = this.props.suppliersList;
+            currentList = this.props.customersList;
 
             // Use .filter() to determine which items should be displayed
             // based on the search terms
@@ -68,11 +68,11 @@ class SuppliersContent extends Component {
             });
         } else {
             // If the search bar is empty, set newList to original task list
-            newList = this.props.suppliersList;
+            newList = this.props.customersList;
         }
         // Set the filtered state based on what our rules added to newList
         this.setState({
-            suppliersList: newList
+            customersList: newList
         });
     }
 
@@ -101,15 +101,15 @@ class SuppliersContent extends Component {
         return (<span className="tb-text ff-italic text-muted">Not added yet</span>)
     }
 
-    renderSuppliersList = () => {
+    renderCustomersList = () => {
 
-        let suppliersList = this.state.suppliersList;
+        let customersList = this.state.customersList;
 
-        if (suppliersList) {
+        if (customersList) {
 
-            const slice = suppliersList.slice(this.state.offset, this.state.offset + this.state.perPage)
+            const slice = customersList.slice(this.state.offset, this.state.offset + this.state.perPage)
 
-            return slice.map((supplier, i) => {
+            return slice.map((customer, i) => {
                 return (
                     <div className="nk-tb-item" key={i}>
                         <div className="nk-tb-col nk-tb-col-check">
@@ -120,20 +120,20 @@ class SuppliersContent extends Component {
                         </div>
                         <div className="nk-tb-col">
                             <Link to={{
-                                pathname: "/supplierInfo",
+                                pathname: "/customerInfo",
                                 state: {
-                                    supplierInfo: supplier
+                                    customerInfo: customer
                                 }
                             }}
                             >
                                 <div className="user-card">
                                     <div className={"user-avatar " + this.getCustomBg()}>
-                                        <span>{this.getInitials(supplier.name)}</span>
+                                        <span>{this.getInitials(customer.name)}</span>
                                     </div>
                                     <div className="user-info">
-                                        <span className="tb-lead">{supplier.name}
+                                        <span className="tb-lead">{customer.name}
                                         {
-                                            supplier.status === "active"?
+                                            customer.status === "active"?
                                                 <span className="dot dot-success d-md-none ml-1"></span>
                                             :
                                               <span className="dot dot-danger d-md-none ml-1"></span>
@@ -144,28 +144,28 @@ class SuppliersContent extends Component {
                             </Link>
                         </div>
                         <div className="nk-tb-col tb-col-mb">
-                            {this.getColText(supplier.email)}
+                            {this.getColText(customer.email)}
                         </div>
                         <div className="nk-tb-col tb-col-md">
-                            {this.getColText(supplier.phone)}
+                            {this.getColText(customer.phone)}
                         </div>
                         <div className="nk-tb-col tb-col-lg">
                             <span>Lahore</span>
                         </div>
                         <div className="nk-tb-col tb-col-md">
                             {
-                                supplier.status === 'active' ?
-                                    <span className="tb-status text-success ccap">{supplier.status}</span>
-                                    : <span className="tb-status text-danger ccap">{supplier.status}</span>
+                                customer.status === 'active' ?
+                                    <span className="tb-status text-success ccap">{customer.status}</span>
+                                    : <span className="tb-status text-danger ccap">{customer.status}</span>
                             }
 
                         </div>
                         <div className="nk-tb-col nk-tb-col-tools">
                             <ul className="nk-tb-actions gx-1">
                                 {
-                                    supplier.email?
+                                    customer.email?
                                     <li className="nk-tb-action-hidden">
-                                    <a href ={"mailto:"+supplier.email}  className="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Send Email">
+                                    <a href ={"mailto:"+customer.email}  className="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Send Email">
                                         <em className="icon ni ni-mail-fill"></em>
                                     </a>
                                     </li>
@@ -180,33 +180,33 @@ class SuppliersContent extends Component {
                                         <div className="dropdown-menu dropdown-menu-right">
                                             <ul className="link-list-opt no-bdr">
                                                 <li>    <Link to={{
-                                                    pathname: "/supplierInfo",
+                                                    pathname: "/customerInfo",
                                                     state: {
-                                                        supplierInfo: supplier
+                                                        customerInfo: customer
                                                     }
                                                 }}
                                                 ><em className="icon ni ni-eye"></em><span>View Details</span></Link></li>
                                                 <li className="divider"></li>
                                                 <li><a href="#"><em className="icon ni ni-activity-round"></em><span>View Orders</span></a></li>
                                                 <li> <Link to={{
-                                                    pathname: "/editSupplier",
+                                                    pathname: "/editCustomer",
                                                     state: {
-                                                        supplierInfo: supplier
+                                                        customerInfo: customer
                                                     }
                                                 }}>
                                                     <em className="icon ni ni-pen"></em><span>Edit details</span></Link></li>
                                                 {
-                                                    supplier.status === "active" ?
-                                                        <li><a onClick={() => { this.props.changeStatus(supplier) }}>
+                                                    customer.status === "active" ?
+                                                        <li><a onClick={() => { this.props.changeStatus(customer) }}>
                                                             <em className="icon ni ni-na"></em><span style={{ cursor: "pointer" }} className="text-warning">Suspend</span>
                                                         </a></li>
                                                         :
-                                                        <li><a onClick={() => { this.props.changeStatus(supplier) }}>
-                                                            <em className="icon ni ni-user-check"></em><span style={{ cursor: "pointer" }} className="text-info">Active Supplier</span>
+                                                        <li><a onClick={() => { this.props.changeStatus(customer) }}>
+                                                            <em className="icon ni ni-user-check"></em><span style={{ cursor: "pointer" }} className="text-info">Active Customer</span>
                                                         </a></li>
                                                 }
 
-                                                <li><a onClick={() => { this.props.deleteSupplier(supplier) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }} className="text-danger ">Remove Supplier</span></a></li>
+                                                <li><a onClick={() => { this.props.deleteCustomer(customer) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }} className="text-danger ">Remove Customer</span></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -220,8 +220,8 @@ class SuppliersContent extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if(prevProps.suppliersList !== this.props.suppliersList) {
-          this.setState({suppliersList: this.props.suppliersList});
+        if(prevProps.customersList !== this.props.customersList) {
+          this.setState({customersList: this.props.customersList});
         }
       }
 
@@ -236,7 +236,7 @@ class SuppliersContent extends Component {
                             <div className="nk-block-head nk-block-head-sm">
                                 <div className="nk-block-between">
                                     <div className="nk-block-head-content">
-                                        <h3 className="nk-block-title page-title">Suppliers</h3>
+                                        <h3 className="nk-block-title page-title">Customers</h3>
                                     </div>
                                     <div className="nk-block-head-content">
                                         <div className="toggle-wrap nk-block-tools-toggle">
@@ -254,7 +254,7 @@ class SuppliersContent extends Component {
                                                   
                                                     <li className="nk-block-tools-opt">
                                                         <a href="#" className="btn btn-icon btn-primary d-md-none"><em className="icon ni ni-plus"></em></a>
-                                                        <Link to={"/addSupplier"}><button className="toggle btn btn-primary d-none d-md-inline-flex"><em className="icon ni ni-plus"></em><span>Add Supplier</span></button></Link>
+                                                        <Link to={"/addCustomer"}><button className="toggle btn btn-primary d-none d-md-inline-flex"><em className="icon ni ni-plus"></em><span>Add Customer</span></button></Link>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -274,7 +274,7 @@ class SuppliersContent extends Component {
                                         <div className="nk-tb-col tb-col-md"><span className="sub-text">Status</span></div>
 
                                     </div>
-                                    {this.renderSuppliersList()}
+                                    {this.renderCustomersList()}
                                 </div>
                                 <div className="card">
                                     <div className="card-inner">
@@ -317,4 +317,4 @@ class SuppliersContent extends Component {
     }
 }
 
-export default SuppliersContent;
+export default CustomersContent;

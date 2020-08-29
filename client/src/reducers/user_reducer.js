@@ -11,12 +11,20 @@ export default function(state={},action){
         case 'USER_PROFILE':
             return {...state,data:action.payload}
         case 'UPDATE_USER':
-                return {...state,data:action.payload.user}
+            return {...state,data:action.payload.user}
         case 'USER_REGISTER':
             return {
                 ...state,
                 success:action.payload.success,
                 error:action.payload.error
+            }
+        case 'CHANGE_PASSWORD':
+            return {...state,changePassword:action.payload}
+        case 'CLEAR_PROFILE':
+            return {
+                ...state,
+                changePassword:action.payload.changePassword,
+                profile:action.payload.data
             }
         default:
             return state;

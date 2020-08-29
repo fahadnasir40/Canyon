@@ -6,34 +6,32 @@ import Content from './Content/content'
 import { getUsers } from '../../actions';
 import { connect } from 'react-redux';
 
-class Users extends Component {    
+class Users extends Component {
 
-    UNSAFE_componentWillMount(){
+    componentDidMount() {
         this.props.dispatch(getUsers());
     }
 
-    renderUsers = ()=>{
-        return(
+    renderUsers = () => {
+        return (
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">
                     <div className="nk-main"></div>
-                    <Sidebar/>         
+                    <Sidebar />
                     <div className="wrap container-fluid">
-                        <Header user = {this.props.user}/>   
+                        <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
-
-                            <Content userList={this.props.userList}/>
-
-                            <Footer/>
+                            <Content userList={this.props.userList} />
+                            <Footer />
                         </div>
-                    </div>  
-                 </div>
+                    </div>
+                </div>
             </div>
         )
     }
 
-   
-    render() {      
+
+    render() {
         return (
             <div>
                 {this.renderUsers()}
@@ -42,10 +40,10 @@ class Users extends Component {
     }
 }
 
-function mapStateToProps(state){
-    return{
-        userList:state.user.userList
+function mapStateToProps(state) {
+    return {
+        userList: state.user.userList
     }
-  }
-  
-  export default connect(mapStateToProps)(Users)
+}
+
+export default connect(mapStateToProps)(Users)

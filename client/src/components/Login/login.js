@@ -9,7 +9,7 @@ class Login extends Component {
     state ={
         email:'',
         password:'',
-      
+        redirectMessage: '',
         error:'',
         validated: false,
     }
@@ -23,18 +23,48 @@ class Login extends Component {
     } 
 
     UNSAFE_componentWillReceiveProps(nextProps){
+      
         if(nextProps.user.login.isAuth){
             this.props.history.push('/dashboard')
         }
+      
     }
 
+    componentDidUpdate(prevProps){
+        
+        if(prevProps.location.redirect){
+            if(!this.props.location.redirect.message){
+                if(prevProps.location.redirect.message){
+                    this.props.location.redirect.message = prevProps.location.redirect.message;
+                    this.setState({
+                        redirectMessage: this.props.location.redirect.message
+                    })
+                }
+            }    
+        }
+    }
+
+    // componentDidMount(){
+    //     console.log("Component Did Mount Called");
+    //     console.log("Did mount props",this.props.location.redirect);
+    //     if(this.props.location.redirect){
+    //         console.log("Recieving Location");
+        
+    //         this.setState({
+    //             redirectMessage: this.props.location.redirect.message
+    //         })
+    //         // if(!nextProps.location.redirect){
+    //         //     nextProps.location.redirect.message = this.props.location.redirect.message;
+    //         // }
+    //     }
+    // }
 
     submitForm = (e) =>{
         e.preventDefault();
         this.props.dispatch(loginUser(this.state))
     }
 
-    LoginScreen =(user)=>{
+    LoginScreen =(user,message)=>{
         return (
             <div class="nk-app-root">
             {/* <!-- main @s --> */}
@@ -90,11 +120,27 @@ class Login extends Component {
                                             <span className="ff-bold"><strong>{user.login.message}</strong></span>
                                         :null}
                                     </div>
+                                 
                                 </div>
                             </div>
                         </div>
+                        {
+                            message?
+                                <div className="container ">
+                                        <div class="alert alert-pro alert-success alert-dismissible mb-2">
+                                                <div class="alert-text">
+                                                    <h6>Password Changed Successfully</h6>
+                                                    <p>Your password has been changed. Please sign in again with your new password. </p>
+                                                </div>
+                                                <button class="close" data-dismiss="alert"></button>
+                                        </div>
+                                </div>
+                            :null
+                        }
+                        
                         <div class="nk-footer nk-auth-footer-full">
                             <div class="container wide-lg">
+                          
                                 <div class="row g-3">
                                     <div class="col-lg-6 order-lg-last">
                                         <ul class="nav nav-sm justify-content-center justify-content-lg-end">
@@ -128,9 +174,16 @@ class Login extends Component {
         )
     }
 
-    state = {  }
     render() {
         let user = this.props.user;
+        let rm = '';
+        console.log("This state of login",this.state)
+        if(this.state.redirectMessage){
+            
+            rm = this.props.location.redirect.message
+        }
+        
+       
 
         if(user.login){
             if(user.login.message === 'Request failed with status code 504'){
@@ -139,7 +192,7 @@ class Login extends Component {
         }
 
         return (    
-            this.LoginScreen(user)
+            this.LoginScreen(user,rm)
         );
     }
 }

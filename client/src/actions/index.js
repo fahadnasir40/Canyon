@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-export function getBooks(
+export function getSuppliers(
     start = 0,
-    limit = 10,
-    order = 'asc',
+    limit = 0,
+    order = 'desc',
     list = ''
 ){
 
-    const request = axios.get(`api/books?skip=${start}&limit=${limit}&order=${order}`)
+    const request = axios.get(`api/getSuppliers?skip=${start}&limit=${limit}&order=${order}`)
     .then(response => {
         if(list){
             return [...list,...response.data];
@@ -19,7 +19,31 @@ export function getBooks(
 
 
     return {
-        type: 'GET_BOOKS',
+        type: 'GET_SUPPLIERS',
+        payload: request
+    }
+}
+
+export function getCustomers(
+    start = 0,
+    limit = 0,
+    order = 'desc',
+    list = ''
+){
+
+    const request = axios.get(`api/getCustomers?skip=${start}&limit=${limit}&order=${order}`)
+    .then(response => {
+        if(list){
+            return [...list,...response.data];
+        }
+        else{
+            return response.data;
+        }
+    } );
+
+
+    return {
+        type: 'GET_CUSTOMERS',
         payload: request
     }
 }
@@ -65,21 +89,50 @@ export function clearBookWithReviewer(){
 
 
 
-export function addBook(book){
-    const request = axios.post('/api/book',book)
+export function saveSupplier(document){
+    const request = axios.post('/api/addSupplier',document)
         .then(response => response.data);
     return {
-        type:'ADD_BOOK',
+        type:'ADD_SUPPLIER',
         payload:request
     }
 }
 
-export function addDocument(document){
-    const request = axios.post('/api/document',document)
+export function saveCustomer(document){
+    const request = axios.post('/api/addCustomer',document)
         .then(response => response.data);
     return {
-        type:'ADD_DOCUMENT',
+        type:'ADD_CUSTOMER',
         payload:request
+    }
+}
+
+
+export function clearNewSupplier() {
+    return {
+        type:'CLEAR_SUPPLIER',
+        payload:{}
+    }
+}
+
+export function clearNewCustomer() {
+    return {
+        type:'CLEAR_CUSTOMER',
+        payload:{}
+    }
+}
+
+export function clearSupplierList() {
+    return {
+        type:'CLEAR_SUPPLIER_LIST',
+        payload:{}
+    }
+}
+
+export function clearCustomerList() {
+    return {
+        type:'CLEAR_CUSTOMER_LIST',
+        payload:{}
     }
 }
 
@@ -151,22 +204,42 @@ export function updateDocument(data){
     }
 }
 
-export function updateBook(data){
-    const request = axios.post(`/api/book_update`,data)
+export function updateSupplier(data){
+    const request = axios.post(`/api/supplier_update`,data)
                     .then(response =>response.data);
 
     return{
-        type: 'UPDATE_BOOK',
+        type: 'UPDATE_SUPPLIER',
         payload: request
     }
 }
 
-export function deleteBook(id){
-    const request = axios.delete(`/api/delete_book?id=${id}`)
+export function updateCustomer(data){
+    const request = axios.post(`/api/customer_update`,data)
+                    .then(response =>response.data);
+
+    return{
+        type: 'UPDATE_CUSTOMER',
+        payload: request
+    }
+}
+
+export function deleteSupplier(id){
+    const request = axios.delete(`/api/delete_supplier?id=${id}`)
     .then(response =>response.data);
 
     return{
-        type: 'DELETE_BOOK',
+        type: 'DELETE_SUPPLIER',
+        payload: request
+    }
+}
+
+export function deleteCustomer(id){
+    const request = axios.delete(`/api/delete_customer?id=${id}`)
+    .then(response =>response.data);
+
+    return{
+        type: 'DELETE_CUSTOMER',
         payload: request
     }
 }
@@ -233,8 +306,8 @@ export function clearProfile(){
     return {
         type: 'CLEAR_PROFILE',
         payload: {
-            success: false,
-            user: ''
+            data: {},
+            changePassword: {}
         }
     }
 }
@@ -245,7 +318,7 @@ export function getUsers(){
     .then(response => response.data);
 
     return {
-       type: 'GET_USERS',
+        type: 'GET_USERS',
         payload: request
     }
 
@@ -267,25 +340,30 @@ export function userRegister(user){
     }
 }
 
-// export function userRegister(data){
-//     const request = axios.post(`/api/changePassword`,data);
-//     // return (dispatch) =>{
-//     //     request.then(({data})=>{
-//     //         let response = {
-//     //             success:data.success,
-//     //             user
-//     //         }
-//     //         dispatch({
-//     //             type:'USER_PASSCHANGE',
-//     //             payload:response
-//     //         })
-//     //     })
-//     // }
-// }
+export function changePassword(data){
+    const request = axios.post(`/api/change_password`,data)
+    .then(response=>response.data);
+
+    return {
+        type: 'CHANGE_PASSWORD',
+        payload: request
+    }
+    // return (dispatch) =>{
+    //     request.then(({data})=>{
+    //         let response = {
+    //             success:data.success,
+    //             user
+    //         }
+    //         dispatch({
+    //             type:'USER_PASSCHANGE',
+    //             payload:response
+    //         })
+    //     })
+    // }
+}
 
 
 export function updateUser(user){
-    console.log("User obj",user);
     const request = axios.post(`/api/user_update`,user);
 
     return (dispatch) =>{
