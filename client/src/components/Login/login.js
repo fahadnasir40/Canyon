@@ -1,46 +1,50 @@
-import React,{Component} from 'react'
-import {Redirect} from 'react-router-dom'
+import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { loginUser } from '../../actions'
 
 
 class Login extends Component {
 
-    state ={
-        email:'',
-        password:'',
+    state = {
+        email: '',
+        password: '',
         redirectMessage: '',
-        error:'',
+        error: '',
         validated: false,
+        hasError: false
     }
 
     handleInputEmail = (event) => {
-        this.setState({email:event.target.value})
-    } 
-
-    handleInputPassword = (event) => {
-        this.setState({password:event.target.value})
-    } 
-
-    UNSAFE_componentWillReceiveProps(nextProps){
-      
-        if(nextProps.user.login.isAuth){
-            this.props.history.push('/dashboard')
-        }
-      
+        this.setState({ email: event.target.value })
     }
 
-    componentDidUpdate(prevProps){
-        
-        if(prevProps.location.redirect){
-            if(!this.props.location.redirect.message){
-                if(prevProps.location.redirect.message){
+    handleInputPassword = (event) => {
+        this.setState({ password: event.target.value })
+    }
+
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if(nextProps.user.login){
+            if (nextProps.user.login.isAuth) {
+                nextProps.history.push('/dashboard')
+            }    
+        }
+
+        return null;
+    }
+
+    componentDidUpdate(prevProps) {
+
+        if (prevProps.location.redirect) {
+            if (!this.props.location.redirect.message) {
+                if (prevProps.location.redirect.message) {
                     this.props.location.redirect.message = prevProps.location.redirect.message;
                     this.setState({
                         redirectMessage: this.props.location.redirect.message
                     })
                 }
-            }    
+            }
         }
     }
 
@@ -49,7 +53,7 @@ class Login extends Component {
     //     console.log("Did mount props",this.props.location.redirect);
     //     if(this.props.location.redirect){
     //         console.log("Recieving Location");
-        
+
     //         this.setState({
     //             redirectMessage: this.props.location.redirect.message
     //         })
@@ -59,147 +63,153 @@ class Login extends Component {
     //     }
     // }
 
-    submitForm = (e) =>{
+    submitForm = (e) => {
         e.preventDefault();
         this.props.dispatch(loginUser(this.state))
     }
 
-    LoginScreen =(user,message)=>{
+    LoginScreen = (user, message) => {
         return (
-            <div class="nk-app-root">
-            {/* <!-- main @s --> */}
-            <div class="nk-main ">
-                {/* <!-- wrap @s --> */}
-                <div class="nk-wrap nk-wrap-nosidebar">
-                    {/* <!-- content @s --> */}
-                    <div class="nk-content ">
-                        <div class="nk-block nk-block-middle nk-auth-body  wide-xs">
-                            <div class="brand-logo pb-4 text-center">
-                                <a href="html/index.html" class="logo-link">
-                                    <img class="logo-light logo-img logo-img-lg" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo"/>
-                                    <img class="logo-dark logo-img logo-img-lg" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark"/>
-                                </a>
-                            </div>
-                            <div class="card">
-                                <div class="card-inner card-inner-lg">
-                                    <div class="nk-block-head">
-                                        <div class="nk-block-head-content">
-                                            <h4 class="nk-block-title">Sign-In</h4>
-                                            <div class="nk-block-des">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <form noValidate validated={this.state.validated} onSubmit={this.submitForm}>
-                                        <div class="form-group">
-                                            <div class="form-label-group">
-                                                <label class="form-label" for="default-01">Email</label>
-                                            </div>
-                                            <input type="text" value={this.state.email} onChange={this.handleInputEmail} class="form-control form-control-lg" id="default-01" placeholder="Enter your email address"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-label-group">
-                                                <label class="form-label" for="password">Password</label>
-                                                <a class="link link-primary link-sm" href="#">Forgot Code?</a>
-                                            </div>
-                                            <div class="form-control-wrap">
-                                                {/* <a href="#" class="form-icon form-icon-right passcode-switch" data-target="password">
-                                                    <em class="passcode-icon icon-show icon ni ni-eye"></em>
-                                                    <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
-                                                </a> */}
-                                                <input type="password" value={this.state.password} onChange={this.handleInputPassword} class="form-control form-control-lg" id="password" placeholder="Enter your password"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-lg btn-primary btn-block">Sign in</button>
-                                        </div>
-                                    </form>
-                                    <div class="form-note-s2 text-center pt-4"> New on our platform? <a href="#">Contact Canyon Pty Ltd.</a>
-                                    </div>
-                                    <div className="text-danger  mt-2 text-center">
-                                        {user.login ? 
-                                            <span className="ff-bold"><strong>{user.login.message}</strong></span>
-                                        :null}
-                                    </div>
-                                 
+            <div className="nk-app-root">
+                {/* <!-- main @s --> */}
+                <div className="nk-main ">
+                    {/* <!-- wrap @s --> */}
+                    <div className="nk-wrap nk-wrap-nosidebar">
+                        {/* <!-- content @s --> */}
+                        <div className="nk-content ">
+                            <div className="nk-block nk-block-middle nk-auth-body  wide-xs">
+                                <div className="brand-logo pb-4 text-center">
+                                    <a href="html/index.html" className="logo-link">
+                                        <img className="logo-light logo-img logo-img-lg" src="./images/logo.png" srcSet="./images/logo2x.png 2x" alt="logo" />
+                                        <img className="logo-dark logo-img logo-img-lg" src="./images/logo-dark.png" srcSet="./images/logo-dark2x.png 2x" alt="logo-dark" />
+                                    </a>
                                 </div>
-                            </div>
-                        </div>
-                        {
-                            message?
-                                <div className="container ">
-                                        <div class="alert alert-pro alert-success alert-dismissible mb-2">
-                                                <div class="alert-text">
-                                                    <h6>Password Changed Successfully</h6>
-                                                    <p>Your password has been changed. Please sign in again with your new password. </p>
+                                <div className="card">
+                                    <div className="card-inner card-inner-lg">
+                                        <div className="nk-block-head">
+                                            <div className="nk-block-head-content">
+                                                <h4 className="nk-block-title">Sign-In</h4>
+                                                <div className="nk-block-des">
                                                 </div>
-                                                <button class="close" data-dismiss="alert"></button>
+                                            </div>
                                         </div>
-                                </div>
-                            :null
-                        }
-                        
-                        <div class="nk-footer nk-auth-footer-full">
-                            <div class="container wide-lg">
-                          
-                                <div class="row g-3">
-                                    <div class="col-lg-6 order-lg-last">
-                                        <ul class="nav nav-sm justify-content-center justify-content-lg-end">
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="#">Terms and Condition</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="#">Privacy Policy</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="#">Help</a>
-                                            </li>
-                                
-                                        </ul>
+                                        <form onSubmit={this.submitForm}>
+                                            <div className="form-group">
+                                                <div className="form-label-group">
+                                                    <label className="form-label" htmlFor="default-01">Email</label>
+                                                </div>
+                                                <input type="text" value={this.state.email} onChange={this.handleInputEmail} className="form-control form-control-lg" id="default-01" placeholder="Enter your email address" />
+                                            </div>
+                                            <div className="form-group">
+                                                <div className="form-label-group">
+                                                    <label className="form-label" htmlFor="password">Password</label>
+                                                    <a className="link link-primary link-sm" href="#">Forgot Code?</a>
+                                                </div>
+                                                <div className="form-control-wrap">
+                                                    {/* <a href="#" className="form-icon form-icon-right passcode-switch" data-target="password">
+                                                    <em className="passcode-icon icon-show icon ni ni-eye"></em>
+                                                    <em className="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                                </a> */}
+                                                    <input type="password" value={this.state.password} onChange={this.handleInputPassword} className="form-control form-control-lg" id="password" placeholder="Enter your password" />
+                                                </div>
+                                            </div>
+                                            <div className="form-group">
+                                                <button type="submit" className="btn btn-lg btn-primary btn-block">Sign in</button>
+                                            </div>
+                                        </form>
+                                        <div className="form-note-s2 text-center pt-4"> New on our platform? <a href="#">Contact Canyon Pty Ltd.</a>
+                                        </div>
+                                        <div className="text-danger  mt-2 text-center">
+                                            {user.login ?
+                                                <span className="ff-bold"><strong>{user.login.message}</strong></span>
+                                                : null}
+                                        </div>
+
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="nk-block-content text-center text-lg-left">
-                                            <p class="text-soft">&copy; 2020 Canyon Waters. All Rights Reserved.</p>
+                                </div>
+                            </div>
+                            {
+                                message ?
+                                    <div className="container ">
+                                        <div className="alert alert-pro alert-success alert-dismissible mb-2">
+                                            <div className="alert-text">
+                                                <h6>Password Changed Successfully</h6>
+                                                <p>Your password has been changed. Please sign in again with your new password. </p>
+                                            </div>
+                                            <button className="close" data-dismiss="alert"></button>
+                                        </div>
+                                    </div>
+                                    : null
+                            }
+
+                            <div className="nk-footer nk-auth-footer-full">
+                                <div className="container wide-lg">
+
+                                    <div className="row g-3">
+                                        <div className="col-lg-6 order-lg-last">
+                                            <ul className="nav nav-sm justify-content-center justify-content-lg-end">
+                                                <li className="nav-item">
+                                                    <a className="nav-link" href="#">Terms and Condition</a>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <a className="nav-link" href="#">Privacy Policy</a>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <a className="nav-link" href="#">Help</a>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                        <div className="col-lg-6">
+                                            <div className="nk-block-content text-center text-lg-left">
+                                                <p className="text-soft">&copy; 2020 Canyon Waters. All Rights Reserved.</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        {/* <!-- wrap @e --> */}
                     </div>
-                    {/* <!-- wrap @e --> */}
+                    {/* <!-- content @e --> */}
                 </div>
-                {/* <!-- content @e --> */}
+                {/* <!-- main @e --> */}
             </div>
-            {/* <!-- main @e --> */}
-        </div>
         )
     }
+
+    // static getDerivedStateFromError(error) {
+    //     // Update state so the next render will show the fallback UI.
+    //     return { hasError: true };
+    // }
+
+    // componentDidCatch(error, errorInfo) {
+    //     console.log("Error Found",error,errorInfo);
+    // }
 
     render() {
         let user = this.props.user;
         let rm = '';
-        console.log("This state of login",this.state)
-        if(this.state.redirectMessage){
-            
+
+        if (this.state.redirectMessage) {
             rm = this.props.location.redirect.message
-        }
-        
-       
+        }  
 
-        if(user.login){
-            if(user.login.message === 'Request failed with status code 504'){
-                return <Redirect to="/error"/>
-            }    
+        if (user.login) {
+            if (user.login.message === 'Request failed with status code 504') {
+                return <Redirect to="/error" />
+            }
         }
 
-        return (    
-            this.LoginScreen(user,rm)
+        return (
+            this.LoginScreen(user, rm)
         );
     }
 }
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
     return {
-        user:state.user
+        user: state.user
     }
 }
 

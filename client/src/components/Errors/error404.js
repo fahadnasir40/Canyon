@@ -5,17 +5,17 @@ const Error=()=>{
 
     return(
         
-        <div class="nk-body bg-white npc-general pg-error">
-            <div class="nk-app-root">
-            <div class="nk-main ">
-                <div class="nk-wrap nk-wrap-nosidebar">
-                    <div class="nk-content ">
-                        <div class="nk-block nk-block-middle wide-xs mx-auto">
-                            <div class="nk-block-content nk-error-ld text-center">
-                                <h1 class="nk-error-head">404</h1>
-                                <h3 class="nk-error-title">Oops! Why you’re here?</h3>
-                                <p class="nk-error-text">We are very sorry for inconvenience. It looks like you’re try to access a page that either has been deleted or never existed.</p>
-                                <a href="/dashboard" class="btn btn-lg btn-primary mt-2">Back To Home</a>
+        <div className="nk-body bg-white npc-general pg-error">
+            <div className="nk-app-root">
+            <div className="nk-main ">
+                <div className="nk-wrap nk-wrap-nosidebar">
+                    <div className="nk-content ">
+                        <div className="nk-block nk-block-middle wide-xs mx-auto">
+                            <div className="nk-block-content nk-error-ld text-center">
+                                <h1 className="nk-error-head">404</h1>
+                                <h3 className="nk-error-title">Oops! Why you’re here?</h3>
+                                <p className="nk-error-text">We are very sorry for inconvenience. It looks like you’re try to access a page that either has been deleted or never existed.</p>
+                                <Link to="/dashboard" className="btn btn-lg btn-primary mt-2">Back To Home</Link>
                             </div>
                         </div>
                     </div>

@@ -61,9 +61,6 @@ class EditSupplier extends Component {
     return null;
   }
 
-  componentWillUnmount() {
-    // this.props.dispatch(clearNewSupplier());
-  }
 
 
   handleShareholderNameChange = idx => evt => {
