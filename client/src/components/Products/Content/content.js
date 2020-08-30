@@ -309,7 +309,7 @@ class Content extends Component {
                             </div>
 
                             {/* <!-- Modal Content Code - to add product--> */}
-                            <div class="modal fade" tabindex="-1" id="addmodal">
+                            {/* <div class="modal fade" tabindex="-1" id="addmodal">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <a href="#" class="close" data-dismiss="modal" aria-label="Close">
@@ -397,12 +397,12 @@ class Content extends Component {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
 
                         {/* <!-- Modal Content Code - to define cost --> */}
 
-                        <div class="modal fade" tabindex="-1" id="addmodalcost">
+                        {/* <div class="modal fade" tabindex="-1" id="addmodalcost">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <a href="#" class="close" data-dismiss="modal" aria-label="Close">
@@ -496,7 +496,7 @@ class Content extends Component {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                 </div>
