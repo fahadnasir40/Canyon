@@ -15,7 +15,10 @@ export function getSuppliers(
         else{
             return response.data;
         }
-    } );
+    } )
+    .catch(error=>{
+        console.log(error)
+    });
 
 
     return {

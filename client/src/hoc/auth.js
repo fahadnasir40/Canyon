@@ -13,29 +13,36 @@ export default function(ComposedClass,reload){
             this.props.dispatch(auth())
         }
 
-        UNSAFE_componentWillReceiveProps(nextProps){
-            this.setState({loading:false})
-
-            if(!nextProps.user.login.isAuth){
-                if(reload){
-                    this.props.history.push('/');
+        static getDerivedStateFromProps(nextProps,prevState){            
+            if(prevState.loading){
+                if(nextProps.user.login){
+                    if(!nextProps.user.login.isAuth){
+                        if(reload){
+                            this.props.history.push('/');
+                        }
+                    }
+                    else {
+                        if(reload === false) {
+                            nextProps.props.history.push('/dashboard')
+                        }
+                    }           
+    
                 }
-            } else {
-                if(reload === false) {
-                    this.props.history.push('/dashboard')
-                }
+                return {
+                    loading: false
+                } 
             }
+            return null;
         }
       
+
         render(){
             if(this.state.loading){
                 return null;
             }
-          
             return(
                 <ComposedClass {...this.props} user={this.props.user}/>
-            )
-            
+            )            
         }
     }
 

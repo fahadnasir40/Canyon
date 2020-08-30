@@ -12,7 +12,8 @@ import Profile from './components/Profile/profile'
 import Auth from './hoc/auth';
 import Customers from './components/Customers/customers';
 import Suppliers from './components/Suppliers/suppliers';
-import Purchases from './components/Purchases/purchases';
+import Purchases from './components/Purchases/Add/addPurchase';
+// import Purchases from './components/Purchases/purchases';
 import AddPurchases from './components/Purchases/Wizards/WizardFormFirstPage';
 import Transactions from './components/Transactions/Transactions';
 import Sales from './components/Sales/sales';

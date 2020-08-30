@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import DataTable from 'react-data-table-component';
 
 class Content extends Component {
 
     render() {
         return (
-
             <div class="nk-content ">
                 <div class="container-fluid">
                     <div class="nk-content-inner">
@@ -20,7 +20,19 @@ class Content extends Component {
                                         <input type="text" class="form-control border-transparent form-focus-none" placeholder="Search" />
                                     </div>
                                     <ul class="nk-block-tools-opt">
-                                        <Link to="/addpurchases"><button class="btn btn-primary"><em class="icon ni ni-plus"></em><span>New Purchase</span></button></Link>
+                                    <ul class="nk-block-tools-opt">
+                                        <Link to={{
+                                            pathname: "/addPurchase",
+                                            state:
+                                            {
+                                                activityName: 'Purchases'
+                                            }
+                                        }}
+                                        >
+                                        <button class="btn btn-primary"><em class="icon ni ni-plus"></em><span>New Purchase</span></button>
+                                        </Link>
+                                    </ul>
+                                        {/* <Link to="/addpurchases"><button class="btn btn-primary"><em class="icon ni ni-plus"></em><span>New Purchase</span></button></Link> */}
                                     </ul>
                                 </div>
                                 <div class="nk-block nk-block-lg">
