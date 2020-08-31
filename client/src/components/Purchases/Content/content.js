@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import DataTable from 'react-data-table-component';
+// import DataTable from 'react-data-table-component';
 
 class Content extends Component {
 

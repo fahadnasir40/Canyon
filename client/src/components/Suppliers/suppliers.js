@@ -25,7 +25,7 @@ class Suppliers extends Component {
             supplier.status = 'suspended'
             this.props.dispatch(updateSupplier(supplier))
         }
-        else if (supplier.status == 'suspended') {
+        else if (supplier.status === 'suspended') {
             supplier.status = 'active'
             this.props.dispatch(updateSupplier(supplier))
         }

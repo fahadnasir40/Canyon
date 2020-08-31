@@ -4,7 +4,7 @@ import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
 import { saveCustomer, clearNewCustomer } from '../../../actions';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom'
+// import { Redirect } from 'react-router-dom'
 
 
 class AddCustomer extends Component {
@@ -86,7 +86,7 @@ class AddCustomer extends Component {
 
   submitForm = (event) => {
 
-    const form = event.currentTarget;
+    // const form = event.currentTarget;
 
     event.preventDefault();
 

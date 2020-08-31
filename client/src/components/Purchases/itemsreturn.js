@@ -9,7 +9,7 @@ class Itemsreturn extends PureComponent {
     handleProductDropdown = (event) => {
 
         if (this.props.productsList) {
-            if (event.target.value == -1 && this.state.currentProduct) {
+            if (event.target.value === -1 && this.state.currentProduct) {
                 this.setState({ currentProduct: '', currentQuantity: '' });
             }
             else {

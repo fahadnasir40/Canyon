@@ -4,7 +4,7 @@ import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
 import { saveSupplier, clearNewSupplier } from '../../../actions';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom'
+// import { Redirect } from 'react-router-dom'
 
 
 class addSupplier extends Component {
@@ -90,7 +90,7 @@ class addSupplier extends Component {
 
   submitForm = (event) => {
 
-    const form = event.currentTarget;
+    // const form = event.currentTarget;
 
     event.preventDefault();
 

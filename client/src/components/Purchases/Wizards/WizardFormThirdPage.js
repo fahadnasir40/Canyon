@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import {Link} from 'react-router-dom'
-import Purchases from '../purchases'
+// import {Link} from 'react-router-dom'
+// import Purchases from '../purchases'
 import Swal from 'sweetalert2'
 
 class WizardFormThirdPage extends Component {
@@ -47,9 +47,9 @@ class WizardFormThirdPage extends Component {
     render(){
       // const { handleSubmit, pristine, previousPage, submitting } = this.props
       
-      const handleSubmit = this.props.onSubmit;
+    //   const handleSubmit = this.props.onSubmit;
       const previousPage = this.props.previousPage;
-      const onSubmit = this.props.onSubmit;
+    //   const onSubmit = this.props.onSubmit;
 
       return (
         <div className="nk-content ml-5">

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import ItemRow from '../itemsreturn'
 
 class WizardFormSecondPage extends Component {
@@ -58,8 +58,8 @@ class WizardFormSecondPage extends Component {
     }
 
     render() {
-        const handleSubmit = this.props.onSubmit;
-        const previousPage = this.props.previousPage;
+        // const handleSubmit = this.props.onSubmit;
+        // const previousPage = this.props.previousPage;
 
         return (
 

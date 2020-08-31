@@ -4,7 +4,7 @@ import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
 // import { saveProduct, clearProduct } from '../../../actions';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+// import { Redirect } from 'react-router-dom';
 import { getSuppliers, getProducts } from '../../../actions';
 import PurchaseDetail from '../Wizards/WizardFormSecondPage';
 import Moment from 'react-moment';
@@ -58,7 +58,7 @@ class AddPurchase extends Component {
     }
 
     handleInputDropdown = (event) => {
-        if (this.state.suppliersList && event.target.value != -1) {
+        if (this.state.suppliersList && event.target.value !== -1) {
             this.setState({ currentSupplier: this.state.suppliersList[event.target.value] })
         }
     }

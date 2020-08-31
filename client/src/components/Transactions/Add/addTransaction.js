@@ -4,10 +4,10 @@ import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
 import { saveProduct, clearProduct } from '../../../actions';
 import { connect } from 'react-redux';
-// import { Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 
-class AddProduct extends Component {
+class AddTransaction extends Component {
 
     state = {
         name: '',
@@ -335,4 +335,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(AddProduct)
+export default connect(mapStateToProps)(AddTransaction)

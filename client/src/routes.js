@@ -16,6 +16,7 @@ import Purchases from './components/Purchases/Add/addPurchase';
 // import Purchases from './components/Purchases/purchases';
 import AddPurchases from './components/Purchases/Wizards/WizardFormFirstPage';
 import Transactions from './components/Transactions/Transactions';
+// import AddTransaction from './components/Transactions/Add/addTransaction';
 import Sales from './components/Sales/sales';
 import AddSupplier from './components/Suppliers/AddSupplier/add';
 import AddProduct from './components/Products/Add/addProduct';
@@ -46,27 +47,13 @@ const routes = () => {
                 <Route path="/editSupplier" exact component ={Auth(EditSupplier,true)}/>
                 <Route path="/purchases" exact component ={Auth(Purchases,true)}/>
                 <Route path="/addpurchases" exact component ={Auth(AddPurchases,true)}/>
-                <Route path="/transactions" exact component ={Auth(Transactions,true)}/>
+                <Route path="/Transactions" exact component ={Auth(Transactions,true)}/>
                 <Route path="/sales" exact component ={Auth(Sales,true)}/>
                 <Route path="/profile" exact component ={Auth(Profile,true)}/>
                 <Route path="/error" exact component={ErrorPage504}/> 
                 <Route component={ErrorPage404}/>  
        </Switch>
     )
-                {/* <Route path="/" exact component = {Auth(Home,null)} />
-                <Route path="/documents"  component ={Auth(Dashboard,true)} />
-                <Route path="/user/logout" exact component = {Auth(Logout,true)} />
-                <Route path="/document/:id/:type?" exact component = {Auth(Document,true)}/> 
-                <Route path="/reset" exact component = {ResetPassword} />  
-                <Route path="/forgotPassword" exact component = {ForgotPassword} />            
-                {/* <Route path="/login" exact component = {Auth(Login,false)} />
-                <Route path="/user/logout" exact component = {Auth(Logout,true)} />
-                <Route path="/user" exact component = {Auth(User,true)} />
-                <Route path="/books/:id" exact component = {Auth(BookView,null)} />
-                <Route path="/user/user-reviews" exact component = {Auth(UserPosts,true)} />
-                <Route path="/user/add" exact component = {Auth(AddReview,true)} />
-                <Route path="/user/register" exact component = {Auth(Register,true)} />
-    <Route path="/user/edit-post/:id" exact component = {Auth(EditReview,true)} />  */ }
 }
 
 export default routes;
