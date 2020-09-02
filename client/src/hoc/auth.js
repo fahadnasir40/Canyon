@@ -18,15 +18,14 @@ export default function(ComposedClass,reload){
                 if(nextProps.user.login){
                     if(!nextProps.user.login.isAuth){
                         if(reload){
-                            this.props.history.push('/');
+                            nextProps.history.push('/');
                         }
                     }
                     else {
                         if(reload === false) {
-                            nextProps.props.history.push('/dashboard')
+                            nextProps.history.push('/dashboard')
                         }
-                    }           
-    
+                    }
                 }
                 return {
                     loading: false

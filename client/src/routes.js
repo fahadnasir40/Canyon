@@ -30,8 +30,9 @@ const routes = () => {
 
     return (
         <Switch>
-            <Route path="/dashboard" exact component ={Auth(Dashboard,true)}/>
+            
             <Route path="/" exact  component = {Auth(Login,false)}/>
+                <Route path="/dashboard" exact component ={Auth(Dashboard,true)}/>
                 <Route path="/users" exact component ={Auth(Users,true)}/>
                 <Route path="/add" exact component ={Auth(AddUser,true)}/>
                 <Route path="/products" exact component ={Auth(Products,true)}/>

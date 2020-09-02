@@ -1,16 +1,24 @@
 /*!
+ * Theme Name: Default
+ * Package : DashLite
+ * Author: Softnio
+ * Author URI: http://themeforest.net/user/softnio
+ * Version	 :	1.0.0
+ * Updated	 :	07.23.2020
+**/
+@media only screen and (min-width: 1200px) {
+    .custom-dashboard {
+        margin-left: 15em;
+    }
+  }
+
+  /*!
  * Theme: Blue 
- * Package: DashLite v1.8.0
- * Updated: 07.23.2020
+ * Package: DashLite v1.9.1
+ * Updated: 08.28.2020
  * Author: Softnio
  * Author URI: http://themeforest.net/user/softnio
 **/
-
-@media only screen and (min-width: 1200px) {
-  .custom-dashboard {
-      margin-left: 15em;
-  }
-}
 .nk-sidebar.is-dark { background: #0f192a; border-right-color: #1c2f50; }
 
 .nk-sidebar.is-theme { background: #0a2d6c; border-right-color: #0f419a; }
@@ -180,3 +188,5 @@ a:hover { color: #015edd; }
 .nk-files-view-list .nk-file.selected { background-color: #e1eeff; }
 
 .chat.is-me .chat-msg { background-color: #0971fe; }
+
+  
