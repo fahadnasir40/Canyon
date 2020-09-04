@@ -13,8 +13,7 @@ import Auth from './hoc/auth';
 import Customers from './components/Customers/customers';
 import Suppliers from './components/Suppliers/suppliers';
 import Purchases from './components/Purchases/Add/addPurchase';
-// import Purchases from './components/Purchases/purchases';
-import AddPurchases from './components/Purchases/Wizards/WizardFormFirstPage';
+import AddPurchases from './components/Purchases/Add/addPurchase';
 import Transactions from './components/Transactions/Transactions';
 import Sales from './components/Sales/sales';
 import AddSupplier from './components/Suppliers/AddSupplier/add';
@@ -46,7 +45,7 @@ const routes = () => {
                 <Route path="/addSupplier" exact component ={Auth(AddSupplier,true)}/>
                 <Route path="/editSupplier" exact component ={Auth(EditSupplier,true)}/>
                 <Route path="/purchases" exact component ={Auth(Purchases,true)}/>
-                <Route path="/addpurchases" exact component ={Auth(AddPurchases,true)}/>
+                <Route path="/addpurchase" exact component ={Auth(AddPurchases,true)}/>
                 <Route path="/transactions" exact component ={Auth(Transactions,true)}/>
                 <Route path="/sales" exact component ={Auth(Sales,true)}/>
                 <Route path="/profile" exact component ={Auth(Profile,true)}/>

@@ -5,20 +5,6 @@ import Footer from '../Footer/footer'
 import Content from './Content/content'
 import OrderDetails from './Auth/add'
 
-// import React, { Component } from 'react'
-// import Sidebar from '../Sidebar/sidebar'
-// import Header from '../Header/header'
-// import Footer from '../Footer/footer'
-// import PropTypes from 'prop-types'
-// import WizardFormFirstPage from './Wizards/WizardFormFirstPage'
-// import WizardFormSecondPage from './Wizards/WizardFormSecondPage'
-// import OrderDetails from './Wizards/OrderDetails'
-// import WizardFormThirdPage from './Wizards/WizardFormThirdPage'
-
-
-// import WizardFormThirdPage from './WizardFormThirdPage'
-// import Content from './Content/content'
-
 class Purchases extends Component {
   constructor(props) {
     super(props)

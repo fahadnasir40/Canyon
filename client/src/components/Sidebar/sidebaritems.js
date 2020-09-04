@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import $ from 'jquery'
 
 const SideNavItems = (props) => {
     const items = [
@@ -11,14 +12,14 @@ const SideNavItems = (props) => {
         },
         {
             icon: 'icon ni ni-bag-fill',
-            text: 'Purchases',
-            link: '/purchases',
+            text: 'Orders',
+            link: '/sales',
             login: ''
         },
         {
-            icon: 'icon ni ni-bag-fill',
-            text: 'Orders',
-            link: '/sales',
+            icon: 'icon ni  ni-cc-alt2-fill',
+            text: 'Purchases',
+            link: '/addpurchase',
             login: ''
         },
         {
@@ -35,19 +36,19 @@ const SideNavItems = (props) => {
         },
         ,
         {
-            icon: 'icon ni ni-users-fill',
+            icon: 'icon ni ni-truck',
             text: 'Suppliers',
             link: '/suppliers',
             login: false
         },
         {
-            icon: 'icon ni ni-chat-fill',
+            icon: 'icon ni ni-activity-round-fill',
             text: 'Transactions',
             link: '/transactions',
             login: true
         },
         {
-            icon: 'icon ni ni-chat-fill',
+            icon: 'icon ni ni-user-list-fill',
             text: 'Users',
             link: '/users',
             login: true
@@ -60,16 +61,37 @@ const SideNavItems = (props) => {
         }
     ]
 
-    const element = (item,i) => (
-          <div key={i} className={item.type}>
-              {/* <!-- .nk-menu-item --> */}
-            <li className="nk-menu-item">    
-              <Link to={item.link} className="nk-menu-link">
-                    <span className="nk-menu-icon"><em className= {item.icon}></em></span>
+    const setCurrentLink = () => {
+
+        var _link = '.nk-menu-link, .menu-link, .nav-link',
+            _currentURL = window.location.href,
+            fileName = _currentURL.substring(0, _currentURL.indexOf("#") == -1 ? _currentURL.length : _currentURL.indexOf("#")),
+            fileName = fileName.substring(0, fileName.indexOf("?") == -1 ? fileName.length : fileName.indexOf("?"));
+
+        $(_link).each(function () {
+            var self = $(this),
+                _self_link = self.attr('href');
+
+            if (fileName.match(_self_link)) {
+                self.closest("li").addClass('active current-page').parents().closest("li").addClass("active current-page");
+                self.closest("li").children('.nk-menu-sub').css('display', 'block');
+                self.parents().closest("li").children('.nk-menu-sub').css('display', 'block');
+            } else {
+                self.closest("li").removeClass('active current-page').parents().closest("li:not(.current-page)").removeClass("active");
+            }
+        });
+    }; // PasswordSwitch @v1.0
+
+    const element = (item, i) => (
+        <div key={i} className={item.type}>
+            {/* <!-- .nk-menu-item --> */}
+            <li className="nk-menu-item">
+                <Link to={item.link} className="nk-menu-link">
+                    <span className="nk-menu-icon"><em className={item.icon}></em></span>
                     <span className="nk-menu-text">{item.text}</span>
-              </Link>
+                </Link>
             </li>
-         </div>
+        </div>
     )
 
 
@@ -107,16 +129,17 @@ const SideNavItems = (props) => {
 
 
     const showItems = () => {
-        return items.map( (item,i) =>{
-            return element(item,i);
-        } )
+        return items.map((item, i) => {
+            return element(item, i);
+        })
     }
 
 
-    return(
-           <div>
-               {showItems()}
-           </div> 
+    return (
+        <div>
+            {showItems()}
+            {setCurrentLink()}
+        </div>
     )
 }
 

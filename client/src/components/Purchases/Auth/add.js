@@ -5,7 +5,7 @@ import Footer from '../../Footer/footer'
 import { userRegister } from '../../../actions';
 import { connect } from 'react-redux';
 import {Redirect} from 'react-router-dom';
-import Purchases from '../purchases';
+import Purchases from '../purchase';
 
 class AddPurchase extends Component {
 
