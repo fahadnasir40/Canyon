@@ -148,7 +148,7 @@ export function saveProduct(document){
 
 //save transaction
 export function saveTransaction(document){
-    const request = axios.post('/api/ADD_TRANSACTION',document)
+    const request = axios.post('/api/addTransaction',document)
         .then(response => response.data);
     return {
         type:'ADD_TRANSACTION',

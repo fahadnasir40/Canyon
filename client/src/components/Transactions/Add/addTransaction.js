@@ -14,7 +14,7 @@ class AddTransaction extends Component {
     state = {
         name: '',
         brand: 'canyon',
-        startDate : new Date(),
+        startDate: new Date(),
         source: '',
         svalue: '',
         ttype: '',
@@ -33,12 +33,12 @@ class AddTransaction extends Component {
         error: ''
     }
 
-    componentDidMount() {
-        this.props.dispatch(getSuppliers())
-        this.props.dispatch(getProducts())
-        this.props.dispatch(getCustomers())
-        this.props.dispatch(getUsers())
-    }
+    // componentDidMount() {
+    // this.props.dispatch(getSuppliers())
+    // this.props.dispatch(getProducts())
+    // this.props.dispatch(getCustomers())
+    // this.props.dispatch(getUsers())
+    // }
 
     static getDerivedStateFromProps(nextProps, prevState) {
 
@@ -72,11 +72,22 @@ class AddTransaction extends Component {
     }
 
     handleInputSource = (event) => {
-        this.setState({ source: event.target.value })
-        if (this.state.source !== null)
-        {
-            this.state.transaction_value_true_false = false
+
+        if (event.target.value === "supplier" && this.props.supplierList == null) {
+            this.props.dispatch(getSuppliers())
         }
+        else if (event.target.value === "customer" && this.props.customerList == null) {
+            this.props.dispatch(getCustomers())
+        }
+        else if (event.target.value === "employees" && this.props.userList == null) {
+            this.props.dispatch(getUsers())
+        }
+
+        this.setState({ source: event.target.value })
+
+        // if (this.state.source !== null) {
+        //     this.state.transaction_value_true_false = false
+        // }
     }
 
     handleInputSvalue = (event) => {
@@ -125,13 +136,12 @@ class AddTransaction extends Component {
         event.preventDefault();
 
         this.props.dispatch(saveTransaction({
-            transaction_date : this.state.startDate,
-            primary_quantity : this.state.qty,
-            transaction_source : this.state.source,
-            transaction_type : this.state.ttype,
-            transaction_action : this.state.taction,
-            transaction_value : this.state.transaction_value,
-            brand: this.state.brand,
+            transaction_date: this.state.startDate,
+            primary_quantity: this.state.qty,
+            transaction_source: this.state.source,
+            transaction_type: this.state.ttype,
+            transaction_action: this.state.taction,
+            transaction_value: this.state.transaction_value,
             addedBy: this.props.user.login.id
         }))
     }
@@ -193,22 +203,27 @@ class AddTransaction extends Component {
                                         <div className="form-control-wrap ">
                                             <div className="form-control-select">
 
-                                                <select required onChange={this.handleInputDropdown} className="form-control ccap" id= "svalue" disabled={this.state.transaction_value_true_false} required>
+                                                <select required onChange={this.handleInputDropdown} className="form-control ccap" id="svalue" required>
                                                     <option value={-1}> Select {this.state.source}</option>
 
                                                     {
                                                         this.state.source === "supplier" ?
-                                                            this.state.suppliersList.map((item, key) => {
-                                                                return <option key={key} value={key} className="ccap" >{item.name} ({item.brand})</option>;
-                                                            })
-                                                            : this.state.source === "customer" ?
-                                                                this.state.customerList.map((item, key) => {
-                                                                    return <option key={key} value={key} className="ccap" >{item.name}</option>;
+                                                            this.props.suppliersList ?
+                                                                this.props.suppliersList.map((item, key) => {
+                                                                    return <option key={key} value={key} className="ccap" >{item.name} ({item.brand})</option>;
                                                                 })
-                                                                : this.state.source === "employees" ?
-                                                                    this.state.userList.map((item, key) => {
+                                                                : null
+                                                            : this.state.source === "customer" ?
+                                                                this.props.customerList ?
+                                                                    this.props.customerList.map((item, key) => {
                                                                         return <option key={key} value={key} className="ccap" >{item.name}</option>;
-                                                                    })
+                                                                    }) : null
+                                                                : this.state.source === "employees" ?
+                                                                    this.props.userList ?
+                                                                        this.props.userList.map((item, key) => {
+                                                                            return <option key={key} value={key} className="ccap" >{item.name}</option>;
+                                                                        })
+                                                                        : null
                                                                     : null
                                                     }
                                                 </select>
@@ -328,12 +343,13 @@ class AddTransaction extends Component {
     render() {
 
         if (this.state.redirect === true) {
-            this.props.history.push('/products')
+            this.props.history.push('/Transaction')
         }
 
         let total = 0;
-
+        console.log("List", this.props)
         return (
+
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">
                     <div className="nk-main"></div>

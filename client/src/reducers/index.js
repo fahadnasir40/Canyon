@@ -3,12 +3,14 @@ import user from './user_reducer';
 import supplier from './supplier_reducer';
 import customer from './customer_reducer';
 import product from './product_reducer';
+import transaction from './transaction_reducer';
 
 const rootReducer = combineReducers({
     user,
     supplier,
     customer,
-    product
+    product,
+    transaction
 });
 
 export default rootReducer;
