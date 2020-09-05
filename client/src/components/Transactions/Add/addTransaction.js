@@ -4,8 +4,10 @@ import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
 import { saveProduct, clearProduct } from '../../../actions';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom'
-
+import { Redirect } from 'react-router-dom';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import Moment from 'react-moment';
 
 class AddTransaction extends Component {
 
@@ -14,85 +16,79 @@ class AddTransaction extends Component {
         sku: '',
         uom: 'Pcs',
         brand: 'canyon',
+        startDate: new Date(),
+        source: '',
+        svalue: '',
+        ttype: '',
+        taction: '',
+        qty: 1,
+        rate: 1,
+        comments: '',
         seal: '',
-        wrapper: '',
-        others: '',
-        security: '',
-        flatRate: '',
         redirect: false,
         error: ''
     }
 
-      static getDerivedStateFromProps(nextProps, prevState) {
-         
+    static getDerivedStateFromProps(nextProps, prevState) {
+
         if (nextProps.addProduct) {
-          if (nextProps.addProduct.post === true) {
-            return {
-              redirect: true
+            if (nextProps.addProduct.post === true) {
+                return {
+                    redirect: true
+                }
             }
-          }
-          else if (nextProps.addProduct.post === false) {
-            return {
-              error: 'Error adding the product.'
+            else if (nextProps.addProduct.post === false) {
+                return {
+                    error: 'Error adding the product.'
+                }
             }
-          }
         }
 
         return null;
-      }
+    }
 
     componentWillUnmount() {
-         this.props.dispatch(clearProduct());
+        this.props.dispatch(clearProduct());
+    }
+
+    handleInputTaction = (event) => {
+        this.setState({ taction: event.target.value })
     }
 
 
-    handleInputName = (event) => {
-        this.setState({ name: event.target.value })
+    handleInputTtype = (event) => {
+        this.setState({ ttype: event.target.value })
     }
 
-
-    handleInputSku = (event) => {
-        this.setState({ sku: event.target.value })
+    handleInputSource = (event) => {
+        this.setState({ source: event.target.value })
     }
 
-
-    handleInputUom = (event) => {
-        this.setState({ uom: event.target.value })
+    handleInputSvalue = (event) => {
+        this.setState({ svalue: event.target.value })
     }
 
-    handleInputSeal = (event) => {
-        let value = Number(event.target.value);
-        if (value >= 0)
-            this.setState({ seal: event.target.value })
-    }
+    handleInputDate = date => {
+        this.setState({
+            startDate: date
+        });
+    };
 
-    handleInputWrapper = (event) => {
-        let value = Number(event.target.value);
-        if (value >= 0)
-            this.setState({ wrapper: event.target.value })
-    }
+    handleInputQty = event => {
+        this.setState({ qty: event.target.value })
+    };
 
-    handleInputSecurity = (event) => {
-        let value = Number(event.target.value);
-        if (value >= 0)
-            this.setState({ security: event.target.value })
-    }
+    handleInputRate = event => {
+        this.setState({ rate: event.target.value })
+    };
 
-    handleInputFlatRate = (event) => {
-        let value = Number(event.target.value);
-        if (value >= 0)
-            this.setState({ flatRate: event.target.value })
-    }
+    handleInputComments = event => {
+        this.setState({ comments: event.target.value })
+    };
 
-    handleInputOthers = (event) => {
-        let value = Number(event.target.value);
-        if (value >= 0)
-            this.setState({ others: event.target.value })
-    }
-
-    handleInputBrand = (event) => {
-        this.setState({ brand: event.target.value })
-    }
+    // handleInputBrand = (event) => {
+    //     this.setState({ brand: event.target.value })
+    // }
 
     submitForm = (event) => {
 
@@ -101,191 +97,193 @@ class AddTransaction extends Component {
         event.preventDefault();
 
         this.props.dispatch(saveProduct({
-          name: this.state.name,
-          brand: this.state.brand,
-          sku: this.state.sku,
-          uom: this.state.uom,
-          price:{
-              cost_seal: this.state.seal,
-              cost_wrapper: this.state.wrapper,
-              cost_others: this.state.others,
-              cost_flatRate: this.state.flatRate,
-              cost_security: this.state.security
-          },
-          addedBy: this.props.user.login.id
+            name: this.state.name,
+            brand: this.state.brand,
+            sku: this.state.sku,
+            uom: this.state.uom,
+            price: {
+                cost_seal: this.state.seal
+            },
+            addedBy: this.props.user.login.id
         }))
     }
 
-    calculateTotal = (total) =>{
-    
-        total = Number(this.state.wrapper) + Number(this.state.seal) + Number(this.state.others);
-        if(!total)
+    calculateTotal = (total) => {
+
+        total = Number(this.state.seal);
+        if (!total)
             return 0;
         return total;
     }
 
+
+    getCurrentDate = () => {
+        const date = new Date();
+        return (<Moment format="MMM DD, YYYY">{date}</Moment>)
+    }
 
     renderBody = (total) => {
         return (
             <div className="container mt-5">
                 <div className="card">
                     <div className="card-inner">
-                        <div className="card-head mt-1">
-                            <h4 className="ff-base fw-medium">Add Product</h4>
+                        <div className="card-head mt-2">
+                            <h4 className="ff-base fw-medium">New Transaction</h4>
+                            {/* <div className="col-lg-4"> */}
+                            {/* <div class="d-flex justify-content-end" > */}
+                            <span>Date: <DatePicker
+                                selected={this.state.startDate}
+                                onChange={this.handleInputDate}
+                            /></span>
+                            {/* </div> */}
+                            {/* </div> */}
                         </div>
                         <form className="form-validate">
                             <div className="row g-4">
                                 <div className="col-lg-4">
                                     <div className="form-group">
-                                        <label className="form-label" htmlFor="full-name-1">
-                                            Product Title
-                                        </label>
-                                        <div className="form-control-wrap">
-                                            <input
-                                                type="text"
-                                                value={this.state.name}
-                                                onChange={this.handleInputName}
-                                                className="form-control"
-                                                id="full-name-1"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-4">
-                                    <div className="form-group">
-                                        <label className="form-label" htmlFor="brand">
-                                            Brand
+                                        <label className="form-label" htmlFor="source">
+                                            Source
                                          </label>
                                         <div className="form-control-wrap ">
                                             <div className="form-control-select">
-                                                <select required onChange={this.handleInputBrand} className="form-control" id="brand">
-                                                    <option value="canyon">Canyon</option>
-                                                    <option value="others">Others</option>
+                                                <select required onChange={this.handleInputSource} className="form-control" id="source">
+                                                    <option value="employees">Employees</option>
+                                                    <option value="supplier">Supplier</option>
+                                                    <option value="supplier">Customer</option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div className="row g-4">
                                 <div className="col-lg-4">
                                     <div className="form-group">
-                                        <label className="form-label" htmlFor="sku">
-                                            Item Code (SKU)
-                                        </label>
-                                        <div className="form-control-wrap">
-                                            <input type="text" value={this.state.sku}
-                                                onChange={this.handleInputSku} className="form-control" id="sku" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-label" for="uom">Unit of Measure</label>
-                                        <div class="form-control-wrap ">
-                                            <div class="form-control-select">
-                                                <select required onChange={this.handleInputUom} class="form-control" id="uom">
-                                                    <option value="Pcs">Pcs</option>
-                                                    <option value="KG">KG</option>
-                                                    <option value="Pet">Pet</option>
-                                                    <option value="Ltr">Ltr</option>
-                                                    <option value="Number">Number</option>
-                                                    <option value="Others">Others</option>
+                                        <label className="form-label" htmlFor="svalue">
+                                            Value
+                                         </label>
+                                        <div className="form-control-wrap ">
+                                            <div className="form-control-select">
+                                                <select required onChange={this.handleInputSvalue} className="form-control" id="svalue">
+                                                    <option value="canyon">Saad Khan</option>
+                                                    <option value="csupplier">Canyon Supplier</option>
+                                                    <option value="ccustomer">Canyon Customer</option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
+                            <div className="row g-2">
+                                <div className="col-lg-4">
+                                    <div className="form-group">
+                                        <label className="form-label" htmlFor="ttype">
+                                            Type
+                                         </label>
+                                        <div className="form-control-wrap ">
+                                            <div className="form-control-select">
+                                                <select required onChange={this.handleInputTtype} className="form-control" id="ttype">
+                                                    <option value="Otherexpense">Other Expense</option>
+                                                    <option value="sales">Sales</option>
+                                                    <option value="purchase">Purchase</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label" for="taction">Action</label>
+                                        <div class="form-control-wrap ">
+                                            <div class="form-control-select">
+                                                <select required onChange={this.handleInputTaction} class="form-control" id="taction">
+                                                    <option value="paysalary">Pay Salary</option>
+                                                    <option value="fuelcost">Fuel Cost</option>
+                                                    <option value="vehiclemaintenance">Vehicle Maintenance</option>
+                                                    <option value="advancepaid">Advance Paid</option>
+                                                    <option value="salesreturn">Sales Return</option>
+                                                    <option value="purchasereturn">Purchase Return</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <label class="form-label" for="qty">Quantity</label>
+                                        <div class="form-control-wrap">
+                                            <input type="number" min={0} value={this.state.qty} onChange={this.handleInputQty} class="form-control" id="qty" placeholder="Transaction Quantity" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <label class="form-label" for="rate">Rate</label>
+                                        <div class="form-control-wrap">
+                                            <input type="number" min="0" value={this.state.rate} onChange={this.handleInputRate} class="form-control" id="rate" placeholder="Rate" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mt-5  border-info    border-top border-bottom">
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <strong className="ff-base  h6 ccap">Total</strong>
+                                    </div>
+
+                                    <div className="col-md-6 d-flex justify-content-end">
+                                        <span className="fw-medium ccap ">Rs. {this.calculateTotal(total)}</span>
+                                    </div>
+
+                                </div>
 
                             </div>
 
 
-
-                            <div id="accordion-2" class="accordion accordion-s3 mt-4">
+                            {/* <div id="accordion-2" class="accordion accordion-s3 mt-4">
                                 <div class="accordion-item">
                                     <a href="#" class="accordion-head" data-toggle="collapse" data-target="#accordion-item-2-1">
-                                        <h6 class="title">Define Price</h6>
+                                        <h6 class="title">Detail</h6>
                                         <span class="accordion-icon"></span>
                                     </a>
                                     <div class="accordion-body collapse show" id="accordion-item-2-1" data-parent="#accordion-2">
                                         <div class="accordion-inner">
                                             <div class="row g-3">
 
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="seal">Seal</label>
-                                                        <div class="form-control-wrap">
-                                                            <input type="number" min={0} value={this.state.seal} onChange={this.handleInputSeal} class="form-control" id="seal" placeholder="Enter Seal Price" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3 ml-md-5">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="wrapper">Wrapper</label>
-                                                        <div class="form-control-wrap">
-                                                            <input type="number"  min="0" value={this.state.wrapper} onChange={this.handleInputWrapper} class="form-control" id="wrapper" placeholder="Enter Wrapper Price" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                                            <div class="row g-3">
-                                                <div class="col-md-3 ">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="flat">Flat Rate</label>
-                                                        <div class="form-control-wrap">
-                                                            <input type="number" min="0" value={this.state.flatRate} onChange={this.handleInputFlatRate}class="form-control" id="flat" placeholder="Enter Flat Rate" />
-                                                        </div>
-                                                    </div>
-                                                </div>
 
-                                                <div class="col-md-3 ml-md-5">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="security">Security</label>
-                                                        <div class="form-control-wrap">
-                                                            <input type="number" min="0" value={this.state.security} onChange={this.handleInputSecurity} class="form-control" id="security" placeholder="Enter Security Price" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row g-3">
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="others">Others</label>
-                                                        <div class="form-control-wrap">
-                                                            <input type="number" min="0" value={this.state.others} onChange={this.handleInputOthers} class="form-control" id="others" placeholder="Others" />
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
-
                                         <div class="row g-3 mt-2">
-                                            <div class="col-md-6 mt-4 ml-3  border-info    border-top border-bottom">
-                                                <div className="row">
-                                                    <div className="col-md-6">
-                                                        <strong className="ff-base  h6 ccap">Total</strong>
-                                                    </div>
-
-                                                    <div className="col-md-6 d-flex justify-content-end">
-                                                        <span className="fw-medium ccap ">Rs. {this.calculateTotal(total)}</span>
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
+                            {/* <div class="row g-4 mt-5"> */}
+                                <div class="col-md-8 mt-5">
+                                    <div class="form-group">
+                                        <label class="form-label" for="comments">Comments</label>
+                                        <div class="form-control-wrap">
+                                            {/* <input type="textarea" value={this.state.comments} onChange={this.handleInputComments} class="form-control" id="comments" placeholder="Comments" /> */}
+                                            <textarea
+                                                className="form-control"
+                                                value={this.state.comments}
+                                                onChange={this.handleInputComments}
+                                                id="comments"
+                                                placeholder="Comments"
+                                                rows={5}
+                                                cols={5}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            {/* </div> */}
                             <div className="row g-4">
 
                                 <div className="col-12 mt-4 ml-2">
                                     <div className="form-group">
                                         <button onClick={this.submitForm} className="btn btn-lg btn-primary">
-                                            <em class="icon ni ni-plus-c"></em> <span>  Save Product</span>
+                                            <em class="icon ni ni-plus-c"></em> <span>  Save </span>
                                         </button>
                                     </div>
                                 </div>

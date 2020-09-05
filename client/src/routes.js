@@ -6,25 +6,25 @@ import Dashboard from './components/Dashboard/dashboard'
 import ErrorPage404 from './components/Errors/error404'
 import ErrorPage504 from './components/Errors/error504'
 import Users from './components/Users/users'
-import Products from './components/Products/products'
 import AddUser from './components/Users/Auth/add'
 import Profile from './components/Profile/profile'
 import Auth from './hoc/auth';
-import Customers from './components/Customers/customers';
 import Suppliers from './components/Suppliers/suppliers';
+import SupplierDetails from './components/Suppliers/SupplierInfo/supplierInfo';
+import AddSupplier from './components/Suppliers/AddSupplier/add';
+import EditSupplier from './components/Suppliers/AddSupplier/edit';
 import Purchases from './components/Purchases/Add/addPurchase';
 // import Purchases from './components/Purchases/purchases';
 import AddPurchases from './components/Purchases/Wizards/WizardFormFirstPage';
-// import Transactions from './components/Transactions/Transactions';
+import Transactions from './components/Transactions/transactions';
 import AddTransaction from './components/Transactions/Add/addTransaction';
 import Sales from './components/Sales/sales';
-import AddSupplier from './components/Suppliers/AddSupplier/add';
+import Products from './components/Products/products'
 import AddProduct from './components/Products/Add/addProduct';
-import EditSupplier from './components/Suppliers/AddSupplier/edit';
-import SupplierDetails from './components/Suppliers/SupplierInfo/supplierInfo';
+import Customers from './components/Customers/customers';
+import CustomerDetails from './components/Customers/CustomerInfo/customerInfo';
 import AddCustomer from './components/Customers/AddCustomer/add';
 import EditCustomer from './components/Customers/AddCustomer/edit';
-import CustomerDetails from './components/Customers/CustomerInfo/customerInfo';
 
 
 const routes = () => {
@@ -37,6 +37,7 @@ const routes = () => {
                 <Route path="/add" exact component ={Auth(AddUser,true)}/>
                 <Route path="/products" exact component ={Auth(Products,true)}/>
                 <Route path="/addProduct" exact component ={Auth(AddProduct,true)}/>
+                <Route path="/transactions" exact component ={Auth(Transactions,true)}/>
                 <Route path="/addTransaction" exact component ={Auth(AddTransaction,true)}/>
                 <Route path="/customers" exact component ={Auth(Customers,true)}/>
                 <Route path="/customerInfo" exact component ={Auth(CustomerDetails,true)}/>                
