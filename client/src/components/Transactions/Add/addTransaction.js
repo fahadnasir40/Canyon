@@ -12,11 +12,11 @@ import Moment from 'react-moment';
 class AddTransaction extends Component {
 
     state = {
-        name: '',
         brand: 'canyon',
         startDate: new Date(),
         source: '',
-        svalue: '',
+        // svalue: 'asad waqas',
+        svalue : '',
         ttype: '',
         taction: '',
         qty: 1,
@@ -26,9 +26,8 @@ class AddTransaction extends Component {
         productsList: '',
         customerList: '',
         userList: '',
-        seal: '',
+        // seal: '',
         redirect: false,
-        transction_source: '',
         transaction_value_true_false: true,
         error: ''
     }
@@ -50,7 +49,7 @@ class AddTransaction extends Component {
             }
             else if (nextProps.AddTransaction.post === false) {
                 return {
-                    error: 'Error adding the product.'
+                    error: 'Error adding the transaction.'
                 }
             }
         }
@@ -68,30 +67,28 @@ class AddTransaction extends Component {
 
 
     handleInputTtype = (event) => {
-        this.setState({ ttype: event.target.value })
+        // this.setState({ ttype: event.target.value,taction: 'paysalary' })
+        this.setState({ ttype: event.target.value})
     }
 
     handleInputSource = (event) => {
 
-        if (event.target.value === "supplier" && this.props.supplierList == null) {
+        if (event.target.value === "supplier" && this.props.supplierList === null) {
             this.props.dispatch(getSuppliers())
         }
-        else if (event.target.value === "customer" && this.props.customerList == null) {
+        else if (event.target.value === "customer" && this.props.customerList === null) {
             this.props.dispatch(getCustomers())
         }
-        else if (event.target.value === "employees" && this.props.userList == null) {
+        else if (event.target.value === "employees" && this.props.userList === null) {
             this.props.dispatch(getUsers())
         }
 
         this.setState({ source: event.target.value })
 
-        // if (this.state.source !== null) {
-        //     this.state.transaction_value_true_false = false
-        // }
     }
 
     handleInputSvalue = (event) => {
-        this.setState({ svalue: event.target.value })
+        this.setState({ svalue: this.props.supplierList[event.target.value]._id  })
     }
 
     handleInputDate = date => {
@@ -113,15 +110,8 @@ class AddTransaction extends Component {
     };
 
     handleInputDropdown = (event) => {
-        if (this.state.suppliersList && event.target.value !== -1) {
-            this.setState({ currentSupplier: this.state.suppliersList[event.target.value] })
-        }
-        if (this.state.customerList && event.target.value !== -1) {
-            this.setState({ currentCustomer: this.state.customerList[event.target.value] })
-        }
-        if (this.state.userList && event.target.value !== -1) {
-            this.setState({ currentUser: this.state.userList[event.target.value] })
-        }
+        this.setState({svalue: event.target.value})
+
     }
 
 
@@ -139,20 +129,21 @@ class AddTransaction extends Component {
             transaction_date: this.state.startDate,
             primary_quantity: this.state.qty,
             transaction_source: this.state.source,
-            transaction_type: this.state.ttype,
+            transaction_type: this.state.ttype ,
             transaction_action: this.state.taction,
-            transaction_value: this.state.transaction_value,
+            transaction_value: this.state.svalue,
+
             addedBy: this.props.user.login.id
         }))
     }
 
-    calculateTotal = (total) => {
+    // calculateTotal = (total) => {
 
-        total = Number(this.state.seal);
-        if (!total)
-            return 0;
-        return total;
-    }
+    //     total = Number(this.state.seal);
+    //     if (!total)
+    //         return 0;
+    //     return total;
+    // }
 
 
     getCurrentDate = () => {
@@ -168,7 +159,7 @@ class AddTransaction extends Component {
                         <div className="card-head mt-2">
                             <h4 className="ff-base fw-medium">New Transaction</h4>
                             {/* <div className="col-lg-4"> */}
-                            {/* <div class="d-flex justify-content-end" > */}
+                            {/* <div className="d-flex justify-content-end" > */}
                             <span>Date: <DatePicker
                                 selected={this.state.startDate}
                                 onChange={this.handleInputDate}
@@ -185,7 +176,7 @@ class AddTransaction extends Component {
                                          </label>
                                         <div className="form-control-wrap ">
                                             <div className="form-control-select">
-                                                <select required onChange={this.handleInputSource} className="form-control" id="source" required>
+                                                <select required onChange={this.handleInputSource} className="form-control" id="source">
                                                     <option value=""></option>
                                                     <option value="employees">Employees</option>
                                                     <option value="supplier">Supplier</option>
@@ -203,7 +194,7 @@ class AddTransaction extends Component {
                                         <div className="form-control-wrap ">
                                             <div className="form-control-select">
 
-                                                <select required onChange={this.handleInputDropdown} className="form-control ccap" id="svalue" required>
+                                                <select required onChange={this.handleInputDropdown} className="form-control ccap" id="svalue">
                                                     <option value={-1}> Select {this.state.source}</option>
 
                                                     {
@@ -250,13 +241,13 @@ class AddTransaction extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label class="form-label" for="taction">Action</label>
-                                        <div class="form-control-wrap ">
-                                            <div class="form-control-select">
-                                                <select required onChange={this.handleInputTaction} class="form-control" id="taction" required>
-                                                    <option value="paysalary">Pay Salary</option>
+                                <div className="col-lg-3">
+                                    <div className="form-group">
+                                        <label className="form-label" htmlFor="taction">Action</label>
+                                        <div className="form-control-wrap ">
+                                            <div className="form-control-select">
+                                                <select required onChange={this.handleInputTaction} className="form-control" id="taction" required>
+                                                    <option value="paysalary" >Pay Salary</option>
                                                     <option value="fuelcost">Fuel Cost</option>
                                                     <option value="vehiclemaintenance">Vehicle Maintenance</option>
                                                     <option value="advancepaid">Advance Paid</option>
@@ -267,43 +258,43 @@ class AddTransaction extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-1">
-                                    <div class="form-group">
-                                        <label class="form-label" for="qty">Quantity</label>
-                                        <div class="form-control-wrap">
-                                            <input type="number" min={0} value={this.state.qty} onChange={this.handleInputQty} class="form-control" id="qty" placeholder="Transaction Quantity" />
+                                <div className="col-md-1">
+                                    <div className="form-group">
+                                        <label className="form-label" htmlFor="qty">Quantity</label>
+                                        <div className="form-control-wrap">
+                                            <input type="number" min={0} value={this.state.qty} onChange={this.handleInputQty} className="form-control" id="qty" placeholder="Transaction Quantity" />
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-1">
-                                    <div class="form-group">
-                                        <label class="form-label" for="rate">Rate</label>
-                                        <div class="form-control-wrap">
-                                            <input type="number" min="0" value={this.state.rate} onChange={this.handleInputRate} class="form-control" id="rate" placeholder="Rate" />
+                                <div className="col-md-1">
+                                    <div className="form-group">
+                                        <label className="form-label" htmlFor="rate">Rate</label>
+                                        <div className="form-control-wrap">
+                                            <input type="number" min="0" value={this.state.rate} onChange={this.handleInputRate} className="form-control" id="rate" placeholder="Rate" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 mt-5  border-info border-top border-bottom">
+                            <div className="col-md-3 mt-5  border-info border-top border-bottom">
                                 <div className="row g-2">
                                     <div className="col-md-6">
                                         <strong className="ff-base  h6 ccap">Total</strong>
                                     </div>
 
-                                    <div className="col-md-6 d-flex justify-content-end">
+                                    {/* <div className="col-md-6 d-flex justify-content-end">
                                         <span className="fw-medium ccap ">Rs. {this.calculateTotal(total)}</span>
-                                    </div>
+                                    </div> */}
 
                                 </div>
 
                             </div>
 
-                            {/* <div class="row g-4 mt-5"> */}
-                            <div class="col-md-8 mt-5">
-                                <div class="form-group">
-                                    <label class="form-label" for="comments">Comments</label>
-                                    <div class="form-control-wrap">
-                                        {/* <input type="textarea" value={this.state.comments} onChange={this.handleInputComments} class="form-control" id="comments" placeholder="Comments" /> */}
+                            {/* <div className="row g-4 mt-5"> */}
+                            <div className="col-md-8 mt-5">
+                                <div className="form-group">
+                                    <label className="form-label" htmlFor="comments">Comments</label>
+                                    <div className="form-control-wrap">
+                                        {/* <input type="textarea" value={this.state.comments} onChange={this.handleInputComments} className="form-control" id="comments" placeholder="Comments" /> */}
                                         <textarea
                                             className="form-control"
                                             value={this.state.comments}
@@ -322,7 +313,7 @@ class AddTransaction extends Component {
                                 <div className="col-12 mt-4 ml-2">
                                     <div className="form-group">
                                         <button onClick={this.submitForm} className="btn btn-lg btn-primary">
-                                            <em class="icon ni ni-plus-c"></em> <span>  Save </span>
+                                            <em className="icon ni ni-plus-c"></em> <span>  Save </span>
                                         </button>
                                     </div>
                                 </div>
@@ -343,11 +334,11 @@ class AddTransaction extends Component {
     render() {
 
         if (this.state.redirect === true) {
-            this.props.history.push('/Transaction')
+            this.props.history.push('/transactions')
         }
 
         let total = 0;
-        console.log("List", this.props)
+        console.log("List", this.state)
         return (
 
             <div className="nk-body bg-lighter npc-default has-sidebar ">

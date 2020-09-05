@@ -236,7 +236,7 @@ app.post('/api/addTransaction',auth,(req, res) => {
     
     console.log("Transaction",transaction)
 
-    product.save((error, transaction) => {
+    transaction.save((error, transaction) => {
         if (error) {
             console.log("Transaction",error)
             return res.status(400).send(error);
