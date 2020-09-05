@@ -16,9 +16,9 @@ class AddTransaction extends Component {
         startDate: new Date(),
         source: '',
         // svalue: 'asad waqas',
-        svalue : '',
-        ttype: '',
-        taction: '',
+        svalue : 0,
+        ttype: 'otherexpense',
+        taction: 'paysalary',
         qty: 1,
         rate: 1,
         comments: '',
@@ -41,13 +41,13 @@ class AddTransaction extends Component {
 
     static getDerivedStateFromProps(nextProps, prevState) {
 
-        if (nextProps.AddTransaction) {
-            if (nextProps.AddTransaction.post === true) {
+        if (nextProps.addTransaction) {
+            if (nextProps.addTransaction.post === true) {
                 return {
                     redirect: true
                 }
             }
-            else if (nextProps.AddTransaction.post === false) {
+            else if (nextProps.addTransaction.post === false) {
                 return {
                     error: 'Error adding the transaction.'
                 }
@@ -73,18 +73,18 @@ class AddTransaction extends Component {
 
     handleInputSource = (event) => {
 
-        if (event.target.value === "supplier" && this.props.supplierList === null) {
-            this.props.dispatch(getSuppliers())
-        }
-        else if (event.target.value === "customer" && this.props.customerList === null) {
-            this.props.dispatch(getCustomers())
-        }
-        else if (event.target.value === "employees" && this.props.userList === null) {
-            this.props.dispatch(getUsers())
-        }
-
         this.setState({ source: event.target.value })
 
+        if (event.target.value === "supplier") {
+            this.props.dispatch(getSuppliers())
+        }
+        else if (event.target.value === "customer") {
+            console.log("customer list calling", event.target.value)
+            this.props.dispatch(getCustomers())
+        }
+        else if (event.target.value === "employees") {
+            this.props.dispatch(getUsers())
+        }
     }
 
     handleInputSvalue = (event) => {
@@ -128,11 +128,12 @@ class AddTransaction extends Component {
         this.props.dispatch(saveTransaction({
             transaction_date: this.state.startDate,
             primary_quantity: this.state.qty,
+            rate : this.state.rate,
             transaction_source: this.state.source,
             transaction_type: this.state.ttype ,
             transaction_action: this.state.taction,
             transaction_value: this.state.svalue,
-
+            comments : this.state.comments,
             addedBy: this.props.user.login.id
         }))
     }
@@ -294,7 +295,6 @@ class AddTransaction extends Component {
                                 <div className="form-group">
                                     <label className="form-label" htmlFor="comments">Comments</label>
                                     <div className="form-control-wrap">
-                                        {/* <input type="textarea" value={this.state.comments} onChange={this.handleInputComments} className="form-control" id="comments" placeholder="Comments" /> */}
                                         <textarea
                                             className="form-control"
                                             value={this.state.comments}
@@ -360,10 +360,11 @@ class AddTransaction extends Component {
 
 function mapStateToProps(state) {
     return {
-        addProduct: state.product.product,
+        // addProduct: state.product.product,
         suppliersList: state.supplier.supplierList,
         customerList: state.customer.customerList,
-        userList: state.user.userList
+        userList: state.user.userList,
+        addTransaction : state.transaction.transaction
     }
 }
 

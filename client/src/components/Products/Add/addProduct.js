@@ -306,6 +306,7 @@ class AddProduct extends Component {
     render() {
 
         if (this.state.redirect === true) {
+            console.log("history products calling")
             this.props.history.push('/products')
         }
 

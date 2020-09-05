@@ -12,8 +12,8 @@ class Content extends Component {
     columns = [
 
         {
-            name: 'Name',
-            selector: 'name',
+            name: 'Source',
+            selector: 'source',
             sortable: true,
             grow: 2,
             style: {
@@ -23,8 +23,8 @@ class Content extends Component {
             },
         },
         {
-            name: 'SKU',
-            selector: 'sku',
+            name: 'Value',
+            selector: 'value',
             sortable: true,
 
         },
@@ -37,32 +37,32 @@ class Content extends Component {
         //     },
         // },
         {
-            name: 'Stock',
-            selector: 'stock',
+            name: 'Type',
+            selector: 'type',
             sortable: true,
             style: {
                 color: 'rgba(0,0,0,.54)',
             },
         },
         {
-            name: 'Brand',
-            selector: 'brand',
+            name: 'Action',
+            selector: 'action',
             sortable: true,
             style: {
                 color: 'rgba(0,0,0,.54)',
             },
         },
         {
-            name: 'UOM',
-            selector: 'uom',
+            name: 'Date',
+            selector: 'date',
             sortable: true,
             style: {
                 color: 'rgba(0,0,0,.54)',
             },
         },
         {
-            name: 'Status',
-            selector: 'status',
+            name: 'Qty',
+            selector: 'qty',
             sortable: true,
             style: {
                 color: 'rgba(0,0,0,.54)',
@@ -78,9 +78,9 @@ class Content extends Component {
                                 <a href="#" className="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
                                 <div className="dropdown-menu dropdown-menu-right">
                                     <ul className="link-list-opt no-bdr">
-                                        <li><a href="#"><em className="icon ni ni-edit"></em><span>Edit Product</span></a></li>
-                                        <li><a href="#"><em className="icon ni ni-eye"></em><span>View Product</span></a></li>
-                                        <li><a href="#"><em className="icon ni ni-activity-round"></em><span>Product Orders</span></a></li>
+                                        <li><a href="#"><em className="icon ni ni-edit"></em><span>Edit</span></a></li>
+                                        <li><a href="#"><em className="icon ni ni-eye"></em><span>View</span></a></li>
+                                        {/* <li><a href="#"><em className="icon ni ni-activity-round"></em><span>Product Orders</span></a></li> */}
                                         <li><a href="#"><em className="icon ni ni-trash"></em><span>Remove Product</span></a></li>
                                     </ul>
                                 </div>
