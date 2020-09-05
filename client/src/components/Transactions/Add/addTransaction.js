@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import Header from "../../Header/header";
 import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
-import { saveProduct, clearProduct } from '../../../actions';
+// import { saveProduct, clearProduct } from '../../../actions';
+import { getSuppliers, getProducts, getCustomers, getUsers } from '../../../actions';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Moment from 'react-moment';
@@ -13,8 +13,6 @@ class AddTransaction extends Component {
 
     state = {
         name: '',
-        sku: '',
-        uom: 'Pcs',
         brand: 'canyon',
         startDate: new Date(),
         source: '',
@@ -24,32 +22,71 @@ class AddTransaction extends Component {
         qty: 1,
         rate: 1,
         comments: '',
+        suppliersList: '',
+        productsList: '',
+        customerList: '',
+        userList: '',
         seal: '',
         redirect: false,
+        transction_source: '',
+        transaction_value_true_false: true,
         error: ''
     }
 
-    static getDerivedStateFromProps(nextProps, prevState) {
+    componentDidMount() {
+        this.props.dispatch(getSuppliers())
+        this.props.dispatch(getProducts())
+        this.props.dispatch(getCustomers())
+        this.props.dispatch(getUsers())
+    }
 
-        if (nextProps.addProduct) {
-            if (nextProps.addProduct.post === true) {
-                return {
-                    redirect: true
-                }
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.suppliersList !== prevState.suppliersList) {
+            console.log("Supplier Props", nextProps.suppliersList);
+            return {
+                suppliersList: nextProps.suppliersList
             }
-            else if (nextProps.addProduct.post === false) {
-                return {
-                    error: 'Error adding the product.'
-                }
+        }
+        if (nextProps.productsList !== prevState.productsList) {
+            return {
+                productsList: nextProps.productsList
+            }
+        }
+        if (nextProps.customerList !== prevState.customerList) {
+            return {
+                customerList: nextProps.customerList
+            }
+        }
+        if (nextProps.userList !== prevState.userList) {
+            return {
+                userList: nextProps.userList
             }
         }
 
         return null;
     }
 
-    componentWillUnmount() {
-        this.props.dispatch(clearProduct());
-    }
+    // static getDerivedStateFromProps(nextProps, prevState) {
+
+    //     if (nextProps.addProduct) {
+    //         if (nextProps.addProduct.post === true) {
+    //             return {
+    //                 redirect: true
+    //             }
+    //         }
+    //         else if (nextProps.addProduct.post === false) {
+    //             return {
+    //                 error: 'Error adding the product.'
+    //             }
+    //         }
+    //     }
+
+    //     return null;
+    // }
+
+    // componentWillUnmount() {
+    //     this.props.dispatch(clearProduct());
+    // }
 
     handleInputTaction = (event) => {
         this.setState({ taction: event.target.value })
@@ -62,6 +99,10 @@ class AddTransaction extends Component {
 
     handleInputSource = (event) => {
         this.setState({ source: event.target.value })
+        if (this.state.source !== null)
+        {
+            this.state.transaction_value_true_false = false
+        }
     }
 
     handleInputSvalue = (event) => {
@@ -86,27 +127,38 @@ class AddTransaction extends Component {
         this.setState({ comments: event.target.value })
     };
 
+    handleInputDropdown = (event) => {
+        if (this.state.suppliersList && event.target.value !== -1) {
+            this.setState({ currentSupplier: this.state.suppliersList[event.target.value] })
+        }
+        if (this.state.customerList && event.target.value !== -1) {
+            this.setState({ currentCustomer: this.state.customerList[event.target.value] })
+        }
+        if (this.state.userList && event.target.value !== -1) {
+            this.setState({ currentUser: this.state.userList[event.target.value] })
+        }
+    }
+
+
     // handleInputBrand = (event) => {
     //     this.setState({ brand: event.target.value })
     // }
 
-    submitForm = (event) => {
+    // submitForm = (event) => {
 
-        // const form = event.currentTarget;
+    //     // const form = event.currentTarget;
 
-        event.preventDefault();
+    //     event.preventDefault();
 
-        this.props.dispatch(saveProduct({
-            name: this.state.name,
-            brand: this.state.brand,
-            sku: this.state.sku,
-            uom: this.state.uom,
-            price: {
-                cost_seal: this.state.seal
-            },
-            addedBy: this.props.user.login.id
-        }))
-    }
+    //     this.props.dispatch(saveProduct({
+    //         name: this.state.name,
+    //         brand: this.state.brand,
+    //         price: {
+    //             cost_seal: this.state.seal
+    //         },
+    //         addedBy: this.props.user.login.id
+    //     }))
+    // }
 
     calculateTotal = (total) => {
 
@@ -147,10 +199,11 @@ class AddTransaction extends Component {
                                          </label>
                                         <div className="form-control-wrap ">
                                             <div className="form-control-select">
-                                                <select required onChange={this.handleInputSource} className="form-control" id="source">
+                                                <select required onChange={this.handleInputSource} className="form-control" id="source" required>
+                                                    <option value=""></option>
                                                     <option value="employees">Employees</option>
                                                     <option value="supplier">Supplier</option>
-                                                    <option value="supplier">Customer</option>
+                                                    <option value="customer">Customer</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -163,10 +216,25 @@ class AddTransaction extends Component {
                                          </label>
                                         <div className="form-control-wrap ">
                                             <div className="form-control-select">
-                                                <select required onChange={this.handleInputSvalue} className="form-control" id="svalue">
-                                                    <option value="canyon">Saad Khan</option>
-                                                    <option value="csupplier">Canyon Supplier</option>
-                                                    <option value="ccustomer">Canyon Customer</option>
+
+                                                <select required onChange={this.handleInputDropdown} className="form-control ccap" id={this.state.transction_source} disabled={this.state.transaction_value_true_false} required>
+                                                    <option value={-1}> Select {this.state.source}</option>
+
+                                                    {
+                                                        this.state.source === "supplier" ?
+                                                            this.state.suppliersList.map((item, key) => {
+                                                                return <option key={key} value={key} className="ccap" >{item.name} ({item.brand})</option>;
+                                                            })
+                                                            : this.state.source === "customer" ?
+                                                                this.state.customerList.map((item, key) => {
+                                                                    return <option key={key} value={key} className="ccap" >{item.name}</option>;
+                                                                })
+                                                                : this.state.source === "employees" ?
+                                                                    this.state.userList.map((item, key) => {
+                                                                        return <option key={key} value={key} className="ccap" >{item.name}</option>;
+                                                                    })
+                                                                    : null
+                                                    }
                                                 </select>
                                             </div>
                                         </div>
@@ -182,7 +250,7 @@ class AddTransaction extends Component {
                                          </label>
                                         <div className="form-control-wrap ">
                                             <div className="form-control-select">
-                                                <select required onChange={this.handleInputTtype} className="form-control" id="ttype">
+                                                <select required onChange={this.handleInputTtype} className="form-control" id="ttype" required>
                                                     <option value="Otherexpense">Other Expense</option>
                                                     <option value="sales">Sales</option>
                                                     <option value="purchase">Purchase</option>
@@ -196,7 +264,7 @@ class AddTransaction extends Component {
                                         <label class="form-label" for="taction">Action</label>
                                         <div class="form-control-wrap ">
                                             <div class="form-control-select">
-                                                <select required onChange={this.handleInputTaction} class="form-control" id="taction">
+                                                <select required onChange={this.handleInputTaction} class="form-control" id="taction" required>
                                                     <option value="paysalary">Pay Salary</option>
                                                     <option value="fuelcost">Fuel Cost</option>
                                                     <option value="vehiclemaintenance">Vehicle Maintenance</option>
@@ -225,8 +293,8 @@ class AddTransaction extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 mt-5  border-info    border-top border-bottom">
-                                <div className="row">
+                            <div class="col-md-3 mt-5  border-info border-top border-bottom">
+                                <div className="row g-2">
                                     <div className="col-md-6">
                                         <strong className="ff-base  h6 ccap">Total</strong>
                                     </div>
@@ -239,44 +307,24 @@ class AddTransaction extends Component {
 
                             </div>
 
-
-                            {/* <div id="accordion-2" class="accordion accordion-s3 mt-4">
-                                <div class="accordion-item">
-                                    <a href="#" class="accordion-head" data-toggle="collapse" data-target="#accordion-item-2-1">
-                                        <h6 class="title">Detail</h6>
-                                        <span class="accordion-icon"></span>
-                                    </a>
-                                    <div class="accordion-body collapse show" id="accordion-item-2-1" data-parent="#accordion-2">
-                                        <div class="accordion-inner">
-                                            <div class="row g-3">
-
-
-
-                                            </div>
-                                        </div>
-                                        <div class="row g-3 mt-2">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> */}
                             {/* <div class="row g-4 mt-5"> */}
-                                <div class="col-md-8 mt-5">
-                                    <div class="form-group">
-                                        <label class="form-label" for="comments">Comments</label>
-                                        <div class="form-control-wrap">
-                                            {/* <input type="textarea" value={this.state.comments} onChange={this.handleInputComments} class="form-control" id="comments" placeholder="Comments" /> */}
-                                            <textarea
-                                                className="form-control"
-                                                value={this.state.comments}
-                                                onChange={this.handleInputComments}
-                                                id="comments"
-                                                placeholder="Comments"
-                                                rows={5}
-                                                cols={5}
-                                            />
-                                        </div>
+                            <div class="col-md-8 mt-5">
+                                <div class="form-group">
+                                    <label class="form-label" for="comments">Comments</label>
+                                    <div class="form-control-wrap">
+                                        {/* <input type="textarea" value={this.state.comments} onChange={this.handleInputComments} class="form-control" id="comments" placeholder="Comments" /> */}
+                                        <textarea
+                                            className="form-control"
+                                            value={this.state.comments}
+                                            onChange={this.handleInputComments}
+                                            id="comments"
+                                            placeholder="Comments"
+                                            rows={5}
+                                            cols={5}
+                                        />
                                     </div>
                                 </div>
+                            </div>
                             {/* </div> */}
                             <div className="row g-4">
 
@@ -329,7 +377,10 @@ class AddTransaction extends Component {
 
 function mapStateToProps(state) {
     return {
-        addProduct: state.product.product
+        addProduct: state.product.product,
+        suppliersList: state.supplier.supplierList,
+        customerList: state.customer.customerList,
+        userList: state.user.userList
     }
 }
 
