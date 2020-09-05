@@ -15,8 +15,8 @@ import Suppliers from './components/Suppliers/suppliers';
 import Purchases from './components/Purchases/Add/addPurchase';
 // import Purchases from './components/Purchases/purchases';
 import AddPurchases from './components/Purchases/Wizards/WizardFormFirstPage';
-import Transactions from './components/Transactions/Transactions';
-// import AddTransaction from './components/Transactions/Add/addTransaction';
+// import Transactions from './components/Transactions/Transactions';
+import AddTransaction from './components/Transactions/Add/addTransaction';
 import Sales from './components/Sales/sales';
 import AddSupplier from './components/Suppliers/AddSupplier/add';
 import AddProduct from './components/Products/Add/addProduct';
@@ -37,6 +37,7 @@ const routes = () => {
                 <Route path="/add" exact component ={Auth(AddUser,true)}/>
                 <Route path="/products" exact component ={Auth(Products,true)}/>
                 <Route path="/addProduct" exact component ={Auth(AddProduct,true)}/>
+                <Route path="/addTransaction" exact component ={Auth(AddTransaction,true)}/>
                 <Route path="/customers" exact component ={Auth(Customers,true)}/>
                 <Route path="/customerInfo" exact component ={Auth(CustomerDetails,true)}/>                
                 <Route path="/addCustomer" exact component ={Auth(AddCustomer,true)}/>                
@@ -47,7 +48,7 @@ const routes = () => {
                 <Route path="/editSupplier" exact component ={Auth(EditSupplier,true)}/>
                 <Route path="/purchases" exact component ={Auth(Purchases,true)}/>
                 <Route path="/addpurchases" exact component ={Auth(AddPurchases,true)}/>
-                <Route path="/Transactions" exact component ={Auth(Transactions,true)}/>
+                {/* <Route path="/Transactions" exact component ={Auth(Transactions,true)}/> */}
                 <Route path="/sales" exact component ={Auth(Sales,true)}/>
                 <Route path="/profile" exact component ={Auth(Profile,true)}/>
                 <Route path="/error" exact component={ErrorPage504}/> 
