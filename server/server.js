@@ -21,6 +21,8 @@ const { User } = require("./models/user");
 const { Supplier } = require("./models/supplier");
 const { Customer } = require("./models/customer");
 const { Product } = require("./models/product");
+const { Transaction } = require("./models/transaction");
+// const { default: Transactions } = require("../client/src/components/Transactions/Transactions");
 
 
 app.use(bodyParser.json());
@@ -174,6 +176,8 @@ app.post("/api/change_password", auth, (req, res) => {
     });
 });
 
+
+//add Supplier
 app.post('/api/addSupplier', (req, res) => {
     const supplier = new Supplier(req.body);
 
@@ -188,6 +192,7 @@ app.post('/api/addSupplier', (req, res) => {
     });
 })
 
+//add Customer
 app.post('/api/addCustomer', (req, res) => {
     const customer = new Customer(req.body);
 
@@ -202,6 +207,7 @@ app.post('/api/addCustomer', (req, res) => {
     });
 })
 
+//add Product
 app.post('/api/addProduct',auth,(req, res) => {
 
     const product = new Product(req.body);
@@ -221,6 +227,26 @@ app.post('/api/addProduct',auth,(req, res) => {
         })
     });
 })
+
+//add Transaction
+
+app.post('/api/addTransaction',auth,(req, res) => {
+
+    const transaction = new Transaction(req.body);
+    
+    console.log("Transaction",transaction)
+
+    product.save((error, transaction) => {
+        if (error) {
+            return res.status(400).send(error);
+        }
+        return res.status(200).json({
+            post: true,
+            transactionId: transaction._id
+        })
+    });
+})
+
 
 // UPDATE //
 

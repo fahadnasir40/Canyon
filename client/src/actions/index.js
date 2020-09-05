@@ -146,6 +146,15 @@ export function saveProduct(document){
     }
 }
 
+//save transaction
+export function saveTransaction(document){
+    const request = axios.post('/api/ADD_TRANSACTION',document)
+        .then(response => response.data);
+    return {
+        type:'ADD_TRANSACTION',
+        payload:request
+    }
+}
 
 export function clearNewSupplier() {
     return {

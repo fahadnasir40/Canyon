@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Header from "../../Header/header";
 import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
-// import { saveProduct, clearProduct } from '../../../actions';
+import { saveTransaction } from '../../../actions';
 import { getSuppliers, getProducts, getCustomers, getUsers } from '../../../actions';
 import { connect } from 'react-redux';
 import DatePicker from "react-datepicker";
@@ -14,7 +14,7 @@ class AddTransaction extends Component {
     state = {
         name: '',
         brand: 'canyon',
-        startDate: new Date(),
+        startDate : new Date(),
         source: '',
         svalue: '',
         ttype: '',
@@ -41,48 +41,22 @@ class AddTransaction extends Component {
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.suppliersList !== prevState.suppliersList) {
-            console.log("Supplier Props", nextProps.suppliersList);
-            return {
-                suppliersList: nextProps.suppliersList
+
+        if (nextProps.AddTransaction) {
+            if (nextProps.AddTransaction.post === true) {
+                return {
+                    redirect: true
+                }
             }
-        }
-        if (nextProps.productsList !== prevState.productsList) {
-            return {
-                productsList: nextProps.productsList
-            }
-        }
-        if (nextProps.customerList !== prevState.customerList) {
-            return {
-                customerList: nextProps.customerList
-            }
-        }
-        if (nextProps.userList !== prevState.userList) {
-            return {
-                userList: nextProps.userList
+            else if (nextProps.AddTransaction.post === false) {
+                return {
+                    error: 'Error adding the product.'
+                }
             }
         }
 
         return null;
     }
-
-    // static getDerivedStateFromProps(nextProps, prevState) {
-
-    //     if (nextProps.addProduct) {
-    //         if (nextProps.addProduct.post === true) {
-    //             return {
-    //                 redirect: true
-    //             }
-    //         }
-    //         else if (nextProps.addProduct.post === false) {
-    //             return {
-    //                 error: 'Error adding the product.'
-    //             }
-    //         }
-    //     }
-
-    //     return null;
-    // }
 
     // componentWillUnmount() {
     //     this.props.dispatch(clearProduct());
@@ -144,21 +118,23 @@ class AddTransaction extends Component {
     //     this.setState({ brand: event.target.value })
     // }
 
-    // submitForm = (event) => {
+    submitForm = (event) => {
 
-    //     // const form = event.currentTarget;
+        // const form = event.currentTarget;
 
-    //     event.preventDefault();
+        event.preventDefault();
 
-    //     this.props.dispatch(saveProduct({
-    //         name: this.state.name,
-    //         brand: this.state.brand,
-    //         price: {
-    //             cost_seal: this.state.seal
-    //         },
-    //         addedBy: this.props.user.login.id
-    //     }))
-    // }
+        this.props.dispatch(saveTransaction({
+            transaction_date : this.state.startDate,
+            primary_quantity : this.state.qty,
+            transaction_source : this.state.source,
+            transaction_type : this.state.ttype,
+            transaction_action : this.state.taction,
+            transaction_value : this.state.transaction_value,
+            brand: this.state.brand,
+            addedBy: this.props.user.login.id
+        }))
+    }
 
     calculateTotal = (total) => {
 
@@ -217,7 +193,7 @@ class AddTransaction extends Component {
                                         <div className="form-control-wrap ">
                                             <div className="form-control-select">
 
-                                                <select required onChange={this.handleInputDropdown} className="form-control ccap" id={this.state.transction_source} disabled={this.state.transaction_value_true_false} required>
+                                                <select required onChange={this.handleInputDropdown} className="form-control ccap" id= "svalue" disabled={this.state.transaction_value_true_false} required>
                                                     <option value={-1}> Select {this.state.source}</option>
 
                                                     {
