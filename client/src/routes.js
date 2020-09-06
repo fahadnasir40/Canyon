@@ -13,7 +13,6 @@ import Suppliers from './components/Suppliers/suppliers';
 import SupplierDetails from './components/Suppliers/SupplierInfo/supplierInfo';
 import AddSupplier from './components/Suppliers/AddSupplier/add';
 import EditSupplier from './components/Suppliers/AddSupplier/edit';
-import Purchases from './components/Purchases/Add/addPurchase';
 import AddPurchases from './components/Purchases/Add/addPurchase';
 import Transactions from './components/Transactions/transactions';
 import AddTransaction from './components/Transactions/Add/addTransaction';
@@ -47,8 +46,7 @@ const routes = () => {
                 <Route path="/supplierInfo" exact component ={Auth(SupplierDetails,true)}/>
                 <Route path="/addSupplier" exact component ={Auth(AddSupplier,true)}/>
                 <Route path="/editSupplier" exact component ={Auth(EditSupplier,true)}/>
-                <Route path="/purchases" exact component ={Auth(Purchases,true)}/>
-                <Route path="/addpurchases" exact component ={Auth(AddPurchases,true)}/>
+                <Route path="/addpurchase" exact component ={Auth(AddPurchases,true)}/>
                 {/* <Route path="/Transactions" exact component ={Auth(Transactions,true)}/> */}
                 <Route path="/transactions" exact component ={Auth(Transactions,true)}/>
                 <Route path="/sales" exact component ={Auth(Sales,true)}/>
