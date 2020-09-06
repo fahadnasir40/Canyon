@@ -20,12 +20,39 @@ export function getSuppliers(
         console.log(error)
     });
 
-
     return {
         type: 'GET_SUPPLIERS',
         payload: request
     }
 }
+
+
+export function getSuppliersTransactions(
+    start = 0,
+    limit = 0,
+    order = 'desc',
+    list = ''
+){
+
+    const request = axios.get(`api/getSuppliersTransactions?skip=${start}&limit=${limit}&order=${order}`)
+    .then(response => {
+        if(list){
+            return [...list,...response.data];
+        }
+        else{
+            return response.data;
+        }
+    } )
+    .catch(error=>{
+        console.log(error)
+    });
+
+    return {
+        type: 'GET_SUPPLIERS_TRANSACTIONS',
+        payload: request
+    }
+}
+
 
 export function getCustomers(
     start = 0,
