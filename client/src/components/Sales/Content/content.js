@@ -20,7 +20,7 @@ class Content extends Component {
                                         <input type="text" class="form-control border-transparent form-focus-none" placeholder="Search" />
                                     </div>
                                     <ul class="nk-block-tools-opt">
-                                        <Link to={{
+                                        {/* <Link to={{
                                             pathname: "/addpurchases",
                                             state:
                                             {
@@ -29,7 +29,7 @@ class Content extends Component {
                                         }}
                                         >
                                         <button class="btn btn-primary"><em class="icon ni ni-plus"></em><span>New Sale</span></button>
-                                        </Link>
+                                        </Link> */}
                                     </ul>
                                 </div>
                                 <div class="nk-block nk-block-lg">
