@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import Header from "../../Header/header";
 import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
-// import { saveProduct, clearProduct } from '../../../actions';
+import { savePurchase, clearPurchase } from '../../../actions';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { getSuppliers, getProducts } from '../../../actions';
+import { getActiveSuppliers, getActiveProducts } from '../../../actions';
 import PurchaseDetail from './purchaseDetails';
 import Moment from 'react-moment';
 import DatePicker from "react-datepicker";
@@ -24,20 +24,25 @@ class AddPurchase extends Component {
         description: '',
         address: '',
         loading: false,
-        valid: false
-        // redirect: false,
-        // error: ''
+        valid: false,
+        request: false,
+        redirect: false,
+        error: ''
     }
+
     products = [];
     paidAmount = 0;
     totalAmount = 0;
 
 
     componentDidMount() {
-        this.props.dispatch(getSuppliers())
-        this.props.dispatch(getProducts())
+        this.props.dispatch(getActiveSuppliers())
+        this.props.dispatch(getActiveProducts())
     }
 
+    componentWillUnmount() {
+        this.props.dispatch(clearPurchase());
+    }
 
     static getDerivedStateFromProps(nextProps, prevState) {
         if (nextProps.suppliersList !== prevState.suppliersList) {
@@ -48,6 +53,18 @@ class AddPurchase extends Component {
         if (nextProps.productsList !== prevState.productsList) {
             return {
                 productsList: nextProps.productsList
+            }
+        }
+
+        if (nextProps.purchase) {
+            if (nextProps.purchase.post) {
+                if (nextProps.purchase.post) {
+                    return ({
+                        redirect: true,
+                        request: false,
+                        loading: false
+                    })
+                }
             }
         }
 
@@ -62,7 +79,10 @@ class AddPurchase extends Component {
 
     handleInputDropdown = (event) => {
         if (this.state.suppliersList && event.target.value != -1) {
-            this.setState({ currentSupplier: this.state.suppliersList[event.target.value] })
+            this.setState({
+                currentSupplier: this.state.suppliersList[event.target.value],
+                address: this.state.suppliersList[event.target.value].address[0]
+            });
         }
     }
 
@@ -106,11 +126,10 @@ class AddPurchase extends Component {
         }
         else {
             if (this.products.length > 0) {
-                console.log("This state", this.state);
+
                 let purchase = {
                     supplierId: this.state.currentSupplier._id,
-                    name: this.state.currentSupplier.name,
-                    supplierBrand: this.state.currentSupplier.brand,
+                    supplierName: this.state.currentSupplier.name,
                     supplierAddress: this.state.address,
                     description: this.state.description,
                     purchaseDate: this.state.purchaseDate,
@@ -118,10 +137,27 @@ class AddPurchase extends Component {
                     totalAmount: this.totalAmount,
                     paidAmount: this.paidAmount
                 }
-                console.log("Purchase", purchase);
-                this.setState({
-                    loading: false
-                })
+
+                let productDetails = [];
+
+                this.products.forEach(item => {
+                    productDetails.push({
+                        _id: item._id,
+                        puom: item.uom,
+                        pqty: item.qty,
+                        pprice: Number(item.price.total),
+                        ptotal: item.totalAmount,
+                        pname: item.name
+                    });
+                });
+                purchase = { ...purchase, productDetails };
+
+                if (this.state.request === false) {
+                    this.props.dispatch(savePurchase(purchase));
+                    this.setState({
+                        request: true
+                    })
+                }
             }
             else {
                 this.setState({
@@ -129,7 +165,6 @@ class AddPurchase extends Component {
                 })
             }
         }
-
     }
 
     renderBody = () => {
@@ -248,6 +283,11 @@ class AddPurchase extends Component {
     };
 
     render() {
+
+        if (this.state.redirect === true) {
+            return <Redirect to="/" />
+        }
+
         return (
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">
@@ -269,7 +309,8 @@ class AddPurchase extends Component {
 function mapStateToProps(state) {
     return {
         suppliersList: state.supplier.supplierList,
-        productsList: state.product.productList
+        productsList: state.product.productList,
+        purchase: state.purchase.purchase
     }
 }
 

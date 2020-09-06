@@ -35,7 +35,8 @@ class PurchaseDetails extends Component {
     clearAllItems = () => {
         this.setState({
             itemsList: [],
-            totalAmount: 0
+            totalAmount: 0,
+            paidAmount: 0
         })
         if (this.props.valid === true) {
             this.props.setValid()

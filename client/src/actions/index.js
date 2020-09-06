@@ -27,6 +27,30 @@ export function getSuppliers(
     }
 }
 
+export function getActiveSuppliers(
+    start = 0,
+    limit = 0,
+    order = 'desc',
+    list = ''
+){
+    const request = axios.get(`api/getActiveSuppliers?skip=${start}&limit=${limit}&order=${order}`)
+    .then(response => {
+        if(list){
+            return [...list,...response.data];
+        }
+        else{
+            return response.data;
+        }
+    } )
+    .catch(error=>{
+        console.log(error)
+    });
+
+    return {
+        type: 'GET_SUPPLIERS',
+        payload: request
+    }
+}
 export function getCustomers(
     start = 0,
     limit = 0,
@@ -68,14 +92,33 @@ export function getProducts(
             return response.data;
         }
     } );
-
-
     return {
         type: 'GET_PRODUCTS',
         payload: request
     }
 }
 
+export function getActiveProducts(
+    start = 0,
+    limit = 0,
+    order = 'desc',
+    list = ''
+){
+
+    const request = axios.get(`api/getActiveProducts?skip=${start}&limit=${limit}&order=${order}`)
+    .then(response => {
+        if(list){
+            return [...list,...response.data];
+        }
+        else{
+            return response.data;
+        }
+    } );
+    return {
+        type: 'GET_PRODUCTS',
+        payload: request
+    }
+}
 
 
 export function getBookWithReviewer(id){
@@ -146,6 +189,14 @@ export function saveProduct(document){
     }
 }
 
+export function savePurchase(document){
+    const request = axios.post('/api/addPurchase',document)
+        .then(response => response.data);
+    return {
+        type:'ADD_PURCHASE',
+        payload:request
+    }
+}
 
 export function clearNewSupplier() {
     return {
@@ -164,6 +215,13 @@ export function clearNewCustomer() {
 export function clearProduct() {
     return {
         type:'CLEAR_PRODUCT',
+        payload:{}
+    }
+}
+
+export function clearPurchase() {
+    return {
+        type:'CLEAR_PURCHASE',
         payload:{}
     }
 }
@@ -190,16 +248,6 @@ export function clearNewBook() {
 }
 
 
-export function getDocument(id){ 
-   
-    const request = axios.get(`/api/getDocument?id=${id}`)
-                    .then(response => response.data);
-
-    return{
-        type: 'GET_DOCUMENT',
-        payload: request
-    }
-}
 
 export function getSharedDocuments(){
     const request = axios.get(`/api/shared_documents`)
