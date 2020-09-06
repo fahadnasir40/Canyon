@@ -76,7 +76,30 @@ export function getProducts(
     }
 }
 
+//getTransactions
+export function getTransactions(
+    start = 0,
+    limit = 0,
+    order = 'desc',
+    list = ''
+){
 
+    const request = axios.get(`api/getTransactions?skip=${start}&limit=${limit}&order=${order}`)
+    .then(response => {
+        if(list){
+            return [...list,...response.data];
+        }
+        else{
+            return response.data;
+        }
+    } );
+
+
+    return {
+        type: 'GET_TRANSACTIONS',
+        payload: request
+    }
+}
 
 export function getBookWithReviewer(id){
     const request = axios.get(`/api/getBook?id=${id}`)

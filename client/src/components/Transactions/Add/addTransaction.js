@@ -16,19 +16,18 @@ class AddTransaction extends Component {
         startDate: new Date(),
         source: '',
         // svalue: 'asad waqas',
-        svalue : 0,
+        svalue: 0,
         ttype: 'otherexpense',
         taction: 'paysalary',
         qty: 1,
         rate: 1,
         comments: '',
         suppliersList: '',
-        productsList: '',
+        // productsList: '',
         customerList: '',
         userList: '',
         // seal: '',
         redirect: false,
-        transaction_value_true_false: true,
         error: ''
     }
 
@@ -68,7 +67,7 @@ class AddTransaction extends Component {
 
     handleInputTtype = (event) => {
         // this.setState({ ttype: event.target.value,taction: 'paysalary' })
-        this.setState({ ttype: event.target.value})
+        this.setState({ ttype: event.target.value })
     }
 
     handleInputSource = (event) => {
@@ -88,7 +87,7 @@ class AddTransaction extends Component {
     }
 
     handleInputSvalue = (event) => {
-        this.setState({ svalue: this.props.supplierList[event.target.value]._id  })
+        this.setState({ svalue: this.props.supplierList[event.target.value]._id })
     }
 
     handleInputDate = date => {
@@ -110,7 +109,7 @@ class AddTransaction extends Component {
     };
 
     handleInputDropdown = (event) => {
-        this.setState({svalue: event.target.value})
+        this.setState({ svalue: event.target.value })
 
     }
 
@@ -128,12 +127,12 @@ class AddTransaction extends Component {
         this.props.dispatch(saveTransaction({
             transaction_date: this.state.startDate,
             primary_quantity: this.state.qty,
-            rate : this.state.rate,
+            rate: this.state.rate,
             transaction_source: this.state.source,
-            transaction_type: this.state.ttype ,
+            transaction_type: this.state.ttype,
             transaction_action: this.state.taction,
             transaction_value: this.state.svalue,
-            comments : this.state.comments,
+            comments: this.state.comments,
             addedBy: this.props.user.login.id
         }))
     }
@@ -364,7 +363,7 @@ function mapStateToProps(state) {
         suppliersList: state.supplier.supplierList,
         customerList: state.customer.customerList,
         userList: state.user.userList,
-        addTransaction : state.transaction.transaction
+        addTransaction: state.transaction.transaction
     }
 }
 
