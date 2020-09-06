@@ -10,6 +10,8 @@ export default function (state = {}, action) {
                 post: action.payload.success,
                 supplier: action.payload.doc
             }
+        case 'GET_SUPPLIERS_TRANSACTIONS':
+            return { ...state, supplierList: action.payload }
         case 'ADD_SUPPLIER':
             return { ...state, supplier: action.payload }
 
@@ -19,9 +21,9 @@ export default function (state = {}, action) {
                 postDeleted: action.payload
             }
         case 'CLEAR_SUPPLIER':
-            return { ...state, supplier: action.payload, post: action.payload}
+            return { ...state, supplier: action.payload, post: action.payload }
         case 'CLEAR_SUPPLIER_LIST':
-            return { ...state, supplierList: action.payload}
+            return { ...state, supplierList: action.payload }
 
         case 'DOWNLOAD_DOCUMENT':
             return { ...state, downloadStatus: action.payload }

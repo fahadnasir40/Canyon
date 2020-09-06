@@ -38,12 +38,6 @@ class Purchases extends Component {
                 <Header user = {this.props.user}/>   
                 <div className="custom-dashboard mt-5">
                     <Content userList={this.props.userList}/>
-                    {/* <div>
-                        {page === 1 &&   <WizardFormFirstPage  onSubmit={this.nextPage} />}
-                        {/* {page === 2 && ( <WizardFormSecondPage previousPage={this.previousPage} onSubmit={this.nextPage}/>)} */}
-                        {/* {page === 2 && ( <OrderDetails previousPage={this.previousPage} onSubmit={this.nextPage}/>)} */}
-                        {/* {page === 3 && ( <WizardFormThirdPage  previousPage={this.previousPage} onSubmit={onSubmit}/>)} */}
-                    {/* </div> */}
                     <Footer/>
                 </div>
             </div>

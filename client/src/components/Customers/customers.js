@@ -25,7 +25,7 @@ class Customers extends Component {
             customer.status = 'suspended'
             this.props.dispatch(updateCustomer(customer))
         }
-        else if (customer.status == 'suspended') {
+        else if (customer.status === 'suspended') {
             customer.status = 'active'
             this.props.dispatch(updateCustomer(customer))
         }

@@ -4,7 +4,7 @@ import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
 import { saveProduct, clearProduct } from '../../../actions';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom'
+// import { Redirect } from 'react-router-dom'
 
 
 class AddProduct extends Component {
@@ -96,7 +96,7 @@ class AddProduct extends Component {
 
     submitForm = (event) => {
 
-        const form = event.currentTarget;
+        // const form = event.currentTarget;
 
         event.preventDefault();
 
@@ -306,6 +306,7 @@ class AddProduct extends Component {
     render() {
 
         if (this.state.redirect === true) {
+            console.log("history products calling")
             this.props.history.push('/products')
         }
 

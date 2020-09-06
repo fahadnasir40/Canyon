@@ -4,7 +4,7 @@ import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
 import { updateCustomer, clearNewCustomer } from '../../../actions';
 import { connect } from 'react-redux';
-import { Redirect, Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 
 class EditCustomer extends Component {
@@ -59,11 +59,6 @@ class EditCustomer extends Component {
     return null;
   }
 
-  componentWillUnmount() {
-    // this.props.dispatch(clearNewCustomer());
-  }
-
-
   handleShareholderNameChange = idx => evt => {
     const newAddress = this.state.address.map((address, sidx) => {
       if (idx !== sidx) return address;
@@ -107,7 +102,7 @@ class EditCustomer extends Component {
 
   submitForm = (event) => {
 
-    const form = event.currentTarget;
+    // const form = event.currentTarget;
 
     event.preventDefault();
 

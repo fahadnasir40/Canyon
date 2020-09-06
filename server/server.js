@@ -21,6 +21,7 @@ const { User } = require("./models/user");
 const { Supplier } = require("./models/supplier");
 const { Customer } = require("./models/customer");
 const { Product } = require("./models/product");
+const { Transaction } = require("./models/transaction");
 const { Purchase } = require("./models/purchase");
 
 
@@ -101,6 +102,19 @@ app.get('/api/getActiveProducts', auth, (req, res) => {
 
     // ORDER = asc || desc
     Product.find({status: 'active'}).skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.send(doc);
+    })
+})
+
+app.get('/api/getTransactions', auth, (req, res) => {
+    // locahost:3001/api/books?skip=3&limit=2&order=asc
+    let skip = parseInt(req.query.skip);
+    let limit = parseInt(req.query.limit);
+    let order = req.query.order;
+
+    // ORDER = asc || desc
+    Transaction.find().skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.send(doc);
     })
@@ -200,6 +214,8 @@ app.post("/api/change_password", auth, (req, res) => {
     });
 });
 
+
+//add Supplier
 app.post('/api/addSupplier', (req, res) => {
     const supplier = new Supplier(req.body);
 
@@ -214,6 +230,7 @@ app.post('/api/addSupplier', (req, res) => {
     });
 })
 
+//add Customer
 app.post('/api/addCustomer', (req, res) => {
     const customer = new Customer(req.body);
 
@@ -258,6 +275,27 @@ app.post('/api/addProduct',auth,(req, res) => {
         })
     });
 })
+
+//add Transaction
+
+app.post('/api/addTransaction',auth,(req, res) => {
+
+    const transaction = new Transaction(req.body);
+    
+    console.log("Transaction",transaction)
+
+    transaction.save((error, transaction) => {
+        if (error) {
+            console.log("Transaction",error)
+            return res.status(400).send(error);
+        }
+        return res.status(200).json({
+            post: true,
+            transactionId: transaction._id
+        })
+    });
+})
+
 
 // UPDATE //
 
@@ -316,6 +354,14 @@ app.delete('/api/delete_customer', auth, (req, res) => {
     })
 })
 
+app.delete('/api/delete_transaction', auth, (req, res) => {
+    let id = req.query.id;
+
+    Transaction.findByIdAndRemove(id, (err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.json(true)
+    })
+})
 
 
 

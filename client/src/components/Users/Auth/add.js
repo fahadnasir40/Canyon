@@ -57,7 +57,7 @@ class AddUser extends Component {
 
     submitForm = (event) => {
 
-        const form = event.currentTarget;
+        // const form = event.currentTarget;
 
         event.preventDefault();
     
@@ -220,9 +220,9 @@ class AddUser extends Component {
     )
       
     componentDidUpdate(prevProps){
-        if(this.props != prevProps){
+        if(this.props !== prevProps){
             if(this.props.user){
-                if(this.props.user.success == false){
+                if(this.props.user.success === false){
                     this.setState({error:'Error registering the account.'})
                 }
             }

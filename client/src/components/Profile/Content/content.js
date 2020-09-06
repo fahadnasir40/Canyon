@@ -74,7 +74,7 @@ class ProfileContent extends Component {
 
     submitForm = (event) => {
 
-        const form = event.currentTarget;
+        // const form = event.currentTarget;
 
         event.preventDefault();
 
@@ -107,7 +107,7 @@ class ProfileContent extends Component {
 
     submitPasswordChange = (event) => {
 
-        const form = event.currentTarget;
+        // const form = event.currentTarget;
 
         event.preventDefault();
 
@@ -149,7 +149,7 @@ class ProfileContent extends Component {
 
     UNSAFE_componentWillReceiveProps(nextProps) {
 
-        if (this.props != nextProps) {
+        if (this.props !== nextProps) {
 
             if (nextProps.changePassword) {
                 if (!nextProps.changePassword.success) {

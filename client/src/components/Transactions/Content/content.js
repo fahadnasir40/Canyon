@@ -1,203 +1,200 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import Swal from 'sweetalert2'
+import DataTable from 'react-data-table-component';
+import NumberFormat from 'react-number-format';
+import transactions from '../transactions';
 
-class Transactions extends Component {
+class Content extends Component {
 
-    paymentAlert = () =>{
-    
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-              confirmButton: 'btn btn-success',
-              cancelButton: 'btn btn-danger'
+    state = {
+        transactionsList: this.props.transactionsList
+    }
+
+    columns = [
+
+        {
+            name: 'Source',
+            selector: 'transaction_source',
+            sortable: true,
+            grow: 2,
+            style: {
+                color: '#202124',
+                fontSize: '14px',
+                fontWeight: 500,
             },
-            buttonsStyling: false
-          })
-          
-          swalWithBootstrapButtons.fire({
-            // title: 'Are you sure?',
-            text: "Are you Sure to Remove Transaction!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes!',
-            cancelButtonText: 'No!',
-            reverseButtons: true
-          }).then((result) => {
-            if (result.value) {
-              swalWithBootstrapButtons.fire(
-                // 'Paid!',
-                'Deleted',
-                // 'success'
-              )
-            } else if (
-              /* Read more about handling dismissals below */
-              result.dismiss === Swal.DismissReason.cancel
-            ) {
-              swalWithBootstrapButtons.fire(
-                // 'Unapid',
-                'Unable to Delete Transaction',
-                // 'error'
-              )
-            }
-          })    
+        },
+        {
+            name: 'Value',
+            selector: 'transaction_value',
+            sortable: true,
+
+        },
+        {
+            name: 'Type',
+            selector: 'transaction_type',
+            sortable: true,
+            style: {
+                color: 'rgba(0,0,0,.54)',
+            },
+        },
+        {
+            name: 'Action',
+            selector: 'transaction_action',
+            sortable: true,
+            style: {
+                color: 'rgba(0,0,0,.54)',
+            },
+        },
+        {
+            name: 'Date',
+            selector: 'transaction_date',
+            sortable: true,
+            style: {
+                color: 'rgba(0,0,0,.54)',
+            },
+        },
+        {
+            name: 'Qty',
+            selector: 'primary_quantity',
+            sortable: true,
+            thousandSeparator : true,
+            style: {
+                color: 'rgba(0,0,0,.54)',
+            },
+        },
+        {
+            name: 'Rate',
+            selector: 'rate',
+            sortable: true,
+            style: {
+                color: 'rgba(0,0,0,.54)',
+            },
+        },
+        {
+            cell: row => (
+                <div className="nk-tb-col nk-tb-col-tools">
+                    <ul className="nk-tb-actions gx-1 my-n1">
+                        <li className="mr-n1">
+                            <div className="dropdown">
+                                <a href="#" className="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
+                                <div className="dropdown-menu dropdown-menu-right">
+                                    <ul className="link-list-opt no-bdr">
+                                        <li><a href="#"><em className="icon ni ni-edit"></em><span>Edit</span></a></li>
+                                        <li><a href="#"><em className="icon ni ni-eye"></em><span>View</span></a></li>
+                                        <li><a onClick={() => { this.props.deleteTransaction(transactions) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }}>Remove Transaction</span></a></li>
+                                        {/* <li><a onClick={() => { this.props.deleteSupplier(supplier) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }} className="text-danger ">Remove Supplier</span></a></li> */}
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            ),
+            allowOverflow: true,
+            button: true,
+        },
+    ];
+
+    // componentDidUpdate(prevProps) {
+    //     if (prevProps.productsList !== this.props.productsList) {
+    //         this.setState({ productsList: this.props.productsList });
+    //     }
+    // }
+    componentDidUpdate(prevProps) {
+        if (prevProps.transactionsList !== this.props.transactionsList) {
+            this.setState({ transactionsList: this.props.transactionsList });
+        }
+    }
+
+
+    handleSearchChange = (e) => {
+        // Variable to hold the original version of the list
+        let currentList = [];
+        // Variable to hold the filtered list before putting into state
+        let newList = [];
+
+        // If the search bar isn't empty
+        if (e.target.value !== "") {
+            // Assign the original list to currentList
+            // currentList = this.props.productsList;
+            currentList = this.props.transactionsList;
+
+            // Use .filter() to determine which items should be displayed
+            // based on the search terms
+            newList = currentList.filter(item => {
+                // change current item to lowercase
+                // const lc = item.name.toLowerCase();
+                const lc = item.source.toLowerCase();
+                // change search term to lowercase
+                const filter = e.target.value.toLowerCase();
+                // check to see if the current list item includes the search term
+                // If it does, it will be added to newList. Using lowercase eliminates
+                // issues with capitalization in search terms and search content
+                return lc.includes(filter);
+            });
+        } else {
+            // If the search bar is empty, set newList to original task list
+            // newList = this.props.productsList;
+            newList = this.props.transactionsList;
+        }
+        // Set the filtered state based on what our rules added to newList
+        // this.setState({
+        //     productsList: newList
+        // });
+        this.setState({
+            transactionsList: newList
+        });
     }
 
 
     render() {
+        console.log("Content", this.props);
         return (
-            <div className="nk-content ">
+            <div className="nk-content ml-md-5 ">
                 <div className="container-fluid">
                     <div className="nk-content-inner">
                         <div className="nk-content-body">
-                            <div className="components-preview wide-md mx-auto">
-
-                                <div className="nk-block nk-block-lg">
-                                    <div className="nk-block-head">
-                                        <div className="nk-block-head-content">
-                                            <h4 className="nk-block-title">Transaction List</h4>
-                                            <Link to="/addpurchases"><button className="btn btn-primary"><em className="icon ni ni-plus"></em><span>New Transaction</span></button></Link>
-                                        </div>
+                            <div className="nk-block-head nk-block-head-sm">
+                                <div className="nk-block-between">
+                                    <div className="nk-block-head-content">
+                                        <h3 className="nk-block-title page-title">Transactions</h3>
                                     </div>
-                                    <div className="card card-preview">
-                                        <table className="table table-tranx" >
-                                            <thead>
-                                                <tr className="tb-tnx-head">
-                                                    {/* <th className="tb-tnx-id"><span className="">#</span></th> */}
-                                                    <th className="tb-tnx-info" >
-                                                        <span className="d-none d-sm-block">
-                                                            <span>Date</span>
-                                                        </span>
-                                                    </th>
-                                                    <th className="tb-tnx-info">
-                                                        {/* <span className="tb-tnx-desc d-none d-sm-inline-block"> */}
-                                                            <span>Source</span>
-                                                        {/* </span> */}
-                                                    </th>
-                                                    <th className="tb-tnx-info">
-                                                        <span>Value</span>
-                                                    </th>
-                                                    <th className="tb-tnx-info">
-                                                        <span>Type</span>
-                                                    </th>
-                                                    <th className="tb-tnx-info">
-                                                            <span >Action</span>
-                                                    </th>
-                                                    
-                                                    <th className="tb-tnx-info">
-                                                        <span>Quantity</span>
-                                                    </th>
-                                                    
-                                                    <th className="tb-tnx-info">
-                                                        <span>Rate</span>
-                                                    </th>
-                                                    <th className="tb-tnx-amount is-alt">
-                                                        <span>Total</span>
-                                                    </th>
-                                                    <th className="tb-tnx-action">
-                                                        <span>&nbsp;</span>
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr className="tb-tnx-item">
-                                                    <td className="tb-tnx-id" hidden>
-                                                        <a href="#"><span>47895</span></a>
-                                                    </td>
-                                                    <td className="tb-tnx-input">
+                                    <div className="nk-block-head-content">
+                                        <div className="toggle-wrap nk-block-tools-toggle">
+                                            <a href="#" className="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em className="icon ni ni-more-v"></em></a>
+                                            <div className="toggle-expand-content" data-content="pageMenu">
+                                                <ul className="nk-block-tools g-3">
+                                                    <li>
                                                         <div className="form-control-wrap">
-                                                            <div className="form-icon form-icon-left">
-                                                                <em className="icon ni ni-calendar"></em>
+                                                            <div className="form-icon form-icon-right">
+                                                                <em className="icon ni ni-search"></em>
                                                             </div>
-                                                            <input type="text" className="form-control date-picker" data-date-format="yyyy-mm-dd" placeholder = "25-AUG-2020" />
+                                                            <input type="text" className="form-control" onChange={this.handleSearchChange} id="default-04" placeholder="Quick search by source" />
                                                         </div>
-                                                        {/* <div className="form-note">Date format <code>yyyy-mm-dd</code></div> */}
-                                                    </td>
-                                                    <td className="tb-tnx-info">
-                                                        <select className="form-select form-control form-control" data-search="on">
-                                                            <option value="employees">Employees</option>
-                                                            <option value="customers">Customers</option>
-                                                            <option value="suppliers">Suppliers</option>
-                                                        </select>
-                                                    </td>
-                                                    <td className="tb-tnx-info" >
-                                                        <div className="form-control-wrap">
-                                                            <select className="form-select form-control form-control-md" data-search="on">
-                                                                <option value="employees">Saad Khan</option>
-                                                                <option value="canyonsupplier">Canyon Supplier</option>
-                                                                <option value="canyoncustomer">Canyon Customer</option>
-                                                            </select>
-                                                        </div>
-                                                    </td>
-                                                    <td className="tb-tnx-info" >
-                                                        <div className="form-control-wrap">
-                                                            <select className="form-select form-control form-control-md" data-search="on">
-                                                                <option value="otherexpense">Expense</option>
-                                                                <option value="purchase">Purchase</option>
-                                                                <option value="purchasereturn">Purchase Return</option>
-                                                                <option value="sale">Sale</option>
-                                                                <option value="salereturn">Sale Return</option>
-                                                            </select>
-                                                        </div>
-                                                    </td>
-                                                    
-                                                    <td className="tb-tnx-info" >
-                                                        <div className="form-control-wrap">
-                                                            <select className="form-select form-control form-control-md" data-search="on">
-                                                                <option value="pay salary">Pay Salary</option>
-                                                                <option value="purchase">Purchase</option>
-                                                                <option value="sale">Sale</option>
-                                                            </select>
-                                                        </div>
-                                                    </td>
-                                                   
-                                                     <td className="tb-tnx-info">
-                                                        <div className="tb-tnx-info">
-                                                            <input type="text" className="form-control" id="quantity" placeholder="10" />
-                                                        </div>
-                                                    </td>
-                                                   
-                                                    <td className="tb-tnx-info" >
-                                                        <div className="tb-tnx-info">
-                                                            <input type="text" className="form-control" id="rate" placeholder="150" />
-                                                        </div>
-                                                    </td>
-                                                   
-                                                    <td className="tb-tnx-amount is-alt">
-                                                        {/* <div className="tb-tnx-total"> */}
-                                                            <span className="amount">$125000</span>
-                                                        {/* </div> */}
-                                                        {/* <div className="tb-tnx-status">
-                                                            <span className="badge badge-dot badge-warning">Active</span>
-                                                        </div> */}
-                                                    </td>
-                                                   
-                                                    <td className="tb-tnx-action">
-                                                        <div className="dropdown">
-                                                            <a className="text-soft dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
-                                                            <div className="dropdown-menu dropdown-menu-right dropdown-menu-xs">
-                                                                <ul className="link-list-plain">
-                                                                    <li><a href="#">View</a></li>
-                                                                    <li><a href="#" onClick={this.paymentAlert}>Remove</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                                    </li>
+                                                    <li className="nk-block-tools-opt">
+                                                        <Link to="/addTransaction"><button className="toggle btn btn-primary d-none d-md-inline-flex"><em className="icon ni ni-plus"></em><span>Add Transaction</span></button></Link>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="nk-block-head-content ml-5">
-                                <Link to="/addpurchases"><button className="btn btn-info"><span>Save</span></button></Link>
-                            </div>
+                            <DataTable
+                                columns={this.columns}
+                                data={this.state.transactionsList}
+                                highlightOnHover
+                                pointerOnHover
+                                pagination
+                                paginationPerPage={10}
+                            />
                         </div>
                     </div>
                 </div>
             </div>
-
         )
     }
 }
 
-export default Transactions
+export default Content

@@ -20,7 +20,6 @@ export function getSuppliers(
         console.log(error)
     });
 
-
     return {
         type: 'GET_SUPPLIERS',
         payload: request
@@ -120,6 +119,30 @@ export function getActiveProducts(
     }
 }
 
+//getTransactions
+export function getTransactions(
+    start = 0,
+    limit = 0,
+    order = 'desc',
+    list = ''
+){
+
+    const request = axios.get(`api/getTransactions?skip=${start}&limit=${limit}&order=${order}`)
+    .then(response => {
+        if(list){
+            return [...list,...response.data];
+        }
+        else{
+            return response.data;
+        }
+    } );
+
+
+    return {
+        type: 'GET_TRANSACTIONS',
+        payload: request
+    }
+}
 
 export function getBookWithReviewer(id){
     const request = axios.get(`/api/getBook?id=${id}`)
@@ -189,14 +212,34 @@ export function saveProduct(document){
     }
 }
 
-export function savePurchase(document){
-    const request = axios.post('/api/addPurchase',document)
+//save transaction
+export function saveTransaction(document){
+    const request = axios.post('/api/addTransaction',document)
         .then(response => response.data);
     return {
-        type:'ADD_PURCHASE',
+        type:'ADD_TRANSACTION',
         payload:request
     }
 }
+
+//delete transaction
+export function deleteTransaction(id){
+    const request = axios.delete(`/api/delete_transaction?id=${id}`)
+    .then(response =>response.data);
+
+    return{
+        type: 'DELETE_TRANSACTION',
+        payload: request
+    }
+}
+
+export function clearNewTransaction() {
+    return {
+        type:'CLEAR_TRANSACTION',
+        payload:{}
+    }
+}
+
 
 export function clearNewSupplier() {
     return {
