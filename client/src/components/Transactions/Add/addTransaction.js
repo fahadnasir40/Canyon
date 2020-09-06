@@ -17,8 +17,8 @@ class AddTransaction extends Component {
         source: '',
         // svalue: 'asad waqas',
         svalue: 0,
-        ttype: 'otherexpense',
-        taction: 'paysalary',
+        ttype: 'Other Expense',
+        taction: 'Pay Salary',
         qty: 1,
         rate: 1,
         comments: '',
@@ -74,14 +74,14 @@ class AddTransaction extends Component {
 
         this.setState({ source: event.target.value })
 
-        if (event.target.value === "supplier") {
+        if (event.target.value === "Supplier") {
             this.props.dispatch(getSuppliers())
         }
-        else if (event.target.value === "customer") {
+        else if (event.target.value === "Customer") {
             console.log("customer list calling", event.target.value)
             this.props.dispatch(getCustomers())
         }
-        else if (event.target.value === "employees") {
+        else if (event.target.value === "Employees") {
             this.props.dispatch(getUsers())
         }
     }
@@ -178,9 +178,9 @@ class AddTransaction extends Component {
                                             <div className="form-control-select">
                                                 <select required onChange={this.handleInputSource} className="form-control" id="source">
                                                     <option value=""></option>
-                                                    <option value="employees">Employees</option>
-                                                    <option value="supplier">Supplier</option>
-                                                    <option value="customer">Customer</option>
+                                                    <option value="Employees">Employees</option>
+                                                    <option value="Supplier">Supplier</option>
+                                                    <option value="Customer">Customer</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -198,18 +198,18 @@ class AddTransaction extends Component {
                                                     <option value={-1}> Select {this.state.source}</option>
 
                                                     {
-                                                        this.state.source === "supplier" ?
+                                                        this.state.source === "Supplier" ?
                                                             this.props.suppliersList ?
                                                                 this.props.suppliersList.map((item, key) => {
                                                                     return <option key={key} value={key} className="ccap" >{item.name} ({item.brand})</option>;
                                                                 })
                                                                 : null
-                                                            : this.state.source === "customer" ?
+                                                            : this.state.source === "Customer" ?
                                                                 this.props.customerList ?
                                                                     this.props.customerList.map((item, key) => {
                                                                         return <option key={key} value={key} className="ccap" >{item.name}</option>;
                                                                     }) : null
-                                                                : this.state.source === "employees" ?
+                                                                : this.state.source === "Employees" ?
                                                                     this.props.userList ?
                                                                         this.props.userList.map((item, key) => {
                                                                             return <option key={key} value={key} className="ccap" >{item.name}</option>;
@@ -233,9 +233,9 @@ class AddTransaction extends Component {
                                         <div className="form-control-wrap ">
                                             <div className="form-control-select">
                                                 <select required onChange={this.handleInputTtype} className="form-control" id="ttype" required>
-                                                    <option value="Otherexpense">Other Expense</option>
-                                                    <option value="sales">Sales</option>
-                                                    <option value="purchase">Purchase</option>
+                                                    <option value="Other Expense">Other Expense</option>
+                                                    <option value="Sales">Sales</option>
+                                                    <option value="Purchase">Purchase</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -247,12 +247,12 @@ class AddTransaction extends Component {
                                         <div className="form-control-wrap ">
                                             <div className="form-control-select">
                                                 <select required onChange={this.handleInputTaction} className="form-control" id="taction" required>
-                                                    <option value="paysalary" >Pay Salary</option>
-                                                    <option value="fuelcost">Fuel Cost</option>
-                                                    <option value="vehiclemaintenance">Vehicle Maintenance</option>
-                                                    <option value="advancepaid">Advance Paid</option>
-                                                    <option value="salesreturn">Sales Return</option>
-                                                    <option value="purchasereturn">Purchase Return</option>
+                                                    <option value="Pay Salary" >Pay Salary</option>
+                                                    <option value="Fuel Cost">Fuel Cost</option>
+                                                    <option value="Vehicle Maintenance">Vehicle Maintenance</option>
+                                                    <option value="Advance Paid">Advance Paid</option>
+                                                    <option value="Sales Return">Sales Return</option>
+                                                    <option value="Purchase Return">Purchase Return</option>
                                                 </select>
                                             </div>
                                         </div>

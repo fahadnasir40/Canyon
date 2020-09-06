@@ -179,6 +179,25 @@ export function saveTransaction(document){
     }
 }
 
+//delete transaction
+export function deleteTransaction(id){
+    const request = axios.delete(`/api/delete_transaction?id=${id}`)
+    .then(response =>response.data);
+
+    return{
+        type: 'DELETE_TRANSACTION',
+        payload: request
+    }
+}
+
+export function clearNewTransaction() {
+    return {
+        type:'CLEAR_TRANSACTION',
+        payload:{}
+    }
+}
+
+
 export function clearNewSupplier() {
     return {
         type:'CLEAR_SUPPLIER',

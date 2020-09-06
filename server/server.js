@@ -22,7 +22,6 @@ const { Supplier } = require("./models/supplier");
 const { Customer } = require("./models/customer");
 const { Product } = require("./models/product");
 const { Transaction } = require("./models/transaction");
-// const { default: Transactions } = require("../client/src/components/Transactions/Transactions");
 
 
 app.use(bodyParser.json());
@@ -81,6 +80,19 @@ app.get('/api/getProducts', auth, (req, res) => {
     })
 })
 
+
+app.get('/api/getTransactions', auth, (req, res) => {
+    // locahost:3001/api/books?skip=3&limit=2&order=asc
+    let skip = parseInt(req.query.skip);
+    let limit = parseInt(req.query.limit);
+    let order = req.query.order;
+
+    // ORDER = asc || desc
+    Transaction.find().skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.send(doc);
+    })
+})
 
 app.get("/api/profile", auth, (req, res) => {
     res.json({
@@ -306,6 +318,14 @@ app.delete('/api/delete_customer', auth, (req, res) => {
     })
 })
 
+app.delete('/api/delete_transaction', auth, (req, res) => {
+    let id = req.query.id;
+
+    Transaction.findByIdAndRemove(id, (err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.json(true)
+    })
+})
 
 
 

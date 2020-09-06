@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import DataTable from 'react-data-table-component';
-
+import NumberFormat from 'react-number-format';
+import transactions from '../transactions';
 
 class Content extends Component {
 
@@ -13,7 +14,7 @@ class Content extends Component {
 
         {
             name: 'Source',
-            selector: 'source',
+            selector: 'transaction_source',
             sortable: true,
             grow: 2,
             style: {
@@ -24,21 +25,13 @@ class Content extends Component {
         },
         {
             name: 'Value',
-            selector: 'value',
+            selector: 'transaction_value',
             sortable: true,
 
         },
-        // {
-        //     name: 'Price',
-        //     selector: 'price',
-        //     sortable: true,
-        //     style: {
-        //         color: 'rgba(0,0,0,.54)',
-        //     },
-        // },
         {
             name: 'Type',
-            selector: 'type',
+            selector: 'transaction_type',
             sortable: true,
             style: {
                 color: 'rgba(0,0,0,.54)',
@@ -46,7 +39,7 @@ class Content extends Component {
         },
         {
             name: 'Action',
-            selector: 'action',
+            selector: 'transaction_action',
             sortable: true,
             style: {
                 color: 'rgba(0,0,0,.54)',
@@ -54,7 +47,7 @@ class Content extends Component {
         },
         {
             name: 'Date',
-            selector: 'date',
+            selector: 'transaction_date',
             sortable: true,
             style: {
                 color: 'rgba(0,0,0,.54)',
@@ -62,13 +55,21 @@ class Content extends Component {
         },
         {
             name: 'Qty',
-            selector: 'qty',
+            selector: 'primary_quantity',
+            sortable: true,
+            thousandSeparator : true,
+            style: {
+                color: 'rgba(0,0,0,.54)',
+            },
+        },
+        {
+            name: 'Rate',
+            selector: 'rate',
             sortable: true,
             style: {
                 color: 'rgba(0,0,0,.54)',
             },
         },
-
         {
             cell: row => (
                 <div className="nk-tb-col nk-tb-col-tools">
@@ -80,8 +81,8 @@ class Content extends Component {
                                     <ul className="link-list-opt no-bdr">
                                         <li><a href="#"><em className="icon ni ni-edit"></em><span>Edit</span></a></li>
                                         <li><a href="#"><em className="icon ni ni-eye"></em><span>View</span></a></li>
-                                        {/* <li><a href="#"><em className="icon ni ni-activity-round"></em><span>Product Orders</span></a></li> */}
-                                        <li><a href="#"><em className="icon ni ni-trash"></em><span>Remove Product</span></a></li>
+                                        <li><a onClick={() => { this.props.deleteTransaction(transactions) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }}>Remove Transaction</span></a></li>
+                                        {/* <li><a onClick={() => { this.props.deleteSupplier(supplier) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }} className="text-danger ">Remove Supplier</span></a></li> */}
                                     </ul>
                                 </div>
                             </div>
@@ -122,7 +123,8 @@ class Content extends Component {
             // based on the search terms
             newList = currentList.filter(item => {
                 // change current item to lowercase
-                const lc = item.name.toLowerCase();
+                // const lc = item.name.toLowerCase();
+                const lc = item.source.toLowerCase();
                 // change search term to lowercase
                 const filter = e.target.value.toLowerCase();
                 // check to see if the current list item includes the search term
@@ -167,11 +169,10 @@ class Content extends Component {
                                                             <div className="form-icon form-icon-right">
                                                                 <em className="icon ni ni-search"></em>
                                                             </div>
-                                                            <input type="text" className="form-control" onChange={this.handleSearchChange} id="default-04" placeholder="Quick search by name" />
+                                                            <input type="text" className="form-control" onChange={this.handleSearchChange} id="default-04" placeholder="Quick search by source" />
                                                         </div>
                                                     </li>
                                                     <li className="nk-block-tools-opt">
-                                                        {/* <button data-toggle="modal" data-target="#addmodal" className="toggle btn btn-icon btn-primary d-md-none"><em className="icon ni ni-plus"></em></button> */}
                                                         <Link to="/addTransaction"><button className="toggle btn btn-primary d-none d-md-inline-flex"><em className="icon ni ni-plus"></em><span>Add Transaction</span></button></Link>
                                                     </li>
                                                 </ul>
@@ -182,7 +183,6 @@ class Content extends Component {
                             </div>
                             <DataTable
                                 columns={this.columns}
-                                // data={this.state.productsList}
                                 data={this.state.transactionsList}
                                 highlightOnHover
                                 pointerOnHover
