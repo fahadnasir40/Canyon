@@ -4,7 +4,7 @@ import Header from '../Header/header'
 import Footer from '../Footer/footer'
 import Content from './Content/content';
 import { connect } from 'react-redux';
-import { getTransactions , deleteTransaction} from '../../actions/';
+import { getTransactions , deleteTransaction} from '../../actions';
 import Swal from 'sweetalert2'
 
 class Transactions extends Component {

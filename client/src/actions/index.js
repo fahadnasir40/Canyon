@@ -194,6 +194,15 @@ export function saveSupplier(document){
     }
 }
 
+export function savePurchase(document){
+    const request = axios.post('/api/addPurchase',document)
+        .then(response => response.data);
+    return {
+        type:'ADD_PURCHASE',
+        payload:request
+    }
+}
+
 export function saveCustomer(document){
     const request = axios.post('/api/addCustomer',document)
         .then(response => response.data);

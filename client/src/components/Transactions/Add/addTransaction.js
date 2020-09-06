@@ -3,7 +3,7 @@ import Header from "../../Header/header";
 import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
 import { saveTransaction } from '../../../actions';
-import { getProducts, getCustomers, getUsers, getSuppliersTransactions } from '../../../actions';
+import { getProducts, getCustomers, getUsers, getSuppliers } from '../../../actions';
 import { connect } from 'react-redux';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -68,7 +68,7 @@ class AddTransaction extends Component {
         this.setState({ source: event.target.value })
 
         if (event.target.value === "Supplier") {
-            this.props.dispatch(getSuppliersTransactions())
+            this.props.dispatch(getSuppliers())
         }
         else if (event.target.value === "Customer") {
             console.log("customer list calling", event.target.value)
