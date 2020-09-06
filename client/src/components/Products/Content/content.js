@@ -28,14 +28,6 @@ class Content extends Component {
             sortable: true,
 
         },
-        // {
-        //     name: 'Price',
-        //     selector: 'price',
-        //     sortable: true,
-        //     style: {
-        //         color: 'rgba(0,0,0,.54)',
-        //     },
-        // },
         {
             name: 'Stock',
             selector: 'stock',
@@ -71,17 +63,17 @@ class Content extends Component {
 
         {
             cell: row => (
-                <div class="nk-tb-col nk-tb-col-tools">
-                    <ul class="nk-tb-actions gx-1 my-n1">
-                        <li class="mr-n1">
-                            <div class="dropdown">
-                                <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <ul class="link-list-opt no-bdr">
-                                        <li><a href="#"><em class="icon ni ni-edit"></em><span>Edit Product</span></a></li>
-                                        <li><a href="#"><em class="icon ni ni-eye"></em><span>View Product</span></a></li>
-                                        <li><a href="#"><em class="icon ni ni-activity-round"></em><span>Product Orders</span></a></li>
-                                        <li><a href="#"><em class="icon ni ni-trash"></em><span>Remove Product</span></a></li>
+                <div className="nk-tb-col nk-tb-col-tools">
+                    <ul className="nk-tb-actions gx-1 my-n1">
+                        <li className="mr-n1">
+                            <div className="dropdown">
+                                <a href="#" className="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
+                                <div className="dropdown-menu dropdown-menu-right">
+                                    <ul className="link-list-opt no-bdr">
+                                        <li><a href="#"><em className="icon ni ni-edit"></em><span>Edit Product</span></a></li>
+                                        <li><a href="#"><em className="icon ni ni-eye"></em><span>View Product</span></a></li>
+                                        <li><a href="#"><em className="icon ni ni-activity-round"></em><span>Product Orders</span></a></li>
+                                        <li><a href="#"><em className="icon ni ni-trash"></em><span>Remove Product</span></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -138,31 +130,31 @@ class Content extends Component {
     render() {
         console.log("Content", this.props);
         return (
-            <div class="nk-content ml-md-5 ">
-                <div class="container-fluid">
-                    <div class="nk-content-inner">
-                        <div class="nk-content-body">
-                            <div class="nk-block-head nk-block-head-sm">
-                                <div class="nk-block-between">
-                                    <div class="nk-block-head-content">
-                                        <h3 class="nk-block-title page-title">Products</h3>
+            <div className="nk-content ml-md-5 ">
+                <div className="container-fluid">
+                    <div className="nk-content-inner">
+                        <div className="nk-content-body">
+                            <div className="nk-block-head nk-block-head-sm">
+                                <div className="nk-block-between">
+                                    <div className="nk-block-head-content">
+                                        <h3 className="nk-block-title page-title">Products</h3>
                                     </div>
-                                    <div class="nk-block-head-content">
-                                        <div class="toggle-wrap nk-block-tools-toggle">
-                                            <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
-                                            <div class="toggle-expand-content" data-content="pageMenu">
-                                                <ul class="nk-block-tools g-3">
+                                    <div className="nk-block-head-content">
+                                        <div className="toggle-wrap nk-block-tools-toggle">
+                                            <a href="#" className="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em className="icon ni ni-more-v"></em></a>
+                                            <div className="toggle-expand-content" data-content="pageMenu">
+                                                <ul className="nk-block-tools g-3">
                                                     <li>
-                                                        <div class="form-control-wrap">
-                                                            <div class="form-icon form-icon-right">
-                                                                <em class="icon ni ni-search"></em>
+                                                        <div className="form-control-wrap">
+                                                            <div className="form-icon form-icon-right">
+                                                                <em className="icon ni ni-search"></em>
                                                             </div>
-                                                            <input type="text" class="form-control" onChange={this.handleSearchChange} id="default-04" placeholder="Quick search by name" />
+                                                            <input type="text" className="form-control" onChange={this.handleSearchChange} id="default-04" placeholder="Quick search by name" />
                                                         </div>
                                                     </li>
-                                                    <li class="nk-block-tools-opt">
-                                                        <button data-toggle="modal" data-target="#addmodal" class="toggle btn btn-icon btn-primary d-md-none"><em class="icon ni ni-plus"></em></button>
-                                                        <Link to="/addProduct"><button class="toggle btn btn-primary d-none d-md-inline-flex"><em class="icon ni ni-plus"></em><span>Add Product</span></button></Link>
+                                                    <li className="nk-block-tools-opt">
+                                                        <button data-toggle="modal" data-target="#addmodal" className="toggle btn btn-icon btn-primary d-md-none"><em className="icon ni ni-plus"></em></button>
+                                                        <Link to="/addProduct"><button className="toggle btn btn-primary d-none d-md-inline-flex"><em className="icon ni ni-plus"></em><span>Add Product</span></button></Link>
                                                     </li>
                                                 </ul>
                                             </div>

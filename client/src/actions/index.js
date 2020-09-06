@@ -26,15 +26,13 @@ export function getSuppliers(
     }
 }
 
-
-export function getSuppliersTransactions(
+export function getActiveSuppliers(
     start = 0,
     limit = 0,
     order = 'desc',
     list = ''
 ){
-
-    const request = axios.get(`api/getSuppliersTransactions?skip=${start}&limit=${limit}&order=${order}`)
+    const request = axios.get(`api/getActiveSuppliers?skip=${start}&limit=${limit}&order=${order}`)
     .then(response => {
         if(list){
             return [...list,...response.data];
@@ -48,12 +46,10 @@ export function getSuppliersTransactions(
     });
 
     return {
-        type: 'GET_SUPPLIERS_TRANSACTIONS',
+        type: 'GET_SUPPLIERS',
         payload: request
     }
 }
-
-
 export function getCustomers(
     start = 0,
     limit = 0,
@@ -95,8 +91,28 @@ export function getProducts(
             return response.data;
         }
     } );
+    return {
+        type: 'GET_PRODUCTS',
+        payload: request
+    }
+}
 
+export function getActiveProducts(
+    start = 0,
+    limit = 0,
+    order = 'desc',
+    list = ''
+){
 
+    const request = axios.get(`api/getActiveProducts?skip=${start}&limit=${limit}&order=${order}`)
+    .then(response => {
+        if(list){
+            return [...list,...response.data];
+        }
+        else{
+            return response.data;
+        }
+    } );
     return {
         type: 'GET_PRODUCTS',
         payload: request
@@ -246,6 +262,13 @@ export function clearProduct() {
     }
 }
 
+export function clearPurchase() {
+    return {
+        type:'CLEAR_PURCHASE',
+        payload:{}
+    }
+}
+
 export function clearSupplierList() {
     return {
         type:'CLEAR_SUPPLIER_LIST',
@@ -268,16 +291,6 @@ export function clearNewBook() {
 }
 
 
-export function getDocument(id){ 
-   
-    const request = axios.get(`/api/getDocument?id=${id}`)
-                    .then(response => response.data);
-
-    return{
-        type: 'GET_DOCUMENT',
-        payload: request
-    }
-}
 
 export function getSharedDocuments(){
     const request = axios.get(`/api/shared_documents`)

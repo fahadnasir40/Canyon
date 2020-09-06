@@ -3,7 +3,7 @@ import Sidebar from '../Sidebar/sidebar'
 import Header from '../Header/header'
 import Footer from '../Footer/footer'
 import Content from './Content/content'
-// import OrderDetails from './Auth/add'
+import OrderDetails from './Auth/add'
 
 class Purchases extends Component {
   constructor(props) {

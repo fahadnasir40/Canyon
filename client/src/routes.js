@@ -14,8 +14,7 @@ import SupplierDetails from './components/Suppliers/SupplierInfo/supplierInfo';
 import AddSupplier from './components/Suppliers/AddSupplier/add';
 import EditSupplier from './components/Suppliers/AddSupplier/edit';
 import Purchases from './components/Purchases/Add/addPurchase';
-// import Purchases from './components/Purchases/purchases';
-import AddPurchases from './components/Purchases/Wizards/WizardFormFirstPage';
+import AddPurchases from './components/Purchases/Add/addPurchase';
 import Transactions from './components/Transactions/transactions';
 import AddTransaction from './components/Transactions/Add/addTransaction';
 import Sales from './components/Sales/sales';
@@ -31,8 +30,9 @@ const routes = () => {
 
     return (
         <Switch>
-            <Route path="/dashboard" exact component ={Auth(Dashboard,true)}/>
+            
             <Route path="/" exact  component = {Auth(Login,false)}/>
+                <Route path="/dashboard" exact component ={Auth(Dashboard,true)}/>
                 <Route path="/users" exact component ={Auth(Users,true)}/>
                 <Route path="/add" exact component ={Auth(AddUser,true)}/>
                 <Route path="/products" exact component ={Auth(Products,true)}/>
@@ -50,6 +50,7 @@ const routes = () => {
                 <Route path="/purchases" exact component ={Auth(Purchases,true)}/>
                 <Route path="/addpurchases" exact component ={Auth(AddPurchases,true)}/>
                 {/* <Route path="/Transactions" exact component ={Auth(Transactions,true)}/> */}
+                <Route path="/transactions" exact component ={Auth(Transactions,true)}/>
                 <Route path="/sales" exact component ={Auth(Sales,true)}/>
                 <Route path="/profile" exact component ={Auth(Profile,true)}/>
                 <Route path="/error" exact component={ErrorPage504}/> 
