@@ -13,6 +13,12 @@ class Content extends Component {
     columns = [
 
         {
+            name: 'Brand',
+            selector: 'brand',
+            sortable: true,
+
+        },
+        {
             name: 'Source',
             selector: 'transaction_source',
             sortable: true,
@@ -64,6 +70,14 @@ class Content extends Component {
         },
         {
             name: 'Rate',
+            selector: 'rate',
+            sortable: true,
+            style: {
+                color: 'rgba(0,0,0,.54)',
+            },
+        },
+        {
+            name: 'Status',
             selector: 'rate',
             sortable: true,
             style: {
@@ -124,7 +138,7 @@ class Content extends Component {
             newList = currentList.filter(item => {
                 // change current item to lowercase
                 // const lc = item.name.toLowerCase();
-                const lc = item.source.toLowerCase();
+                const lc = item.transaction_value.toLowerCase();
                 // change search term to lowercase
                 const filter = e.target.value.toLowerCase();
                 // check to see if the current list item includes the search term
@@ -169,7 +183,7 @@ class Content extends Component {
                                                             <div className="form-icon form-icon-right">
                                                                 <em className="icon ni ni-search"></em>
                                                             </div>
-                                                            <input type="text" className="form-control" onChange={this.handleSearchChange} id="default-04" placeholder="Quick search by source" />
+                                                            <input type="text" className="form-control" onChange={this.handleSearchChange} id="default-04" placeholder="Quick search by value" />
                                                         </div>
                                                     </li>
                                                     <li className="nk-block-tools-opt">

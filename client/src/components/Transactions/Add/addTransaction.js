@@ -3,7 +3,7 @@ import Header from "../../Header/header";
 import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
 import { saveTransaction } from '../../../actions';
-import { getProducts, getCustomers, getUsers, getSuppliers } from '../../../actions';
+import { getActiveProducts, getCustomersTransactions, getEmployeesTransactions, getSuppliersTransactions } from '../../../actions';
 import { connect } from 'react-redux';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -12,21 +12,19 @@ import Moment from 'react-moment';
 class AddTransaction extends Component {
 
     state = {
-        brand: 'canyon',
         startDate: new Date(),
         source: '',
-        // svalue: 'asad waqas',
-        svalue: 0,
+        svalueid: '',
+        svalue: '',
         ttype: 'Other Expense',
         taction: 'Pay Salary',
         qty: 1,
         rate: 1,
         comments: '',
         suppliersList: '',
-        // productsList: '',
         customerList: '',
         userList: '',
-        // seal: '',
+        productsList: '',
         redirect: false,
         error: ''
     }
@@ -55,11 +53,14 @@ class AddTransaction extends Component {
 
     handleInputTaction = (event) => {
         this.setState({ taction: event.target.value })
+        if (event.target.value === "Transfer Inventory") {
+            console.log("Hello List" ,this.state.productsList)
+            this.props.dispatch(getActiveProducts())
+        }
     }
 
 
     handleInputTtype = (event) => {
-        // this.setState({ ttype: event.target.value,taction: 'paysalary' })
         this.setState({ ttype: event.target.value })
     }
 
@@ -67,20 +68,38 @@ class AddTransaction extends Component {
 
         this.setState({ source: event.target.value })
 
-        if (event.target.value === "Supplier") {
-            this.props.dispatch(getSuppliers())
+        if (event.target.value === "Supplier" && !this.props.suppliersList) {
+            this.props.dispatch(getSuppliersTransactions())
         }
-        else if (event.target.value === "Customer") {
+        else if (event.target.value === "Customer" && !this.props.customerList) {
             console.log("customer list calling", event.target.value)
-            this.props.dispatch(getCustomers())
+            this.props.dispatch(getCustomersTransactions())
         }
-        else if (event.target.value === "Employees") {
-            this.props.dispatch(getUsers())
+        else if (event.target.value === "Employees" && !this.props.userList) {
+            this.props.dispatch(getEmployeesTransactions())
         }
     }
 
     handleInputSvalue = (event) => {
-        this.setState({ svalue: this.props.supplierList[event.target.value]._id })
+
+        if (this.state.source === "Supplier" && this.props.suppliersList) {
+            this.setState({
+                svalueid: this.props.suppliersList[event.target.value]._id
+                , svalue: this.props.suppliersList[event.target.value].name
+            })
+        }
+        else if (this.state.source === "Customer" && this.props.customerList) {
+            this.setState({
+                svalueid: this.props.customerList[event.target.value]._id
+                , svalue: this.props.customerList[event.target.value].name
+            })
+        }
+        else if (this.state.source === "Employees" && this.props.userList) {
+            this.setState({
+                svalueid: this.props.userList[event.target.value]._id
+                , svalue: this.props.userList[event.target.value].name
+            })
+        }
     }
 
     handleInputDate = date => {
@@ -101,16 +120,6 @@ class AddTransaction extends Component {
         this.setState({ comments: event.target.value })
     };
 
-    handleInputDropdown = (event) => {
-        this.setState({ svalue: event.target.value })
-
-    }
-
-
-    // handleInputBrand = (event) => {
-    //     this.setState({ brand: event.target.value })
-    // }
-
     submitForm = (event) => {
 
         // const form = event.currentTarget;
@@ -125,6 +134,7 @@ class AddTransaction extends Component {
             transaction_type: this.state.ttype,
             transaction_action: this.state.taction,
             transaction_value: this.state.svalue,
+            transaction_value_id: this.state.svalueid,
             comments: this.state.comments,
             addedBy: this.props.user.login.id
         }))
@@ -145,20 +155,17 @@ class AddTransaction extends Component {
     }
 
     renderBody = (total) => {
+        console.log("products List ", this.props.productList)
         return (
             <div className="container mt-5">
                 <div className="card">
                     <div className="card-inner">
                         <div className="card-head mt-2">
                             <h4 className="ff-base fw-medium">New Transaction</h4>
-                            {/* <div className="col-lg-4"> */}
-                            {/* <div className="d-flex justify-content-end" > */}
                             <span>Date: <DatePicker
                                 selected={this.state.startDate}
                                 onChange={this.handleInputDate}
                             /></span>
-                            {/* </div> */}
-                            {/* </div> */}
                         </div>
                         <form className="form-validate">
                             <div className="row g-4">
@@ -187,7 +194,7 @@ class AddTransaction extends Component {
                                         <div className="form-control-wrap ">
                                             <div className="form-control-select">
 
-                                                <select required onChange={this.handleInputDropdown} className="form-control ccap" id="svalue">
+                                                <select required onChange={this.handleInputSvalue} className="form-control ccap" id="svalue">
                                                     <option value={-1}> Select {this.state.source}</option>
 
                                                     {
@@ -218,7 +225,7 @@ class AddTransaction extends Component {
                             </div>
 
                             <div className="row g-2">
-                                <div className="col-lg-4">
+                                <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="form-label" htmlFor="ttype">
                                             Type
@@ -234,7 +241,7 @@ class AddTransaction extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-lg-3">
+                                <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="form-label" htmlFor="taction">Action</label>
                                         <div className="form-control-wrap ">
@@ -244,6 +251,7 @@ class AddTransaction extends Component {
                                                     <option value="Fuel Cost">Fuel Cost</option>
                                                     <option value="Vehicle Maintenance">Vehicle Maintenance</option>
                                                     <option value="Advance Paid">Advance Paid</option>
+                                                    <option value="Inventory Transfer">Transfer Inventory</option>
                                                     <option value="Sales Return">Sales Return</option>
                                                     <option value="Purchase Return">Purchase Return</option>
                                                 </select>
@@ -251,7 +259,53 @@ class AddTransaction extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-md-1">
+                            </div>
+                            {
+                                this.state.taction === "Inventory Transfer" ?
+                                    <div className="row g-2">
+                                        <div className="col-md-4">
+                                            <div className="form-group">
+                                                <label className="form-label" htmlFor="fromitem">From Product</label>
+                                                <div className="form-control-wrap ">
+                                                    <div className="form-control-select">
+                                                        <select required onChange={this.handleInputTaction} className="form-control" id="fromitem" required>
+                                                            <option value={-1}> From Item</option>
+                                                            {
+                                                                this.props.productsList ?
+                                                                    this.props.productsList.map((item, key) => {
+                                                                        return <option key={key} value={key} className="ccap" >{item.name} ({item.brand})</option>;
+                                                                    })
+                                                                    : null
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="form-group">
+                                                <label className="form-label" htmlFor="toitem">To Product</label>
+                                                <div className="form-control-wrap ">
+                                                    <div className="form-control-select">
+                                                        <select required onChange={this.handleInputTaction} className="form-control" id="toitem" required>
+                                                            <option value={-1}> To Item</option>
+                                                            {
+                                                                this.props.productsList ?
+                                                                    this.props.productsList.map((item, key) => {
+                                                                        return <option key={key} value={key} className="ccap" >{item.name} ({item.brand})</option>;
+                                                                    })
+                                                                    : null
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    : null
+                            }
+                            <div className="row">
+                                <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="form-label" htmlFor="qty">Quantity</label>
                                         <div className="form-control-wrap">
@@ -259,7 +313,7 @@ class AddTransaction extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-md-1">
+                                <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="form-label" htmlFor="rate">Rate</label>
                                         <div className="form-control-wrap">
@@ -268,6 +322,7 @@ class AddTransaction extends Component {
                                     </div>
                                 </div>
                             </div>
+
                             <div className="col-md-3 mt-5  border-info border-top border-bottom">
                                 <div className="row g-2">
                                     <div className="col-md-6">
@@ -330,7 +385,7 @@ class AddTransaction extends Component {
         }
 
         let total = 0;
-        console.log("List", this.props)
+        console.log("List", this.state)
         return (
 
             <div className="nk-body bg-lighter npc-default has-sidebar ">
@@ -352,7 +407,7 @@ class AddTransaction extends Component {
 
 function mapStateToProps(state) {
     return {
-        // addProduct: state.product.product,
+        productsList: state.product.productList,
         suppliersList: state.supplier.supplierList,
         customerList: state.customer.customerList,
         userList: state.user.userList,

@@ -23,6 +23,8 @@ const { Customer } = require("./models/customer");
 const { Product } = require("./models/product");
 const { Transaction } = require("./models/transaction");
 const { Purchase } = require("./models/purchase");
+// const { default: transactions } = require("../client/src/components/Transactions/transactions");
+const supplier = require("./models/supplier");
 
 
 app.use(bodyParser.json());
@@ -55,6 +57,45 @@ app.get('/api/getSuppliers', auth, (req, res) => {
     })
 })
 
+app.get('/api/getSuppliersTransactions', auth, (req, res) => {
+    // locahost:3001/api/books?skip=3&limit=2&order=asc
+    let skip = parseInt(req.query.skip);
+    let limit = parseInt(req.query.limit);
+    let order = req.query.order;
+
+    // ORDER = asc || desc
+    Supplier.find({ status: "active" }).skip(skip).sort({ _id: order }).limit(limit).select('_id name brand').exec((err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.send(doc);
+    })
+})
+
+app.get('/api/getCustomersTransactions', auth, (req, res) => {
+    let skip = parseInt(req.query.skip);
+    let limit = parseInt(req.query.limit);
+    let order = req.query.order;
+
+    // ORDER = asc || desc
+    Customer.find({ status: "active" }).skip(skip).sort({ _id: order }).limit(limit).select('_id name brand').exec((err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.send(doc);
+    })
+})
+
+app.get('/api/getEmployeesTransactions', auth, (req, res) => {
+    // locahost:3001/api/books?skip=3&limit=2&order=asc
+    let skip = parseInt(req.query.skip);
+    let limit = parseInt(req.query.limit);
+    let order = req.query.order;
+
+    // ORDER = asc || desc
+    User.find().skip(skip).sort({ _id: order }).limit(limit).select('_id name').exec((err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.send(doc);
+    })
+})
+
+
 app.get('/api/getActiveSuppliers', auth, (req, res) => {
     // locahost:3001/api/books?skip=3&limit=2&order=asc
     let skip = parseInt(req.query.skip);
@@ -62,7 +103,7 @@ app.get('/api/getActiveSuppliers', auth, (req, res) => {
     let order = req.query.order;
 
     // ORDER = asc || desc
-    Supplier.find({status: 'active'}).skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+    Supplier.find({ status: 'active' }).skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.send(doc);
     })
@@ -101,7 +142,7 @@ app.get('/api/getActiveProducts', auth, (req, res) => {
     let order = req.query.order;
 
     // ORDER = asc || desc
-    Product.find({status: 'active'}).skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+    Product.find({ status: 'active' }).skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.send(doc);
     })
@@ -114,9 +155,9 @@ app.get('/api/getTransactions', auth, (req, res) => {
     let order = req.query.order;
 
     // ORDER = asc || desc
-    Transaction.find().skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+    Transaction.find().skip(skip).sort({ _id: order }).limit(limit).exec((err, docs) => {
         if (err) return res.status(400).send(err);
-        res.send(doc);
+        res.send(docs);
     })
 })
 
@@ -259,11 +300,11 @@ app.post('/api/addPurchase', (req, res) => {
     });
 })
 
-app.post('/api/addProduct',auth,(req, res) => {
+app.post('/api/addProduct', auth, (req, res) => {
 
     const product = new Product(req.body);
-    const total = Number(product.price.cost_seal) + Number(product.price.cost_wrapper) + 
-    Number(product.price.cost_others);
+    const total = Number(product.price.cost_seal) + Number(product.price.cost_wrapper) +
+        Number(product.price.cost_others);
     product.price.total = total;
     product.save((error, product) => {
         if (error) {
@@ -278,15 +319,15 @@ app.post('/api/addProduct',auth,(req, res) => {
 
 //add Transaction
 
-app.post('/api/addTransaction',auth,(req, res) => {
+app.post('/api/addTransaction', auth, (req, res) => {
 
     const transaction = new Transaction(req.body);
-    
-    console.log("Transaction",transaction)
+
+    console.log("Transaction", transaction)
 
     transaction.save((error, transaction) => {
         if (error) {
-            console.log("Transaction",error)
+            console.log("Transaction", error)
             return res.status(400).send(error);
         }
         return res.status(200).json({

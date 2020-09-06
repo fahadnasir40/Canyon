@@ -48,7 +48,6 @@ const routes = () => {
                 <Route path="/editSupplier" exact component ={Auth(EditSupplier,true)}/>
                 <Route path="/addpurchase" exact component ={Auth(AddPurchases,true)}/>
                 {/* <Route path="/Transactions" exact component ={Auth(Transactions,true)}/> */}
-                <Route path="/transactions" exact component ={Auth(Transactions,true)}/>
                 <Route path="/sales" exact component ={Auth(Sales,true)}/>
                 <Route path="/profile" exact component ={Auth(Profile,true)}/>
                 <Route path="/error" exact component={ErrorPage504}/> 

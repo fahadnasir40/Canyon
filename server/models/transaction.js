@@ -26,6 +26,10 @@ const transactionSchema = mongoose.Schema({
         type: String,
         required: false
     },
+    transaction_value_id:{
+        type: String,
+        required: true
+    },
     transaction_value:{
         type: String,
         required: true

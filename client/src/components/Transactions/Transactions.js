@@ -4,13 +4,12 @@ import Header from '../Header/header'
 import Footer from '../Footer/footer'
 import Content from './Content/content';
 import { connect } from 'react-redux';
-import { getTransactions , deleteTransaction} from '../../actions';
+import { getTransactions , deleteTransaction} from '../../actions/';
 import Swal from 'sweetalert2'
 
 class Transactions extends Component {
 
     componentDidMount() {
-        console.log("getTreansactions", this.props.dispatch(getTransactions()))
         this.props.dispatch(getTransactions());
     }
 
@@ -85,7 +84,7 @@ class Transactions extends Component {
 function mapStateToProps(state) {
     return {
         transactionsList: state.transaction.transactionList,
-        removeTransaction: state.transaction.postDeleted,
+        // removeTransaction: state.transaction_source.postDeleted,
         // editSupplier: state.supplier.post
     }
 }
