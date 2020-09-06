@@ -330,7 +330,7 @@ class AddTransaction extends Component {
         }
 
         let total = 0;
-        console.log("List", this.state)
+        console.log("List", this.props)
         return (
 
             <div className="nk-body bg-lighter npc-default has-sidebar ">
