@@ -2,53 +2,109 @@ import React, { Component } from 'react'
 import Sidebar from '../Sidebar/sidebar'
 import Header from '../Header/header'
 import Footer from '../Footer/footer'
-
-
+import { Link } from 'react-router-dom'
+import Moment from 'react-moment'
+import ReactToPrint, { PrintContextConsumer } from 'react-to-print';
+import PrintInvoiceComponent from './invoice-print';
 class purchaseInvoice extends Component {
-    renderBody = () => (
-        <div class="nk-content ">
-            <div class="container wide-xl">
-                <div class="nk-content-inner">
-                  
+
+    state = {
+        purchase: ''
+    }
+
+    componentDidMount() {
+        if (!this.props.location.state) {
+            this.props.history.push('/purchases')
+        }
+        else {
+            this.setState({
+                purchase: this.props.location.state.purchaseInfo
+            })
+        }
+    }
+
+    getSupplierAddress = (value) => {
+        let newValue = '';
+        let check = false;
+        for (var i = 0; i < value.length; i++) {
+            newValue += value[i];
+            if (value[i] === ',' && i > 5 && !check) {
+                check = true;
+                newValue += '\n   '
+            }
+        }
+        return newValue;
+    }
+
+    printInvoice = () => {
+        return (
+            <PrintInvoiceComponent ref={el => (this.componentRef = el)} />
+        )
+    }
+
+    renderBody = (purchase) => (
+        purchase ?
+            <div class="nk-content ">
+                <div class="container wide-xl">
                     <div class="nk-content-body">
                         <div class="nk-content-wrap">
-                            <div class="nk-block-head nk-block-head-lg">
-                                <div class="nk-block-head-sub"><a class="back-to" href="html/subscription/invoices.html"><em class="icon ni ni-arrow-left"></em><span>Invoices</span></a></div>
-                                <div class="nk-block-between-md g-4">
+                            <div class="nk-block-head">
+                                <div class="nk-block-between g-3">
                                     <div class="nk-block-head-content">
-                                        <h2 class="nk-block-title fw-normal">Invoice #746F5K2</h2>
-                                        <div class="nk-block-des">
-                                            <p>Your invoice details are given bellow.</p>
+                                        <h3 class="nk-block-title page-title">Invoice <strong class="text-primary small"># {purchase._id}</strong></h3>
+                                        <div class="nk-block-des text-soft">
+                                            <ul class="list-inline">
+                                                <li>Created At: <span class="text-base"><Moment format="DD MMM, YYYY hh:mm A"></Moment></span></li>
+                                            </ul>
                                         </div>
+                                    </div>
+                                    <div class="nk-block-head-content">
+                                        <Link to="/purchases" class="btn btn-outline-light bg-white d-none d-sm-inline-flex"><em class="icon ni ni-arrow-left"></em><span>Back</span></Link>
+                                        <Link to="/purchases" class="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none"><em class="icon ni ni-arrow-left"></em></Link>
                                     </div>
                                 </div>
                             </div>
-                            <div class="nk-block">
-                                <div class="invoice">
-                                    <div class="invoice-action">
-                                        <a class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary" href="invoice-print.html" target="_blank"><em class="icon ni ni-printer-fill"></em></a>
-                                    </div>
+                            <div class="nk-block border border-light p-3">
+                                <div class="invoice-action">
+                                    <ReactToPrint
+                                        trigger={() => {
+                                            // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
+                                            // to the root node of the returned component as it will be overwritten.
+                                            return <Link class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary" onClick={this.printInvoice}><em class="icon ni ni-printer-fill"></em></Link>
+                                        }}
+                                        content={() => this.componentRef}
+                                    />
+
+                                </div>
+                                <div class="invoice m-5"  ref={el => (this.componentRef = el)} >
+
                                     <div class="invoice-wrap">
                                         <div class="invoice-brand text-center">
-                                            <img src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt=""/>
+                                            <img src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="" />
                                         </div>
-                                        <div class="invoice-head">
-                                            <div class="invoice-contact">
-                                                <span class="overline-title">Invoice To</span>
-                                                <div class="invoice-contact-info">
-                                                    <h4 class="title">Gregory Anderson</h4>
-                                                    <ul class="list-plain">
-                                                        <li><em class="icon ni ni-map-pin-fill"></em><span>House #65, 4328 Marion Street<br/>Newbury, VT 05051</span></li>
-                                                        <li><em class="icon ni ni-call-fill"></em><span>+012 8764 556</span></li>
-                                                    </ul>
+                                        <div class="invoice-head mb-2 mt-4">
+                                            <div className="row mt-2">
+                                                <div className="d-flex mr-auto ml-4">
+                                                    <div class="invoice-contact  ">
+                                                        <span class="overline-title">Invoice To</span>
+                                                        <div class="invoice-contact-info">
+                                                            <h4 class="title">{purchase.supplierName}</h4>
+                                                            <ul class="list-plain">
+                                                                <li><em class="icon ni ni-map-pin-fill mt-1"></em><span style={{ whiteSpace: " pre-wrap" }}> {this.getSupplierAddress(purchase.supplierAddress.name)}<br /></span></li>
+                                                                {/* <li><em class="icon ni ni-call-fill mt-1 "></em><span>+012 8764 556</span></li> */}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="invoice-desc">
-                                                <h3 class="title">Invoice</h3>
-                                                <ul class="list-plain">
-                                                    <li class="invoice-id"><span>Invoice ID</span>:<span>66K5W3</span></li>
-                                                    <li class="invoice-date"><span>Date</span>:<span>26 Jan, 2020</span></li>
-                                                </ul>
+                                                <div className="d-flex ml-auto mr-5">
+                                                    <div class="invoice-desc">
+                                                        <h3 class="title">Invoice</h3>
+                                                        <ul class="list-plain">
+                                                            <li class="invoice-id"><span>Invoice ID</span>: <span>{purchase._id}</span></li>
+                                                            <li class="invoice-date"><span>Purchase Date</span>: <span><Moment format="DD MMM, YYYY">{purchase.date}</Moment></span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="invoice-bills">
@@ -57,62 +113,35 @@ class purchaseInvoice extends Component {
                                                     <thead>
                                                         <tr>
                                                             <th>Item ID</th>
-                                                            <th>Description</th>
+                                                            <th>Name</th>
                                                             <th>Price</th>
                                                             <th>Qty</th>
                                                             <th>Amount</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>24108054</td>
-                                                            <td>Dashlite - Conceptual App Dashboard - Regular License</td>
-                                                            <td>$40.00</td>
-                                                            <td>5</td>
-                                                            <td>$200.00</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>24108054</td>
-                                                            <td>6 months premium support</td>
-                                                            <td>$25.00</td>
-                                                            <td>1</td>
-                                                            <td>$25.00</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>23604094</td>
-                                                            <td>Invest Management Dashboard - Regular License</td>
-                                                            <td>$131.25</td>
-                                                            <td>1</td>
-                                                            <td>$131.25</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>23604094</td>
-                                                            <td>6 months premium support</td>
-                                                            <td>$78.75</td>
-                                                            <td>1</td>
-                                                            <td>$78.75</td>
-                                                        </tr>
+                                                        {
+                                                            purchase.productDetails.map((item, key) => (
+                                                                <tr>
+                                                                    <td>24108054</td>
+                                                                    <td>{item.pname}</td>
+                                                                    <td>{item.pprice}</td>
+                                                                    <td>{item.pqty}</td>
+                                                                    <td>{item.ptotal}</td>
+                                                                </tr>
+                                                            ))
+                                                        }
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
                                                             <td colspan="2"></td>
                                                             <td colspan="2">Subtotal</td>
-                                                            <td>$435.00</td>
+                                                            <td>{purchase.totalAmount}</td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2"></td>
-                                                            <td colspan="2">Processing fee</td>
-                                                            <td>$10.00</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="2"></td>
-                                                            <td colspan="2">TAX</td>
-                                                            <td>$43.50</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="2"></td>
-                                                            <td colspan="2">Grand Total</td>
-                                                            <td>$478.50</td>
+                                                            <td colspan="2"><strong>Grand Total</strong></td>
+                                                            <td>Rs. {purchase.totalAmount}</td>
                                                         </tr>
                                                     </tfoot>
                                                 </table>
@@ -126,11 +155,12 @@ class purchaseInvoice extends Component {
                     </div>
                 </div>
             </div>
-        </div>
+            : null
     )
 
 
     render() {
+        let purchase = this.state.purchase;
         return (
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">
@@ -139,7 +169,7 @@ class purchaseInvoice extends Component {
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
-                            {this.renderBody()}
+                            {this.renderBody(purchase)}
                             <Footer />
                         </div>
                     </div>
