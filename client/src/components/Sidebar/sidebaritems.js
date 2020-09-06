@@ -19,7 +19,7 @@ const SideNavItems = (props) => {
         {
             icon: 'icon ni  ni-cc-alt2-fill',
             text: 'Purchases',
-            link: '/addpurchase',
+            link: '/purchases',
             login: ''
         },
         {
