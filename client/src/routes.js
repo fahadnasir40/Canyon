@@ -16,6 +16,7 @@ import EditSupplier from './components/Suppliers/AddSupplier/edit';
 import AddPurchases from './components/Purchases/Add/addPurchase';
 import Purchases from './components/Purchases/purchase';
 import PurchaseInvoice from './components/Purchases/purchaseInvoice';
+import PrintPurchaseInvoice from './components/Purchases/invoice-print';
 import Transactions from './components/Transactions/transactions';
 import AddTransaction from './components/Transactions/Add/addTransaction';
 import Sales from './components/Sales/sales';
@@ -51,6 +52,7 @@ const routes = () => {
                 <Route path="/purchases" exact component ={Auth(Purchases,true)}/>
                 <Route path="/addpurchase" exact component ={Auth(AddPurchases,true)}/>
                 <Route path="/purchase_invoice" exact component ={Auth(PurchaseInvoice,true)}/>
+                <Route path="/printPurchaseInvoice" exact component ={Auth(PrintPurchaseInvoice,true)}/>
                 {/* <Route path="/Transactions" exact component ={Auth(Transactions,true)}/> */}
                 <Route path="/sales" exact component ={Auth(Sales,true)}/>
                 <Route path="/profile" exact component ={Auth(Profile,true)}/>

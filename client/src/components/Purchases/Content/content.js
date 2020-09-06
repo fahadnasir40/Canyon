@@ -23,7 +23,7 @@ class Content extends Component {
             cell: row => (
                 <tr class="tb-odr-item">
                     <td class="tb-odr-info">
-                        <span class="tb-odr-id"><a href="html/subscription/invoice-details.html">{row._id}</a></span>
+                        <span class="tb-odr-id text-azure">{row._id}</span>
                         <span class="tb-odr-date d-sm-none"><Moment format={'DD MMM YYYY'}>{row.puchaseDate}</Moment></span>
                     </td>
                 </tr>
@@ -123,9 +123,20 @@ class Content extends Component {
                 <div>
                     <div className="d-none d-md-inline">
                         <Link to="/" href="html/subscription/invoice-print.html" target="_blank" class="btn btn-icon btn-white btn-dim btn-sm btn-primary"><em class="icon ni ni-printer-fill"></em></Link>
-                        <Link to="/purchase_invoice" class="btn btn-dim btn-sm btn-primary ml-2">View</Link>
+
+                        <Link to={{
+                            pathname: "/purchase_invoice",
+                            state: {
+                                purchaseInfo: row
+                            }
+                        }} class="btn btn-dim btn-sm btn-primary ml-2">View</Link>
                     </div>
-                    <Link to="/purchase_invoice" class="btn btn-pd-auto d-md-none"><em class="icon ni ni-chevron-right"></em></Link>
+                    <Link  to={{
+                            pathname: "/purchase_invoice",
+                            state: {
+                                purchaseInfo: row
+                            }
+                        }}class="btn btn-pd-auto d-md-none"><em class="icon ni ni-chevron-right"></em></Link>
                 </div>
 
             )
@@ -172,13 +183,17 @@ class Content extends Component {
             purchaseList: newList
         });
     }
-    
+
     SampleExpandedComponent = ({ data }) => (
         <div>
-            {data._id}
+            <div>
+                Description:  <span> {data.description}</span>
+            </div>
+            <div>
+            </div>
         </div>
-        
-      );
+
+    );
 
 
     render() {
@@ -221,8 +236,8 @@ class Content extends Component {
                                 highlightOnHover
                                 pointerOnHover
                                 pagination
-                                expandableRows = {true}
-                                expandableRowsComponent={<this.SampleExpandedComponent/>}
+                                expandableRows={true}
+                                expandableRowsComponent={<this.SampleExpandedComponent />}
                                 paginationPerPage={10}
                             />
                         </div>
