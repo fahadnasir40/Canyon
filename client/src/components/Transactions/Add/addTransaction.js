@@ -23,6 +23,7 @@ class AddTransaction extends Component {
         comments: '',
         fromitem: '',
         toitem: '',
+        ritem: '',
         suppliersList: '',
         customerList: '',
         userList: '',
@@ -131,6 +132,12 @@ class AddTransaction extends Component {
     handleInputTitem = event => {
         this.setState({
             toitem: this.props.productsList[event.target.value]._id
+        })
+    };
+
+    handleInputRitem = event => {
+        this.setState({
+            ritem: this.props.productsList[event.target.value]._id
         })
     };
 
@@ -320,6 +327,28 @@ class AddTransaction extends Component {
                                     : null
                             }
                             <div className="row">
+                                {this.state.taction === "Sales Return" || this.state.taction === "Purchase Return" ?
+                                    <div className="col-md-4">
+                                        <div className="form-group">
+                                            <label className="form-label" htmlFor="ritem">Return Product</label>
+                                            <div className="form-control-wrap ">
+                                                <div className="form-control-select">
+                                                    <select required onChange={this.handleInputRitem} className="form-control" id="ritem" required>
+                                                        <option value={-1}> Return Item</option>
+                                                        {
+                                                            this.props.productsList ?
+                                                                this.props.productsList.map((item, key) => {
+                                                                    return <option key={key} value={key} className="ccap" >{item.name} ({item.brand})</option>;
+                                                                })
+                                                                : null
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    : null
+                                }
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="form-label" htmlFor="qty">Quantity</label>

@@ -40,10 +40,13 @@ const transactionSchema = mongoose.Schema({
     comments:{
         type: String
     },
-    form_item: {
+    from_item: {
         type:String
     },
     to_item: {
+        type:String
+    },
+    ritem: {
         type:String
     },
     status: {
