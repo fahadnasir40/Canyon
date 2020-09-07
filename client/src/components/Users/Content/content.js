@@ -136,7 +136,7 @@ class Content extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="card-inner p-0">
+                                <div className="card-inner p-0 bg-white">
                                                 <div className="nk-tb-list nk-tb-ulist">
                                                     <div className="nk-tb-item nk-tb-head">
                                                         <div className="nk-tb-col nk-tb-col-check">

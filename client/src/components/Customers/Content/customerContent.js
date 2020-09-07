@@ -1,4 +1,4 @@
-import React, {Component } from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import ReactPaginate from 'react-paginate'
 
@@ -21,9 +21,9 @@ class CustomersContent extends Component {
         })
     }
 
-    componentWillUpdate(nextProps,nextState){
-        if(this.props!=nextProps){
-            if(this.props.customersList.length < nextProps.customersList){
+    componentWillUpdate(nextProps, nextState) {
+        if (this.props != nextProps) {
+            if (this.props.customersList.length < nextProps.customersList) {
                 nextState = {
                     customersList: nextProps.customersList
                 }
@@ -96,8 +96,12 @@ class CustomersContent extends Component {
 
 
     getColText = (value) => {
-        if (value)
+        if (value && value.length < 25)
             return (<span className="tb-text">{value}</span>)
+        else if (value && value.length >= 25) {
+            return (<span className="tb-text">{value + ' ...'}</span>)
+        }
+
         return (<span className="tb-text ff-italic text-muted">Not added yet</span>)
     }
 
@@ -132,12 +136,12 @@ class CustomersContent extends Component {
                                     </div>
                                     <div className="user-info">
                                         <span className="tb-lead">{customer.name}
-                                        {
-                                            customer.status === "active"?
-                                                <span className="dot dot-success d-md-none ml-1"></span>
-                                            :
-                                              <span className="dot dot-danger d-md-none ml-1"></span>
-                                        } </span>
+                                            {
+                                                customer.status === "active" ?
+                                                    <span className="dot dot-success d-md-none ml-1"></span>
+                                                    :
+                                                    <span className="dot dot-danger d-md-none ml-1"></span>
+                                            } </span>
 
                                     </div>
                                 </div>
@@ -150,7 +154,7 @@ class CustomersContent extends Component {
                             {this.getColText(customer.phone)}
                         </div>
                         <div className="nk-tb-col tb-col-lg">
-                            <span>Lahore</span>
+                            {this.getColText(customer.address[0].name)}
                         </div>
                         <div className="nk-tb-col tb-col-md">
                             {
@@ -163,17 +167,17 @@ class CustomersContent extends Component {
                         <div className="nk-tb-col nk-tb-col-tools">
                             <ul className="nk-tb-actions gx-1">
                                 {
-                                    customer.email?
-                                    <li className="nk-tb-action-hidden">
-                                    <a href ={"mailto:"+customer.email}  className="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Send Email">
-                                        <em className="icon ni ni-mail-fill"></em>
-                                    </a>
-                                    </li>
-                                    
-                                    :null
+                                    customer.email ?
+                                        <li className="nk-tb-action-hidden">
+                                            <a href={"mailto:" + customer.email} className="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Send Email">
+                                                <em className="icon ni ni-mail-fill"></em>
+                                            </a>
+                                        </li>
+
+                                        : null
                                 }
-                                
-                     
+
+
                                 <li>
                                     <div className="drodown">
                                         <a href="#" className="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
@@ -220,10 +224,10 @@ class CustomersContent extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if(prevProps.customersList !== this.props.customersList) {
-          this.setState({customersList: this.props.customersList});
+        if (prevProps.customersList !== this.props.customersList) {
+            this.setState({ customersList: this.props.customersList });
         }
-      }
+    }
 
 
     render() {
@@ -251,7 +255,7 @@ class CustomersContent extends Component {
                                                             <input type="text" onChange={this.handleChange} className="form-control" id="default-04" placeholder="Search by name" />
                                                         </div>
                                                     </li>
-                                                  
+
                                                     <li className="nk-block-tools-opt">
                                                         <a href="#" className="btn btn-icon btn-primary d-md-none"><em className="icon ni ni-plus"></em></a>
                                                         <Link to={"/addCustomer"}><button className="toggle btn btn-primary d-none d-md-inline-flex"><em className="icon ni ni-plus"></em><span>Add Customer</span></button></Link>
@@ -272,7 +276,7 @@ class CustomersContent extends Component {
                                         <div className="nk-tb-col tb-col-md"><span className="sub-text">Phone</span></div>
                                         <div className="nk-tb-col tb-col-lg"><span className="sub-text">Address</span></div>
                                         <div className="nk-tb-col tb-col-md"><span className="sub-text">Status</span></div>
-
+                                        <div className="nk-tb-col"><span className="sub-text">Action</span></div>
                                     </div>
                                     {this.renderCustomersList()}
                                 </div>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { Redirect, Link } from 'react-router-dom'
-
+import $ from 'jquery';
 class Header extends Component {
 
     state = {
@@ -31,6 +31,9 @@ class Header extends Component {
 
     }
 
+    showNav = () =>{
+         $('.nk-sidebar').css( 'transform','translateX(0)');
+    }
 
     render() {
         if (this.state.logout) {
@@ -42,8 +45,9 @@ class Header extends Component {
                 <div className="container-fluid">
                     <div className="nk-header-wrap">
                         <div className="nk-menu-trigger d-xl-none ml-n1">
-                            <a href="#" className="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em className="icon ni ni-menu"></em></a>
+                            <a style={{cursor:"pointer"}} onClick={this.showNav} className="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em className="icon ni ni-menu"></em></a>
                         </div>
+
                         <div className="nk-header-brand d-xl-none">
                             <Link to="/" className="logo-link">
                                 <img className="logo-light logo-img" srcSet="./images/logo.png" srcSet="./images/logo2x.png 2x" alt="logo" />
