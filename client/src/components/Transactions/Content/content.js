@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import DataTable from 'react-data-table-component';
-import NumberFormat from 'react-number-format';
+// import NumberFormat from 'react-number-format';
 import transactions from '../transactions';
+import Moment from 'react-moment';
 
 class Content extends Component {
 
@@ -13,16 +14,9 @@ class Content extends Component {
     columns = [
 
         {
-            name: 'Brand',
-            selector: 'brand',
-            sortable: true,
-
-        },
-        {
             name: 'Source',
             selector: 'transaction_source',
             sortable: true,
-            grow: 2,
             style: {
                 color: '#202124',
                 fontSize: '14px',
@@ -58,7 +52,11 @@ class Content extends Component {
             style: {
                 color: 'rgba(0,0,0,.54)',
             },
+            cell : row =>(
+                <Moment format = {'YYYY-MM-DD'}>{row.transaction_date}</Moment>
+            )        
         },
+        
         {
             name: 'Qty',
             selector: 'primary_quantity',
@@ -78,7 +76,7 @@ class Content extends Component {
         },
         {
             name: 'Status',
-            selector: 'rate',
+            selector: 'status',
             sortable: true,
             style: {
                 color: 'rgba(0,0,0,.54)',

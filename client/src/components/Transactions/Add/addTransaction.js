@@ -21,6 +21,8 @@ class AddTransaction extends Component {
         qty: 1,
         rate: 1,
         comments: '',
+        fromitem: '',
+        toitem: '',
         suppliersList: '',
         customerList: '',
         userList: '',
@@ -53,10 +55,10 @@ class AddTransaction extends Component {
 
     handleInputTaction = (event) => {
         this.setState({ taction: event.target.value })
-        if (event.target.value === "Transfer Inventory") {
-            console.log("Hello List" ,this.state.productsList)
-            this.props.dispatch(getActiveProducts())
-        }
+        // if (event.target.value === "Transfer Inventory") {
+        console.log("Hello List", this.state.productsList)
+        this.props.dispatch(getActiveProducts())
+        // }
     }
 
 
@@ -120,6 +122,18 @@ class AddTransaction extends Component {
         this.setState({ comments: event.target.value })
     };
 
+    handleInputFitem = event => {
+        this.setState({
+            fromitem: this.props.productsList[event.target.value]._id
+        })
+    };
+
+    handleInputTitem = event => {
+        this.setState({
+            toitem: this.props.productsList[event.target.value]._id
+        })
+    };
+
     submitForm = (event) => {
 
         // const form = event.currentTarget;
@@ -136,6 +150,8 @@ class AddTransaction extends Component {
             transaction_value: this.state.svalue,
             transaction_value_id: this.state.svalueid,
             comments: this.state.comments,
+            from_item: this.state.fromitem,
+            to_item: this.state.toitem,
             addedBy: this.props.user.login.id
         }))
     }
@@ -193,7 +209,6 @@ class AddTransaction extends Component {
                                          </label>
                                         <div className="form-control-wrap ">
                                             <div className="form-control-select">
-
                                                 <select required onChange={this.handleInputSvalue} className="form-control ccap" id="svalue">
                                                     <option value={-1}> Select {this.state.source}</option>
 
@@ -268,7 +283,7 @@ class AddTransaction extends Component {
                                                 <label className="form-label" htmlFor="fromitem">From Product</label>
                                                 <div className="form-control-wrap ">
                                                     <div className="form-control-select">
-                                                        <select required onChange={this.handleInputTaction} className="form-control" id="fromitem" required>
+                                                        <select required onChange={this.handleInputFitem} className="form-control" id="fromitem" required>
                                                             <option value={-1}> From Item</option>
                                                             {
                                                                 this.props.productsList ?
@@ -287,7 +302,7 @@ class AddTransaction extends Component {
                                                 <label className="form-label" htmlFor="toitem">To Product</label>
                                                 <div className="form-control-wrap ">
                                                     <div className="form-control-select">
-                                                        <select required onChange={this.handleInputTaction} className="form-control" id="toitem" required>
+                                                        <select required onChange={this.handleInputTitem} className="form-control" id="toitem" required>
                                                             <option value={-1}> To Item</option>
                                                             {
                                                                 this.props.productsList ?

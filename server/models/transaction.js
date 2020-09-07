@@ -40,6 +40,12 @@ const transactionSchema = mongoose.Schema({
     comments:{
         type: String
     },
+    form_item: {
+        type:String
+    },
+    to_item: {
+        type:String
+    },
     status: {
         type: String,
         default: 'active'
