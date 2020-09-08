@@ -78,9 +78,11 @@ class PurchaseDetails extends Component {
     }
 
     handleInputPaidAmount = (event) =>{
-        this.setState({
-            paidAmount: event.target.value
-        })
+        if(event.target.value >= 0 && event.target.value <= this.state.totalAmount){
+            this.setState({
+                paidAmount: event.target.value
+            })
+        }
     }
 
     render() {

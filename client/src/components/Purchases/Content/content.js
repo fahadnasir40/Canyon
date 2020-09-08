@@ -57,7 +57,7 @@ class Content extends Component {
         },
         {
             name: 'Amount',
-            selector: 'paidAmount',
+            selector: 'totalAmount',
             sortable: true,
             style: {
                 color: 'rgba(0,0,0,.54)',
@@ -66,7 +66,7 @@ class Content extends Component {
                 <tr class="tb-odr-item">
                     <td class="tb-odr-amount">
                         <span class="tb-odr-total">
-                            <span class="amount">Rs. {row.paidAmount}</span>
+                            <span class="amount">Rs. {row.totalAmount}</span>
                         </span>
                         <span class="tb-odr-status d-sm-none">
                             {
@@ -118,18 +118,16 @@ class Content extends Component {
         {
             name: 'Action',
             selector: 'action',
-           
+
             cell: row => (
                 <div>
                     <div className="d-none d-md-inline">
-                        <Link to="/" href="html/subscription/invoice-print.html" target="_blank" class="btn btn-icon btn-white btn-dim btn-sm btn-primary"><em class="icon ni ni-printer-fill"></em></Link>
-
                         <Link to={{
                             pathname: "/purchase_invoice",
                             state: {
                                 purchaseInfo: row
                             }
-                        }} class="btn btn-dim btn-sm btn-primary ml-2">View</Link>
+                        }} class="btn btn-dim btn-sm btn-primary">View</Link>
                     </div>
                     <Link to={{
                         pathname: "/purchase_invoice",
