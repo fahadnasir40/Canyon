@@ -5,7 +5,7 @@ import Footer from "../../Footer/footer";
 import { savePurchase, clearPurchase } from '../../../actions';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { getActiveSuppliers, getActiveProducts } from '../../../actions';
+import { getActiveSuppliers, getActiveProducts,saveTransaction } from '../../../actions';
 import PurchaseDetail from './purchaseDetails';
 import Moment from 'react-moment';
 import DatePicker from "react-datepicker";
@@ -58,7 +58,8 @@ class AddPurchase extends Component {
 
         if (nextProps.purchase) {
             if (nextProps.purchase.post) {
-                if (nextProps.purchase.post) {
+                if (nextProps.purchase.post === true) {
+                    console.log("Redirect",prevState.redirect,nextProps);
                     return ({
                         redirect: true,
                         request: false,
@@ -154,6 +155,7 @@ class AddPurchase extends Component {
 
                 if (this.state.request === false) {
                     this.props.dispatch(savePurchase(purchase));
+                    this.saveTransaction();
                     this.setState({
                         request: true
                     })
@@ -165,6 +167,22 @@ class AddPurchase extends Component {
                 })
             }
         }
+    }
+
+
+    saveTransaction = () => {
+        this.props.dispatch(saveTransaction({
+            transaction_date: new Date(),
+            primary_quantity: 0,
+            rate: this.totalAmount,
+            transaction_source: 'Supplier',
+            transaction_type: 'Purchase',
+            transaction_action: 'Purchase',
+            transaction_value: this.state.currentSupplier.name,
+            transaction_value_id: this.state.currentSupplier._id,
+            comments: this.state.description,
+            addedBy: this.props.user.login.id
+        }))
     }
 
     renderBody = () => {
