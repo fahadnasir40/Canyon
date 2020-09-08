@@ -360,6 +360,13 @@ export function clearNewSupplier() {
     }
 }
 
+export function clearProfile() {
+    return {
+        type: 'CLEAR_PROFILE',
+        payload: {}
+    }
+}
+
 export function clearNewCustomer() {
     return {
         type: 'CLEAR_CUSTOMER',
@@ -551,15 +558,6 @@ export function getProfile() {
     }
 }
 
-export function clearProfile() {
-    return {
-        type: 'CLEAR_PROFILE',
-        payload: {
-            data: {},
-            changePassword: {}
-        }
-    }
-}
 
 export function getUsers() {
 
