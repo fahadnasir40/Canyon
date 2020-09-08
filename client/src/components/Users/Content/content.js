@@ -99,7 +99,7 @@ class Content extends Component {
        
         return (
             <div>
-                <div className="nk-content ml-5 ">
+                <div className="nk-content ml-md-5 ">
                     <div className="container-fluid">
                         <div className="nk-content-inner">
                             <div className="nk-content-body">
@@ -136,7 +136,7 @@ class Content extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="card-inner p-0">
+                                <div className="card-inner p-0 bg-white">
                                                 <div className="nk-tb-list nk-tb-ulist">
                                                     <div className="nk-tb-item nk-tb-head">
                                                         <div className="nk-tb-col nk-tb-col-check">

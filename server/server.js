@@ -148,6 +148,21 @@ app.get('/api/getActiveProducts', auth, (req, res) => {
     })
 })
 
+
+app.get('/api/getPurchases', auth, (req, res) => {
+    // locahost:3001/api/books?skip=3&limit=2&order=asc
+    let skip = parseInt(req.query.skip);
+    let limit = parseInt(req.query.limit);
+    let order = req.query.order;
+
+    // ORDER = asc || desc
+    Purchase.find().skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.send(doc);
+    })
+})
+
+
 app.get('/api/getTransactions', auth, (req, res) => {
     // locahost:3001/api/books?skip=3&limit=2&order=asc
     let skip = parseInt(req.query.skip);

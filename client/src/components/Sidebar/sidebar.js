@@ -27,6 +27,24 @@ class SideBar extends Component {
         });
     };
 
+    showNav = (x) => {
+        if (x.matches) {
+            $('.nk-sidebar').css('transform', 'translateX(0)');
+        } else {
+            $('.nk-sidebar').css('transform', 'translateX(-100%)');
+        }
+    }
+
+    componentDidMount() {
+        var x = window.matchMedia("(min-width: 991.98px)")
+        x.addListener(this.showNav)
+    }
+
+    hideNav = () => {
+        if (window.matchMedia('(max-width: 991.98px)').matches) {
+            $('.nk-sidebar').css('transform', 'translateX(-100%)');
+        }
+    }
 
     render() {
         return (
@@ -42,7 +60,7 @@ class SideBar extends Component {
                             </Link>
                         </div>
                         <div className="nk-menu-trigger mr-n2">
-                            <a style={{ cursor: "pointer" }} onClick={this.sbCompact} className="nk-nav-toggle nk-quick-nav-icon d-xl-none" data-target="sidebarMenu"><em className="icon ni ni-arrow-left"></em></a>
+                            <a style={{ cursor: "pointer" }} onClick={this.hideNav} className="nk-nav-toggle nk-quick-nav-icon d-xl-none" data-target="sidebarMenu"><em className="icon ni ni-arrow-left"></em></a>
                             <a style={{ cursor: "pointer" }} onClick={this.sbCompact} className="nk-nav-compact nk-quick-nav-icon d-none d-xl-inline-flex" data-target="sidebarMenu"><em className="icon ni ni-menu"></em></a>
                         </div>
                     </div>

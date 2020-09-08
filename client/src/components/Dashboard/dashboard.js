@@ -6,6 +6,7 @@ import Footer from '../Footer/footer'
 
 class Dashboard extends Component {
 
+
     renderDashboard = ()=>{
         return(
             <div className="nk-body bg-lighter npc-general has-sidebar">
