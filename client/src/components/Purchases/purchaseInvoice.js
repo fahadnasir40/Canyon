@@ -5,7 +5,7 @@ import Footer from '../Footer/footer'
 import { Link } from 'react-router-dom'
 import Moment from 'react-moment'
 import ReactToPrint, { PrintContextConsumer } from 'react-to-print';
-import PrintInvoiceComponent from './invoice-print';
+
 class purchaseInvoice extends Component {
 
     state = {
@@ -36,15 +36,10 @@ class purchaseInvoice extends Component {
         return newValue;
     }
 
-    printInvoice = () => {
-        return (
-            <PrintInvoiceComponent ref={el => (this.componentRef = el)} />
-        )
-    }
 
     renderBody = (purchase) => (
         purchase ?
-            <div class="nk-content ">
+            <div class="nk-content ml-md-5">
                 <div class="container wide-xl">
                     <div class="nk-content-body">
                         <div class="nk-content-wrap">

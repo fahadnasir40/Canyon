@@ -10,7 +10,7 @@ export default function (state = {}, action) {
                 postDeleted: action.payload
             }
         case 'CLEAR_PURCHASE':
-            return { ...state, pruchase: action.payload, post: action.payload}
+            return { ...state, purchase: action.payload, post: action.payload}
         default:
             return state;
     }
