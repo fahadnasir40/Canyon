@@ -26,6 +26,86 @@ export function getSuppliers(
     }
 }
 
+
+export function getSuppliersTransactions(
+    start = 0,
+    limit = 0,
+    order = 'desc',
+    list = ''
+){
+
+    const request = axios.get(`api/getSuppliersTransactions?skip=${start}&limit=${limit}&order=${order}`)
+    .then(response => {
+        if(list){
+            return [...list,...response.data];
+        }
+        else{
+            return response.data;
+        }
+    } )
+    .catch(error=>{
+        console.log(error)
+    });
+
+    return {
+        type: 'GET_SUPPLIERS_TRANSACTIONS',
+        payload: request
+    }
+}
+
+export function getCustomersTransactions(
+    start = 0,
+    limit = 0,
+    order = 'desc',
+    list = ''
+){
+
+    const request = axios.get(`api/getCustomersTransactions?skip=${start}&limit=${limit}&order=${order}`)
+    .then(response => {
+        if(list){
+            return [...list,...response.data];
+        }
+        else{
+            return response.data;
+        }
+    } )
+    .catch(error=>{
+        console.log(error)
+    });
+
+    return {
+        type: 'GET_CUSTOMERS_TRANSACTIONS',
+        payload: request
+    }
+}
+
+export function getEmployeesTransactions(
+    start = 0,
+    limit = 0,
+    order = 'desc',
+    list = ''
+){
+
+    const request = axios.get(`api/getEmployeesTransactions?skip=${start}&limit=${limit}&order=${order}`)
+    .then(response => {
+        if(list){
+            return [...list,...response.data];
+        }
+        else{
+            return response.data;
+        }
+    } )
+    .catch(error=>{
+        console.log(error)
+    });
+
+    return {
+        type: 'GET_USERS_TRANSACTIONS',
+        payload: request
+    }
+}
+
+
 export function getActiveSuppliers(
     start = 0,
     limit = 0,

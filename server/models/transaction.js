@@ -26,6 +26,10 @@ const transactionSchema = mongoose.Schema({
         type: String,
         required: false
     },
+    transaction_value_id:{
+        type: String,
+        required: true
+    },
     transaction_value:{
         type: String,
         required: true
@@ -35,6 +39,15 @@ const transactionSchema = mongoose.Schema({
     },
     comments:{
         type: String
+    },
+    from_item: {
+        type:String
+    },
+    to_item: {
+        type:String
+    },
+    ritem: {
+        type:String
     },
     status: {
         type: String,
