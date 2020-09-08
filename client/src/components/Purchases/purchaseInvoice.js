@@ -64,7 +64,7 @@ class purchaseInvoice extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div class="nk-block border border-light p-3">
+                            <div class="nk-block border border-light bg-white p-3">
                                 <div class="invoice-action">
                                     <ReactToPrint
                                         trigger={() => {
@@ -72,6 +72,8 @@ class purchaseInvoice extends Component {
                                             // to the root node of the returned component as it will be overwritten.
                                             return <Link class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary" onClick={this.printInvoice}><em class="icon ni ni-printer-fill"></em></Link>
                                         }}
+                                        documentTitle = {`Purchase Invoice - ${purchase._id}`}
+                                        bodyClass="bg-white"
                                         content={() => this.componentRef}
                                     />
 
@@ -84,7 +86,7 @@ class purchaseInvoice extends Component {
                                         </div>
                                         <div class="invoice-head mb-2 mt-4">
                                             <div className="row mt-2">
-                                                <div className="d-flex mr-auto ml-4">
+                                                <div className="d-flex mr-auto ml-md-4">
                                                     <div class="invoice-contact  ">
                                                         <span class="overline-title">Invoice To</span>
                                                         <div class="invoice-contact-info">
@@ -101,15 +103,16 @@ class purchaseInvoice extends Component {
                                                         <h3 class="title">Invoice</h3>
                                                         <ul class="list-plain">
                                                             <li class="invoice-id"><span>Invoice ID</span>: <span>{purchase._id}</span></li>
-                                                            <li class="invoice-date"><span>Purchase Date</span>: <span><Moment format="DD MMM, YYYY">{purchase.date}</Moment></span></li>
+                                                            <li class="invoice-date"><span>Issue Date</span>: <span><Moment format="DD MMM, YYYY"></Moment></span></li>
+                                                            <li class="invoice-date"><span>Purchase Date</span>: <span><Moment format="DD MMM, YYYY">{purchase.date}</Moment></span></li>                                                       
                                                         </ul>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="invoice-bills">
+                                        <div class="invoice-bills mt-5">
                                             <div class="table-responsive">
-                                                <table class="table table-striped">
+                                                <table class="table">
                                                     <thead>
                                                         <tr>
                                                             <th>Item ID</th>
@@ -145,7 +148,7 @@ class purchaseInvoice extends Component {
                                                         </tr>
                                                     </tfoot>
                                                 </table>
-                                                <div class="nk-notes ff-italic fs-12px text-soft"> Invoice was created on a computer and is valid without the signature and seal. </div>
+                                                <div class="nk-notes ff-italic fs-12px text-soft mt-5"> Invoice was created on a computer and is valid without the signature and seal. </div>
                                             </div>
                                         </div>
                                     </div>

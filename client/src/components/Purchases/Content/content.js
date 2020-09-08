@@ -118,7 +118,7 @@ class Content extends Component {
         {
             name: 'Action',
             selector: 'action',
-            right: true,
+           
             cell: row => (
                 <div>
                     <div className="d-none d-md-inline">
@@ -131,12 +131,12 @@ class Content extends Component {
                             }
                         }} class="btn btn-dim btn-sm btn-primary ml-2">View</Link>
                     </div>
-                    <Link  to={{
-                            pathname: "/purchase_invoice",
-                            state: {
-                                purchaseInfo: row
-                            }
-                        }}class="btn btn-pd-auto d-md-none"><em class="icon ni ni-chevron-right"></em></Link>
+                    <Link to={{
+                        pathname: "/purchase_invoice",
+                        state: {
+                            purchaseInfo: row
+                        }
+                    }} class="btn btn-pd-auto d-md-none"><em class="icon ni ni-chevron-right"></em></Link>
                 </div>
 
             )
@@ -166,7 +166,7 @@ class Content extends Component {
             // based on the search terms
             newList = currentList.filter(item => {
                 // change current item to lowercase
-                const lc = item.name.toLowerCase();
+                const lc = item.supplierName.toLowerCase();
                 // change search term to lowercase
                 const filter = e.target.value.toLowerCase();
                 // check to see if the current list item includes the search term
@@ -209,8 +209,8 @@ class Content extends Component {
                                     </div>
                                     <div className="nk-block-head-content">
                                         <div className="toggle-wrap nk-block-tools-toggle">
-                                            <a href="#" className="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em className="icon ni ni-more-v"></em></a>
-                                            <div className="toggle-expand-content" data-content="pageMenu">
+                                            <a href="#" className="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu2"><em className="icon ni ni-more-v"></em></a>
+                                            <div className="toggle-expand-content" data-content="pageMenu2">
                                                 <ul className="nk-block-tools g-3">
                                                     <li>
                                                         <div className="form-control-wrap">
