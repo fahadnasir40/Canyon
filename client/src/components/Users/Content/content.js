@@ -99,7 +99,7 @@ class Content extends Component {
        
         return (
             <div>
-                <div className="nk-content ml-5 ">
+                <div className="nk-content ml-md-5 ">
                     <div className="container-fluid">
                         <div className="nk-content-inner">
                             <div className="nk-content-body">
