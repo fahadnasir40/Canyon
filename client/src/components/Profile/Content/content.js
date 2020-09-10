@@ -496,8 +496,6 @@ class ProfileContent extends Component {
             $('body').removeClass('modal-open');
             $('#change-password-modal').hide();
             $('.modal-backdrop').remove();
-            console.log("State before redirect", this.state);
-
             return <Redirect to={{
                 pathname: '/',
                 redirect: { message: this.state.pwmessage }

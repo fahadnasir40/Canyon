@@ -177,7 +177,7 @@ class AddPurchase extends Component {
             rate: this.totalAmount,
             transaction_source: 'Supplier',
             transaction_type: 'Purchase',
-            transaction_action: 'Purchase',
+            transaction_action: 'Purchase Added',
             transaction_value: this.state.currentSupplier.name,
             transaction_value_id: this.state.currentSupplier._id,
             comments: this.state.description,
@@ -303,7 +303,7 @@ class AddPurchase extends Component {
     render() {
 
         if (this.state.redirect === true) {
-            return <Redirect to="/" />
+            return <Redirect to="/purchases" />
         }
 
         return (

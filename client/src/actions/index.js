@@ -26,6 +26,23 @@ export function getSuppliers(
     }
 }
 
+export function getSupplier(id)
+{
+
+    const request = axios.get(`/api/getSupplier?id=${id}`)
+        .then(response => {
+                return response.data;
+        })
+        .catch(error => {
+            console.log(error)
+        });
+
+    return {
+        type: 'GET_SUPPLIER',
+        payload: request
+    }
+}
+
 
 export function getSuppliersTransactions(
     start = 0,
@@ -360,6 +377,13 @@ export function clearNewSupplier() {
     }
 }
 
+export function clearProfile() {
+    return {
+        type: 'CLEAR_PROFILE',
+        payload: {}
+    }
+}
+
 export function clearNewCustomer() {
     return {
         type: 'CLEAR_CUSTOMER',
@@ -551,15 +575,6 @@ export function getProfile() {
     }
 }
 
-export function clearProfile() {
-    return {
-        type: 'CLEAR_PROFILE',
-        payload: {
-            data: {},
-            changePassword: {}
-        }
-    }
-}
 
 export function getUsers() {
 

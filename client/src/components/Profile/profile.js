@@ -4,12 +4,16 @@ import Header from './../Header/header'
 import Content from './Content/content'
 import Footer from '../Footer/footer'
 import {connect} from 'react-redux'
-import {getProfile} from '../../actions'
+import {getProfile,clearProfile} from '../../actions'
 
 class Profile extends Component {
 
     componentDidMount(){
         this.props.dispatch(getProfile());
+    }
+
+    componentWillUnmount(){
+        this.props.dispatch(clearProfile());
     }
 
     

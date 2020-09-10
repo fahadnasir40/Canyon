@@ -53,7 +53,8 @@ class Content extends Component {
                 color: 'rgba(0,0,0,.54)',
             },
             cell : row =>(
-                <Moment format = {'YYYY-MM-DD'}>{row.transaction_date}</Moment>
+
+                    <Moment format = {'DD MMM,YYYY'}>{row.transaction_date}</Moment>
             )        
         },
         
