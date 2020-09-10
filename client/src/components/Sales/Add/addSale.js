@@ -6,12 +6,12 @@ import { savePurchase, clearPurchase } from '../../../actions';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { getActiveSuppliers, getActiveProducts,saveTransaction } from '../../../actions';
-import PurchaseDetail from './purchaseDetails';
+import PurchaseDetail from './SaleDetails';
 import Moment from 'react-moment';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-class AddPurchase extends Component {
+class AddSale extends Component {
 
 
     state = {
@@ -332,4 +332,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(AddPurchase)
+export default connect(mapStateToProps)(AddSale)

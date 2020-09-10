@@ -44,6 +44,15 @@ app.get("/api/auth", auth, (req, res) => {
     });
 });
 
+app.get('/api/getSupplier',auth,(req,res)=>{
+    let id = req.query.id;
+
+    Supplier.findById(id,(err,doc)=>{
+        if(err) return res.status(400).send(err);
+        res.send(doc);
+    })
+})
+
 app.get('/api/getSuppliers', auth, (req, res) => {
     // locahost:3001/api/books?skip=3&limit=2&order=asc
     let skip = parseInt(req.query.skip);
@@ -69,6 +78,16 @@ app.get('/api/getSuppliersTransactions', auth, (req, res) => {
         res.send(doc);
     })
 })
+
+app.get('/api/getCustomer',auth,(req,res)=>{
+    let id = req.query.id;
+
+    Customer.findById(id,(err,doc)=>{
+        if(err) return res.status(400).send(err);
+        res.send(doc);
+    })
+})
+
 
 app.get('/api/getCustomersTransactions', auth, (req, res) => {
     let skip = parseInt(req.query.skip);
