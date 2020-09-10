@@ -13,7 +13,6 @@ class Purchase extends Component {
     }
 
     render() {
-        console.log("props", this.props);
         return (
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">

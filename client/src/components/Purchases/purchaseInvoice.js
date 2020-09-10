@@ -3,10 +3,13 @@ import Sidebar from '../Sidebar/sidebar'
 import Header from '../Header/header'
 import Footer from '../Footer/footer'
 import { Link } from 'react-router-dom'
+import { getSupplier } from '../../actions'
+import { connect } from 'react-redux'
 import Moment from 'react-moment'
-import ReactToPrint, { PrintContextConsumer } from 'react-to-print';
-import PrintInvoiceComponent from './invoice-print';
-class purchaseInvoice extends Component {
+import ReactToPrint from 'react-to-print'
+
+
+class PurchaseInvoice extends Component {
 
     state = {
         purchase: ''
@@ -17,6 +20,8 @@ class purchaseInvoice extends Component {
             this.props.history.push('/purchases')
         }
         else {
+            console.log("Purchase", this.props.location.state.purchaseInfo)
+            this.props.dispatch(getSupplier(this.props.location.state.purchaseInfo.supplierId));
             this.setState({
                 purchase: this.props.location.state.purchaseInfo
             })
@@ -36,15 +41,10 @@ class purchaseInvoice extends Component {
         return newValue;
     }
 
-    printInvoice = () => {
-        return (
-            <PrintInvoiceComponent ref={el => (this.componentRef = el)} />
-        )
-    }
 
     renderBody = (purchase) => (
         purchase ?
-            <div class="nk-content ">
+            <div class="nk-content ml-md-5">
                 <div class="container wide-xl">
                     <div class="nk-content-body">
                         <div class="nk-content-wrap">
@@ -72,17 +72,16 @@ class purchaseInvoice extends Component {
                                             // to the root node of the returned component as it will be overwritten.
                                             return <Link class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary" onClick={this.printInvoice}><em class="icon ni ni-printer-fill"></em></Link>
                                         }}
-                                        documentTitle = {`Purchase Invoice - ${purchase._id}`}
+                                        documentTitle={`Purchase Invoice - ${purchase._id}`}
                                         bodyClass="bg-white"
                                         content={() => this.componentRef}
                                     />
-
                                 </div>
-                                <div class="invoice m-5"  ref={el => (this.componentRef = el)} >
+                                <div class="invoice m-5" ref={el => (this.componentRef = el)} >
 
                                     <div class="invoice-wrap">
                                         <div class="invoice-brand text-center">
-                                            <img src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="" />
+                                            <img src="./images/logo-dark.png" srcSet="./images/logo-dark2x.png 2x" alt="" />
                                         </div>
                                         <div class="invoice-head mb-2 mt-4">
                                             <div className="row mt-2">
@@ -93,7 +92,11 @@ class purchaseInvoice extends Component {
                                                             <h4 class="title">{purchase.supplierName}</h4>
                                                             <ul class="list-plain">
                                                                 <li><em class="icon ni ni-map-pin-fill mt-1"></em><span style={{ whiteSpace: " pre-wrap" }}> {this.getSupplierAddress(purchase.supplierAddress.name)}<br /></span></li>
-                                                                {/* <li><em class="icon ni ni-call-fill mt-1 "></em><span>+012 8764 556</span></li> */}
+                                                                {this.props.supplier ?
+                                                                    this.props.supplier.phone ?
+                                                                        <li><em class="icon ni ni-call-fill mt-1 "></em><span>{this.props.supplier.phone}</span></li>
+                                                                        : null
+                                                                    : null}
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -104,7 +107,7 @@ class purchaseInvoice extends Component {
                                                         <ul class="list-plain">
                                                             <li class="invoice-id"><span>Invoice ID</span>: <span>{purchase._id}</span></li>
                                                             <li class="invoice-date"><span>Issue Date</span>: <span><Moment format="DD MMM, YYYY"></Moment></span></li>
-                                                            <li class="invoice-date"><span>Purchase Date</span>: <span><Moment format="DD MMM, YYYY">{purchase.date}</Moment></span></li>                                                       
+                                                            <li class="invoice-date"><span>Purchase Date</span>: <span><Moment format="DD MMM, YYYY">{purchase.date}</Moment></span></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -183,4 +186,10 @@ class purchaseInvoice extends Component {
 }
 
 
-export default purchaseInvoice;
+function mapStateToProps(state) {
+    return {
+        supplier: state.supplier.supplier
+    }
+}
+
+export default connect(mapStateToProps)(PurchaseInvoice)

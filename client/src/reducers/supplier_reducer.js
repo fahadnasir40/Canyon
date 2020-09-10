@@ -2,6 +2,8 @@ export default function (state = {}, action) {
     switch (action.type) {
         case 'GET_SUPPLIERS':
             return { ...state, supplierList: action.payload }
+        case 'GET_SUPPLIER':
+            return { ...state, supplier: action.payload }
         case 'GET_SHARED_DOCUMENT':
             return { ...state, sharedDocument: action.payload }
         case 'UPDATE_SUPPLIER':

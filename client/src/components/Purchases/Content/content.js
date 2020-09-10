@@ -21,12 +21,12 @@ class Content extends Component {
                 fontWeight: 500,
             },
             cell: row => (
-                <tr class="tb-odr-item">
-                    <td class="tb-odr-info">
-                        <span class="tb-odr-id text-azure">{row._id}</span>
-                        <span class="tb-odr-date d-sm-none"><Moment format={'DD MMM YYYY'}>{row.puchaseDate}</Moment></span>
+                <div className="tb-odr-item">
+                    <td className="tb-odr-info">
+                        <span className="tb-odr-id text-azure">{row._id}</span>
+                        <span className="tb-odr-date d-sm-none"><Moment format={'DD MMM YYYY'}>{row.puchaseDate}</Moment></span>
                     </td>
-                </tr>
+                </div>
             )
         },
         {
@@ -35,13 +35,12 @@ class Content extends Component {
             sortable: true,
             hide: 'lg',
             cell: row => (
-                <tr class="tb-odr-item">
-                    <td class="tb-odr-info">
-                        <span class="tb-odr-date"><Moment format={'DD MMM YYYY'}>{row.puchaseDate}</Moment></span>
+                <div className="tb-odr-item">
+                    <td className="tb-odr-info">
+                        <span className="tb-odr-date"><Moment format={'DD MMM YYYY'}>{row.puchaseDate}</Moment></span>
                     </td>
-                </tr>
+                </div>
             )
-
         },
         {
             name: 'Supplier Name',
@@ -49,9 +48,9 @@ class Content extends Component {
             sortable: true,
             hide: 'md',
             cell: row => (
-                <tr class="tb-odr-item">
+                <div className="tb-odr-item">
                     <div className="title">{row.supplierName}</div>
-                </tr>
+                </div>
             )
 
         },
@@ -63,21 +62,21 @@ class Content extends Component {
                 color: 'rgba(0,0,0,.54)',
             },
             cell: row => (
-                <tr class="tb-odr-item">
-                    <td class="tb-odr-amount">
-                        <span class="tb-odr-total">
-                            <span class="amount">Rs. {row.totalAmount}</span>
+                <div className="tb-odr-item">
+                    <td className="tb-odr-amount">
+                        <span className="tb-odr-total">
+                            <span className="amount">Rs. {row.totalAmount}</span>
                         </span>
-                        <span class="tb-odr-status d-sm-none">
+                        <span className="tb-odr-status d-sm-none">
                             {
                                 row.paidAmount < row.totalAmount ?
-                                    <span class="badge badge-dot badge-warning">Pending</span>
+                                    <span className="badge badge-dot badge-warning">Pending</span>
                                     :
-                                    <span class="badge badge-dot badge-success">Complete</span>
+                                    <span className="badge badge-dot badge-success">Complete</span>
                             }
                         </span>
                     </td>
-                </tr>
+                </div>
             ),
         },
         {
@@ -100,18 +99,18 @@ class Content extends Component {
             selector: 'status',
             hide: 'sm',
             cell: row => (
-                <tr class="tb-odr-item">
-                    <td class="tb-odr-amount">
-                        <span class="tb-odr-status">
+                <div className="tb-odr-item">
+                    <td className="tb-odr-amount">
+                        <span className="tb-odr-status">
                             {
                                 row.paidAmount < row.totalAmount ?
-                                    <span class="badge badge-dot badge-warning">Pending</span>
+                                    <span className="badge badge-dot badge-warning">Pending</span>
                                     :
-                                    <span class="badge badge-dot badge-success">Complete</span>
+                                    <span className="badge badge-dot badge-success">Complete</span>
                             }
                         </span>
                     </td>
-                </tr>
+                </div>
             )
         },
 
@@ -127,20 +126,57 @@ class Content extends Component {
                             state: {
                                 purchaseInfo: row
                             }
-                        }} class="btn btn-dim btn-sm btn-primary">View</Link>
+                        }} className="btn btn-dim btn-sm btn-primary">View</Link>
                     </div>
                     <Link to={{
                         pathname: "/purchase_invoice",
                         state: {
                             purchaseInfo: row
                         }
-                    }} class="btn btn-pd-auto d-md-none"><em class="icon ni ni-chevron-right"></em></Link>
+                    }} className="btn btn-pd-auto d-md-none"><em className="icon ni ni-chevron-right"></em></Link>
                 </div>
 
             )
         },
 
     ];
+
+
+    SampleExpandedComponent = ({data}) => {
+        return (
+            <div className="container-fluid">
+                  <div className="row d-lg-none">
+                    <div className="col">
+                        <span className="title fw-medium">Name: </span> <span className="fw-normal"> {data.supplierName}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <span className="title fw-medium">Description: </span> <span className="fw-normal"> {data.description ? data.description : 'No description added.'}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <span className=" fw-medium">Paid Amount: </span> <span className="fw-normal">Rs. {data.paidAmount}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <span className=" fw-medium">Added on: </span> <span className="fw-normal"><Moment format="DD MMM, YYYY hh:mm A">{data.createdAt}</Moment></span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                    <br/><span className=" fw-medium">Products List </span><br/>
+                    </div>
+                </div>
+            </div>
+        )
+    };
+
+    check = (toggle) =>{
+        
+    }
 
     componentDidUpdate(prevProps) {
         if (prevProps.purchaseList !== this.props.purchaseList) {
@@ -182,17 +218,11 @@ class Content extends Component {
         });
     }
 
-    SampleExpandedComponent = ({ data }) => (
-        <div>
-            <div>
-                Description:  <span> {data.description}</span>
-            </div>
-            <div>
-            </div>
-        </div>
-
-    );
-
+    getProductDetails = (toggleState,data) =>{
+        if(toggleState === true){
+           
+        }
+    }
 
     render() {
         return (
@@ -236,6 +266,7 @@ class Content extends Component {
                                 pagination
                                 expandableRows={true}
                                 expandableRowsComponent={<this.SampleExpandedComponent />}
+                                onRowExpandToggled = {(toggleState,row)=>{this.getProductDetails(toggleState,row)}}
                                 paginationPerPage={10}
                             />
                         </div>
