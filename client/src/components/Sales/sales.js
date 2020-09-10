@@ -4,12 +4,13 @@ import Header from '../Header/header'
 import Footer from '../Footer/footer'
 import Content from './Content/content';
 import { connect } from 'react-redux';
-import { getPurchases } from '../../actions';
+import { getSales } from '../../actions';
+
 
 class Sale extends Component {
 
     componentDidMount() {
-        this.props.dispatch(getPurchases());
+        this.props.dispatch(getSales());
     }
 
     render() {
@@ -21,7 +22,7 @@ class Sale extends Component {
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
-                            <Content purchaseList = {this.props.purchaseList} />
+                            <Content saleList = {this.props.saleList} />
                             <Footer />
                         </div>
                     </div>
@@ -33,7 +34,7 @@ class Sale extends Component {
 
 function mapStateToProps(state) {
     return {
-        purchaseList: state.purchase.purchaseList
+        saleList: state.sale.saleList
         // productsList: state.product.productList,
         // removeSupplier: state.supplier.postDeleted,
         // editSupplier: state.supplier.post

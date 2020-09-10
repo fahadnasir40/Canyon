@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import ItemRow from '../itemsreturn'
+// import ItemRow from '../itemsreturn'
+import ItemRow from '../../../components/Purchases/itemsreturn'
 
 class SaleDetails extends Component {
 

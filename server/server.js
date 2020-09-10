@@ -23,6 +23,7 @@ const { Customer } = require("./models/customer");
 const { Product } = require("./models/product");
 const { Transaction } = require("./models/transaction");
 const { Purchase } = require("./models/purchase");
+const { Sale } = require("./models/sale");
 // const { default: transactions } = require("../client/src/components/Transactions/transactions");
 const supplier = require("./models/supplier");
 
@@ -181,6 +182,20 @@ app.get('/api/getPurchases', auth, (req, res) => {
     })
 })
 
+app.get('/api/getSales', auth, (req, res) => {
+    // locahost:3001/api/books?skip=3&limit=2&order=asc
+    let skip = parseInt(req.query.skip);
+    let limit = parseInt(req.query.limit);
+    let order = req.query.order;
+
+    // ORDER = asc || desc
+    Sale.find().skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.send(doc);
+    })
+})
+
+
 
 app.get('/api/getTransactions', auth, (req, res) => {
     // locahost:3001/api/books?skip=3&limit=2&order=asc
@@ -329,6 +344,20 @@ app.post('/api/addPurchase', (req, res) => {
         return res.status(200).json({
             post: true,
             purchaseId: purchase._id
+        })
+    });
+})
+
+app.post('/api/addSale', (req, res) => {
+    const sale = new Sale(req.body);
+
+    sale.save((error, sale) => {
+        if (error) {
+            return res.status(400).send(error);
+        }
+        return res.status(200).json({
+            post: true,
+            saleId: sale._id
         })
     });
 })

@@ -1,120 +1,280 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import DataTable from 'react-data-table-component';
+import Moment from 'react-moment';
 
 class Content extends Component {
 
+    state = {
+        purchaseList: this.props.purchaseList
+    }
+
+    columns = [
+
+        {
+            name: 'Sale Order',
+            selector: '_id',
+            sortable: true,
+            style: {
+                color: '#202124',
+                fontSize: '14px',
+                fontWeight: 500,
+            },
+            cell: row => (
+                <div className="tb-odr-item">
+                    <td className="tb-odr-info">
+                        <span className="tb-odr-id text-azure">{row._id}</span>
+                        <span className="tb-odr-date d-sm-none"><Moment format={'DD MMM YYYY'}>{row.puchaseDate}</Moment></span>
+                    </td>
+                </div>
+            )
+        },
+        {
+            name: 'Date',
+            selector: 'purchaseDate',
+            sortable: true,
+            hide: 'lg',
+            cell: row => (
+                <div className="tb-odr-item">
+                    <td className="tb-odr-info">
+                        <span className="tb-odr-date"><Moment format={'DD MMM YYYY'}>{row.puchaseDate}</Moment></span>
+                    </td>
+                </div>
+            )
+        },
+        {
+            name: 'Customer',
+            selector: 'supplierName',
+            sortable: true,
+            hide: 'md',
+            cell: row => (
+                <div className="tb-odr-item">
+                    <div className="title">{row.supplierName}</div>
+                </div>
+            )
+
+        },
+        {
+            name: 'Amount',
+            selector: 'totalAmount',
+            sortable: true,
+            style: {
+                color: 'rgba(0,0,0,.54)',
+            },
+            cell: row => (
+                <div className="tb-odr-item">
+                    <td className="tb-odr-amount">
+                        <span className="tb-odr-total">
+                            <span className="amount">Rs. {row.totalAmount}</span>
+                        </span>
+                        <span className="tb-odr-status d-sm-none">
+                            {
+                                row.paidAmount < row.totalAmount ?
+                                    <span className="badge badge-dot badge-warning">Pending</span>
+                                    :
+                                    <span className="badge badge-dot badge-success">Complete</span>
+                            }
+                        </span>
+                    </td>
+                </div>
+            ),
+        },
+        {
+            name: 'Description',
+            selector: 'description',
+            sortable: true,
+            hide: 'md',
+            cell: row => (
+                <div>
+                    {
+                        row.description.length > 20 ?
+                            <p className="fw-normal">{row.description.substr(0, 20) + ' ...'}</p> :
+                            <p className="text-muted">No description added</p>
+                    }
+                </div>
+            ),
+        },
+        {
+            name: 'Status',
+            selector: 'status',
+            hide: 'sm',
+            cell: row => (
+                <div className="tb-odr-item">
+                    <td className="tb-odr-amount">
+                        <span className="tb-odr-status">
+                            {
+                                row.paidAmount < row.totalAmount ?
+                                    <span className="badge badge-dot badge-warning">Pending</span>
+                                    :
+                                    <span className="badge badge-dot badge-success">Complete</span>
+                            }
+                        </span>
+                    </td>
+                </div>
+            )
+        },
+
+        {
+            name: 'Action',
+            selector: 'action',
+
+            cell: row => (
+                <div>
+                    <div className="d-none d-md-inline">
+                        <Link to={{
+                            pathname: "/purchase_invoice",
+                            state: {
+                                purchaseInfo: row
+                            }
+                        }} className="btn btn-dim btn-sm btn-primary">View</Link>
+                    </div>
+                    <Link to={{
+                        pathname: "/purchase_invoice",
+                        state: {
+                            purchaseInfo: row
+                        }
+                    }} className="btn btn-pd-auto d-md-none"><em className="icon ni ni-chevron-right"></em></Link>
+                </div>
+
+            )
+        },
+
+    ];
+
+
+    SampleExpandedComponent = ({data}) => {
+        return (
+            <div className="container-fluid">
+                  <div className="row d-lg-none">
+                    <div className="col">
+                        <span className="title fw-medium">Name: </span> <span className="fw-normal"> {data.supplierName}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <span className="title fw-medium">Description: </span> <span className="fw-normal"> {data.description ? data.description : 'No description added.'}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <span className=" fw-medium">Paid Amount: </span> <span className="fw-normal">Rs. {data.paidAmount}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <span className=" fw-medium">Added on: </span> <span className="fw-normal"><Moment format="DD MMM, YYYY hh:mm A">{data.createdAt}</Moment></span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                    <br/><span className=" fw-medium">Products List </span><br/>
+                    </div>
+                </div>
+            </div>
+        )
+    };
+
+    check = (toggle) =>{
+        
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.purchaseList !== this.props.purchaseList) {
+            this.setState({ purchaseList: this.props.purchaseList });
+        }
+    }
+
+
+    handleSearchChange = (e) => {
+        // Variable to hold the original version of the list
+        let currentList = [];
+        // Variable to hold the filtered list before putting into state
+        let newList = [];
+
+        // If the search bar isn't empty
+        if (e.target.value !== "") {
+            // Assign the original list to currentList
+            currentList = this.props.purchaseList;
+
+            // Use .filter() to determine which items should be displayed
+            // based on the search terms
+            newList = currentList.filter(item => {
+                // change current item to lowercase
+                const lc = item.supplierName.toLowerCase();
+                // change search term to lowercase
+                const filter = e.target.value.toLowerCase();
+                // check to see if the current list item includes the search term
+                // If it does, it will be added to newList. Using lowercase eliminates
+                // issues with capitalization in search terms and search content
+                return lc.includes(filter);
+            });
+        } else {
+            // If the search bar is empty, set newList to original task list
+            newList = this.props.purchaseList;
+        }
+        // Set the filtered state based on what our rules added to newList
+        this.setState({
+            purchaseList: newList
+        });
+    }
+
+    getProductDetails = (toggleState,data) =>{
+        if(toggleState === true){
+           
+        }
+    }
+
     render() {
         return (
-
-            <div class="nk-content ">
-                <div class="container-fluid">
-                    <div class="nk-content-inner">
-                        <div class="nk-content-body">
-                            <div class="components-preview wide-md mx-auto">
-                                <div class="nk-block-head nk-block-head-lg wide-sm">
-                                    <div class="nk-block-head-content">
-                                        <h2 class="nk-block-title fw-normal">Sale Orders</h2>
+            <div className="nk-content ml-md-5 ">
+                <div className="container-fluid">
+                    <div className="nk-content-inner">
+                        <div className="nk-content-body">
+                            <div className="nk-block-head nk-block-head-sm">
+                                <div className="nk-block-between">
+                                    <div className="nk-block-head-content">
+                                        <h3 className="nk-block-title page-title">Sale Contracts</h3>
                                     </div>
-                                    <div class="nk-header-search ml-3 ml-xl-0">
-                                        <em class="icon ni ni-search"></em>
-                                        <input type="text" class="form-control border-transparent form-focus-none" placeholder="Search" />
-                                    </div>
-                                    <ul class="nk-block-tools-opt">
-                                        {/* <Link to={{
-                                            pathname: "/addpurchases",
-                                            state:
-                                            {
-                                                activityName: 'Orders'
-                                            }
-                                        }}
-                                        >
-                                        <button class="btn btn-primary"><em class="icon ni ni-plus"></em><span>New Sale</span></button>
-                                        </Link> */}
-                                    </ul>
-                                </div>
-                                <div class="nk-block nk-block-lg">
-                                    <div class="card card-preview">
-                                        <div class="card-inner">
-                                            <table class="datatable-init nk-tb-list nk-tb-ulist" data-auto-responsive="false">
-                                                <thead>
-                                                    <tr class="nk-tb-item nk-tb-head">
-                                                        <th class="nk-tb-col nk-tb-col-check">
-                                                            <div class="custom-control custom-control-sm custom-checkbox notext">
-                                                                <input type="checkbox" class="custom-control-input" id="uid" />
-                                                                <label class="custom-control-label" for="uid"></label>
+                                    <div className="nk-block-head-content">
+                                        <div className="toggle-wrap nk-block-tools-toggle">
+                                            <a href="#" className="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu2"><em className="icon ni ni-more-v"></em></a>
+                                            <div className="toggle-expand-content" data-content="pageMenu2">
+                                                <ul className="nk-block-tools g-3">
+                                                    <li>
+                                                        <div className="form-control-wrap">
+                                                            <div className="form-icon form-icon-right">
+                                                                <em className="icon ni ni-search"></em>
                                                             </div>
-                                                        </th>
-                                                        <th class="nk-tb-col"><span class="sub-text">Customers</span></th>
-                                                        <th class="nk-tb-col tb-col-mb"><span class="sub-text">Total Sales</span></th>
-                                                        <th class="nk-tb-col tb-col-md"><span class="sub-text">Last Sale</span></th>
-                                                        <th class="nk-tb-col nk-tb-col-tools text-right">Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr class="nk-tb-item">
-                                                        <td class="nk-tb-col nk-tb-col-check">
-                                                            <div class="custom-control custom-control-sm custom-checkbox notext">
-                                                                <input type="checkbox" class="custom-control-input" id="uid13" />
-                                                                <label class="custom-control-label" for="uid13"></label>
-                                                            </div>
-                                                        </td>
-                                                        <td class="nk-tb-col">
-                                                            <div class="user-card">
-                                                                <div class="user-info">
-                                                                    <span class="tb-lead">Canyon Customer<span class="dot dot-success d-md-none ml-1"></span></span>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td class="nk-tb-col tb-col-mb" data-order="440.34">
-                                                            <span class="tb-amount">440.34</span>
-                                                        </td>
-                                                        <td class="nk-tb-col tb-col-md">
-                                                            <span>18 Jan 2020</span>
-                                                        </td>
-                                                        <td class="nk-tb-col nk-tb-col-tools">
-                                                            <ul class="nk-tb-actions gx-1">
-                                                                <li class="nk-tb-action-hidden">
-                                                                    <a href="#" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Wallet">
-                                                                        <em class="icon ni ni-wallet-fill"></em>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="nk-tb-action-hidden">
-                                                                    <a href="#" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Send Email">
-                                                                        <em class="icon ni ni-mail-fill"></em>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="nk-tb-action-hidden">
-                                                                    <a href="#" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Suspend">
-                                                                        <em class="icon ni ni-user-cross-fill"></em>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <div class="drodown">
-                                                                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                                            <ul class="link-list-opt no-bdr">
-                                                                                <li><a href="#"><em class="icon ni ni-focus"></em><span>Supplier Details</span></a></li>
-                                                                                <li><a href="#"><em class="icon ni ni-eye"></em><span>View Transaction</span></a></li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                                            <input type="text" className="form-control" onChange={this.handleSearchChange} id="default-04" placeholder="Quick search by name" />
+                                                        </div>
+                                                    </li>
+                                                    <li className="nk-block-tools-opt">
+                                                        <button data-toggle="modal" data-target="#addmodal" className="toggle btn btn-icon btn-primary d-md-none"><em className="icon ni ni-plus"></em></button>
+                                                        <Link to="/addSale"><button className="toggle btn btn-primary d-none d-md-inline-flex"><em className="icon ni ni-plus"></em><span>Add Sale</span></button></Link>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <DataTable
+                                columns={this.columns}
+                                data={this.state.purchaseList}
+                                highlightOnHover
+                                pointerOnHover
+                                pagination
+                                expandableRows={true}
+                                expandableRowsComponent={<this.SampleExpandedComponent />}
+                                onRowExpandToggled = {(toggleState,row)=>{this.getProductDetails(toggleState,row)}}
+                                paginationPerPage={10}
+                            />
                         </div>
                     </div>
                 </div>
             </div>
-
         )
     }
 }
 
-export default Content
+export default Content;
