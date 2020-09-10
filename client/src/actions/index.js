@@ -314,8 +314,8 @@ export function saveSupplier(document) {
     }
 }
 
-export function savePurchase(document) {
-    const request = axios.post('/api/addPurchase', document)
+export function savePurchase(purchase) {
+    const request = axios.post('/api/addPurchase',purchase)
         .then(response => response.data);
     return {
         type: 'ADD_PURCHASE',

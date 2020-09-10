@@ -44,11 +44,11 @@ app.get("/api/auth", auth, (req, res) => {
     });
 });
 
-app.get('/api/getSupplier',auth,(req,res)=>{
+app.get('/api/getSupplier', auth, (req, res) => {
     let id = req.query.id;
 
-    Supplier.findById(id,(err,doc)=>{
-        if(err) return res.status(400).send(err);
+    Supplier.findById(id, (err, doc) => {
+        if (err) return res.status(400).send(err);
         res.send(doc);
     })
 })
@@ -79,11 +79,11 @@ app.get('/api/getSuppliersTransactions', auth, (req, res) => {
     })
 })
 
-app.get('/api/getCustomer',auth,(req,res)=>{
+app.get('/api/getCustomer', auth, (req, res) => {
     let id = req.query.id;
 
-    Customer.findById(id,(err,doc)=>{
-        if(err) return res.status(400).send(err);
+    Customer.findById(id, (err, doc) => {
+        if (err) return res.status(400).send(err);
         res.send(doc);
     })
 })
@@ -291,7 +291,7 @@ app.post("/api/change_password", auth, (req, res) => {
 
 
 //add Supplier
-app.post('/api/addSupplier', (req, res) => {
+app.post('/api/addSupplier', auth, (req, res) => {
     const supplier = new Supplier(req.body);
 
     supplier.save((error, supplier) => {
@@ -306,7 +306,7 @@ app.post('/api/addSupplier', (req, res) => {
 })
 
 //add Customer
-app.post('/api/addCustomer', (req, res) => {
+app.post('/api/addCustomer', auth, (req, res) => {
     const customer = new Customer(req.body);
 
     customer.save((error, customer) => {
@@ -320,18 +320,60 @@ app.post('/api/addCustomer', (req, res) => {
     });
 })
 
-app.post('/api/addPurchase', (req, res) => {
-    const purchase = new Purchase(req.body);
+app.post('/api/addPurchase', auth, (req, res) => {
 
-    purchase.save((error, purchase) => {
-        if (error) {
+    const purchase = new Purchase(req.body);
+    const trans = {
+        transaction_date: new Date(),
+        primary_quantity: 0,
+        rate: purchase.totalAmount,
+        transaction_source: 'Supplier',
+        transaction_type: 'Purchase',
+        transaction_action: 'Purchase Added',
+        transaction_value: purchase.supplierName,
+        transaction_value_id: purchase.supplierId,
+        comments: purchase.description,
+        addedBy: req.user._id
+    };
+
+    let products = req.body.productDetails;
+
+    const transaction = new Transaction(trans);
+
+    return updateWallet(purchase, transaction, products);
+    async function updateWallet(purchase) {
+        const session = await Purchase.startSession();
+        session.startTransaction();
+        try {
+            await purchase.save();
+            await transaction.save();
+            await products.forEach(item => {
+                
+                Product.findByIdAndUpdate(item._id, {
+                    $inc: { stock: item.pqty }
+                }, (error) => {
+                    if (error) {
+                        console.log("Error update stock", error);
+                    }
+                })
+            });
+
+            await session.commitTransaction();
+            session.endSession();
+            return res.status(200).json({
+                post: true,
+                purchaseId: purchase._id
+            });
+
+        } catch (error) {
+            // If an error occurred, abort the whole transaction and
+            // undo any changes that might have happened
+            await session.abortTransaction();
+            session.endSession();
             return res.status(400).send(error);
         }
-        return res.status(200).json({
-            post: true,
-            purchaseId: purchase._id
-        })
-    });
+    }
+
 })
 
 app.post('/api/addProduct', auth, (req, res) => {
