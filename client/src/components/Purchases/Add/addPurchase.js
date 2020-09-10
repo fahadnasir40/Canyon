@@ -151,11 +151,24 @@ class AddPurchase extends Component {
                         pname: item.name
                     });
                 });
+
                 purchase = { ...purchase, productDetails };
+                const transaction = {
+                    transaction_date: new Date(),
+                    primary_quantity: 0,
+                    rate: this.totalAmount,
+                    transaction_source: 'Supplier',
+                    transaction_type: 'Purchase',
+                    transaction_action: 'Purchase Added',
+                    transaction_value: this.state.currentSupplier.name,
+                    transaction_value_id: this.state.currentSupplier._id,
+                    comments: this.state.description,
+                    addedBy: this.props.user.login.id
+                };
 
                 if (this.state.request === false) {
                     this.props.dispatch(savePurchase(purchase));
-                    this.saveTransaction();
+                   
                     this.setState({
                         request: true
                     })
