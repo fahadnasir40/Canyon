@@ -248,7 +248,6 @@ app.post("/api/login", (req, res) => {
 
 app.post("/api/change_password", auth, (req, res) => {
     req.user.comparePassword(req.body.oldPassword, (err, isMatch) => {
-        console.log("Error Compare", err);
         if (!isMatch) {
             return res.json({
                 success: false,
@@ -338,11 +337,9 @@ app.post('/api/addTransaction', auth, (req, res) => {
 
     const transaction = new Transaction(req.body);
 
-    console.log("Transaction", transaction)
-
     transaction.save((error, transaction) => {
         if (error) {
-            console.log("Transaction", error)
+            
             return res.status(400).send(error);
         }
         return res.status(200).json({
