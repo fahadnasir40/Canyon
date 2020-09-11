@@ -44,6 +44,11 @@ class Content extends Component {
             style: {
                 color: 'rgba(0,0,0,.54)',
             },
+            cell: row => (
+                <div>
+                    <span>{row.transaction_action} </span>{row.transaction_type === 'Purchase' ?<Link to={'/purchases'} className="text-info">{row.transaction_value_id}</Link>:null}
+                </div>
+            )
         },
         {
             name: 'Date',
@@ -52,20 +57,23 @@ class Content extends Component {
             style: {
                 color: 'rgba(0,0,0,.54)',
             },
-            cell : row =>(
-
-                    <Moment format = {'DD MMM,YYYY'}>{row.transaction_date}</Moment>
-            )        
+            cell: row => (
+                <Moment format={'DD MMM,YYYY'}>{row.transaction_date}</Moment>
+            )
         },
-        
+
         {
             name: 'Qty',
             selector: 'primary_quantity',
             sortable: true,
-            thousandSeparator : true,
+            thousandSeparator: true,
             style: {
                 color: 'rgba(0,0,0,.54)',
             },
+
+            cell: row => (
+                <span>{row.transaction_type === 'Purchase' ? 'N/A' : row.primary_quantity}</span>
+            )
         },
         {
             name: 'Rate',

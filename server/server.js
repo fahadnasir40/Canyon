@@ -331,7 +331,7 @@ app.post('/api/addPurchase', auth, (req, res) => {
         transaction_type: 'Purchase',
         transaction_action: 'Purchase Added',
         transaction_value: purchase.supplierName,
-        transaction_value_id: purchase.supplierId,
+        transaction_value_id: purchase._id,
         comments: purchase.description,
         addedBy: req.user._id
     };
