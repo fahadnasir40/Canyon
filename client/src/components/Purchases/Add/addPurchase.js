@@ -144,7 +144,6 @@ class AddPurchase extends Component {
                 this.products.forEach(item => {
                     productDetails.push({
                         _id: item._id,
-                        puom: item.uom,
                         pqty: item.qty,
                         pprice: Number(item.price.total),
                         ptotal: item.totalAmount,

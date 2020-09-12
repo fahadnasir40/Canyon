@@ -32,33 +32,34 @@ class Content extends Component {
             name: 'Stock',
             selector: 'stock',
             sortable: true,
-            style: {
-                color: 'rgba(0,0,0,.54)',
-            },
         },
         {
             name: 'Brand',
             selector: 'brand',
             sortable: true,
-            style: {
-                color: 'rgba(0,0,0,.54)',
-            },
+            cell: row=>(
+            <span className="ccap">{row.brand}</span>
+            )
+
         },
         {
             name: 'UOM',
             selector: 'uom',
             sortable: true,
-            style: {
-                color: 'rgba(0,0,0,.54)',
-            },
         },
         {
             name: 'Status',
             selector: 'status',
             sortable: true,
-            style: {
-                color: 'rgba(0,0,0,.54)',
-            },
+            cell: row => (
+                <div>
+                    {
+                        row.status === 'active' ?
+                            <span className="tb-status text-success ccap">{row.status}</span>
+                            : <span className="tb-status text-danger ccap">{row.status}</span>
+                    }
+                </div>
+            )
         },
 
         {

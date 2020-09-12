@@ -46,7 +46,7 @@ class Content extends Component {
             },
             cell: row => (
                 <div>
-                    <span>{row.transaction_action} </span>{row.transaction_type === 'Purchase' ?<Link to={'/purchases'} className="text-info">{row.transaction_value_id}</Link>:null}
+                    <span>{row.transaction_action}<br/></span>{row.transaction_type === 'Purchase' ?<Link to={`/purchase_invoice_id=${row.transaction_value_id}`} className="text-info">#{row.transaction_value_id}</Link>:null}
                 </div>
             )
         },

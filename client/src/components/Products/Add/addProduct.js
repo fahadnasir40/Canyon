@@ -52,7 +52,7 @@ class AddProduct extends Component {
 
 
     handleInputSku = (event) => {
-        this.setState({ sku: event.target.value })
+        this.setState({ sku: event.target.value.toUpperCase()})
     }
 
 
@@ -175,7 +175,7 @@ class AddProduct extends Component {
                                             Item Code (SKU)
                                         </label>
                                         <div className="form-control-wrap">
-                                            <input type="text" value={this.state.sku}
+                                            <input type="text" maxLength={30}  value={this.state.sku}
                                                 onChange={this.handleInputSku} className="form-control" id="sku" />
                                         </div>
                                     </div>
