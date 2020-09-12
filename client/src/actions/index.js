@@ -457,6 +457,16 @@ export function getUserDocuments(userId) {
     }
 }
 
+export function getPurchaseProduct(id) {
+    const request = axios.get(`/api/getPurchaseProduct?id=${id}`)
+        .then(response => response.data);
+
+    return {
+        type: 'GET_PURCHASE',
+        payload: request
+    }
+}
+
 export function getBook(id) {
     const request = axios.get(`/api/getBook?id=${id}`)
         .then(response => response.data);

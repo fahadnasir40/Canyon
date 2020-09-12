@@ -50,7 +50,7 @@ const routes = () => {
                 <Route path="/editSupplier" exact component ={Auth(EditSupplier,true)}/>
                 <Route path="/purchases" exact component ={Auth(Purchases,true)}/>
                 <Route path="/addpurchase" exact component ={Auth(AddPurchases,true)}/>
-                <Route path="/purchase_invoice" exact component ={Auth(PurchaseInvoice,true)}/>
+                <Route path="/purchase_invoice_id=:id" exact component ={Auth(PurchaseInvoice,true)}/>
                 {/* <Route path="/Transactions" exact component ={Auth(Transactions,true)}/> */}
                 <Route path="/sales" exact component ={Auth(Sales,true)}/>
                 <Route path="/profile" exact component ={Auth(Profile,true)}/>

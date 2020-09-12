@@ -122,17 +122,11 @@ class Content extends Component {
                 <div>
                     <div className="d-none d-md-inline">
                         <Link to={{
-                            pathname: "/purchase_invoice",
-                            state: {
-                                purchaseInfo: row
-                            }
+                           pathname: `/purchase_invoice_id=${row._id}`,
                         }} className="btn btn-dim btn-sm btn-primary">View</Link>
                     </div>
                     <Link to={{
-                        pathname: "/purchase_invoice",
-                        state: {
-                            purchaseInfo: row
-                        }
+                        pathname: `/purchase_invoice_id=${row._id}`,
                     }} className="btn btn-pd-auto d-md-none"><em className="icon ni ni-chevron-right"></em></Link>
                 </div>
 
@@ -163,11 +157,6 @@ class Content extends Component {
                 <div className="row">
                     <div className="col">
                         <span className=" fw-medium">Added on: </span> <span className="fw-normal"><Moment format="DD MMM, YYYY hh:mm A">{data.createdAt}</Moment></span>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col">
-                    <br/><span className=" fw-medium">Products List </span><br/>
                     </div>
                 </div>
             </div>

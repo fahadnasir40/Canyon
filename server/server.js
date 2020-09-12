@@ -181,6 +181,27 @@ app.get('/api/getPurchases', auth, (req, res) => {
     })
 })
 
+app.get('/api/getPurchaseProduct', auth, (req, res) => {
+
+    let id = req.query.id.toString();
+
+    Purchase.findById(id, (err, doc) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        if (!doc) {
+            return res.status(400).send({ message: 'Not found' });
+        }
+
+        if (doc.productDetails.length > 0)
+            Product.find({ _id: { $in: doc.productDetails } }).select('_id name sku brand uom').exec((err, products) => {
+                if (err) return res.status(400).send(err);
+                res.status(200).send({ doc, products });
+            });
+    })
+})
+
+
 
 app.get('/api/getTransactions', auth, (req, res) => {
     // locahost:3001/api/books?skip=3&limit=2&order=asc
@@ -331,7 +352,7 @@ app.post('/api/addPurchase', auth, (req, res) => {
         transaction_type: 'Purchase',
         transaction_action: 'Purchase Added',
         transaction_value: purchase.supplierName,
-        transaction_value_id: purchase.supplierId,
+        transaction_value_id: purchase._id,
         comments: purchase.description,
         addedBy: req.user._id
     };
@@ -348,7 +369,7 @@ app.post('/api/addPurchase', auth, (req, res) => {
             await purchase.save();
             await transaction.save();
             await products.forEach(item => {
-                
+
                 Product.findByIdAndUpdate(item._id, {
                     $inc: { stock: item.pqty }
                 }, (error) => {
