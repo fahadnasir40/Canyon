@@ -56,7 +56,7 @@ class PurchaseInvoice extends Component {
 
     renderBody = (purchase, products) => (
         purchase ?
-            <div className="nk-content ml-md-5">
+            <div className="nk-content bg-white ml-md-5">
                 <div className="container wide-xl">
                     <div className="nk-content-body">
                         <div className="nk-content-wrap">
@@ -71,7 +71,20 @@ class PurchaseInvoice extends Component {
                                         </div>
                                     </div>
                                     <div className="nk-block-head-content">
-                                        <Link to="/purchases" className="btn btn-outline-light bg-white d-none d-sm-inline-flex"><em className="icon ni ni-arrow-left"></em><span>Back</span></Link>
+                                        <Link to="/purchases" className="btn btn-outline-light bg-white d-none d-sm-inline-flex mr-3"><em className="icon ni ni-arrow-left"></em><span>Back</span></Link>
+                                        <Link to={{
+                                            pathname: "/purchaseReturn",
+                                            state: {
+                                                purchase: this.props.purchase
+                                            }
+                                        }} className="btn btn-outline-light bg-white d-none d-sm-inline-flex"><em class="icon ni ni-histroy"></em><span>Return Purchase</span></Link>
+                                        <Link to={{
+                                            pathname: "/purchaseReturn",
+                                            state: {
+                                                purchase: this.props.purchase
+                                            }
+                                        }} className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none mr-3"><em class="icon ni ni-histroy"></em></Link>
+
                                         <Link to="/purchases" className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none"><em className="icon ni ni-arrow-left"></em></Link>
                                     </div>
                                 </div>
