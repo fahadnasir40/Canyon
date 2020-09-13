@@ -36,9 +36,9 @@ class Content extends Component {
             hide: 'lg',
             cell: row => (
                 <div className="tb-odr-item">
-                    <td className="tb-odr-info">
+                    <div className="tb-odr-info">
                         <span className="tb-odr-date"><Moment format={'DD MMM YYYY'}>{row.puchaseDate}</Moment></span>
-                    </td>
+                    </div>
                 </div>
             )
         },

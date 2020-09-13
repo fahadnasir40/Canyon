@@ -77,13 +77,13 @@ class PurchaseInvoice extends Component {
                                             state: {
                                                 purchase: this.props.purchase
                                             }
-                                        }} className="btn btn-outline-light bg-white d-none d-sm-inline-flex"><em class="icon ni ni-histroy"></em><span>Return Purchase</span></Link>
+                                        }} className="btn btn-outline-light bg-white d-none d-sm-inline-flex"><em className="icon ni ni-histroy"></em><span>Return Purchase</span></Link>
                                         <Link to={{
                                             pathname: "/purchaseReturn",
                                             state: {
                                                 purchase: this.props.purchase
                                             }
-                                        }} className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none mr-3"><em class="icon ni ni-histroy"></em></Link>
+                                        }} className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none mr-3"><em className="icon ni ni-histroy"></em></Link>
 
                                         <Link to="/purchases" className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none"><em className="icon ni ni-arrow-left"></em></Link>
                                     </div>
@@ -153,7 +153,7 @@ class PurchaseInvoice extends Component {
                                                     <tbody>
                                                         {
                                                             purchase.productDetails.map((item, key) => (
-                                                                <tr>
+                                                                <tr key={key}>
                                                                     <td>{products.find(x => x._id === item._id).sku}</td>
                                                                     <td>{item.pname}</td>
                                                                     <td>{item.pprice}</td>

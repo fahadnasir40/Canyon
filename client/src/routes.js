@@ -16,7 +16,6 @@ import EditSupplier from './components/Suppliers/AddSupplier/edit';
 import AddPurchases from './components/Purchases/Add/addPurchase';
 import Purchases from './components/Purchases/purchase';
 import PurchaseInvoice from './components/Purchases/purchaseInvoice';
-import ReturnPurchase from './components/Purchases/purchaseReturn';
 import Transactions from './components/Transactions/transactions';
 import AddTransaction from './components/Transactions/Add/addTransaction';
 import Sales from './components/Sales/sales';
@@ -26,7 +25,7 @@ import Customers from './components/Customers/customers';
 import CustomerDetails from './components/Customers/CustomerInfo/customerInfo';
 import AddCustomer from './components/Customers/AddCustomer/add';
 import EditCustomer from './components/Customers/AddCustomer/edit';
-import purchaseReturn from './components/Purchases/purchaseReturn';
+import purchaseReturn from './components/Purchases/Return/purchaseReturn';
 
 
 const routes = () => {
