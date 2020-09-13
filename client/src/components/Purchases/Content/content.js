@@ -36,9 +36,9 @@ class Content extends Component {
             hide: 'lg',
             cell: row => (
                 <div className="tb-odr-item">
-                    <td className="tb-odr-info">
+                    <div className="tb-odr-info">
                         <span className="tb-odr-date"><Moment format={'DD MMM YYYY'}>{row.puchaseDate}</Moment></span>
-                    </td>
+                    </div>
                 </div>
             )
         },
@@ -113,11 +113,9 @@ class Content extends Component {
                 </div>
             )
         },
-
         {
             name: 'Action',
             selector: 'action',
-
             cell: row => (
                 <div>
                     <div className="d-none d-md-inline">
@@ -129,10 +127,8 @@ class Content extends Component {
                         pathname: `/purchase_invoice_id=${row._id}`,
                     }} className="btn btn-pd-auto d-md-none"><em className="icon ni ni-chevron-right"></em></Link>
                 </div>
-
             )
         },
-
     ];
 
 
@@ -213,6 +209,52 @@ class Content extends Component {
         }
     }
 
+//     ----- Export in Excel File -----
+//     // Blatant "inspiration" from https://codepen.io/Jacqueline34/pen/pyVoWr
+//    convertArrayOfObjectsToCSV=(array)=> {
+//     let result;
+  
+//     const columnDelimiter = ',';
+//     const lineDelimiter = '\n';
+//     const keys = Object.keys(this.state.purchaseList[0]);
+  
+//     result = '';
+//     result += keys.join(columnDelimiter);
+//     result += lineDelimiter;
+  
+//     array.forEach(item => {
+//       let ctr = 0;
+//       keys.forEach(key => {
+//         if (ctr > 0) result += columnDelimiter;
+  
+//         result += item[key];
+        
+//         ctr++;
+//       });
+//       result += lineDelimiter;
+//     });
+  
+//     return result;
+//   }
+  
+//   // Blatant "inspiration" from https://codepen.io/Jacqueline34/pen/pyVoWr
+//    downloadCSV =(array)=> {
+//     const link = document.createElement('a');
+//     let csv = this.convertArrayOfObjectsToCSV(array);
+//     if (csv == null) return;
+  
+//     const filename = 'export.csv';
+  
+//     if (!csv.match(/^data:text\/csv/i)) {
+//       csv = `data:text/csv;charset=utf-8,${csv}`;
+//     }
+  
+//     link.setAttribute('href', encodeURI(csv));
+//     link.setAttribute('download', filename);
+//     link.click();
+//   }
+
+
     render() {
         return (
             <div className="nk-content ml-md-5 ">
@@ -238,6 +280,7 @@ class Content extends Component {
                                                         </div>
                                                     </li>
                                                     <li className="nk-block-tools-opt">
+                                                        {/* <button type="btn" onClick={e => this.downloadCSV(this.state.purchaseList)} className="btn btn-primary mr-3" >Export</button> */}
                                                         <button data-toggle="modal" data-target="#addmodal" className="toggle btn btn-icon btn-primary d-md-none"><em className="icon ni ni-plus"></em></button>
                                                         <Link to="/addPurchase"><button className="toggle btn btn-primary d-none d-md-inline-flex"><em className="icon ni ni-plus"></em><span>Add Purchase</span></button></Link>
                                                     </li>

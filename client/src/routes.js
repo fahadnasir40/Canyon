@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route} from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import Login from './components/Login/login';
 import Dashboard from './components/Dashboard/dashboard'
@@ -25,38 +25,38 @@ import Customers from './components/Customers/customers';
 import CustomerDetails from './components/Customers/CustomerInfo/customerInfo';
 import AddCustomer from './components/Customers/AddCustomer/add';
 import EditCustomer from './components/Customers/AddCustomer/edit';
+import purchaseReturn from './components/Purchases/Return/purchaseReturn';
 
 
 const routes = () => {
 
     return (
         <Switch>
-            
-            <Route path="/" exact  component = {Auth(Login,false)}/>
-                <Route path="/dashboard" exact component ={Auth(Dashboard,true)}/>
-                <Route path="/users" exact component ={Auth(Users,true)}/>
-                <Route path="/add" exact component ={Auth(AddUser,true)}/>
-                <Route path="/products" exact component ={Auth(Products,true)}/>
-                <Route path="/addProduct" exact component ={Auth(AddProduct,true)}/>
-                <Route path="/transactions" exact component ={Auth(Transactions,true)}/>
-                <Route path="/addTransaction" exact component ={Auth(AddTransaction,true)}/>
-                <Route path="/customers" exact component ={Auth(Customers,true)}/>
-                <Route path="/customerInfo" exact component ={Auth(CustomerDetails,true)}/>                
-                <Route path="/addCustomer" exact component ={Auth(AddCustomer,true)}/>                
-                <Route path="/editCustomer" exact component ={Auth(EditCustomer,true)}/>
-                <Route path="/suppliers/" exact component ={Auth(Suppliers,true)}/>
-                <Route path="/supplierInfo" exact component ={Auth(SupplierDetails,true)}/>
-                <Route path="/addSupplier" exact component ={Auth(AddSupplier,true)}/>
-                <Route path="/editSupplier" exact component ={Auth(EditSupplier,true)}/>
-                <Route path="/purchases" exact component ={Auth(Purchases,true)}/>
-                <Route path="/addpurchase" exact component ={Auth(AddPurchases,true)}/>
-                <Route path="/purchase_invoice_id=:id" exact component ={Auth(PurchaseInvoice,true)}/>
-                {/* <Route path="/Transactions" exact component ={Auth(Transactions,true)}/> */}
-                <Route path="/sales" exact component ={Auth(Sales,true)}/>
-                <Route path="/profile" exact component ={Auth(Profile,true)}/>
-                <Route path="/error" exact component={ErrorPage504}/> 
-                <Route component={ErrorPage404}/>  
-       </Switch>
+            <Route path="/" exact component={Auth(Login, false)} />
+            <Route path="/dashboard" exact component={Auth(Dashboard, true)} />
+            <Route path="/users" exact component={Auth(Users, true)} />
+            <Route path="/add" exact component={Auth(AddUser, true)} />
+            <Route path="/products" exact component={Auth(Products, true)} />
+            <Route path="/addProduct" exact component={Auth(AddProduct, true)} />
+            <Route path="/transactions" exact component={Auth(Transactions, true)} />
+            <Route path="/addTransaction" exact component={Auth(AddTransaction, true)} />
+            <Route path="/customers" exact component={Auth(Customers, true)} />
+            <Route path="/customerInfo" exact component={Auth(CustomerDetails, true)} />
+            <Route path="/addCustomer" exact component={Auth(AddCustomer, true)} />
+            <Route path="/editCustomer" exact component={Auth(EditCustomer, true)} />
+            <Route path="/suppliers/" exact component={Auth(Suppliers, true)} />
+            <Route path="/supplierInfo" exact component={Auth(SupplierDetails, true)} />
+            <Route path="/addSupplier" exact component={Auth(AddSupplier, true)} />
+            <Route path="/editSupplier" exact component={Auth(EditSupplier, true)} />
+            <Route path="/purchases" exact component={Auth(Purchases, true)} />
+            <Route path="/addpurchase" exact component={Auth(AddPurchases, true)} />
+            <Route path="/purchaseReturn" exact component={Auth(purchaseReturn, true)} />
+            <Route path="/purchase_invoice_id=:id" exact component={Auth(PurchaseInvoice, true)} />
+            <Route path="/sales" exact component={Auth(Sales, true)} />
+            <Route path="/profile" exact component={Auth(Profile, true)} />
+            <Route path="/error" exact component={ErrorPage504} />
+            <Route component={ErrorPage404} />
+        </Switch>
     )
 }
 

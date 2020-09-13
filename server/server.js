@@ -194,7 +194,7 @@ app.get('/api/getPurchaseProduct', auth, (req, res) => {
         }
 
         if (doc.productDetails.length > 0)
-            Product.find({ _id: { $in: doc.productDetails } }).select('_id name sku brand uom').exec((err, products) => {
+            Product.find({ _id: { $in: doc.productDetails } }).select('_id name sku stock brand uom').exec((err, products) => {
                 if (err) return res.status(400).send(err);
                 res.status(200).send({ doc, products });
             });

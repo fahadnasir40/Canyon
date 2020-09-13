@@ -46,7 +46,7 @@ class Content extends Component {
             },
             cell: row => (
                 <div>
-                    <span>{row.transaction_action}<br/></span>{row.transaction_type === 'Purchase' ?<Link to={`/purchase_invoice_id=${row.transaction_value_id}`} className="text-info">#{row.transaction_value_id}</Link>:null}
+                    <span>{row.transaction_action}<br /></span>{row.transaction_type === 'Purchase' ? <Link to={`/purchase_invoice_id=${row.transaction_value_id}`} className="text-info">#{row.transaction_value_id}</Link> : null}
                 </div>
             )
         },
@@ -87,9 +87,15 @@ class Content extends Component {
             name: 'Status',
             selector: 'status',
             sortable: true,
-            style: {
-                color: 'rgba(0,0,0,.54)',
-            },
+            cell: row => (
+                <div>
+                    {
+                        row.status === 'active' ?
+                            <span className="tb-status text-success ccap">{row.status}</span>
+                            : <span className="tb-status text-danger ccap">{row.status}</span>
+                    }
+                </div>
+            )
         },
         {
             cell: row => (
