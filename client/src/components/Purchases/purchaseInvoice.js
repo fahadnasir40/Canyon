@@ -72,19 +72,28 @@ class PurchaseInvoice extends Component {
                                     </div>
                                     <div className="nk-block-head-content">
                                         <Link to="/purchases" className="btn btn-outline-light bg-white d-none d-sm-inline-flex mr-3"><em className="icon ni ni-arrow-left"></em><span>Back</span></Link>
-                                        <Link to={{
-                                            pathname: "/purchaseReturn",
-                                            state: {
-                                                purchase: this.props.purchase
-                                            }
-                                        }} className="btn btn-outline-light bg-white d-none d-sm-inline-flex"><em className="icon ni ni-histroy"></em><span>Return Purchase</span></Link>
-                                        <Link to={{
-                                            pathname: "/purchaseReturn",
-                                            state: {
-                                                purchase: this.props.purchase
-                                            }
-                                        }} className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none mr-3"><em className="icon ni ni-histroy"></em></Link>
+                                        {
 
+                                            purchase.status !== 'Returned' ?
+
+                                                <Link to={{
+                                                    pathname: "/purchaseReturn",
+                                                    state: {
+                                                        purchase: this.props.purchase
+                                                    }
+                                                }} className="btn btn-outline-light bg-white d-none d-sm-inline-flex"><em className="icon ni ni-histroy"></em><span>Return Purchase</span></Link>
+                                                : null
+                                        }
+                                        {
+                                            purchase.status !== 'Returned' ?
+                                                <Link to={{
+                                                    pathname: "/purchaseReturn",
+                                                    state: {
+                                                        purchase: this.props.purchase
+                                                    }
+                                                }} className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none mr-3"><em className="icon ni ni-histroy"></em></Link>
+                                                : null
+                                        }
                                         <Link to="/purchases" className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none"><em className="icon ni ni-arrow-left"></em></Link>
                                     </div>
                                 </div>
@@ -147,6 +156,9 @@ class PurchaseInvoice extends Component {
                                                             <th>Name</th>
                                                             <th>Price</th>
                                                             <th>Qty</th>
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' ?
+                                                                <th>Returned Qty</th>
+                                                                : null}
                                                             <th>Amount</th>
                                                         </tr>
                                                     </thead>
@@ -158,6 +170,9 @@ class PurchaseInvoice extends Component {
                                                                     <td>{item.pname}</td>
                                                                     <td>{item.pprice}</td>
                                                                     <td>{item.pqty}</td>
+                                                                    {purchase.status === 'Returned' || purchase.status === 'Returned Items' ?
+                                                                        <td>{item.returnQty}</td>
+                                                                        : null}
                                                                     <td>{item.ptotal}</td>
                                                                 </tr>
                                                             ))
@@ -165,12 +180,14 @@ class PurchaseInvoice extends Component {
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
-                                                            <td colSpan="2"></td>
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' ?
+                                                                <td colSpan="3"></td> : <td colSpan="2"></td>}
                                                             <td colSpan="2">Subtotal</td>
                                                             <td>{purchase.totalAmount}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td colSpan="2"></td>
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' ?
+                                                                <td colSpan="3"></td> : <td colSpan="2"></td>}
                                                             <td colSpan="2"><strong>Grand Total</strong></td>
                                                             <td>Rs. {purchase.totalAmount}</td>
                                                         </tr>
