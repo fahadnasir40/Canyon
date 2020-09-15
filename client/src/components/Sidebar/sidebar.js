@@ -36,12 +36,12 @@ class SideBar extends Component {
     }
 
     componentDidMount() {
-        var x = window.matchMedia("(min-width: 991.98px)")
+        var x = window.matchMedia("(min-width: 1200px)")
         x.addListener(this.showNav)
     }
 
     hideNav = () => {
-        if (window.matchMedia('(max-width: 991.98px)').matches) {
+        if (window.matchMedia('(max-width: 1200px)').matches) {
             $('.nk-sidebar').css('transform', 'translateX(-100%)');
         }
     }

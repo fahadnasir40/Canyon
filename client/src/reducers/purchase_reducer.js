@@ -6,13 +6,19 @@ export default function (state = {}, action) {
             return { ...state, purchase: action.payload }
         case 'ADD_PURCHASE':
             return { ...state, purchase: action.payload }
+        case 'UPDATE_PURCHASE':
+            return {
+                ...state,
+                post: action.payload.success
+            }
         case 'DELETE_PURCHASE':
             return {
                 ...state,
                 postDeleted: action.payload
             }
+
         case 'CLEAR_PURCHASE':
-            return { ...state, purchase: action.payload, post: action.payload }
+            return { ...state, purchase: action.payload, post: action.payload, purchaseId: action.payload }
         default:
             return state;
     }

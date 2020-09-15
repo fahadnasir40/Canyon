@@ -246,13 +246,13 @@ export function getTransactions(
 export function getPurchases(
     start = 0,
     limit = 0,
-    order = 'desc',
+    order = 'asc',
     list = ''
 ) {
     const request = axios.get(`api/getPurchases?skip=${start}&limit=${limit}&order=${order}`)
         .then(response => {
             if (list) {
-                return [...list, ...response.data];
+                return [...list,...response.data];
             }
             else {
                 return response.data;
@@ -319,6 +319,16 @@ export function savePurchase(purchase) {
         .then(response => response.data);
     return {
         type: 'ADD_PURCHASE',
+        payload: request
+    }
+}
+
+export function updatePurchase(data) {
+    const request = axios.post(`/api/purchase_update`, data)
+        .then(response => response.data);
+
+    return {
+        type: 'UPDATE_PURCHASE',
         payload: request
     }
 }

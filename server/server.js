@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const config = require("./config/config").get(process.env.NODE_ENV);
 const app = express();
 const { auth } = require("./middleware/auth");
+const shortid = require('shortid');
 
 const http = require("http");
 
@@ -343,7 +344,15 @@ app.post('/api/addCustomer', auth, (req, res) => {
 
 app.post('/api/addPurchase', auth, (req, res) => {
 
+
+    const id = shortid.generate();
+    if (shortid.isValid(id)) {
+        shortid.worker(1);
+        req.body._id = id;
+    }
+
     const purchase = new Purchase(req.body);
+
     const trans = {
         transaction_date: new Date(),
         primary_quantity: 0,
@@ -366,7 +375,7 @@ app.post('/api/addPurchase', auth, (req, res) => {
         const session = await Purchase.startSession();
         session.startTransaction();
         try {
-            await purchase.save();
+            await purchase.save((error, doc) => { if (error) console.log("Error Add Purchase", error) });
             await transaction.save();
             await products.forEach(item => {
 
@@ -446,6 +455,67 @@ app.post('/api/supplier_update', (req, res) => {
         })
     });
 })
+
+app.post('/api/purchase_update', auth, async function (req, res) {
+
+    let purchase = req.body;
+
+    
+    let products = purchase.productDetails;
+
+    console.log("Purchase Return",products);
+    try{
+
+ 
+
+        let action = '';
+    
+        if (req.body.status === 'Returned')
+            action = 'Purchase Returned'
+        else
+            action = 'Purchase Items Returned'
+    
+        const trans = {
+            transaction_date: new Date(),
+            primary_quantity: 0,
+            rate: req.body.totalAmount,
+            transaction_source: 'Supplier',
+            transaction_type: 'Purchase',
+            transaction_action: action,
+            transaction_value: req.body.supplierName,
+            transaction_value_id: req.body._id,
+            comments: req.body.description,
+            addedBy: req.user._id
+        };
+    
+        const transaction = new Transaction(trans);
+        await transaction.save();
+        await products.forEach(item => {
+            Product.findByIdAndUpdate(item._id, {
+                $inc: { stock: -item.returnSelected}
+            }, (error) => {
+                if (error) {
+                    console.log("Error update stock", error);
+                }
+            })
+        })
+        for(var index = 0; index <  purchase.productDetails.length;index++){
+            delete purchase.productDetails[index].returnSelected;
+        }
+
+        await Purchase.findByIdAndUpdate(req.body._id, req.body, { new: true });
+    
+        console.log("Returning");
+        return res.status(200).json({
+            success: true
+        });
+    }
+    catch(error){
+        return res.status(400).send(error);
+    }
+   
+
+});
 
 app.post('/api/customer_update', (req, res) => {
     Customer.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, doc) => {
