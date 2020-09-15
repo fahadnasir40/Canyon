@@ -287,11 +287,11 @@ class PurchaseReturn extends Component {
                                             min={0}
                                             // defaultValue={this.getDefaultValue(product,item,key)}
                                             max={item.pqty}
-                                            className="form-control form-control-sm d-none d-md-block"
+                                            className="form-control form-control-sm"
                                             id="quantity"
                                             placeholder="Quantity"
                                         />
-                                        <input
+                                        {/* <input
                                             type="number"
                                             maxLength={7}
                                             value={item.returnQty}
@@ -299,10 +299,10 @@ class PurchaseReturn extends Component {
                                             min={0}
                                             max={item.pqty}
                                             disabled= {this.checkDisabled(item)}
-                                            className="d-block d-md-none"
+                                            className="form-control d-block d-md-none"
                                             id="quantity"
                                             placeholder="Quantity"
-                                        />
+                                        /> */}
                                     </td>
                                     <td scope="row">
                                         <span className="ccap">{item.pprice}</span>

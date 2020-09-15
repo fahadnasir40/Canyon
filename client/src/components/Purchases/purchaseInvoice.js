@@ -71,7 +71,7 @@ class PurchaseInvoice extends Component {
                                         </div>
                                     </div>
                                     <div className="nk-block-head-content">
-                                        <Link to="/purchases" className="btn btn-outline-light bg-white d-none d-sm-inline-flex mr-3"><em className="icon ni ni-arrow-left"></em><span>Back</span></Link>
+                                        <Link to="/purchases" className="btn btn-outline-light bg-white d-none d-sm-inline-flex mr-md-3"><em className="icon ni ni-arrow-left"></em><span>Back</span></Link>
                                         {
 
                                             purchase.status !== 'Returned' ?
@@ -91,10 +91,10 @@ class PurchaseInvoice extends Component {
                                                     state: {
                                                         purchase: this.props.purchase
                                                     }
-                                                }} className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none mr-3"><em className="icon ni ni-histroy"></em></Link>
+                                                }} className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none mr-md-3"><em className="icon ni ni-histroy"></em></Link>
                                                 : null
                                         }
-                                        <Link to="/purchases" className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none"><em className="icon ni ni-arrow-left"></em></Link>
+                                        <Link to="/purchases" className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none "><em className="icon ni ni-arrow-left"></em></Link>
                                     </div>
                                 </div>
                             </div>
@@ -181,14 +181,16 @@ class PurchaseInvoice extends Component {
                                                     <tfoot>
                                                         <tr>
                                                             {purchase.status === 'Returned' || purchase.status === 'Returned Items' ?
-                                                                <td colSpan="3"></td> : <td colSpan="2"></td>}
-                                                            <td colSpan="2">Subtotal</td>
+                                                                <td colSpan="4"></td> : <td colSpan="2"></td>}
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' ?
+                                                                <td colSpan="1">Subtotal</td> : <td colSpan="2">Subtotal</td>}
                                                             <td>{purchase.totalAmount}</td>
                                                         </tr>
                                                         <tr>
                                                             {purchase.status === 'Returned' || purchase.status === 'Returned Items' ?
-                                                                <td colSpan="3"></td> : <td colSpan="2"></td>}
-                                                            <td colSpan="2"><strong>Grand Total</strong></td>
+                                                                <td colSpan="4"></td> : <td colSpan="2"></td>}
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' ?
+                                                                <td colSpan="1"><strong>Grand Total</strong></td> : <td colSpan="2"><strong>Grand Total</strong></td>}
                                                             <td>Rs. {purchase.totalAmount}</td>
                                                         </tr>
                                                     </tfoot>

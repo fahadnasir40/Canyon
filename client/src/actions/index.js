@@ -246,13 +246,13 @@ export function getTransactions(
 export function getPurchases(
     start = 0,
     limit = 0,
-    order = 'desc',
+    order = 'asc',
     list = ''
 ) {
     const request = axios.get(`api/getPurchases?skip=${start}&limit=${limit}&order=${order}`)
         .then(response => {
             if (list) {
-                return [...response.data,...list];
+                return [...list,...response.data];
             }
             else {
                 return response.data;
