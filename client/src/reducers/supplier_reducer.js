@@ -4,14 +4,14 @@ export default function (state = {}, action) {
             return { ...state, supplierList: action.payload }
         case 'GET_SUPPLIER':
             return { ...state, supplier: action.payload }
-        case 'GET_SHARED_DOCUMENT':
-            return { ...state, sharedDocument: action.payload }
         case 'UPDATE_SUPPLIER':
             return {
                 ...state,
                 post: action.payload.success,
                 supplier: action.payload.doc
             }
+        case 'GET_SUPPLIER_DETAILS':
+            return { ...state, supplier: action.payload.doc,purchaseDetails: action.payload.ordersDetails }
         case 'GET_SUPPLIERS_TRANSACTIONS':
             return { ...state, supplierList: action.payload }
         case 'ADD_SUPPLIER':
@@ -23,7 +23,8 @@ export default function (state = {}, action) {
                 postDeleted: action.payload
             }
         case 'CLEAR_SUPPLIER':
-            return { ...state, supplier: action.payload, post: action.payload }
+            return { ...state, supplier: action.payload, post: action.payload,
+                purchaseDetails: action.payload }
         case 'CLEAR_SUPPLIER_LIST':
             return { ...state, supplierList: action.payload }
 

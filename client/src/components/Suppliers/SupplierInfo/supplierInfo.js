@@ -4,11 +4,35 @@ import Header from '../../Header/header'
 import Footer from '../../Footer/footer'
 import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
-
+import NumberFormat from 'react-number-format'
+import { clearSupplier, getSupplierDetails } from '../../../actions'
+import { connect } from 'react-redux';
 class supplierInfo extends Component {
 
     state = {
-        supplier: null
+        supplier: '',
+        completeOrderAmount: 0,
+        totalOrders: 0,
+        completeOrders: 0,
+        pendingOrders: 0,
+        returnedOrders: 0,
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.supplier) {
+            return ({
+                totalOrders: nextProps.purchaseDetails.totalOrders,
+                completeOrders: nextProps.purchaseDetails.completedOrders,
+                pendingOrders: nextProps.purchaseDetails.pendingOrders,
+                returnedOrders: nextProps.purchaseDetails.returnedOrders,
+                completeOrderAmount: nextProps.purchaseDetails.totalOrdersAmount
+            })
+        }
+        return null;
+    }
+
+    componentWillUnmount() {
+        this.props.dispatch(clearSupplier());
     }
 
     getInitials = (name) => {
@@ -17,10 +41,10 @@ class supplierInfo extends Component {
         return initials;
     }
 
-    getColText=(value)=>{
-        if(value)
-            return ( <span className="profile-ud-value">{value}</span>)
-        return ( <span className="profile-ud-value ff-italic text-muted">Not added yet</span>)
+    getColText = (value) => {
+        if (value)
+            return (<span className="profile-ud-value">{value}</span>)
+        return (<span className="profile-ud-value ff-italic text-muted">Not added yet</span>)
     }
 
     componentDidMount() {
@@ -28,10 +52,12 @@ class supplierInfo extends Component {
             this.props.history.push('/suppliers')
         }
         else {
+            this.props.dispatch(getSupplierDetails(this.props.location.state.supplierInfo._id));
             this.setState({
                 supplier: this.props.location.state.supplierInfo
             })
         }
+
     }
 
     renderSupplierInfo = (supplier) => (
@@ -58,9 +84,6 @@ class supplierInfo extends Component {
                                         <ul className="nav nav-tabs nav-tabs-mb-icon nav-tabs-card">
                                             <li className="nav-item">
                                                 <a className="nav-link active" href="#"><em className="icon ni ni-user-circle"></em><span>Personal</span></a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a className="nav-link" href="#"><em className="icon ni ni-repeat"></em><span>Orders</span></a>
                                             </li>
 
                                             <li className="nav-item nav-item-trigger d-xxl-none">
@@ -100,7 +123,7 @@ class supplierInfo extends Component {
                                                             {this.getColText(supplier.phone)}
                                                         </div>
                                                     </div>
-                                                  
+
                                                 </div>
                                             </div>
                                             <div className="nk-block">
@@ -170,8 +193,13 @@ class supplierInfo extends Component {
                                             </div>
                                             <div className="card-inner card-inner-sm">
                                                 <ul className="btn-toolbar justify-center gx-1">
-                                                    <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-shield-off"></em></a></li>
-                                                    <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-mail"></em></a></li>
+                                                    {
+                                                        supplier.status === 'suspended' ?
+                                                            <li><a href="#" className="btn btn-trigger btn-icon text-info"><em className="icon ni ni-shield-off"></em></a></li>
+                                                            : null
+                                                    }
+
+                                                    <li><a href={"mailto:" + supplier.email} className="btn btn-trigger btn-icon"><em className="icon ni ni-mail"></em></a></li>
                                                     <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-download-cloud"></em></a></li>
                                                     <li> <Link to={{
                                                         pathname: "/editSupplier",
@@ -181,7 +209,12 @@ class supplierInfo extends Component {
 
                                                     }} className="btn btn-trigger btn-icon">
                                                         <em className="icon ni ni-edit-alt"></em></Link></li>
-                                                    <li><a href="#" className="btn btn-trigger btn-icon text-danger"><em className="icon ni ni-na"></em></a></li>
+                                                    {
+                                                        supplier.status === 'active' ?
+                                                            <li><a href="#" className="btn btn-trigger btn-icon text-danger"><em className="icon ni ni-na"></em></a></li>
+                                                            : null
+                                                    }
+
                                                 </ul>
                                             </div>
                                             <div className="card-inner">
@@ -190,7 +223,7 @@ class supplierInfo extends Component {
                                                     <div className="profile-balance-group gx-4">
                                                         <div className="profile-balance-sub">
                                                             <div className="profile-balance-amount">
-                                                                <div className="number"> <small className="currency currency-usd">Rs.</small> 2,556.57</div>
+                                                                <div className="number"> <small className="currency currency-usd">Rs.</small> <NumberFormat value={this.state.completeOrderAmount} displayType={'text'} thousandSeparator={true} /></div>
                                                             </div>
                                                             <div className="profile-balance-subtitle">Complete Order</div>
                                                         </div>
@@ -200,21 +233,27 @@ class supplierInfo extends Component {
                                             </div>
                                             <div className="card-inner">
                                                 <div className="row text-center">
-                                                    <div className="col-4">
+                                                    <div className="col-3">
                                                         <div className="profile-stats">
-                                                            <span className="amount">23</span>
+                                                            <span className="amount">{this.state.totalOrders}</span>
                                                             <span className="sub-text">Total Order</span>
                                                         </div>
                                                     </div>
-                                                    <div className="col-4">
+                                                    <div className="col-3">
                                                         <div className="profile-stats">
-                                                            <span className="amount">20</span>
+                                                            <span className="amount">{this.state.completeOrders}</span>
                                                             <span className="sub-text">Complete</span>
                                                         </div>
                                                     </div>
-                                                    <div className="col-4">
+                                                    <div className="col-3">
                                                         <div className="profile-stats">
-                                                            <span className="amount">3</span>
+                                                            <span className="amount">{this.state.returnedOrders}</span>
+                                                            <span className="sub-text">Returned</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-3">
+                                                        <div className="profile-stats">
+                                                            <span className="amount">{this.state.pendingOrders}</span>
                                                             <span className="sub-text">Progress</span>
                                                         </div>
                                                     </div>
@@ -230,9 +269,17 @@ class supplierInfo extends Component {
 
                                                     <div className="col-6">
                                                         <span className="sub-text">Register At:</span>
-                                                        <span>    <Moment format="MMM DD, YYYY">
+                                                        <span>    <Moment format="MMM DD, YYYY hh:mm A">
                                                             {supplier.createdAt}
                                                         </Moment></span>
+                                                    </div>
+                                                    <div className="col-6">
+                                                        <span className="sub-text">Status:</span>
+                                                        {
+                                                            supplier.status === 'active' ?
+                                                                <span className="tb-status text-success fs-12px ccap">{supplier.status}</span>
+                                                                : <span className="tb-status text-danger fs-12px ccap"><strong>{supplier.status}</strong></span>
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
@@ -250,6 +297,11 @@ class supplierInfo extends Component {
     )
 
     render() {
+        const supplier = this.state.supplier;
+
+
+        console.log("State", supplier);
+
         return (
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">
@@ -258,11 +310,7 @@ class supplierInfo extends Component {
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
-                            {
-                                this.state.supplier ?
-                                    this.renderSupplierInfo(this.state.supplier)
-                                    : null
-                            }
+                            {supplier ? this.renderSupplierInfo(supplier) : null}
                             <Footer />
                         </div>
                     </div>
@@ -272,4 +320,12 @@ class supplierInfo extends Component {
     }
 }
 
-export default supplierInfo;
+function mapStateToProps(state) {
+    console.log("State in map state", state);
+    return {
+        supplier: state.supplier.supplier,
+        purchaseDetails: state.supplier.purchaseDetails
+    }
+}
+
+export default connect(mapStateToProps)(supplierInfo)

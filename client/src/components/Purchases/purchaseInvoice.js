@@ -156,7 +156,7 @@ class PurchaseInvoice extends Component {
                                                             <th>Name</th>
                                                             <th>Price</th>
                                                             <th>Qty</th>
-                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' ?
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items'  || purchase.status === 'Returned Items Pending' ?
                                                                 <th>Returned Qty</th>
                                                                 : null}
                                                             <th>Amount</th>
@@ -170,7 +170,7 @@ class PurchaseInvoice extends Component {
                                                                     <td>{item.pname}</td>
                                                                     <td>{item.pprice}</td>
                                                                     <td>{item.pqty}</td>
-                                                                    {purchase.status === 'Returned' || purchase.status === 'Returned Items' ?
+                                                                    {purchase.status === 'Returned' || purchase.status === 'Returned Items'  || purchase.status === 'Returned Items Pending'?
                                                                         <td>{item.returnQty}</td>
                                                                         : null}
                                                                     <td>{item.ptotal}</td>
@@ -180,16 +180,16 @@ class PurchaseInvoice extends Component {
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
-                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' ?
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items'  || purchase.status === 'Returned Items Pending' ?
                                                                 <td colSpan="4"></td> : <td colSpan="2"></td>}
-                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' ?
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items'  || purchase.status === 'Returned Items Pending' ?
                                                                 <td colSpan="1">Subtotal</td> : <td colSpan="2">Subtotal</td>}
                                                             <td>{purchase.totalAmount}</td>
                                                         </tr>
                                                         <tr>
-                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' ?
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' || purchase.status === 'Returned Items Pending'?
                                                                 <td colSpan="4"></td> : <td colSpan="2"></td>}
-                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' ?
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items'  || purchase.status === 'Returned Items Pending'? 
                                                                 <td colSpan="1"><strong>Grand Total</strong></td> : <td colSpan="2"><strong>Grand Total</strong></td>}
                                                             <td>Rs. {purchase.totalAmount}</td>
                                                         </tr>

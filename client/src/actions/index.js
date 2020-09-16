@@ -43,6 +43,22 @@ export function getSupplier(id)
     }
 }
 
+export function getSupplierDetails(_id)
+{
+    const request = axios.get(`/api/getSupplierDetails?id=${_id}`)
+        .then(response => {
+                return response.data;
+        })
+        .catch(error => {
+            console.log(error)
+        });
+
+    return {
+        type: 'GET_SUPPLIER_DETAILS',
+        payload: request
+    }
+}
+
 
 export function getSuppliersTransactions(
     start = 0,
@@ -411,6 +427,13 @@ export function clearProduct() {
 export function clearPurchase() {
     return {
         type: 'CLEAR_PURCHASE',
+        payload: {}
+    }
+}
+
+export function clearSupplier() {
+    return {
+        type: 'CLEAR_SUPPLIER',
         payload: {}
     }
 }
