@@ -62,8 +62,10 @@ class Content extends Component {
                                     <span className="badge badge-dot badge-warning">{row.status}</span>
                                     : row.status === 'Returned' || row.status === 'Returned Items' ?
                                         <span className="badge badge-dot badge-info">{row.status}</span>
-                                        :
-                                        <span className="badge badge-dot badge-success">{row.status}</span>
+                                        : row.status === 'Returned Items Pending' ?
+                                            <span className="badge badge-dot badge-warning">Returned Items</span>
+                                            :
+                                            <span className="badge badge-dot badge-success">{row.status}</span>
                             }
                         </span>
                     </td>
@@ -112,8 +114,10 @@ class Content extends Component {
                                     <span className="badge badge-dot badge-warning">{row.status}</span>
                                     : row.status === 'Returned' || row.status === 'Returned Items' ?
                                         <span className="badge badge-dot badge-info">{row.status}</span>
-                                        :
-                                        <span className="badge badge-dot badge-success">{row.status}</span>
+                                        : row.status === 'Returned Items Pending' ?
+                                            <span className="badge badge-dot badge-warning">Returned Items</span>
+                                            :
+                                            <span className="badge badge-dot badge-success">{row.status}</span>
                             }
                         </span>
                     </td>

@@ -70,15 +70,15 @@ class PurchaseReturn extends Component {
 
     handleSubmit = () => {
         this.setState({ loading: true });
-        console.log("Data", this.state.purchase);
-        console.log("Old Data", this.state.oldPurchase);
+        // console.log("Data", this.state.purchase);
+        // console.log("Old Data", this.state.oldPurchase);
         
         let purchase = this.state.purchase;
 
         let totalAmount = 0;
         purchase.productDetails.forEach(element => {            
             const index = purchase.productDetails.indexOf(element);
-            if(purchase.status === 'Returned Items'){
+            if(purchase.status === 'Returned Items' || purchase.status === 'Returned Items Pending'){
                 if(element.pqty === 0){
                     element.returnQty = this.state.oldPurchase.productDetails[index].returnQty;  
                     element.ptotal = this.state.oldPurchase.productDetails[index].ptotal;
@@ -101,6 +101,10 @@ class PurchaseReturn extends Component {
         purchase.productDetails.every(element => element.returnQty === element.pqty) ?
             purchase.status = "Returned" :
             purchase.status = "Returned Items";
+
+        if(purchase.status === 'Returned Items' && purchase.paidAmount < purchase.totalAmount){
+            purchase.status = "Returned Items Pending";
+        }
 
         this.props.dispatch(updatePurchase(purchase));
     }
@@ -291,18 +295,6 @@ class PurchaseReturn extends Component {
                                             id="quantity"
                                             placeholder="Quantity"
                                         />
-                                        {/* <input
-                                            type="number"
-                                            maxLength={7}
-                                            value={item.returnQty}
-                                            onChange={(event) => { this.handleInputQuantity(event, product.stock, key,item) }}
-                                            min={0}
-                                            max={item.pqty}
-                                            disabled= {this.checkDisabled(item)}
-                                            className="form-control d-block d-md-none"
-                                            id="quantity"
-                                            placeholder="Quantity"
-                                        /> */}
                                     </td>
                                     <td scope="row">
                                         <span className="ccap">{item.pprice}</span>

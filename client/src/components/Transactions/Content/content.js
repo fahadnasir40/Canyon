@@ -72,7 +72,7 @@ class Content extends Component {
             },
 
             cell: row => (
-                <span>{row.transaction_type === 'Purchase' ? 'N/A' : row.primary_quantity}</span>
+                <span>{row.primary_quantity}</span>
             )
         },
         {

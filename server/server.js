@@ -24,8 +24,6 @@ const { Customer } = require("./models/customer");
 const { Product } = require("./models/product");
 const { Transaction } = require("./models/transaction");
 const { Purchase } = require("./models/purchase");
-// const { default: transactions } = require("../client/src/components/Transactions/transactions");
-const supplier = require("./models/supplier");
 
 
 app.use(bodyParser.json());
@@ -54,6 +52,41 @@ app.get('/api/getSupplier', auth, (req, res) => {
     })
 })
 
+
+app.get('/api/getSupplierDetails', auth, (req, res) => {
+    const id = req.query.id;
+    
+    Supplier.findById(id, (err, doc) => {
+        if (err) return res.status(400).send(err);
+        Purchase.find({ supplierId: id }).select('_id totalAmount status').exec((err, purchase) => {
+            if (err) return res.status(400).send(err);
+
+            const totalOrders = purchase.length;
+            var completedOrders = 0;
+            var returnedOrders = 0;
+            var pendingOrders = 0;
+            var totalOrdersAmount = 0;
+
+            purchase.forEach(element => {
+                if (element.status === 'Complete')
+                    completedOrders++;
+                else if (element.status === 'Returned' || element.status === 'Returned Items')
+                    returnedOrders++;
+                else if (element.status === 'Pending' || element.status === 'Returned Items Pending')
+                    pendingOrders++;
+
+                totalOrdersAmount += element.totalAmount;
+            })
+            const ordersDetails = {
+                completedOrders, returnedOrders, pendingOrders, totalOrdersAmount, totalOrders
+            }
+            console.log("Sending Response",id)
+            res.status(200).send({ doc, ordersDetails });
+        })
+    })
+})
+
+
 app.get('/api/getSuppliers', auth, (req, res) => {
     // locahost:3001/api/books?skip=3&limit=2&order=asc
     let skip = parseInt(req.query.skip);
@@ -74,7 +107,7 @@ app.get('/api/getSuppliersTransactions', auth, (req, res) => {
     let order = req.query.order;
 
     // ORDER = asc || desc
-    Supplier.find({ status: "active" }).skip(skip).sort({ _id: order }).limit(limit).select('_id name brand').exec((err, doc) => {
+    Supplier.find({ status: "active" }).skip(skip).sort({ _id: order }).limit(limit).select('_id name brand').lean().exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.send(doc);
     })
@@ -353,6 +386,16 @@ app.post('/api/addPurchase', auth, (req, res) => {
 
     const purchase = new Purchase(req.body);
 
+    let products = req.body.productDetails;
+    let productTotalQty = 0;
+
+    products.forEach(element => {
+        if (element.returnQty)
+            productTotalQty += (Number(element.pqty) - Number(element.returnQty));
+        else
+            productTotalQty += Number(element.pqty);
+    })
+
     const trans = {
         transaction_date: new Date(),
         primary_quantity: 0,
@@ -360,15 +403,16 @@ app.post('/api/addPurchase', auth, (req, res) => {
         transaction_source: 'Supplier',
         transaction_type: 'Purchase',
         transaction_action: 'Purchase Added',
+        primary_quantity: productTotalQty,
         transaction_value: purchase.supplierName,
         transaction_value_id: purchase._id,
         comments: purchase.description,
         addedBy: req.user._id
     };
 
-    let products = req.body.productDetails;
 
     const transaction = new Transaction(trans);
+    console.log("Transaction", transaction, productTotalQty);
 
     return updateWallet(purchase, transaction, products);
     async function updateWallet(purchase) {
@@ -429,8 +473,6 @@ app.post('/api/addTransaction', auth, (req, res) => {
 
     const transaction = new Transaction(req.body);
 
-    console.log("Transaction", transaction)
-
     transaction.save((error, transaction) => {
         if (error) {
             console.log("Transaction", error)
@@ -459,22 +501,26 @@ app.post('/api/supplier_update', (req, res) => {
 app.post('/api/purchase_update', auth, async function (req, res) {
 
     let purchase = req.body;
-
-    
     let products = purchase.productDetails;
 
-    console.log("Purchase Return",products);
-    try{
-
- 
-
+    try {
         let action = '';
-    
+
         if (req.body.status === 'Returned')
             action = 'Purchase Returned'
         else
             action = 'Purchase Items Returned'
-    
+
+        let productTotalQty = 0;
+
+        products.forEach(element => {
+            if (element.returnQty)
+                productTotalQty += (Number(element.pqty) - Number(element.returnQty));
+            else
+                productTotalQty += Number(element.pqty);
+        })
+
+
         const trans = {
             transaction_date: new Date(),
             primary_quantity: 0,
@@ -482,39 +528,36 @@ app.post('/api/purchase_update', auth, async function (req, res) {
             transaction_source: 'Supplier',
             transaction_type: 'Purchase',
             transaction_action: action,
+            primary_quantity: productTotalQty,
             transaction_value: req.body.supplierName,
             transaction_value_id: req.body._id,
             comments: req.body.description,
             addedBy: req.user._id
         };
-    
+
         const transaction = new Transaction(trans);
         await transaction.save();
         await products.forEach(item => {
             Product.findByIdAndUpdate(item._id, {
-                $inc: { stock: -item.returnSelected}
+                $inc: { stock: -item.returnSelected }
             }, (error) => {
                 if (error) {
                     console.log("Error update stock", error);
                 }
             })
         })
-        for(var index = 0; index <  purchase.productDetails.length;index++){
+        for (var index = 0; index < purchase.productDetails.length; index++) {
             delete purchase.productDetails[index].returnSelected;
         }
 
         await Purchase.findByIdAndUpdate(req.body._id, req.body, { new: true });
-    
-        console.log("Returning");
         return res.status(200).json({
             success: true
         });
     }
-    catch(error){
+    catch (error) {
         return res.status(400).send(error);
     }
-   
-
 });
 
 app.post('/api/customer_update', (req, res) => {
