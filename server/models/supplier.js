@@ -23,6 +23,22 @@ const supplierSchema = mongoose.Schema({
             trim: true
         }
     }],
+    notes:[{
+        data:{
+            type: String,
+            trim: true
+        },
+        addedById:{
+            type: String,
+        },
+        addedByName:{
+            type: String
+        },
+        createdOn: ({
+            type: Date,
+            default: new Date()
+        })
+    }],
     brand:{
         type: String,
         required: true

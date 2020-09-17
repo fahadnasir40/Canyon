@@ -43,6 +43,10 @@ const productSchema = mongoose.Schema({
         pqty: {
             type: Number
         },
+        returnQty: {
+            type: Number,
+            default: 0
+        },
         pprice: {
             type: Number
         },
@@ -57,6 +61,9 @@ const productSchema = mongoose.Schema({
     paidAmount: {
         type: Number,
         required: true
+    },
+    status: {
+        type: String
     }
 }, { timestamps: true })
 

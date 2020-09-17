@@ -28,21 +28,7 @@ class Content extends Component {
                     </td>
                 </div>
             )
-        },
-        {
-            name: 'Purchase Date',
-            selector: 'purchaseDate',
-            sortable: true,
-            hide: 'lg',
-            cell: row => (
-                <div className="tb-odr-item">
-                    <td className="tb-odr-info">
-                        <span className="tb-odr-date"><Moment format={'DD MMM YYYY'}>{row.puchaseDate}</Moment></span>
-                    </td>
-                </div>
-            )
-        },
-        {
+        }, {
             name: 'Supplier Name',
             selector: 'supplierName',
             sortable: true,
@@ -65,19 +51,39 @@ class Content extends Component {
                 <div className="tb-odr-item">
                     <td className="tb-odr-amount">
                         <span className="tb-odr-total">
-                            <span className="amount">Rs. {row.totalAmount}</span>
+                            {
+                                <span className="amount">Rs. {row.totalAmount}</span>
+                            }
+
                         </span>
                         <span className="tb-odr-status d-sm-none">
                             {
-                                row.paidAmount < row.totalAmount ?
-                                    <span className="badge badge-dot badge-warning">Pending</span>
-                                    :
-                                    <span className="badge badge-dot badge-success">Complete</span>
+                                row.status === 'Pending' ?
+                                    <span className="badge badge-dot badge-warning">{row.status}</span>
+                                    : row.status === 'Returned' || row.status === 'Returned Items' ?
+                                        <span className="badge badge-dot badge-info">{row.status}</span>
+                                        : row.status === 'Returned Items Pending' ?
+                                            <span className="badge badge-dot badge-warning">Returned Items</span>
+                                            :
+                                            <span className="badge badge-dot badge-success">{row.status}</span>
                             }
                         </span>
                     </td>
                 </div>
             ),
+        },
+        {
+            name: 'Purchase Date',
+            selector: 'purchaseDate',
+            sortable: true,
+            hide: 'lg',
+            cell: row => (
+                <div className="tb-odr-item">
+                    <div className="tb-odr-info">
+                        <span className="tb-odr-date"><Moment format={'DD MMM YYYY'}>{row.purchaseDate}</Moment></span>
+                    </div>
+                </div>
+            )
         },
         {
             name: 'Description',
@@ -98,54 +104,49 @@ class Content extends Component {
             name: 'Status',
             selector: 'status',
             hide: 'sm',
+            sortable: true,
             cell: row => (
                 <div className="tb-odr-item">
                     <td className="tb-odr-amount">
                         <span className="tb-odr-status">
                             {
-                                row.paidAmount < row.totalAmount ?
-                                    <span className="badge badge-dot badge-warning">Pending</span>
-                                    :
-                                    <span className="badge badge-dot badge-success">Complete</span>
+                                row.status === 'Pending' ?
+                                    <span className="badge badge-dot badge-warning">{row.status}</span>
+                                    : row.status === 'Returned' || row.status === 'Returned Items' ?
+                                        <span className="badge badge-dot badge-info">{row.status}</span>
+                                        : row.status === 'Returned Items Pending' ?
+                                            <span className="badge badge-dot badge-warning">Returned Items</span>
+                                            :
+                                            <span className="badge badge-dot badge-success">{row.status}</span>
                             }
                         </span>
                     </td>
                 </div>
             )
         },
-
         {
             name: 'Action',
             selector: 'action',
-
             cell: row => (
                 <div>
                     <div className="d-none d-md-inline">
                         <Link to={{
-                            pathname: "/purchase_invoice",
-                            state: {
-                                purchaseInfo: row
-                            }
+                            pathname: `/purchase_invoice_id=${row._id}`,
                         }} className="btn btn-dim btn-sm btn-primary">View</Link>
                     </div>
                     <Link to={{
-                        pathname: "/purchase_invoice",
-                        state: {
-                            purchaseInfo: row
-                        }
+                        pathname: `/purchase_invoice_id=${row._id}`,
                     }} className="btn btn-pd-auto d-md-none"><em className="icon ni ni-chevron-right"></em></Link>
                 </div>
-
             )
         },
-
     ];
 
 
-    SampleExpandedComponent = ({data}) => {
+    SampleExpandedComponent = ({ data }) => {
         return (
             <div className="container-fluid">
-                  <div className="row d-lg-none">
+                <div className="row d-lg-none">
                     <div className="col">
                         <span className="title fw-medium">Name: </span> <span className="fw-normal"> {data.supplierName}</span>
                     </div>
@@ -165,17 +166,12 @@ class Content extends Component {
                         <span className=" fw-medium">Added on: </span> <span className="fw-normal"><Moment format="DD MMM, YYYY hh:mm A">{data.createdAt}</Moment></span>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col">
-                    <br/><span className=" fw-medium">Products List </span><br/>
-                    </div>
-                </div>
             </div>
         )
     };
 
-    check = (toggle) =>{
-        
+    check = (toggle) => {
+
     }
 
     componentDidUpdate(prevProps) {
@@ -218,11 +214,57 @@ class Content extends Component {
         });
     }
 
-    getProductDetails = (toggleState,data) =>{
-        if(toggleState === true){
-           
+    getProductDetails = (toggleState, data) => {
+        if (toggleState === true) {
+
         }
     }
+
+    //     ----- Export in Excel File -----
+    //     // Blatant "inspiration" from https://codepen.io/Jacqueline34/pen/pyVoWr
+    //    convertArrayOfObjectsToCSV=(array)=> {
+    //     let result;
+
+    //     const columnDelimiter = ',';
+    //     const lineDelimiter = '\n';
+    //     const keys = Object.keys(this.state.purchaseList[0]);
+
+    //     result = '';
+    //     result += keys.join(columnDelimiter);
+    //     result += lineDelimiter;
+
+    //     array.forEach(item => {
+    //       let ctr = 0;
+    //       keys.forEach(key => {
+    //         if (ctr > 0) result += columnDelimiter;
+
+    //         result += item[key];
+
+    //         ctr++;
+    //       });
+    //       result += lineDelimiter;
+    //     });
+
+    //     return result;
+    //   }
+
+    //   // Blatant "inspiration" from https://codepen.io/Jacqueline34/pen/pyVoWr
+    //    downloadCSV =(array)=> {
+    //     const link = document.createElement('a');
+    //     let csv = this.convertArrayOfObjectsToCSV(array);
+    //     if (csv == null) return;
+
+    //     const filename = 'export.csv';
+
+    //     if (!csv.match(/^data:text\/csv/i)) {
+    //       csv = `data:text/csv;charset=utf-8,${csv}`;
+    //     }
+
+    //     link.setAttribute('href', encodeURI(csv));
+    //     link.setAttribute('download', filename);
+    //     link.click();
+    //   }
+
 
     render() {
         return (
@@ -249,6 +291,7 @@ class Content extends Component {
                                                         </div>
                                                     </li>
                                                     <li className="nk-block-tools-opt">
+                                                        {/* <button type="btn" onClick={e => this.downloadCSV(this.state.purchaseList)} className="btn btn-primary mr-3" >Export</button> */}
                                                         <button data-toggle="modal" data-target="#addmodal" className="toggle btn btn-icon btn-primary d-md-none"><em className="icon ni ni-plus"></em></button>
                                                         <Link to="/addPurchase"><button className="toggle btn btn-primary d-none d-md-inline-flex"><em className="icon ni ni-plus"></em><span>Add Purchase</span></button></Link>
                                                     </li>
@@ -266,7 +309,7 @@ class Content extends Component {
                                 pagination
                                 expandableRows={true}
                                 expandableRowsComponent={<this.SampleExpandedComponent />}
-                                onRowExpandToggled = {(toggleState,row)=>{this.getProductDetails(toggleState,row)}}
+                                onRowExpandToggled={(toggleState, row) => { this.getProductDetails(toggleState, row) }}
                                 paginationPerPage={10}
                             />
                         </div>

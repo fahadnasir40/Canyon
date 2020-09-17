@@ -4,11 +4,77 @@ import Header from '../../Header/header'
 import Footer from '../../Footer/footer'
 import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
-
+import NumberFormat from 'react-number-format'
+import { clearSupplier, getSupplierDetails, updateSupplier } from '../../../actions'
+import { connect } from 'react-redux';
+import Swal from 'sweetalert2';
 class supplierInfo extends Component {
 
     state = {
-        supplier: null
+        supplier: '',
+        completeOrderAmount: 0,
+        totalOrders: 0,
+        completeOrders: 0,
+        pendingOrders: 0,
+        returnedOrders: 0,
+        changeState: false,
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+
+        if (nextProps.purchaseDetails) {
+            if (nextProps.editSupplier) {
+                if (nextProps.editSupplier.post === true) {
+                    return {
+                        supplier: nextProps.editSupplier.supplier,
+                        totalOrders: nextProps.purchaseDetails.totalOrders,
+                        completeOrders: nextProps.purchaseDetails.completedOrders,
+                        pendingOrders: nextProps.purchaseDetails.pendingOrders,
+                        returnedOrders: nextProps.purchaseDetails.returnedOrders,
+                        completeOrderAmount: nextProps.purchaseDetails.totalOrdersAmount
+                    }
+                }
+            }
+            return ({
+                totalOrders: nextProps.purchaseDetails.totalOrders,
+                completeOrders: nextProps.purchaseDetails.completedOrders,
+                pendingOrders: nextProps.purchaseDetails.pendingOrders,
+                returnedOrders: nextProps.purchaseDetails.returnedOrders,
+                completeOrderAmount: nextProps.purchaseDetails.totalOrdersAmount
+            })
+        }
+        return null;
+    }
+
+
+    changeStatus = () => {
+        const supplier = this.state.supplier;
+
+        if (supplier.status === 'active') {
+            supplier.status = 'suspended'
+            this.props.dispatch(updateSupplier(supplier))
+        }
+        else if (supplier.status === 'suspended') {
+            supplier.status = 'active'
+            this.props.dispatch(updateSupplier(supplier))
+        }
+
+                   
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Supplier status has been changed',
+                showConfirmButton: false,
+                timer: 1500
+            })
+
+        this.setState({
+            changeState: true
+        })
+    }
+
+    componentWillUnmount() {
+        this.props.dispatch(clearSupplier());
     }
 
     getInitials = (name) => {
@@ -17,10 +83,10 @@ class supplierInfo extends Component {
         return initials;
     }
 
-    getColText=(value)=>{
-        if(value)
-            return ( <span className="profile-ud-value">{value}</span>)
-        return ( <span className="profile-ud-value ff-italic text-muted">Not added yet</span>)
+    getColText = (value) => {
+        if (value)
+            return (<span className="profile-ud-value">{value}</span>)
+        return (<span className="profile-ud-value ff-italic text-muted">Not added yet</span>)
     }
 
     componentDidMount() {
@@ -28,10 +94,71 @@ class supplierInfo extends Component {
             this.props.history.push('/suppliers')
         }
         else {
+            this.props.dispatch(getSupplierDetails(this.props.location.state.supplierInfo._id));
             this.setState({
                 supplier: this.props.location.state.supplierInfo
             })
         }
+    }
+
+    addNote = () => {
+
+        OpenSwal(this);
+
+        async function OpenSwal(selfObject) {
+            const { value: text } = await Swal.fire({
+                title: 'Add a new note',
+                input: 'textarea',
+                inputPlaceholder: 'Type your message here...',
+                inputAttributes: {
+                    maxlength: 300,
+                    'aria-label': 'Type your message here'
+                },
+                showCancelButton: true
+            })
+            if (text) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'New Note Added',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                {
+                    let newSupplier = selfObject.state.supplier;
+                    newSupplier.notes.push({ data: text, addedById: selfObject.props.user.login._id, addedByName: selfObject.props.user.login.name });
+                    selfObject.props.dispatch(updateSupplier(newSupplier));
+                }
+            }
+        }
+    }
+
+    deleteNote = (id) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                let newSupplier = this.state.supplier;
+                const note = newSupplier.notes.find(x => x._id === id);
+                newSupplier.notes.splice(newSupplier.notes.indexOf(note), 1);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Your note has been deleted',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                if (note)
+                    this.props.dispatch(updateSupplier(newSupplier));
+
+
+            }
+        })
     }
 
     renderSupplierInfo = (supplier) => (
@@ -58,9 +185,6 @@ class supplierInfo extends Component {
                                         <ul className="nav nav-tabs nav-tabs-mb-icon nav-tabs-card">
                                             <li className="nav-item">
                                                 <a className="nav-link active" href="#"><em className="icon ni ni-user-circle"></em><span>Personal</span></a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a className="nav-link" href="#"><em className="icon ni ni-repeat"></em><span>Orders</span></a>
                                             </li>
 
                                             <li className="nav-item nav-item-trigger d-xxl-none">
@@ -100,7 +224,7 @@ class supplierInfo extends Component {
                                                             {this.getColText(supplier.phone)}
                                                         </div>
                                                     </div>
-                                                  
+
                                                 </div>
                                             </div>
                                             <div className="nk-block">
@@ -109,7 +233,6 @@ class supplierInfo extends Component {
                                                 </div>
                                                 <div className="profile-ud-list">
                                                     {
-
                                                         supplier.address.map((item, i) => {
                                                             return (<div className="profile-ud-item" key={i}>
                                                                 <div className="profile-ud wider">
@@ -125,31 +248,34 @@ class supplierInfo extends Component {
                                             <div className="nk-block">
                                                 <div className="nk-block-head nk-block-head-sm nk-block-between">
                                                     <h5 className="title">Admin Note</h5>
-                                                    <a href="#" className="link link-sm">+ Add Note</a>
+                                                    {
+                                                        supplier.notes.length < 3 ?
+                                                            <span className="text-azure fw-medium link-sm" style={{ cursor: "pointer" }} onClick={this.addNote}>+ Add Note</span>
+                                                            : null
+                                                    }
                                                 </div>
                                                 <div className="bq-note">
-                                                    <div className="bq-note-item">
-                                                        <div className="bq-note-text">
-                                                            <p>Aproin at metus et dolor tincidunt feugiat eu id quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean sollicitudin non nunc vel pharetra. </p>
-                                                        </div>
-                                                        <div className="bq-note-meta">
-                                                            <span className="bq-note-added">Added on <span className="date">November 18, 2019</span> at <span className="time">5:34 PM</span></span>
-                                                            <span className="bq-note-sep sep">|</span>
-                                                            <span className="bq-note-by">By <span>Softnio</span></span>
-                                                            <a href="#" className="link link-sm link-danger">Delete Note</a>
-                                                        </div>
-                                                    </div>
-                                                    <div className="bq-note-item">
-                                                        <div className="bq-note-text">
-                                                            <p>Aproin at metus et dolor tincidunt feugiat eu id quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean sollicitudin non nunc vel pharetra. </p>
-                                                        </div>
-                                                        <div className="bq-note-meta">
-                                                            <span className="bq-note-added">Added on <span className="date">November 18, 2019</span> at <span className="time">5:34 PM</span></span>
-                                                            <span className="bq-note-sep sep">|</span>
-                                                            <span className="bq-note-by">By <span>Softnio</span></span>
-                                                            <a href="#" className="link link-sm link-danger">Delete Note</a>
-                                                        </div>
-                                                    </div>
+                                                    {
+                                                        supplier.notes.length === 0 ?
+                                                            <span className="text-muted"> No notes added.</span>
+                                                            : null
+                                                    }
+                                                    {
+                                                        supplier.notes.map((item, key) => (
+                                                            <div key={key} className="bq-note-item">
+                                                                <div className="bq-note-text">
+                                                                    <p className="text-break">{item.data}</p>
+                                                                </div>
+                                                                <div className="bq-note-meta">
+                                                                    <span className="bq-note-added">Added on <span className="date"><Moment format="MMMM DD, YYYY">{item.createdOn}</Moment></span> at
+                                                                      <span className="time"> <Moment format="hh:mm A">{item.createdOn}</Moment></span></span>
+                                                                    <span className="bq-note-sep sep">|</span>
+                                                                    <span className="bq-note-by">By <span>{item.addedByName}</span></span>
+                                                                    <span className="text-danger  link-sm" style={{ cursor: "pointer" }} onClick={() => { this.deleteNote(item._id) }}>&nbsp;&nbsp;&nbsp;&nbsp;Delete Note</span>
+                                                                </div>
+                                                            </div>
+                                                        ))
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
@@ -170,9 +296,14 @@ class supplierInfo extends Component {
                                             </div>
                                             <div className="card-inner card-inner-sm">
                                                 <ul className="btn-toolbar justify-center gx-1">
-                                                    <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-shield-off"></em></a></li>
-                                                    <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-mail"></em></a></li>
-                                                    <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-download-cloud"></em></a></li>
+                                                    {
+                                                        supplier.status === 'suspended' ?
+                                                            <li><div onClick={this.changeStatus} className="btn btn-trigger btn-icon text-info"><em className="icon ni ni-shield-off"></em></div></li>
+                                                            : null
+                                                    }
+
+                                                    <li><a href={"mailto:" + supplier.email} className="btn btn-trigger btn-icon"><em className="icon ni ni-mail"></em></a></li>
+                                                    {/* <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-download-cloud"></em></a></li> */}
                                                     <li> <Link to={{
                                                         pathname: "/editSupplier",
                                                         state: {
@@ -181,7 +312,12 @@ class supplierInfo extends Component {
 
                                                     }} className="btn btn-trigger btn-icon">
                                                         <em className="icon ni ni-edit-alt"></em></Link></li>
-                                                    <li><a href="#" className="btn btn-trigger btn-icon text-danger"><em className="icon ni ni-na"></em></a></li>
+                                                    {
+                                                        supplier.status === 'active' ?
+                                                            <li><div onClick={this.changeStatus} className="btn btn-trigger btn-icon text-danger"><em className="icon ni ni-na"></em></div></li>
+                                                            : null
+                                                    }
+
                                                 </ul>
                                             </div>
                                             <div className="card-inner">
@@ -190,7 +326,7 @@ class supplierInfo extends Component {
                                                     <div className="profile-balance-group gx-4">
                                                         <div className="profile-balance-sub">
                                                             <div className="profile-balance-amount">
-                                                                <div className="number"> <small className="currency currency-usd">Rs.</small> 2,556.57</div>
+                                                                <div className="number"> <small className="currency currency-usd">Rs.</small> <NumberFormat value={this.state.completeOrderAmount} displayType={'text'} thousandSeparator={true} /></div>
                                                             </div>
                                                             <div className="profile-balance-subtitle">Complete Order</div>
                                                         </div>
@@ -200,21 +336,27 @@ class supplierInfo extends Component {
                                             </div>
                                             <div className="card-inner">
                                                 <div className="row text-center">
-                                                    <div className="col-4">
+                                                    <div className="col-3">
                                                         <div className="profile-stats">
-                                                            <span className="amount">23</span>
+                                                            <span className="amount">{this.state.totalOrders}</span>
                                                             <span className="sub-text">Total Order</span>
                                                         </div>
                                                     </div>
-                                                    <div className="col-4">
+                                                    <div className="col-3">
                                                         <div className="profile-stats">
-                                                            <span className="amount">20</span>
+                                                            <span className="amount">{this.state.completeOrders}</span>
                                                             <span className="sub-text">Complete</span>
                                                         </div>
                                                     </div>
-                                                    <div className="col-4">
+                                                    <div className="col-3">
                                                         <div className="profile-stats">
-                                                            <span className="amount">3</span>
+                                                            <span className="amount">{this.state.returnedOrders}</span>
+                                                            <span className="sub-text">Returned</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-3">
+                                                        <div className="profile-stats">
+                                                            <span className="amount">{this.state.pendingOrders}</span>
                                                             <span className="sub-text">Progress</span>
                                                         </div>
                                                     </div>
@@ -230,9 +372,17 @@ class supplierInfo extends Component {
 
                                                     <div className="col-6">
                                                         <span className="sub-text">Register At:</span>
-                                                        <span>    <Moment format="MMM DD, YYYY">
+                                                        <span>    <Moment format="MMM DD, YYYY hh:mm A">
                                                             {supplier.createdAt}
                                                         </Moment></span>
+                                                    </div>
+                                                    <div className="col-6">
+                                                        <span className="sub-text">Status:</span>
+                                                        {
+                                                            supplier.status === 'active' ?
+                                                                <span className="tb-status text-success fs-12px ccap">{supplier.status}</span>
+                                                                : <span className="tb-status text-danger fs-12px ccap"><strong>{supplier.status}</strong></span>
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
@@ -250,6 +400,8 @@ class supplierInfo extends Component {
     )
 
     render() {
+        const supplier = this.state.supplier;
+
         return (
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">
@@ -258,11 +410,7 @@ class supplierInfo extends Component {
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
-                            {
-                                this.state.supplier ?
-                                    this.renderSupplierInfo(this.state.supplier)
-                                    : null
-                            }
+                            {supplier ? this.renderSupplierInfo(supplier) : null}
                             <Footer />
                         </div>
                     </div>
@@ -272,4 +420,12 @@ class supplierInfo extends Component {
     }
 }
 
-export default supplierInfo;
+function mapStateToProps(state) {
+    console.log("State Recieved", state)
+    return {
+        purchaseDetails: state.supplier.purchaseDetails,
+        editSupplier: state.supplier
+    }
+}
+
+export default connect(mapStateToProps)(supplierInfo)

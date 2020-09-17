@@ -43,6 +43,22 @@ export function getSupplier(id)
     }
 }
 
+export function getSupplierDetails(_id)
+{
+    const request = axios.get(`/api/getSupplierDetails?id=${_id}`)
+        .then(response => {
+                return response.data;
+        })
+        .catch(error => {
+            console.log(error)
+        });
+
+    return {
+        type: 'GET_SUPPLIER_DETAILS',
+        payload: request
+    }
+}
+
 
 export function getSuppliersTransactions(
     start = 0,
@@ -246,13 +262,13 @@ export function getTransactions(
 export function getPurchases(
     start = 0,
     limit = 0,
-    order = 'desc',
+    order = 'asc',
     list = ''
 ) {
     const request = axios.get(`api/getPurchases?skip=${start}&limit=${limit}&order=${order}`)
         .then(response => {
             if (list) {
-                return [...list, ...response.data];
+                return [...list,...response.data];
             }
             else {
                 return response.data;
@@ -335,8 +351,8 @@ export function saveSupplier(document) {
     }
 }
 
-export function savePurchase(document) {
-    const request = axios.post('/api/addPurchase', document)
+export function savePurchase(purchase) {
+    const request = axios.post('/api/addPurchase',purchase)
         .then(response => response.data);
     return {
         type: 'ADD_PURCHASE',
@@ -349,6 +365,15 @@ export function saveSale(document) {
         .then(response => response.data);
     return {
         type: 'ADD_SALE',
+        payload: request
+    }
+}
+export function updatePurchase(data) {
+    const request = axios.post(`/api/purchase_update`, data)
+        .then(response => response.data);
+
+    return {
+        type: 'UPDATE_PURCHASE',
         payload: request
     }
 }
@@ -441,6 +466,12 @@ export function clearSale() {
         payload: {}
     }
 }
+export function clearSupplier() {
+    return {
+        type: 'CLEAR_SUPPLIER',
+        payload: {}
+    }
+}
 
 export function clearSupplierList() {
     return {
@@ -490,6 +521,16 @@ export function getUserDocuments(userId) {
 
     return {
         type: 'GET_USER_DOCUMENTS',
+        payload: request
+    }
+}
+
+export function getPurchaseProduct(id) {
+    const request = axios.get(`/api/getPurchaseProduct?id=${id}`)
+        .then(response => response.data);
+
+    return {
+        type: 'GET_PURCHASE',
         payload: request
     }
 }

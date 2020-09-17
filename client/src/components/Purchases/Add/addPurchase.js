@@ -59,7 +59,6 @@ class AddPurchase extends Component {
         if (nextProps.purchase) {
             if (nextProps.purchase.post) {
                 if (nextProps.purchase.post === true) {
-                    console.log("Redirect",prevState.redirect,nextProps);
                     return ({
                         redirect: true,
                         request: false,
@@ -139,23 +138,51 @@ class AddPurchase extends Component {
                     paidAmount: this.paidAmount
                 }
 
-                let productDetails = [];
+                if(purchase.paidAmount < purchase.totalAmount)
+                    purchase.status = 'Pending';
+                else
+                    purchase.status = 'Complete';
 
+                let productDetails = [];
                 this.products.forEach(item => {
-                    productDetails.push({
-                        _id: item._id,
-                        puom: item.uom,
-                        pqty: item.qty,
-                        pprice: Number(item.price.total),
-                        ptotal: item.totalAmount,
-                        pname: item.name
-                    });
+                    const product = productDetails.find(element=> element._id === item._id);
+
+                    if(product){
+                        const index = productDetails.indexOf(product);
+                        console.log("Existing Product",productDetails[index],item.qty);
+                        productDetails[index].pqty = Number(productDetails[index].pqty) + Number(item.qty);
+                        productDetails[index].pprice = Number(item.price.total);
+                        productDetails[index].ptotal = Number(productDetails[index].ptotal)+Number(item.totalAmount);
+                    }
+                    else{
+                        productDetails.push({
+                            _id: item._id,
+                            pqty: item.qty,
+                            pprice: Number(item.price.total),
+                            ptotal: item.totalAmount,
+                            pname: item.name
+                        });    
+                    }
                 });
+
+
                 purchase = { ...purchase, productDetails };
+                const transaction = {
+                    transaction_date: new Date(),
+                    primary_quantity: 0,
+                    rate: this.totalAmount,
+                    transaction_source: 'Supplier',
+                    transaction_type: 'Purchase',
+                    transaction_action: 'Purchase Added',
+                    transaction_value: this.state.currentSupplier.name,
+                    transaction_value_id: this.state.currentSupplier._id,
+                    comments: this.state.description,
+                    addedBy: this.props.user.login.id
+                };
 
                 if (this.state.request === false) {
                     this.props.dispatch(savePurchase(purchase));
-                    this.saveTransaction();
+                   
                     this.setState({
                         request: true
                     })
@@ -303,7 +330,8 @@ class AddPurchase extends Component {
     render() {
 
         if (this.state.redirect === true) {
-            return <Redirect to="/purchases" />
+            const path = `/purchase_invoice_id=${this.props.purchase.purchaseId}`
+            return <Redirect to={path}/>
         }
 
         return (

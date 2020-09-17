@@ -168,7 +168,7 @@ class EditSupplier extends Component {
   renderBody = () => {
     return (
       <div className="container mt-5">
-        <div className="card">
+        <div className="card ml-md-3">
           <div className="card-inner">
             <div className="card-head mt-1">
               <h4 className="ff-base fw-medium">Edit Supplier</h4>
