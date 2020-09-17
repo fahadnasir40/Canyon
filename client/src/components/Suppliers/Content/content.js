@@ -189,7 +189,6 @@ class SuppliersContent extends Component {
                                                 }}
                                                 ><em className="icon ni ni-eye"></em><span>View Details</span></Link></li>
                                                 <li className="divider"></li>
-                                                <li><a href="#"><em className="icon ni ni-activity-round"></em><span>View Orders</span></a></li>
                                                 <li> <Link to={{
                                                     pathname: "/editSupplier",
                                                     state: {

@@ -17,10 +17,24 @@ class supplierInfo extends Component {
         completeOrders: 0,
         pendingOrders: 0,
         returnedOrders: 0,
+        changeState: false,
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
+
         if (nextProps.purchaseDetails) {
+            if (nextProps.editSupplier) {
+                if (nextProps.editSupplier.post === true) {
+                    return {
+                        supplier: nextProps.editSupplier.supplier,
+                        totalOrders: nextProps.purchaseDetails.totalOrders,
+                        completeOrders: nextProps.purchaseDetails.completedOrders,
+                        pendingOrders: nextProps.purchaseDetails.pendingOrders,
+                        returnedOrders: nextProps.purchaseDetails.returnedOrders,
+                        completeOrderAmount: nextProps.purchaseDetails.totalOrdersAmount
+                    }
+                }
+            }
             return ({
                 totalOrders: nextProps.purchaseDetails.totalOrders,
                 completeOrders: nextProps.purchaseDetails.completedOrders,
@@ -30,6 +44,33 @@ class supplierInfo extends Component {
             })
         }
         return null;
+    }
+
+
+    changeStatus = () => {
+        const supplier = this.state.supplier;
+
+        if (supplier.status === 'active') {
+            supplier.status = 'suspended'
+            this.props.dispatch(updateSupplier(supplier))
+        }
+        else if (supplier.status === 'suspended') {
+            supplier.status = 'active'
+            this.props.dispatch(updateSupplier(supplier))
+        }
+
+                   
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Supplier status has been changed',
+                showConfirmButton: false,
+                timer: 1500
+            })
+
+        this.setState({
+            changeState: true
+        })
     }
 
     componentWillUnmount() {
@@ -78,7 +119,7 @@ class supplierInfo extends Component {
             if (text) {
                 Swal.fire({
                     icon: 'success',
-                    title: 'New Note Added,',
+                    title: 'New Note Added',
                     showConfirmButton: false,
                     timer: 1500
                 })
@@ -86,7 +127,6 @@ class supplierInfo extends Component {
                     let newSupplier = selfObject.state.supplier;
                     newSupplier.notes.push({ data: text, addedById: selfObject.props.user.login._id, addedByName: selfObject.props.user.login.name });
                     selfObject.props.dispatch(updateSupplier(newSupplier));
-                    selfObject.setState({ supplier: newSupplier });
                 }
             }
         }
@@ -103,19 +143,20 @@ class supplierInfo extends Component {
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                {
-                    let newSupplier = this.state.supplier;
-                    const note = newSupplier.notes.find(x=>x._id === id);
-                    newSupplier.notes.splice(newSupplier.notes.indexOf(note),1);
-                    if(note)
-                        this.props.dispatch(updateSupplier(newSupplier));
-                    this.setState({ supplier: newSupplier });
-                }
-                Swal.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                )
+
+                let newSupplier = this.state.supplier;
+                const note = newSupplier.notes.find(x => x._id === id);
+                newSupplier.notes.splice(newSupplier.notes.indexOf(note), 1);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Your note has been deleted',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                if (note)
+                    this.props.dispatch(updateSupplier(newSupplier));
+
+
             }
         })
     }
@@ -192,7 +233,6 @@ class supplierInfo extends Component {
                                                 </div>
                                                 <div className="profile-ud-list">
                                                     {
-
                                                         supplier.address.map((item, i) => {
                                                             return (<div className="profile-ud-item" key={i}>
                                                                 <div className="profile-ud wider">
@@ -216,9 +256,9 @@ class supplierInfo extends Component {
                                                 </div>
                                                 <div className="bq-note">
                                                     {
-                                                        supplier.notes.length === 0?
+                                                        supplier.notes.length === 0 ?
                                                             <span className="text-muted"> No notes added.</span>
-                                                        :null
+                                                            : null
                                                     }
                                                     {
                                                         supplier.notes.map((item, key) => (
@@ -231,7 +271,7 @@ class supplierInfo extends Component {
                                                                       <span className="time"> <Moment format="hh:mm A">{item.createdOn}</Moment></span></span>
                                                                     <span className="bq-note-sep sep">|</span>
                                                                     <span className="bq-note-by">By <span>{item.addedByName}</span></span>
-                                                                    <span className="text-danger  link-sm" style={{ cursor: "pointer" }} onClick={()=>{this.deleteNote(item._id)}}>&nbsp;&nbsp;&nbsp;&nbsp;Delete Note</span>
+                                                                    <span className="text-danger  link-sm" style={{ cursor: "pointer" }} onClick={() => { this.deleteNote(item._id) }}>&nbsp;&nbsp;&nbsp;&nbsp;Delete Note</span>
                                                                 </div>
                                                             </div>
                                                         ))
@@ -258,7 +298,7 @@ class supplierInfo extends Component {
                                                 <ul className="btn-toolbar justify-center gx-1">
                                                     {
                                                         supplier.status === 'suspended' ?
-                                                            <li><a href="#" className="btn btn-trigger btn-icon text-info"><em className="icon ni ni-shield-off"></em></a></li>
+                                                            <li><div onClick={this.changeStatus} className="btn btn-trigger btn-icon text-info"><em className="icon ni ni-shield-off"></em></div></li>
                                                             : null
                                                     }
 
@@ -274,7 +314,7 @@ class supplierInfo extends Component {
                                                         <em className="icon ni ni-edit-alt"></em></Link></li>
                                                     {
                                                         supplier.status === 'active' ?
-                                                            <li><a href="#" className="btn btn-trigger btn-icon text-danger"><em className="icon ni ni-na"></em></a></li>
+                                                            <li><div onClick={this.changeStatus} className="btn btn-trigger btn-icon text-danger"><em className="icon ni ni-na"></em></div></li>
                                                             : null
                                                     }
 
@@ -381,8 +421,10 @@ class supplierInfo extends Component {
 }
 
 function mapStateToProps(state) {
+    console.log("State Recieved", state)
     return {
-        purchaseDetails: state.supplier.purchaseDetails
+        purchaseDetails: state.supplier.purchaseDetails,
+        editSupplier: state.supplier
     }
 }
 
