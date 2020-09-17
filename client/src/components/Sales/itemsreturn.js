@@ -52,10 +52,10 @@ class Itemsreturn extends PureComponent {
                     return currentProduct.price.total;
             }
             else if(customer.salePrice.find(x=>x._id === currentProduct._id)) {
-                return customer.salePrice.find(x=>x._id === currentProduct._id).rate;
+                return customer.salePrice.find(x=>x._id === currentProduct._id).rate + ' ( C ) ';
             }
             else {
-                return currentProduct.price.total;
+                return currentProduct.price.total; 
             }
         }
         else
