@@ -6,7 +6,7 @@ import Moment from 'react-moment';
 class Content extends Component {
 
     state = {
-        purchaseList: this.props.purchaseList
+        saleList: this.props.saleList
     }
 
     columns = [
@@ -24,27 +24,27 @@ class Content extends Component {
                 <div className="tb-odr-item">
                     <td className="tb-odr-info">
                         <span className="tb-odr-id text-azure">{row._id}</span>
-                        <span className="tb-odr-date d-sm-none"><Moment format={'DD MMM YYYY'}>{row.puchaseDate}</Moment></span>
+                        <span className="tb-odr-date d-sm-none"><Moment format={'DD MMM YYYY'}>{row.saleDate}</Moment></span>
                     </td>
                 </div>
             )
         },
         {
             name: 'Date',
-            selector: 'purchaseDate',
+            selector: 'saleDate',
             sortable: true,
             hide: 'lg',
             cell: row => (
                 <div className="tb-odr-item">
                     <td className="tb-odr-info">
-                        <span className="tb-odr-date"><Moment format={'DD MMM YYYY'}>{row.puchaseDate}</Moment></span>
+                        <span className="tb-odr-date"><Moment format={'DD MMM YYYY'}>{row.saleDate}</Moment></span>
                     </td>
                 </div>
             )
         },
         {
             name: 'Customer',
-            selector: 'supplierName',
+            selector: 'customerName',
             sortable: true,
             hide: 'md',
             cell: row => (
@@ -179,8 +179,8 @@ class Content extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.purchaseList !== this.props.purchaseList) {
-            this.setState({ purchaseList: this.props.purchaseList });
+        if (prevProps.saleList !== this.props.saleList) {
+            this.setState({ saleList: this.props.saleList });
         }
     }
 
@@ -194,7 +194,7 @@ class Content extends Component {
         // If the search bar isn't empty
         if (e.target.value !== "") {
             // Assign the original list to currentList
-            currentList = this.props.purchaseList;
+            currentList = this.props.saleList;
 
             // Use .filter() to determine which items should be displayed
             // based on the search terms
@@ -210,11 +210,11 @@ class Content extends Component {
             });
         } else {
             // If the search bar is empty, set newList to original task list
-            newList = this.props.purchaseList;
+            newList = this.props.saleList;
         }
         // Set the filtered state based on what our rules added to newList
         this.setState({
-            purchaseList: newList
+            saleList: newList
         });
     }
 
@@ -260,7 +260,7 @@ class Content extends Component {
                             </div>
                             <DataTable
                                 columns={this.columns}
-                                data={this.state.purchaseList}
+                                data={this.state.saleList}
                                 highlightOnHover
                                 pointerOnHover
                                 pagination

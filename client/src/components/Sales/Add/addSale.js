@@ -228,7 +228,7 @@ class AddSale extends Component {
                                                     {
                                                         this.state.customersList ?
                                                             this.state.customersList.map((item, key) => {
-                                                                return <option key={key} value={key} className="ccap" >{item.name} ({item.brand})</option>;
+                                                                return <option key={key} value={key} className="ccap" >{item.name}</option>;
                                                             })
                                                             : null
                                                     }
@@ -327,7 +327,7 @@ class AddSale extends Component {
 
 function mapStateToProps(state) {
     return {
-        customersList: state.supplier.customerList,
+        customersList: state.customer.customerList,
         productsList: state.product.productList
         // sale: state.sale.sale
     }

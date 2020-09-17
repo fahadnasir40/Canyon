@@ -4,6 +4,7 @@ import supplier from './supplier_reducer';
 import customer from './customer_reducer';
 import product from './product_reducer';
 import transaction from './transaction_reducer';
+import sale from './sale_reducer';
 
 import purchase from './purchase_reducer';
 const rootReducer = combineReducers({
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
     customer,
     product,
     transaction,
-    purchase
+    purchase,
+    sale
 });
 
 export default rootReducer;

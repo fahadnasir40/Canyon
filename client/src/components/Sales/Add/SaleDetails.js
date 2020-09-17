@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-// import ItemRow from '../itemsreturn'
-import ItemRow from '../../../components/Purchases/itemsreturn'
+import ItemRow from '../../../components/Sales/itemsreturn'
 
 class SaleDetails extends Component {
 
@@ -116,11 +115,11 @@ class SaleDetails extends Component {
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Item Name</th>
-                                    <th scope="col">SKU</th>
-                                    <th scope="col">Brand</th>
                                     <th scope="col">Quantity.</th>
-                                    <th scope="col">Rate</th>
                                     <th scope="col">UOM</th>
+                                    <th scope="col">Rate</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Discount(%)</th>
                                     <th scope="col">Total</th>
                                     <th scope="col">Action</th>
                                 </tr>
