@@ -96,7 +96,7 @@ class SaleDetails extends Component {
                     <div className="nk-block-head-content">
                         <ul className="nk-block-tools-opt">
                             {
-                                this.state.itemsList.length < 20 ?
+                                this.state.itemsList.length < 20 && this.props.customer?
                                     <div onClick={this.addItemRow} className="btn btn-primary"><em className="icon ni ni-plus"></em><span>Add Item</span></div>
                                     : null
                             }
@@ -115,11 +115,10 @@ class SaleDetails extends Component {
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Item Name</th>
-                                    <th scope="col">Quantity.</th>
                                     <th scope="col">UOM</th>
+                                    <th scope="col">Quantity.</th>
                                     <th scope="col">Rate</th>
                                     <th scope="col">Amount</th>
-                                    <th scope="col">Discount(%)</th>
                                     <th scope="col">Total</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -131,6 +130,7 @@ class SaleDetails extends Component {
                                             key={i}
                                             productsList={this.state.productsList}
                                             remove={this.removeItem}
+                                            customer = {this.props.customer}
                                             item={item} addSelectedItem
                                             updateTotalAmount={this.updateTotalAmount}
                                             addSelectedItem={this.addSelectedItem}

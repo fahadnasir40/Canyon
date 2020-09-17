@@ -39,16 +39,28 @@ class Itemsreturn extends PureComponent {
         }
     }
 
-    handleInputDiscount = (event) => {
-        if (event.target.value <= 100000 && event.target.value >= 0) {
-            
-        this.state.currentdiscount = event.target.value
-            // if (this.state.currentdiscount) {
-            //     this.setState({
-            //         currentdiscount: event.target.value
-            //     })
-            // }
+
+    getProductRate = (currentProduct) => {
+
+        const customer = this.props.customer;
+        if (currentProduct) {
+            if (customer.flatRate === true) {
+                if (Number(currentProduct.price.cost_flatRate)) {
+                    return currentProduct.price.cost_flatRate;
+                }
+                else
+                    return currentProduct.price.total;
+            }
+            else if(customer.salePrice.find(x=>x._id === currentProduct._id)) {
+                return customer.salePrice.find(x=>x._id === currentProduct._id).rate;
+            }
+            else {
+                return currentProduct.price.total;
+            }
         }
+        else
+            return 'N/A'
+
     }
 
     render() {
@@ -74,12 +86,11 @@ class Itemsreturn extends PureComponent {
                         </div>
                     </div>
                 </td>
-                <td><input type="number" min={1} maxLength={7} value={this.state.currentQuantity} onChange={this.handleInputQuantity} className="form-control" id="quantity" placeholder="Quantity" /></td>
                 <td>{currentProduct ? currentProduct.uom : 'N/A'}</td>
-                <td>{currentProduct ? currentProduct.price.total : 'N/A'}</td>
+                <td><input type="number" min={1} maxLength={7} value={this.state.currentQuantity} onChange={this.handleInputQuantity} className="form-control" id="quantity" placeholder="Quantity" /></td>
+                <td>{this.getProductRate(currentProduct)}</td>
                 <td>{currentProduct ? (Number(currentProduct.price.total) * Number(this.state.currentQuantity)) : 'N/A'}</td>
-                <td><input type="number" min={1} maxLength={7} value={this.state.currentdiscount} onChange={this.handleInputDiscount} className="form-control" id="discount" placeholder="Discount" /></td>
-                <input type="number" min={1} maxLength={7} value={this.state.currentTotal} onChange={this.handleInputTotal} className="form-control" id="total" placeholder="Total" />
+
                 <td>{currentProduct ? (Number(currentProduct.price.total) * Number(this.state.currentQuantity)) : 'N/A'}</td>
                 <td className="tb-tnx-action">
                     <div className="dropdown">

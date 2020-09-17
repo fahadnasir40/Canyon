@@ -273,6 +273,7 @@ class AddSale extends Component {
                                                         valid={this.state.valid}
                                                         setValid={this.setValid}
                                                         loading={this.state.loading}
+                                                        customer = {this.state.currentCustomer}
                                                         getProductsList={this.getProductsList} />
                                                     : null
                                             }
