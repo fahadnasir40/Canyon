@@ -5,8 +5,9 @@ import Footer from '../../Footer/footer'
 import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
 import NumberFormat from 'react-number-format'
-import { clearSupplier, getSupplierDetails } from '../../../actions'
+import { clearSupplier, getSupplierDetails, updateSupplier } from '../../../actions'
 import { connect } from 'react-redux';
+import Swal from 'sweetalert2';
 class supplierInfo extends Component {
 
     state = {
@@ -19,7 +20,7 @@ class supplierInfo extends Component {
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.supplier) {
+        if (nextProps.purchaseDetails) {
             return ({
                 totalOrders: nextProps.purchaseDetails.totalOrders,
                 completeOrders: nextProps.purchaseDetails.completedOrders,
@@ -57,7 +58,66 @@ class supplierInfo extends Component {
                 supplier: this.props.location.state.supplierInfo
             })
         }
+    }
 
+    addNote = () => {
+
+        OpenSwal(this);
+
+        async function OpenSwal(selfObject) {
+            const { value: text } = await Swal.fire({
+                title: 'Add a new note',
+                input: 'textarea',
+                inputPlaceholder: 'Type your message here...',
+                inputAttributes: {
+                    maxlength: 300,
+                    'aria-label': 'Type your message here'
+                },
+                showCancelButton: true
+            })
+            if (text) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'New Note Added,',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                {
+                    let newSupplier = selfObject.state.supplier;
+                    newSupplier.notes.push({ data: text, addedById: selfObject.props.user.login._id, addedByName: selfObject.props.user.login.name });
+                    selfObject.props.dispatch(updateSupplier(newSupplier));
+                    selfObject.setState({ supplier: newSupplier });
+                }
+            }
+        }
+    }
+
+    deleteNote = (id) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                {
+                    let newSupplier = this.state.supplier;
+                    const note = newSupplier.notes.find(x=>x._id === id);
+                    newSupplier.notes.splice(newSupplier.notes.indexOf(note),1);
+                    if(note)
+                        this.props.dispatch(updateSupplier(newSupplier));
+                    this.setState({ supplier: newSupplier });
+                }
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )
+            }
+        })
     }
 
     renderSupplierInfo = (supplier) => (
@@ -148,31 +208,34 @@ class supplierInfo extends Component {
                                             <div className="nk-block">
                                                 <div className="nk-block-head nk-block-head-sm nk-block-between">
                                                     <h5 className="title">Admin Note</h5>
-                                                    <a href="#" className="link link-sm">+ Add Note</a>
+                                                    {
+                                                        supplier.notes.length < 3 ?
+                                                            <span className="text-azure fw-medium link-sm" style={{ cursor: "pointer" }} onClick={this.addNote}>+ Add Note</span>
+                                                            : null
+                                                    }
                                                 </div>
                                                 <div className="bq-note">
-                                                    <div className="bq-note-item">
-                                                        <div className="bq-note-text">
-                                                            <p>Aproin at metus et dolor tincidunt feugiat eu id quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean sollicitudin non nunc vel pharetra. </p>
-                                                        </div>
-                                                        <div className="bq-note-meta">
-                                                            <span className="bq-note-added">Added on <span className="date">November 18, 2019</span> at <span className="time">5:34 PM</span></span>
-                                                            <span className="bq-note-sep sep">|</span>
-                                                            <span className="bq-note-by">By <span>Softnio</span></span>
-                                                            <a href="#" className="link link-sm link-danger">Delete Note</a>
-                                                        </div>
-                                                    </div>
-                                                    <div className="bq-note-item">
-                                                        <div className="bq-note-text">
-                                                            <p>Aproin at metus et dolor tincidunt feugiat eu id quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean sollicitudin non nunc vel pharetra. </p>
-                                                        </div>
-                                                        <div className="bq-note-meta">
-                                                            <span className="bq-note-added">Added on <span className="date">November 18, 2019</span> at <span className="time">5:34 PM</span></span>
-                                                            <span className="bq-note-sep sep">|</span>
-                                                            <span className="bq-note-by">By <span>Softnio</span></span>
-                                                            <a href="#" className="link link-sm link-danger">Delete Note</a>
-                                                        </div>
-                                                    </div>
+                                                    {
+                                                        supplier.notes.length === 0?
+                                                            <span className="text-muted"> No notes added.</span>
+                                                        :null
+                                                    }
+                                                    {
+                                                        supplier.notes.map((item, key) => (
+                                                            <div key={key} className="bq-note-item">
+                                                                <div className="bq-note-text">
+                                                                    <p className="text-break">{item.data}</p>
+                                                                </div>
+                                                                <div className="bq-note-meta">
+                                                                    <span className="bq-note-added">Added on <span className="date"><Moment format="MMMM DD, YYYY">{item.createdOn}</Moment></span> at
+                                                                      <span className="time"> <Moment format="hh:mm A">{item.createdOn}</Moment></span></span>
+                                                                    <span className="bq-note-sep sep">|</span>
+                                                                    <span className="bq-note-by">By <span>{item.addedByName}</span></span>
+                                                                    <span className="text-danger  link-sm" style={{ cursor: "pointer" }} onClick={()=>{this.deleteNote(item._id)}}>&nbsp;&nbsp;&nbsp;&nbsp;Delete Note</span>
+                                                                </div>
+                                                            </div>
+                                                        ))
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
@@ -200,7 +263,7 @@ class supplierInfo extends Component {
                                                     }
 
                                                     <li><a href={"mailto:" + supplier.email} className="btn btn-trigger btn-icon"><em className="icon ni ni-mail"></em></a></li>
-                                                    <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-download-cloud"></em></a></li>
+                                                    {/* <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-download-cloud"></em></a></li> */}
                                                     <li> <Link to={{
                                                         pathname: "/editSupplier",
                                                         state: {
@@ -299,9 +362,6 @@ class supplierInfo extends Component {
     render() {
         const supplier = this.state.supplier;
 
-
-        console.log("State", supplier);
-
         return (
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">
@@ -321,9 +381,7 @@ class supplierInfo extends Component {
 }
 
 function mapStateToProps(state) {
-    console.log("State in map state", state);
     return {
-        supplier: state.supplier.supplier,
         purchaseDetails: state.supplier.purchaseDetails
     }
 }
