@@ -55,34 +55,30 @@ app.get('/api/getSupplier', auth, (req, res) => {
 
 app.get('/api/getSupplierDetails', auth, (req, res) => {
     const id = req.query.id;
-    
-    Supplier.findById(id, (err, doc) => {
+
+    Purchase.find({ supplierId: id }).select('_id totalAmount status').exec((err, purchase) => {
         if (err) return res.status(400).send(err);
-        Purchase.find({ supplierId: id }).select('_id totalAmount status').exec((err, purchase) => {
-            if (err) return res.status(400).send(err);
 
-            const totalOrders = purchase.length;
-            var completedOrders = 0;
-            var returnedOrders = 0;
-            var pendingOrders = 0;
-            var totalOrdersAmount = 0;
+        const totalOrders = purchase.length;
+        var completedOrders = 0;
+        var returnedOrders = 0;
+        var pendingOrders = 0;
+        var totalOrdersAmount = 0;
 
-            purchase.forEach(element => {
-                if (element.status === 'Complete')
-                    completedOrders++;
-                else if (element.status === 'Returned' || element.status === 'Returned Items')
-                    returnedOrders++;
-                else if (element.status === 'Pending' || element.status === 'Returned Items Pending')
-                    pendingOrders++;
+        purchase.forEach(element => {
+            if (element.status === 'Complete')
+                completedOrders++;
+            else if (element.status === 'Returned' || element.status === 'Returned Items')
+                returnedOrders++;
+            else if (element.status === 'Pending' || element.status === 'Returned Items Pending')
+                pendingOrders++;
 
-                totalOrdersAmount += element.totalAmount;
-            })
-            const ordersDetails = {
-                completedOrders, returnedOrders, pendingOrders, totalOrdersAmount, totalOrders
-            }
-            console.log("Sending Response",id)
-            res.status(200).send({ doc, ordersDetails });
+            totalOrdersAmount += element.totalAmount;
         })
+        const ordersDetails = {
+            completedOrders, returnedOrders, pendingOrders, totalOrdersAmount, totalOrders
+        }
+        res.status(200).send(ordersDetails);
     })
 })
 

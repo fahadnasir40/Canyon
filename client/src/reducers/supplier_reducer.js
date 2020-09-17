@@ -11,7 +11,7 @@ export default function (state = {}, action) {
                 supplier: action.payload.doc
             }
         case 'GET_SUPPLIER_DETAILS':
-            return { ...state, supplier: action.payload.doc,purchaseDetails: action.payload.ordersDetails }
+            return { ...state, purchaseDetails: action.payload}
         case 'GET_SUPPLIERS_TRANSACTIONS':
             return { ...state, supplierList: action.payload }
         case 'ADD_SUPPLIER':
