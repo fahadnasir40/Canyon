@@ -2,18 +2,17 @@ import React, { Component } from "react";
 import Header from "../../Header/header";
 import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
-import { saveProduct, clearProduct } from '../../../actions';
+import { updateProduct, clearProduct } from '../../../actions';
 import { connect } from 'react-redux';
-// import { Redirect } from 'react-router-dom'
+import Swal from 'sweetalert2';
 
-
-class AddProduct extends Component {
+class EditProduct extends Component {
 
     state = {
         name: '',
         sku: '',
-        uom: 'Pcs',
-        brand: 'canyon',
+        uom: '',
+        brand: '',
         seal: '',
         wrapper: '',
         others: '',
@@ -23,17 +22,42 @@ class AddProduct extends Component {
         error: ''
     }
 
+    componentDidMount() {
+        if (this.props.location.state) {
+            if (this.props.location.state.productInfo) {
+                let product = this.props.location.state.productInfo;
+                console.log("Product", product);
+                this.setState({
+                    name: product.name,
+                    sku: product.sku,
+                    uom: product.uom,
+                    brand: product.brand,
+                    wrapper: product.price.cost_wrapper,
+                    others: product.price.cost_others,
+                    security: product.price.cost_security,
+                    flatRate: product.price.cost_flatRate,
+                    seal: product.price.cost_seal,
+                })
+            }
+        }
+        else {
+            this.setState({
+                redirect: true
+            })
+        }
+    }
+
     static getDerivedStateFromProps(nextProps, prevState) {
 
-        if (nextProps.addProduct) {
-            if (nextProps.addProduct.post === true) {
+        if (nextProps.editProduct) {
+            if (nextProps.editProduct.post === true) {
                 return {
                     redirect: true
                 }
             }
-            else if (nextProps.addProduct.post === false) {
+            else if (nextProps.editProduct.post === false) {
                 return {
-                    error: 'Error adding the product.'
+                    error: 'Error updating the product.'
                 }
             }
         }
@@ -51,14 +75,7 @@ class AddProduct extends Component {
     }
 
 
-    handleInputSku = (event) => {
-        this.setState({ sku: event.target.value.toUpperCase() })
-    }
 
-
-    handleInputUom = (event) => {
-        this.setState({ uom: event.target.value })
-    }
 
     handleInputSeal = (event) => {
         let value = Number(event.target.value);
@@ -90,30 +107,24 @@ class AddProduct extends Component {
             this.setState({ others: event.target.value })
     }
 
-    handleInputBrand = (event) => {
-        this.setState({ brand: event.target.value })
-    }
-
     submitForm = (event) => {
-
-        // const form = event.currentTarget;
 
         event.preventDefault();
 
-        this.props.dispatch(saveProduct({
-            name: this.state.name,
-            brand: this.state.brand,
-            sku: this.state.sku,
-            uom: this.state.uom,
-            price: {
-                cost_seal: this.state.seal,
-                cost_wrapper: this.state.wrapper,
-                cost_others: this.state.others,
-                cost_flatRate: this.state.flatRate,
-                cost_security: this.state.security
-            },
-            addedBy: this.props.user.login.id
-        }))
+        let product = this.props.location.state.productInfo;
+
+        product.name = this.state.name;
+        product.price.cost_seal = this.state.seal;
+        product.price.cost_wrapper = this.state.wrapper;
+        product.price.cost_others = this.state.others;
+        product.price.cost_flatRate = this.state.flatRate;
+        product.price.cost_security = this.state.security;
+
+        const total = Number(product.price.cost_seal) + Number(product.price.cost_wrapper) +
+            Number(product.price.cost_others);
+        product.price.total = total;
+
+        this.props.dispatch(updateProduct(product));
     }
 
     calculateTotal = (total) => {
@@ -128,10 +139,10 @@ class AddProduct extends Component {
     renderBody = (total) => {
         return (
             <div className="container mt-5">
-                <div className="card ml-md-3">
+                <div className="card ml-md-4">
                     <div className="card-inner">
                         <div className="card-head mt-1">
-                            <h4 className="ff-base fw-medium">Add Product</h4>
+                            <h4 className="ff-base fw-medium">Edit Product</h4>
                         </div>
                         <form className="form-validate">
                             <div className="row g-4">
@@ -157,12 +168,7 @@ class AddProduct extends Component {
                                             Brand
                                          </label>
                                         <div className="form-control-wrap ">
-                                            <div className="form-control-select">
-                                                <select required onChange={this.handleInputBrand} className="form-control" id="brand">
-                                                    <option value="canyon">Canyon</option>
-                                                    <option value="others">Others</option>
-                                                </select>
-                                            </div>
+                                            <span className="ccap">{this.state.brand}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -175,8 +181,7 @@ class AddProduct extends Component {
                                             Item Code (SKU)
                                         </label>
                                         <div className="form-control-wrap">
-                                            <input type="text" maxLength={30} value={this.state.sku}
-                                                onChange={this.handleInputSku} className="form-control" id="sku" />
+                                            <span>{this.state.sku}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -184,21 +189,10 @@ class AddProduct extends Component {
                                     <div class="form-group">
                                         <label class="form-label" for="uom">Unit of Measure</label>
                                         <div class="form-control-wrap ">
-                                            <div class="form-control-select">
-                                                <select required onChange={this.handleInputUom} class="form-control" id="uom">
-                                                    <option value="Pcs">Pcs</option>
-                                                    <option value="KG">KG</option>
-                                                    <option value="Pet">Pet</option>
-                                                    <option value="Ltr">Ltr</option>
-                                                    <option value="Number">Number</option>
-                                                    <option value="Others">Others</option>
-                                                </select>
-                                            </div>
+                                            <span>{this.state.uom}</span>
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
 
 
@@ -212,7 +206,6 @@ class AddProduct extends Component {
                                     <div class="accordion-body collapse show" id="accordion-item-2-1" data-parent="#accordion-2">
                                         <div class="accordion-inner">
                                             <div class="row g-3">
-
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="form-label" for="seal">Seal</label>
@@ -284,8 +277,8 @@ class AddProduct extends Component {
 
                                 <div className="col-12 mt-4 ml-2">
                                     <div className="form-group">
-                                        <button onClick={this.submitForm} className="btn btn-lg btn-primary">
-                                            <em class="icon ni ni-plus-c"></em> <span>  Save Product</span>
+                                        <button onClick={this.submitForm} className="btn btn-primary">
+                                            Update Product
                                         </button>
                                     </div>
                                 </div>
@@ -306,8 +299,15 @@ class AddProduct extends Component {
     render() {
 
         if (this.state.redirect === true) {
-            console.log("history products calling")
-            this.props.history.push('/products')
+            Swal.fire({
+                icon: 'success',
+                title: 'Product successfully updated',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                this.props.history.push('/products')
+            })
+
         }
 
         let total = 0;
@@ -332,8 +332,8 @@ class AddProduct extends Component {
 
 function mapStateToProps(state) {
     return {
-        addProduct: state.product.product
+        editProduct: state.product
     }
 }
 
-export default connect(mapStateToProps)(AddProduct)
+export default connect(mapStateToProps)(EditProduct)

@@ -493,6 +493,16 @@ app.post('/api/supplier_update', (req, res) => {
     });
 })
 
+app.post('/api/product_update', (req, res) => {
+    Product.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.json({
+            success: true,
+            doc
+        })
+    });
+})
+
 app.post('/api/purchase_update', auth, async function (req, res) {
 
     let purchase = req.body;
