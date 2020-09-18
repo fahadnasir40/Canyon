@@ -26,12 +26,11 @@ export function getSuppliers(
     }
 }
 
-export function getSupplier(id)
-{
+export function getSupplier(id) {
 
     const request = axios.get(`/api/getSupplier?id=${id}`)
         .then(response => {
-                return response.data;
+            return response.data;
         })
         .catch(error => {
             console.log(error)
@@ -43,11 +42,10 @@ export function getSupplier(id)
     }
 }
 
-export function getSupplierDetails(_id)
-{
+export function getSupplierDetails(_id) {
     const request = axios.get(`/api/getSupplierDetails?id=${_id}`)
         .then(response => {
-                return response.data;
+            return response.data;
         })
         .catch(error => {
             console.log(error)
@@ -65,20 +63,20 @@ export function getSuppliersTransactions(
     limit = 0,
     order = 'desc',
     list = ''
-){
+) {
 
     const request = axios.get(`api/getSuppliersTransactions?skip=${start}&limit=${limit}&order=${order}`)
-    .then(response => {
-        if(list){
-            return [...list,...response.data];
-        }
-        else{
-            return response.data;
-        }
-    } )
-    .catch(error=>{
-        console.log(error)
-    });
+        .then(response => {
+            if (list) {
+                return [...list, ...response.data];
+            }
+            else {
+                return response.data;
+            }
+        })
+        .catch(error => {
+            console.log(error)
+        });
 
     return {
         type: 'GET_SUPPLIERS_TRANSACTIONS',
@@ -91,20 +89,20 @@ export function getCustomersTransactions(
     limit = 0,
     order = 'desc',
     list = ''
-){
+) {
 
     const request = axios.get(`api/getCustomersTransactions?skip=${start}&limit=${limit}&order=${order}`)
-    .then(response => {
-        if(list){
-            return [...list,...response.data];
-        }
-        else{
-            return response.data;
-        }
-    } )
-    .catch(error=>{
-        console.log(error)
-    });
+        .then(response => {
+            if (list) {
+                return [...list, ...response.data];
+            }
+            else {
+                return response.data;
+            }
+        })
+        .catch(error => {
+            console.log(error)
+        });
 
     return {
         type: 'GET_CUSTOMERS_TRANSACTIONS',
@@ -117,20 +115,20 @@ export function getEmployeesTransactions(
     limit = 0,
     order = 'desc',
     list = ''
-){
+) {
 
     const request = axios.get(`api/getEmployeesTransactions?skip=${start}&limit=${limit}&order=${order}`)
-    .then(response => {
-        if(list){
-            return [...list,...response.data];
-        }
-        else{
-            return response.data;
-        }
-    } )
-    .catch(error=>{
-        console.log(error)
-    });
+        .then(response => {
+            if (list) {
+                return [...list, ...response.data];
+            }
+            else {
+                return response.data;
+            }
+        })
+        .catch(error => {
+            console.log(error)
+        });
 
     return {
         type: 'GET_USERS_TRANSACTIONS',
@@ -268,7 +266,7 @@ export function getPurchases(
     const request = axios.get(`api/getPurchases?skip=${start}&limit=${limit}&order=${order}`)
         .then(response => {
             if (list) {
-                return [...list,...response.data];
+                return [...list, ...response.data];
             }
             else {
                 return response.data;
@@ -331,7 +329,7 @@ export function saveSupplier(document) {
 }
 
 export function savePurchase(purchase) {
-    const request = axios.post('/api/addPurchase',purchase)
+    const request = axios.post('/api/addPurchase', purchase)
         .then(response => response.data);
     return {
         type: 'ADD_PURCHASE',
@@ -403,6 +401,12 @@ export function clearNewSupplier() {
     }
 }
 
+export function clearNewProduct() {
+    return {
+        type: 'CLEAR_PRODUCT',
+        payload: {}
+    }
+}
 export function clearProfile() {
     return {
         type: 'CLEAR_PROFILE',
@@ -516,6 +520,16 @@ export function updateDocument(data) {
 
     return {
         type: 'UPDATE_BOOK',
+        payload: request
+    }
+}
+
+export function updateProduct(data) {
+    const request = axios.post(`/api/product_update`, data)
+        .then(response => response.data);
+
+    return {
+        type: 'UPDATE_PRODUCT',
         payload: request
     }
 }
