@@ -5,7 +5,7 @@ import Footer from "../../Footer/footer";
 import { savePurchase, clearPurchase } from '../../../actions';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { getActiveSuppliers, getActiveProducts,saveTransaction } from '../../../actions';
+import { getActiveSuppliers, getActiveProducts, saveTransaction } from '../../../actions';
 import PurchaseDetail from './purchaseDetails';
 import Moment from 'react-moment';
 import DatePicker from "react-datepicker";
@@ -138,30 +138,31 @@ class AddPurchase extends Component {
                     paidAmount: this.paidAmount
                 }
 
-                if(purchase.paidAmount < purchase.totalAmount)
+                if (purchase.paidAmount < purchase.totalAmount)
                     purchase.status = 'Pending';
                 else
                     purchase.status = 'Complete';
 
                 let productDetails = [];
+                console.log("This products",this.products);
                 this.products.forEach(item => {
-                    const product = productDetails.find(element=> element._id === item._id);
+                    const product = productDetails.find(element => element._id === item._id);
 
-                    if(product){
+                    if (product) {
                         const index = productDetails.indexOf(product);
-                        console.log("Existing Product",productDetails[index],item.qty);
+                        console.log("Existing Product", productDetails[index], item.qty);
                         productDetails[index].pqty = Number(productDetails[index].pqty) + Number(item.qty);
                         productDetails[index].pprice = Number(item.price.total);
-                        productDetails[index].ptotal = Number(productDetails[index].ptotal)+Number(item.totalAmount);
+                        productDetails[index].ptotal = Number(productDetails[index].ptotal) + Number(item.totalAmount);
                     }
-                    else{
+                    else {
                         productDetails.push({
                             _id: item._id,
                             pqty: item.qty,
                             pprice: Number(item.price.total),
                             ptotal: item.totalAmount,
                             pname: item.name
-                        });    
+                        });
                     }
                 });
 
@@ -182,7 +183,7 @@ class AddPurchase extends Component {
 
                 if (this.state.request === false) {
                     this.props.dispatch(savePurchase(purchase));
-                   
+
                     this.setState({
                         request: true
                     })
@@ -331,7 +332,7 @@ class AddPurchase extends Component {
 
         if (this.state.redirect === true) {
             const path = `/purchase_invoice_id=${this.props.purchase.purchaseId}`
-            return <Redirect to={path}/>
+            return <Redirect to={path} />
         }
 
         return (

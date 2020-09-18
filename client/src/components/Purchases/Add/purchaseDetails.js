@@ -15,7 +15,7 @@ class PurchaseDetails extends Component {
 
 
     addItemRow = () => {
-        var itemsList = [...this.state.itemsList];
+        var itemsList = this.state.itemsList;
         itemsList.push(<ItemRow />)
         this.setState({
             count: this.state.count + 1,
@@ -23,14 +23,29 @@ class PurchaseDetails extends Component {
         })
     }
 
-    removeItem = (index) => {
-        var itemsList = this.state.itemsList;
-        itemsList.splice(index, 1);
-        this.removeSelectedItem(index);
-        this.setState(
-            { itemsList }
-        )
-    }
+    // removeItem = (index) => {
+    //     // var newItemsList = JSON.tothis.state.itemsList;
+
+    //     // console.log("Before") 
+    //     // newItemsList.forEach(element=>{
+    //     //     console.log("Index of items",newItemsList.indexOf(element));
+    //     //     console.log("Items",element);
+    //     // })
+
+    //     // console.log("Delete Index",index)
+    //     // newItemsList.shift();
+
+    //     // console.log("After")
+    //     // newItemsList.forEach(element=>{
+    //     //     console.log("Index of items",newItemsList.indexOf(element));
+    //     //     console.log("Items",element);
+    //     // })
+
+    //     this.setState({
+    //         itemsList ''
+    //     })
+    //     this.removeSelectedItem(index);
+    // }
 
     clearAllItems = () => {
         this.setState({
@@ -77,8 +92,8 @@ class PurchaseDetails extends Component {
         })
     }
 
-    handleInputPaidAmount = (event) =>{
-        if(event.target.value >= 0 && event.target.value <= this.state.totalAmount){
+    handleInputPaidAmount = (event) => {
+        if (event.target.value >= 0 && event.target.value <= this.state.totalAmount) {
             this.setState({
                 paidAmount: event.target.value
             })
@@ -86,8 +101,9 @@ class PurchaseDetails extends Component {
     }
 
     render() {
-        if(this.props.loading === true){
-            this.props.getProductsList(this.productsList,this.state.paidAmount,this.state.totalAmount);
+        console.log("This state", this.productsList, this.state)
+        if (this.props.loading === true) {
+            this.props.getProductsList(this.productsList, this.state.paidAmount, this.state.totalAmount);
         }
 
         return (
@@ -121,22 +137,22 @@ class PurchaseDetails extends Component {
                                     <th scope="col">Rate</th>
                                     <th scope="col">UOM</th>
                                     <th scope="col">Total</th>
-                                    <th scope="col">Action</th>
+                                    {/* <th scope="col">Action</th> */}
                                 </tr>
                             </thead>
                             <tbody>
                                 {
                                     this.state.itemsList.map((item, i) => (
-                                        <ItemRow
-                                            key={i}
-                                            productsList={this.state.productsList}
-                                            remove={this.removeItem}
-                                            item={item} addSelectedItem
-                                            updateTotalAmount={this.updateTotalAmount}
-                                            addSelectedItem={this.addSelectedItem}
-                                            removeSelectedItem={this.removeSelectedItem}
-                                            index={i} />
-                                    ))
+                                            <ItemRow
+                                                key={i}
+                                                productsList={this.state.productsList}
+                                                remove={this.removeItem}
+                                                item={item}
+                                                updateTotalAmount={this.updateTotalAmount}
+                                                addSelectedItem={this.addSelectedItem}
+                                                removeSelectedItem={this.removeSelectedItem}
+                                                index={i} />
+                                        ))
                                 }
                             </tbody>
                         </table>

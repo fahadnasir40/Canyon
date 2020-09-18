@@ -408,7 +408,6 @@ app.post('/api/addPurchase', auth, (req, res) => {
 
 
     const transaction = new Transaction(trans);
-    console.log("Transaction", transaction, productTotalQty);
 
     return updateWallet(purchase, transaction, products);
     async function updateWallet(purchase) {

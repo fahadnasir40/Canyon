@@ -8,6 +8,7 @@ import NumberFormat from 'react-number-format'
 import { clearSupplier, getSupplierDetails, updateSupplier } from '../../../actions'
 import { connect } from 'react-redux';
 import Swal from 'sweetalert2';
+import $ from 'jquery'
 class supplierInfo extends Component {
 
     state = {
@@ -59,14 +60,14 @@ class supplierInfo extends Component {
             this.props.dispatch(updateSupplier(supplier))
         }
 
-                   
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Supplier status has been changed',
-                showConfirmButton: false,
-                timer: 1500
-            })
+
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Supplier status has been changed',
+            showConfirmButton: false,
+            timer: 1500
+        })
 
         this.setState({
             changeState: true
@@ -99,6 +100,10 @@ class supplierInfo extends Component {
                 supplier: this.props.location.state.supplierInfo
             })
         }
+        $('#container').on('click', function (e) {
+            if ($('#sidebarProfile').hasClass('content-active'))
+                $('#sidebarProfile').removeClass('content-active');
+        });
     }
 
     addNote = () => {
@@ -132,6 +137,8 @@ class supplierInfo extends Component {
         }
     }
 
+
+
     deleteNote = (id) => {
         Swal.fire({
             title: 'Are you sure?',
@@ -155,10 +162,14 @@ class supplierInfo extends Component {
                 })
                 if (note)
                     this.props.dispatch(updateSupplier(newSupplier));
-
-
             }
         })
+    }
+
+    showBar = () => {
+        if (!$('#sidebarProfile').hasClass('content-active')) {
+            $('#sidebarProfile').addClass('content-active');
+        }
     }
 
     renderSupplierInfo = (supplier) => (
@@ -188,7 +199,7 @@ class supplierInfo extends Component {
                                             </li>
 
                                             <li className="nav-item nav-item-trigger d-xxl-none">
-                                                <a href="#" className="toggle btn btn-icon btn-trigger" data-target="userAside"><em className="icon ni ni-user-list-fill"></em></a>
+                                                <a onClick={this.showBar} className="toggle btn btn-icon btn-trigger" data-target="userAside"><em className="icon ni ni-user-list-fill"></em></a>
                                             </li>
                                         </ul>
                                         <div className="card-inner">
@@ -280,7 +291,7 @@ class supplierInfo extends Component {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="card-aside card-aside-right user-aside toggle-slide toggle-slide-right toggle-break-xxl" data-content="userAside" data-toggle-screen="xxl" data-toggle-overlay="true" data-toggle-body="true">
+                                    <div className="card-aside card-aside-right user-aside toggle-slide toggle-slide-right toggle-break-xxl" id="sidebarProfile" data-content="userAside" data-toggle-screen="xxl" data-toggle-overlay="true" data-toggle-body="true">
                                         <div className="card-inner-group" data-simplebar>
                                             <div className="card-inner">
                                                 <div className="user-card user-card-s2">
@@ -403,7 +414,7 @@ class supplierInfo extends Component {
         const supplier = this.state.supplier;
 
         return (
-            <div className="nk-body bg-lighter npc-default has-sidebar ">
+            <div className="nk-body bg-lighter npc-default has-sidebar " id="container">
                 <div className="nk-app-root">
                     <div className="nk-main"></div>
                     <Sidebar />
