@@ -190,11 +190,19 @@ class ProfileContent extends Component {
         }
     }
 
+    showSideBar = () => {
+        console.log("show")
+        if (!$('#sidebarUserProfile').hasClass('content-active')) {
+            console.log("Adding");
+            $('#sidebarUserProfile').addClass('content-active')
+        }
+    }
+
+
 
     renderProfile = (user) => (
-        <div>
-
-            <div className="nk-content ml-4 mt-5 ">
+        <div id="container">
+            <div className="nk-content ml-md-4 mt-5 ">
                 <div className="container-fluid">
                     <div className="nk-content-inner">
                         <div className="nk-content-body">
@@ -213,7 +221,7 @@ class ProfileContent extends Component {
                                                                 </div>
                                                             </div>
                                                             <div className="nk-block-head-content align-self-start d-lg-none">
-                                                                <a href="#" className="toggle btn btn-icon btn-trigger mt-n1" data-target="userAside"><em className="icon ni ni-menu-alt-r"></em></a>
+                                                                <a onClick={this.showSideBar} className="toggle btn btn-icon btn-trigger mt-n1" data-target="userAside"><em className="icon ni ni-menu-alt-r"></em></a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -273,7 +281,7 @@ class ProfileContent extends Component {
                                                                 </div>
                                                             </div>
                                                             <div className="nk-block-head-content align-self-start d-lg-none">
-                                                                <a href="#" className="toggle btn btn-icon btn-trigger mt-n1" data-target="userAside"><em className="icon ni ni-menu-alt-r"></em></a>
+                                                                <a onClick={this.showSideBar} className="toggle btn btn-icon btn-trigger mt-n1" data-target="userAside"><em className="icon ni ni-menu-alt-r"></em></a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -306,7 +314,7 @@ class ProfileContent extends Component {
 
                                             </div>
                                         </div>
-                                        <div className="card-aside card-aside-left user-aside toggle-slide toggle-slide-left toggle-break-lg" data-content="userAside" data-toggle-screen="lg" data-toggle-overlay="true">
+                                        <div className="card-aside card-aside-left user-aside toggle-slide toggle-slide-left toggle-break-lg" id='sidebarUserProfile' data-content="userAside" data-toggle-screen="lg" data-toggle-overlay="true">
                                             <div className="card-inner-group" data-simplebar>
                                                 <div className="card-inner">
                                                     <div className="user-card">

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import ReactPaginate from 'react-paginate'
+import $ from 'jquery'
 
 class CustomersContent extends Component {
 
@@ -229,6 +230,19 @@ class CustomersContent extends Component {
         }
     }
 
+    showBar = () => {
+        if (!$('#showButton').hasClass('active')) {
+
+            $('#showButton').addClass('active');
+            $('#expandBar').addClass('expanded');
+            $('#expandBar').css('display', 'block');
+        }
+        else {
+            $('#showButton').removeClass('active');
+            $('#expandBar').removeClass('expanded');
+            $('#expandBar').css('display', 'none');
+        }
+    }
 
     render() {
 
@@ -244,8 +258,8 @@ class CustomersContent extends Component {
                                     </div>
                                     <div className="nk-block-head-content">
                                         <div className="toggle-wrap nk-block-tools-toggle">
-                                            <a href="#" className="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="more-options"><em className="icon ni ni-more-v"></em></a>
-                                            <div className="toggle-expand-content" data-content="more-options">
+                                            <a onClick={this.showBar} id="showButton" className="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="more-options"><em className="icon ni ni-more-v"></em></a>
+                                            <div className="toggle-expand-content" id="expandBar" data-content="more-options">
                                                 <ul className="nk-block-tools g-3">
                                                     <li>
                                                         <div className="form-control-wrap">
@@ -257,7 +271,7 @@ class CustomersContent extends Component {
                                                     </li>
 
                                                     <li className="nk-block-tools-opt">
-                                                        <a href="#" className="btn btn-icon btn-primary d-md-none"><em className="icon ni ni-plus"></em></a>
+                                                        <Link to={"/addCustomer"} className="toggle btn btn-icon btn-primary d-md-none mr-4"><em className="icon ni ni-plus"></em></Link>
                                                         <Link to={"/addCustomer"}><button className="toggle btn btn-primary d-none d-md-inline-flex"><em className="icon ni ni-plus"></em><span>Add Customer</span></button></Link>
                                                     </li>
                                                 </ul>
