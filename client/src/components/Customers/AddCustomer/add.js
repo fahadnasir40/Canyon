@@ -75,7 +75,7 @@ class AddCustomer extends Component {
   };
 
   handleProductChange = id => event => {
-    if (event.target.value != -1) {
+    if (event.target.value !== -1) {
       const newProduct = this.state.products.map((product, sidx) => {
         if (id !== sidx) return product;
         return { ...product, _id: this.props.productsList[event.target.value]._id, rate: Number(this.props.productsList[event.target.value].price.total)};
@@ -379,7 +379,7 @@ class AddCustomer extends Component {
                       this.state.products.map((item, key) => {
                         return (
                           <div className="row g-4">
-                            <div className="col-lg-4">
+                            <div className="col-sm-4">
                               <div className="form-group">
                                 <label className="form-label" htmlFor="product">Product</label>
                                 <div className="form-control-wrap ">
@@ -398,7 +398,7 @@ class AddCustomer extends Component {
                                 </div>
                               </div>
                             </div>
-                            <div className="col-lg-4" >
+                            <div className="col-sm-4" >
                               <div className="form-group">
                                 <label className="form-label" htmlFor="productrate">Rate</label>
                                 <div className="form-control-wrap">

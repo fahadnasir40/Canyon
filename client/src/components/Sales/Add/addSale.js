@@ -5,11 +5,12 @@ import Footer from "../../Footer/footer";
 import { saveSale, clearSale } from '../../../actions';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { getActiveProducts,saveTransaction, getCustomers } from '../../../actions';
-import SaleDetail from './SaleDetails';
+import { getActiveProducts, saveTransaction, getCustomers } from '../../../actions';
+// import SaleDetail from './SaleDetails';
 import Moment from 'react-moment';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Salestab from '../../Sales/itemsreturn'
 
 class AddSale extends Component {
 
@@ -19,7 +20,7 @@ class AddSale extends Component {
         // suppliersList: '',
         customersList: '',
         productsList: '',
-        currentCustomer:'',
+        currentCustomer: '',
         saleDate: new Date(),
         itemsSelected: [],
         description: '',
@@ -60,7 +61,7 @@ class AddSale extends Component {
         if (nextProps.sale) {
             if (nextProps.sale.post) {
                 if (nextProps.sale.post === true) {
-                    console.log("Redirect",prevState.redirect,nextProps);
+                    console.log("Redirect", prevState.redirect, nextProps);
                     return ({
                         redirect: true,
                         request: false,
@@ -259,7 +260,30 @@ class AddSale extends Component {
                                 }
                             </div>
                             <div id="accordion-2" className="accordion accordion-s3 mt-4">
-                                <div className="accordion-item">
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="#tabItem1">Products Detail</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem2">Transaction</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem3">Payment</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tabItem1">
+                                        <p>content</p>
+                                    </div>
+                                    <div class="tab-pane" id="tabItem2">
+                                        <p>content</p>
+                                    </div>
+                                    <div class="tab-pane" id="tabItem3">
+                                        <p>contnet</p>
+                                    </div>
+                                </div>
+                                {/* <Salestab/> */}
+                                {/* <div className="accordion-item">
                                     <a href="#" className="accordion-head" data-toggle="collapse" data-target="#accordion-item-2-1">
                                         <h6 className="title">Sale Details</h6>
                                         <span className="accordion-icon"></span>
@@ -279,7 +303,7 @@ class AddSale extends Component {
                                             }
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="row g-4">
                                 <div className="col-12 mt-4 ml-2">

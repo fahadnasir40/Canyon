@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom'
 import { clearPurchase, getPurchaseProduct, getSupplier } from '../../actions'
 import { connect } from 'react-redux'
 import Moment from 'react-moment'
-import ReactToPrint, { PrintContextConsumer } from 'react-to-print';
 import ReactToPrint from 'react-to-print'
 
 class PurchaseInvoice extends Component {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import ItemRow from '../../../components/Sales/itemsreturn'
+import ItemRow from '../itemsreturn'
 
-class SaleDetails extends Component {
+class SaleDetailsPayment extends Component {
 
     state = {
         itemsList: [],
@@ -116,11 +116,16 @@ class SaleDetails extends Component {
                                     <th scope="col">#</th>
                                     <th scope="col">Item Name</th>
                                     <th scope="col">UOM</th>
-                                    <th scope="col">Quantity.</th>
+                                    {/* <th scope="col">Limit</th> */}
+                                    {/* <th scope="col">Quantity Received.</th> */}
+                                    {/* <th scope="col">Quantity Delivered.</th> */}
                                     <th scope="col">Rate</th>
+                                    <th scope="col">Discount</th>
+                                    <th scope="col">Payment Method</th>
+                                    <th scope="col">Sec. Paid</th>
                                     <th scope="col">Amount</th>
                                     <th scope="col">Total</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col">...</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -169,4 +174,4 @@ class SaleDetails extends Component {
     }
 }
 
-export default SaleDetails;
+export default SaleDetailsPayment;
