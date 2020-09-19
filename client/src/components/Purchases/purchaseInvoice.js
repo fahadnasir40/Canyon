@@ -8,9 +8,7 @@ import { connect } from 'react-redux'
 import Moment from 'react-moment'
 import ReactToPrint from 'react-to-print'
 
-
 class PurchaseInvoice extends Component {
-
     state = {
         purchase: '',
         products: '',

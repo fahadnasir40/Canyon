@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Header from "../../Header/header";
 import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
-import { saveCustomer, clearNewCustomer } from '../../../actions';
+import { saveCustomer, clearNewCustomer, getActiveProducts } from '../../../actions';
 import { connect } from 'react-redux';
 // import { Redirect } from 'react-router-dom'
 
@@ -12,11 +12,16 @@ class AddCustomer extends Component {
   state = {
     addressCount: 2,
     name: '',
+    flatrate: false,
+    salerate: false,
     email: '',
     phone: '',
     address: [{ name: "" }],
     redirect: false,
-    error: ''
+    error: '',
+    productsList: '',
+    products: [{ _id: "", rate: "" }],
+    rate: ''
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -50,6 +55,52 @@ class AddCustomer extends Component {
     this.setState({ address: newAddress });
   };
 
+  handleProductAdd = () => {
+    this.setState({
+      products: this.state.products.concat([{ _id: "", rate: "" }])
+    });
+  };
+
+  handleRemoveProduct = idx => () => {
+    this.setState({
+      products: this.state.products.filter((s, sidx) => idx !== sidx)
+    });
+  };
+
+
+  handleRemoveShareholder = idx => () => {
+    this.setState({
+      address: this.state.address.filter((s, sidx) => idx !== sidx)
+    });
+  };
+
+  handleProductChange = id => event => {
+    if (event.target.value !== -1) {
+      const newProduct = this.state.products.map((product, sidx) => {
+        if (id !== sidx) return product;
+        return { ...product, _id: this.props.productsList[event.target.value]._id, rate: Number(this.props.productsList[event.target.value].price.total)};
+      });
+
+      this.setState({ products: newProduct });
+    }
+    else {
+      let newProduct = this.state.products;
+      newProduct[id] = { _id: "", rate: "" };
+      this.setState({ products: newProduct });
+    }
+  };
+
+  handleProductRateChange = id => event => {
+    if (event.target.value>= 0) {
+      const newProduct = this.state.products.map((product, sidx) => {
+        if (id !== sidx) return product;
+        return { ...product, rate: Number(event.target.value)};
+      });
+
+      this.setState({ products: newProduct });
+    }
+  };
+
   handleAddShareholder = () => {
     this.setState({
       address: this.state.address.concat([{ name: "" }])
@@ -62,14 +113,44 @@ class AddCustomer extends Component {
     });
   };
 
+
   handleInputEmail = (event) => {
     this.setState({ email: event.target.value })
+  }
+
+  handleInputflatrate = (event) => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    // const name = target.value;
+
+    this.setState({
+      flatrate: value
+    });
+  }
+
+  handleInputsalerate = (event) => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+
+    this.setState({ salerate: value });
+
+    if (value === true && !this.props.productsList) {
+      this.props.dispatch(this.props.dispatch(getActiveProducts()))
+    }
+    else if( value === false){
+      this.setState({products:[]})
+    }
   }
 
 
   handleInputName = (event) => {
     this.setState({ name: event.target.value })
   }
+
+  handleInputDropdown = (event) => {
+    this.setState({ product: event.target.value })
+  }
+
 
   handleInputAddress = () => {
     var address = [...this.state.address];
@@ -90,15 +171,23 @@ class AddCustomer extends Component {
 
     event.preventDefault();
 
+    let newList = this.state.products;
+    this.state.products.forEach(element => {
+      if(element._id===''){
+          newList.splice(this.state.products.indexOf(element),1);
+      }
+    })
+
     this.props.dispatch(saveCustomer({
       email: this.state.email,
       name: this.state.name,
       address: this.state.address,
       phone: this.state.phone,
-      addedBy: this.props.user.login.id
+      addedBy: this.props.user.login.id,
+      flatRate: this.state.flatrate,
+      salePrice: newList 
     }))
   }
-
 
   addressRow = (i) => (
 
@@ -120,18 +209,6 @@ class AddCustomer extends Component {
     </div>
   )
 
-  getAddressField = () => {
-    var rows = [];
-    for (var i = 0; i < this.state.addressCount; i++) {
-      // note: we add a key prop here to allow react to uniquely identify each
-      // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
-      rows.push(this.addressRow(i));
-    }
-
-    return <div className="row col-lg-8 g-4" >
-      {rows}
-    </div>;
-  }
   addAddressField = () => {
     if (this.state.addressCount < 5) {
       this.setState({
@@ -191,7 +268,7 @@ class AddCustomer extends Component {
               <h4 className="ff-base fw-medium">Add Customer</h4>
             </div>
             <form className="form-validate">
-              <div className="row g-4">
+              <div className="row g-8">
                 <div className="col-lg-4">
                   <div className="form-group">
                     <label className="form-label" htmlFor="full-name-1">
@@ -208,8 +285,18 @@ class AddCustomer extends Component {
                     </div>
                   </div>
                 </div>
+                <div className="col-lg-4 mt-4 text-right">
+                  <div class="custom-control custom-control-sm custom-checkbox">
+                    <input
+                      type="checkbox"
+                      className="custom-control-input"
+                      id="flatrate"
+                      onChange={this.handleInputflatrate}
+                      checked={this.state.flatrate} />
+                    <label className="custom-control-label" htmlFor="flatrate">Apply Flat Rate</label>
+                  </div>
+                </div>
               </div>
-
               <div className="row g-4">
                 <div className="col-lg-4">
                   <div className="form-group">
@@ -272,6 +359,75 @@ class AddCustomer extends Component {
                 </div> : null
               }
 
+              <div className="row g-4">
+                <div className="col-lg-4 mt-4 ml-md-2">
+                  <div className="custom-control custom-control-sm custom-checkbox">
+                    <input
+                      type="checkbox"
+                      className="custom-control-input"
+                      id="salerate"
+                      onChange={this.handleInputsalerate}
+                      checked={this.state.salerate} />
+                    <label className="custom-control-label" htmlFor="salerate">Apply Sale Rate</label>
+                  </div>
+                </div>
+              </div>
+              {
+                this.state.salerate === true ?
+                  <div>
+                    {
+                      this.state.products.map((item, key) => {
+                        return (
+                          <div className="row g-4">
+                            <div className="col-sm-4">
+                              <div className="form-group">
+                                <label className="form-label" htmlFor="product">Product</label>
+                                <div className="form-control-wrap ">
+                                  <div className="form-control-select">
+                                    <select required onChange={this.handleProductChange(key)} className="form-control ccap" id="product">
+                                      <option value={-1}> Select Product</option>
+                                      {
+                                        this.props.productsList ?
+                                          this.props.productsList.map((item, key) => {
+                                            return <option key={key} value={key} disabled={this.state.products.find(x => x._id === item._id) ? true : null} className="ccap" >{item.name} ({item.brand})</option>;
+                                          })
+                                          : null
+                                      }
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-sm-4" >
+                              <div className="form-group">
+                                <label className="form-label" htmlFor="productrate">Rate</label>
+                                <div className="form-control-wrap">
+                                  <input type="text" value={item.rate} disabled={item._id ? false : true} min={0} max={999999999}
+                                    onChange={this.handleProductRateChange(key)} className="form-control" id="rate"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="mt-md-4">
+                              {key >= 0 && key < this.state.products.length ? <div className="btn" onClick={this.handleRemoveProduct(key)}><em className="icon ni ni-minus-c"></em><span>Remove</span></div> : null}
+                            </div>
+
+                          </div>
+                        )
+                      })}
+                    {
+                      this.props.productsList ?
+                        this.state.products.length < this.props.productsList.length ? <div className="row mt-2 ml-n4">
+                          <div className="col-lg-4">
+                            <div className="btn" onClick={this.handleProductAdd}><em className="icon ni ni-plus-c"></em><span> Add product</span></div>
+                          </div>
+                        </div> : null : null
+                    }
+                  </div>
+                  : null
+
+              }
+
 
               <div className="row g-4">
                 <div className="col-12 mt-4 mb-2">
@@ -321,7 +477,8 @@ class AddCustomer extends Component {
 
 function mapStateToProps(state) {
   return {
-    addCustomer: state.customer
+    addCustomer: state.customer,
+    productsList: state.product.productList
   }
 }
 

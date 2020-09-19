@@ -24,6 +24,8 @@ const { Customer } = require("./models/customer");
 const { Product } = require("./models/product");
 const { Transaction } = require("./models/transaction");
 const { Purchase } = require("./models/purchase");
+const { Sale } = require("./models/sale");
+
 
 
 app.use(bodyParser.json());
@@ -211,6 +213,20 @@ app.get('/api/getPurchases', auth, (req, res) => {
     })
 })
 
+app.get('/api/getSales', auth, (req, res) => {
+    // locahost:3001/api/books?skip=3&limit=2&order=asc
+    let skip = parseInt(req.query.skip);
+    let limit = parseInt(req.query.limit);
+    let order = req.query.order;
+
+    // ORDER = asc || desc
+    Sale.find().skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.send(doc);
+    });
+});
+
+
 app.get('/api/getPurchaseProduct', auth, (req, res) => {
 
     let id = req.query.id.toString();
@@ -318,7 +334,6 @@ app.post("/api/login", (req, res) => {
 
 app.post("/api/change_password", auth, (req, res) => {
     req.user.comparePassword(req.body.oldPassword, (err, isMatch) => {
-        console.log("Error Compare", err);
         if (!isMatch) {
             return res.json({
                 success: false,
@@ -445,6 +460,20 @@ app.post('/api/addPurchase', auth, (req, res) => {
 
 })
 
+app.post('/api/addSale', (req, res) => {
+    const sale = new Sale(req.body);
+
+    sale.save((error, sale) => {
+        if (error) {
+            return res.status(400).send(error);
+        }
+        return res.status(200).json({
+            post: true,
+            saleId: sale._id
+        })
+    });
+})
+
 app.post('/api/addProduct', auth, (req, res) => {
 
     const product = new Product(req.body);
@@ -470,7 +499,7 @@ app.post('/api/addTransaction', auth, (req, res) => {
 
     transaction.save((error, transaction) => {
         if (error) {
-            console.log("Transaction", error)
+            
             return res.status(400).send(error);
         }
         return res.status(200).json({

@@ -19,6 +19,7 @@ import PurchaseInvoice from './components/Purchases/purchaseInvoice';
 import Transactions from './components/Transactions/transactions';
 import AddTransaction from './components/Transactions/Add/addTransaction';
 import Sales from './components/Sales/sales';
+import AddSale from './components/Sales/Add/addSale';
 import Products from './components/Products/products'
 import AddProduct from './components/Products/Add/addProduct';
 import EditProduct from './components/Products/Add/editProduct';
@@ -55,6 +56,7 @@ const routes = () => {
             <Route path="/purchaseReturn" exact component={Auth(purchaseReturn, true)} />
             <Route path="/purchase_invoice_id=:id" exact component={Auth(PurchaseInvoice, true)} />
             <Route path="/sales" exact component={Auth(Sales, true)} />
+            <Route path="/addSale" exact component ={Auth(AddSale,true)}/>
             <Route path="/profile" exact component={Auth(Profile, true)} />
             <Route path="/error" exact component={ErrorPage504} />
             <Route component={ErrorPage404} />

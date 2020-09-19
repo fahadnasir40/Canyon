@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import Header from "../../Header/header";
 import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
-import { updateCustomer, clearNewCustomer } from '../../../actions';
+import { updateCustomer, clearNewCustomer, getActiveProducts } from '../../../actions';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom'
 
 
 class EditCustomer extends Component {
@@ -12,13 +11,16 @@ class EditCustomer extends Component {
   state = {
     addressCount: 2,
     name: '',
+    flatrate: false,
+    salerate: false,
     email: '',
     phone: '',
     address: [{ name: "" }],
     redirect: false,
-    error: ''
+    error: '',
+    productsList: '',
+    products: [{ _id: "", rate: "" }],
   }
-
 
 
   componentDidMount() {
@@ -26,13 +28,21 @@ class EditCustomer extends Component {
     if (this.props.location.state) {
       if (this.props.location.state.customerInfo) {
         let customer = this.props.location.state.customerInfo;
+        const salerate = customer.salePrice.length === 0? false: true;
+
         this.setState({
           name: customer.name,
           email: customer.email,
           phone: customer.phone,
           addressCount: customer.address.length,
-          address: customer.address
+          address: customer.address,
+          flatrate: customer.flatRate,
+          products: customer.salePrice,
+          salerate: salerate
         })
+
+        if(salerate) 
+          this.props.dispatch(getActiveProducts());
       }
     }
     else {
@@ -59,6 +69,12 @@ class EditCustomer extends Component {
     return null;
   }
 
+  
+  componentWillUnmount() {
+    this.props.dispatch(clearNewCustomer());
+  }
+
+
   handleShareholderNameChange = idx => evt => {
     const newAddress = this.state.address.map((address, sidx) => {
       if (idx !== sidx) return address;
@@ -66,6 +82,52 @@ class EditCustomer extends Component {
     });
 
     this.setState({ address: newAddress });
+  };
+
+  handleProductAdd = () => {
+    this.setState({
+      products: this.state.products.concat([{ _id: "", rate: "" }])
+    });
+  };
+
+  handleRemoveProduct = idx => () => {
+    this.setState({
+      products: this.state.products.filter((s, sidx) => idx !== sidx)
+    });
+  };
+
+
+  handleRemoveShareholder = idx => () => {
+    this.setState({
+      address: this.state.address.filter((s, sidx) => idx !== sidx)
+    });
+  };
+
+  handleProductChange = id => event => {
+    if (event.target.value != -1) {
+      const newProduct = this.state.products.map((product, sidx) => {
+        if (id !== sidx) return product;
+        return { ...product, _id: this.props.productsList[event.target.value]._id, rate: Number(this.props.productsList[event.target.value].price.total)};
+      });
+
+      this.setState({ products: newProduct });
+    }
+    else {
+      let newProduct = this.state.products;
+      newProduct[id] = { _id: "", rate: "" };
+      this.setState({ products: newProduct });
+    }
+  };
+
+  handleProductRateChange = id => event => {
+    if (event.target.value>= 0) {
+      const newProduct = this.state.products.map((product, sidx) => {
+        if (id !== sidx) return product;
+        return { ...product, rate: Number(event.target.value)};
+      });
+
+      this.setState({ products: newProduct });
+    }
   };
 
   handleAddShareholder = () => {
@@ -80,14 +142,44 @@ class EditCustomer extends Component {
     });
   };
 
+
   handleInputEmail = (event) => {
     this.setState({ email: event.target.value })
+  }
+
+  handleInputflatrate = (event) => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    // const name = target.value;
+
+    this.setState({
+      flatrate: value
+    });
+  }
+
+  handleInputsalerate = (event) => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+
+    this.setState({ salerate: value });
+
+    if (value === true && !this.props.productsList) {
+      this.props.dispatch(this.props.dispatch(getActiveProducts()))
+    }
+    else if( value === false){
+      this.setState({products:[]})
+    }
   }
 
 
   handleInputName = (event) => {
     this.setState({ name: event.target.value })
   }
+
+  handleInputDropdown = (event) => {
+    this.setState({ product: event.target.value })
+  }
+
 
   handleInputAddress = () => {
     var address = [...this.state.address];
@@ -100,25 +192,68 @@ class EditCustomer extends Component {
     this.setState({ phone: event.target.value })
   }
 
+
+
   submitForm = (event) => {
 
     // const form = event.currentTarget;
 
     event.preventDefault();
-
+    
     let customer = this.props.location.state.customerInfo;
+    let newList = this.state.products;
+    this.state.products.forEach(element => {
+      if(element._id===''){
+          newList.splice(this.state.products.indexOf(element),1);
+      }
+    })
+
 
     customer.name = this.state.name;
     customer.email = this.state.email;
     customer.phone = this.state.phone;
     customer.address = this.state.address;
+    customer.flatRate = this.state.flatrate;
+    customer.salePrice = newList;
 
     this.props.dispatch(updateCustomer(customer));
+
   }
 
-  componentWillUnmount() {
-    this.props.dispatch(clearNewCustomer());
+  addressRow = (i) => (
+
+    <div className="col-lg-6 " key={i}>
+      <div className="form-group" key={i}>
+        <label className="form-label" htmlFor={"address-line-" + i}>
+          Address Line {i + 1}
+        </label>
+        <div className="form-control-wrap">
+          <input
+            key={i}
+            onChange={this.handleInputAddress}
+            type="text"
+            className="form-control"
+            id={"address-line-" + i}
+          />
+        </div>
+      </div>
+    </div>
+  )
+
+  addAddressField = () => {
+    if (this.state.addressCount < 5) {
+      this.setState({
+        addressCount: this.state.addressCount + 1
+      })
+    }
   }
+
+  resetAddressField = () => {
+    this.setState({
+      addressCount: 1
+    })
+  }
+
 
   getButton = () => {
     if (this.state.addressCount < 5) {
@@ -182,8 +317,18 @@ class EditCustomer extends Component {
                     </div>
                   </div>
                 </div>
+                <div className="col-lg-4 mt-4 text-right">
+                  <div class="custom-control custom-control-sm custom-checkbox">
+                    <input
+                      type="checkbox"
+                      className="custom-control-input"
+                      id="flatrate"
+                      onChange={this.handleInputflatrate}
+                      checked={this.state.flatrate} />
+                    <label className="custom-control-label" htmlFor="flatrate">Apply Flat Rate</label>
+                  </div>
+                </div>
               </div>
-
               <div className="row g-4">
                 <div className="col-lg-4">
                   <div className="form-group">
@@ -216,8 +361,8 @@ class EditCustomer extends Component {
                     this.state.address.map((address, idx) => (
                       <div className="col-lg-4" key={idx}>
 
-                        <div className="form-group " >
-                          <label className="form-label" htmlFor={"address-line-" + idx} >
+                        <div className="form-group ">
+                          <label className="form-label" htmlFor={"address-line-" + idx}>
                             Address Line {idx + 1}
                           </label>
                           <div className="form-control-wrap">
@@ -233,6 +378,7 @@ class EditCustomer extends Component {
                           </div>
                         </div>
                       </div>
+
                     ))
                   }
                 </div>
@@ -246,13 +392,81 @@ class EditCustomer extends Component {
               }
 
               <div className="row g-4">
+                <div className="col-lg-4 mt-4 ml-md-2">
+                  <div className="custom-control custom-control-sm custom-checkbox">
+                    <input
+                      type="checkbox"
+                      className="custom-control-input"
+                      id="salerate"
+                      onChange={this.handleInputsalerate}
+                      checked={this.state.salerate} />
+                    <label className="custom-control-label" htmlFor="salerate">Apply Sale Rate</label>
+                  </div>
+                </div>
+              </div>
+              {
+                this.state.salerate === true ?
+                  <div>
+                    {
+                      this.state.products.map((item, key) => {
+                        return (
+                          <div className="row g-4">
+                            <div className="col-lg-4">
+                              <div className="form-group">
+                                <label className="form-label" htmlFor="product">Product</label>
+                                <div className="form-control-wrap ">
+                                  <div className="form-control-select">
+                                    <select required onChange={this.handleProductChange(key)} className="form-control ccap" id="product">
+                                      <option value={-1}> Select Product</option>
+                                      {
+                                        this.props.productsList ?
+                                          this.props.productsList.map((product, key) => {
+                                            return <option key={key} value={key} selected={item._id === product._id? true: false} disabled={this.state.products.find(x => x._id === product._id) ? true : null} className="ccap" >{product.name} ({product.brand})</option>;
+                                          })
+                                          : null
+                                      }
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-lg-4" >
+                              <div className="form-group">
+                                <label className="form-label" htmlFor="productrate">Rate</label>
+                                <div className="form-control-wrap">
+                                  <input type="text" value={item.rate} disabled={item._id ? false : true} min={0} max={999999999}
+                                    onChange={this.handleProductRateChange(key)} className="form-control" id="rate"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="mt-md-4">
+                              {key >= 0 && key < this.state.products.length ? <div className="btn" onClick={this.handleRemoveProduct(key)}><em className="icon ni ni-minus-c"></em><span>Remove</span></div> : null}
+                            </div>
+
+                          </div>
+                        )
+                      })}
+                    {
+                      this.props.productsList ?
+                        this.state.products.length < this.props.productsList.length ? <div className="row mt-2 ml-n4">
+                          <div className="col-lg-4">
+                            <div className="btn" onClick={this.handleProductAdd}><em className="icon ni ni-plus-c"></em><span> Add product</span></div>
+                          </div>
+                        </div> : null : null
+                    }
+                  </div>
+                  : null
+
+              }
+
+
+              <div className="row g-4">
                 <div className="col-12 mt-4 mb-2">
                   <div className="form-group">
-
                     <button onClick={this.submitForm} className="btn btn-lg btn-primary">
-                      Update Information
+                      Save Informations
                     </button>
-
                   </div>
                 </div>
               </div>
@@ -271,8 +485,9 @@ class EditCustomer extends Component {
 
   render() {
 
+
     if (this.state.redirect === true) {
-      return <Redirect to="/customers" />
+      this.props.history.push('/customers')
     }
 
     return (
@@ -295,7 +510,8 @@ class EditCustomer extends Component {
 
 function mapStateToProps(state) {
   return {
-    editCustomer: state.customer
+    editCustomer: state.customer,
+    productsList: state.product.productList
   }
 }
 

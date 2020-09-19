@@ -23,6 +23,18 @@ const supplierSchema = mongoose.Schema({
             type: String
         }
     }],
+    flatRate:{
+        type: Boolean,
+        default: false
+    },
+    salePrice:[{
+        _id:{
+            type: String
+        },
+        rate:{
+            type: String
+        }
+    }],
     status: {
         type: String,
         default: 'active'
