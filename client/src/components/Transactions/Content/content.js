@@ -4,6 +4,7 @@ import DataTable from 'react-data-table-component';
 // import NumberFormat from 'react-number-format';
 import transactions from '../transactions';
 import Moment from 'react-moment';
+import $ from 'jquery'
 
 class Content extends Component {
 
@@ -173,6 +174,20 @@ class Content extends Component {
         });
     }
 
+    showBar = () => {
+        if (!$('#showButton').hasClass('active')) {
+
+            $('#showButton').addClass('active');
+            $('#expandBar').addClass('expanded');
+            $('#expandBar').css('display', 'block');
+        }
+        else {
+            $('#showButton').removeClass('active');
+            $('#expandBar').removeClass('expanded');
+            $('#expandBar').css('display', 'none');
+        }
+    }
+
 
     render() {
         console.log("Content", this.props);
@@ -188,8 +203,8 @@ class Content extends Component {
                                     </div>
                                     <div className="nk-block-head-content">
                                         <div className="toggle-wrap nk-block-tools-toggle">
-                                            <a href="#" className="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em className="icon ni ni-more-v"></em></a>
-                                            <div className="toggle-expand-content" data-content="pageMenu">
+                                            <a onClick={this.showBar} id="showButton" className="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em className="icon ni ni-more-v"></em></a>
+                                            <div className="toggle-expand-content" id="expandBar" data-content="pageMenu">
                                                 <ul className="nk-block-tools g-3">
                                                     <li>
                                                         <div className="form-control-wrap">
@@ -200,6 +215,7 @@ class Content extends Component {
                                                         </div>
                                                     </li>
                                                     <li className="nk-block-tools-opt">
+                                                        <Link to="/addTransaction" className="btn btn-icon btn-primary d-md-none mr-4"><em className="icon ni ni-plus"></em></Link>
                                                         <Link to="/addTransaction"><button className="toggle btn btn-primary d-none d-md-inline-flex"><em className="icon ni ni-plus"></em><span>Add Transaction</span></button></Link>
                                                     </li>
                                                 </ul>

@@ -22,6 +22,7 @@ import Sales from './components/Sales/sales';
 import AddSale from './components/Sales/Add/addSale';
 import Products from './components/Products/products'
 import AddProduct from './components/Products/Add/addProduct';
+import EditProduct from './components/Products/Add/editProduct';
 import Customers from './components/Customers/customers';
 import CustomerDetails from './components/Customers/CustomerInfo/customerInfo';
 import AddCustomer from './components/Customers/AddCustomer/add';
@@ -39,6 +40,7 @@ const routes = () => {
             <Route path="/add" exact component={Auth(AddUser, true)} />
             <Route path="/products" exact component={Auth(Products, true)} />
             <Route path="/addProduct" exact component={Auth(AddProduct, true)} />
+            <Route path="/editProduct" exact component={Auth(EditProduct, true)} />
             <Route path="/transactions" exact component={Auth(Transactions, true)} />
             <Route path="/addTransaction" exact component={Auth(AddTransaction, true)} />
             <Route path="/customers" exact component={Auth(Customers, true)} />

@@ -423,7 +423,6 @@ app.post('/api/addPurchase', auth, (req, res) => {
 
 
     const transaction = new Transaction(trans);
-    console.log("Transaction", transaction, productTotalQty);
 
     return updateWallet(purchase, transaction, products);
     async function updateWallet(purchase) {
@@ -515,6 +514,16 @@ app.post('/api/addTransaction', auth, (req, res) => {
 
 app.post('/api/supplier_update', (req, res) => {
     Supplier.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.json({
+            success: true,
+            doc
+        })
+    });
+})
+
+app.post('/api/product_update', (req, res) => {
+    Product.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, doc) => {
         if (err) return res.status(400).send(err);
         res.json({
             success: true,

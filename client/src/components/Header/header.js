@@ -31,8 +31,8 @@ class Header extends Component {
 
     }
 
-    showNav = () =>{
-         $('.nk-sidebar').css( 'transform','translateX(0)');
+    showNav = () => {
+        $('.nk-sidebar').css('transform', 'translateX(0)');
     }
 
     render() {
@@ -45,7 +45,7 @@ class Header extends Component {
                 <div className="container-fluid">
                     <div className="nk-header-wrap">
                         <div className="nk-menu-trigger d-xl-none ml-n1">
-                            <a style={{cursor:"pointer"}} onClick={this.showNav} className="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em className="icon ni ni-menu"></em></a>
+                            <a style={{ cursor: "pointer" }} onClick={this.showNav} className="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em className="icon ni ni-menu"></em></a>
                         </div>
 
                         <div className="nk-header-brand d-xl-none">
@@ -75,7 +75,7 @@ class Header extends Component {
                                         }
                                     </a>
                                     <div className="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                                        <div className="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
+                                        <div className="dropdown-inner user-card-wrap bg-lighter ">
                                             {
                                                 this.props.user.login ?
                                                     <div className="user-card">

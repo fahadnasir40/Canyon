@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react'
-class Itemsreturn extends PureComponent {
+import React, { Component } from 'react'
+class Itemsreturn extends Component {
 
     state = {
         currentProduct: '',
@@ -30,7 +30,7 @@ class Itemsreturn extends PureComponent {
         if (event.target.value <= 100000 && event.target.value >= 0) {
             if (this.state.currentProduct) {
                 this.setState({
-                    currentQuantity: event.target.value
+                    currentQuantity: Number(event.target.value)
                 })
                 this.props.updateTotalAmount(this.props.index, event.target.value, this.state.currentProduct.price.total);
             }
@@ -65,17 +65,17 @@ class Itemsreturn extends PureComponent {
                 <td><input type="number" min={1} maxLength={7} value={this.state.currentQuantity} onChange={this.handleInputQuantity} className="form-control" id="quantity" placeholder="Quantity" /></td>
                 <td>{currentProduct ? currentProduct.price.total : 'N/A'}</td>
                 <td>{currentProduct ? currentProduct.uom : 'N/A'}</td>
-                <td>{currentProduct ? (Number(currentProduct.price.total) * Number(this.state.currentQuantity)) : 'N/A'}</td>
-                <td className="tb-tnx-action">
+                <td>{currentProduct ? (Number(currentProduct.price.total) * Number(this.state.currentQuantity)) : 'N/A'} </td>
+                {/* <td className="tb-tnx-action">
                     <div className="dropdown">
                         <a className="text-soft dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
                         <div className="dropdown-menu dropdown-menu-right dropdown-menu-xs">
                             <ul className="link-list-plain">
-                                <li><a onClick={() => { this.props.remove(this.props.item.key) }}>Remove</a></li>
+                                <li><a onClick={() => { this.props.remove(this.props.key) }}>Remove</a></li>
                             </ul>
                         </div>
                     </div>
-                </td>
+                </td> */}
             </tr>
         )
     }
