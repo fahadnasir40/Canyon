@@ -49,7 +49,7 @@ class Content extends Component {
             hide: 'md',
             cell: row => (
                 <div className="tb-odr-item">
-                    <div className="title">{row.supplierName}</div>
+                    <div className="title">{row.customerName}</div>
                 </div>
             )
 
@@ -122,14 +122,14 @@ class Content extends Component {
                 <div>
                     <div className="d-none d-md-inline">
                         <Link to={{
-                            pathname: "/purchase_invoice",
+                            pathname: "/sale_Invoice",
                             state: {
                                 purchaseInfo: row
                             }
                         }} className="btn btn-dim btn-sm btn-primary">View</Link>
                     </div>
                     <Link to={{
-                        pathname: "/purchase_invoice",
+                        pathname: "/sale_Invoice",
                         state: {
                             purchaseInfo: row
                         }
@@ -147,7 +147,7 @@ class Content extends Component {
             <div className="container-fluid">
                   <div className="row d-lg-none">
                     <div className="col">
-                        <span className="title fw-medium">Name: </span> <span className="fw-normal"> {data.supplierName}</span>
+                        <span className="title fw-medium">Name: </span> <span className="fw-normal"> {data.customerName}</span>
                     </div>
                 </div>
                 <div className="row">
@@ -200,7 +200,7 @@ class Content extends Component {
             // based on the search terms
             newList = currentList.filter(item => {
                 // change current item to lowercase
-                const lc = item.supplierName.toLowerCase();
+                const lc = item.customerName.toLowerCase();
                 // change search term to lowercase
                 const filter = e.target.value.toLowerCase();
                 // check to see if the current list item includes the search term
