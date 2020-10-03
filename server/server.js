@@ -499,7 +499,7 @@ app.post('/api/addTransaction', auth, (req, res) => {
 
     transaction.save((error, transaction) => {
         if (error) {
-            
+
             return res.status(400).send(error);
         }
         return res.status(200).json({
@@ -531,6 +531,33 @@ app.post('/api/product_update', (req, res) => {
         })
     });
 })
+
+app.post('/api/purchase_paid_update', auth, (req, res) => {
+    let purchase = req.body;
+
+    if (purchase.paidAmount < purchase.totalAmount && purchase.totalAmount > 0) {
+        if (purchase.status === 'Complete')
+            purchase.status = 'Pending'
+        else if (purchase.status === 'Returned Items') {
+            purchase.status = 'Returned Items Pending'
+        }
+    }
+    else if (purchase.paidAmount >= purchase.totalAmount) {
+        if (purchase.status === 'Pending')
+            purchase.status = 'Complete'
+        else if (purchase.status === 'Returned Items Pending') {
+            purchase.status = 'Returned Items'
+        }
+    }
+    Purchase.findByIdAndUpdate(req.body._id, purchase, { new: true }, (err, doc) => {
+        if (err) return res.status(400).send(err);
+        return res.status(200).json({
+            success: true
+        });
+    });
+})
+
+
 
 app.post('/api/purchase_update', auth, async function (req, res) {
 

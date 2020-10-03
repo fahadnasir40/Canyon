@@ -1,10 +1,10 @@
-import React, { cloneElement, Component } from "react";
+import React, { Component } from "react";
 import Sidebar from "../../Sidebar/sidebar";
 import Header from "../../Header/header";
 import Footer from "../../Footer/footer";
 import { connect } from "react-redux";
 import Moment from "react-moment";
-import { Link,Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { updatePurchase } from "../../../actions";
 class PurchaseReturn extends Component {
     state = {
@@ -23,24 +23,24 @@ class PurchaseReturn extends Component {
 
             let newPurchase = this.props.location.state.purchase.doc;
             const oldPurchase = JSON.parse(JSON.stringify(this.props.location.state.purchase.doc));
-             
-            const products = this.props.location.state.purchase.products;           
+
+            const products = this.props.location.state.purchase.products;
             newPurchase.productDetails.forEach(element => {
                 const p = products.find(x => x._id === element._id);
                 if (p) {
-                    if (element.returnQty > 0){
-                        element.pqty = (element.pqty - element.returnQty )
+                    if (element.returnQty > 0) {
+                        element.pqty = (element.pqty - element.returnQty)
                     }
-                    
-                  
-                    
+
+
+
                     element.returnQty = element.pqty;
                     if (element.pqty > p.stock) {
                         element.returnQty = 0;
-                    }   
-                    if(element.pqty === 0)
-                       element.returnQty = 0;
-                
+                    }
+                    if (element.pqty === 0)
+                        element.returnQty = 0;
+
 
                     element.ptotal = (element.pqty - element.returnQty) * element.pprice;
 
@@ -55,10 +55,10 @@ class PurchaseReturn extends Component {
         }
     }
 
-    static getDerivedStateFromProps(nextProps,prevState){
-        if(nextProps.purchaseReturned){
-            if(nextProps.purchaseReturned === true){
-                return({
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.purchaseReturned) {
+            if (nextProps.purchaseReturned === true) {
+                return ({
                     loading: false,
                     redirect: true
                 })
@@ -72,26 +72,25 @@ class PurchaseReturn extends Component {
         this.setState({ loading: true });
         // console.log("Data", this.state.purchase);
         // console.log("Old Data", this.state.oldPurchase);
-        
+
         let purchase = this.state.purchase;
 
         let totalAmount = 0;
-        purchase.productDetails.forEach(element => {            
+        purchase.productDetails.forEach(element => {
             const index = purchase.productDetails.indexOf(element);
-            if(purchase.status === 'Returned Items' || purchase.status === 'Returned Items Pending'){
-                if(element.pqty === 0){
-                    element.returnQty = this.state.oldPurchase.productDetails[index].returnQty;  
+            if (purchase.status === 'Returned Items' || purchase.status === 'Returned Items Pending') {
+                if (element.pqty === 0) {
+                    element.returnQty = this.state.oldPurchase.productDetails[index].returnQty;
                     element.ptotal = this.state.oldPurchase.productDetails[index].ptotal;
                 }
-                else
-                {
+                else {
                     element.returnSelected = element.returnQty;
                     element.returnQty = this.state.oldPurchase.productDetails[index].returnQty + element.returnQty;
                 }
-                element.pqty = this.state.oldPurchase.productDetails[index].pqty; 
-                
+                element.pqty = this.state.oldPurchase.productDetails[index].pqty;
+
             }
-            else{
+            else {
                 element.returnSelected = element.returnQty;
             }
             totalAmount += element.ptotal
@@ -102,20 +101,20 @@ class PurchaseReturn extends Component {
             purchase.status = "Returned" :
             purchase.status = "Returned Items";
 
-        if(purchase.status === 'Returned Items' && purchase.paidAmount < purchase.totalAmount){
+        if (purchase.status === 'Returned Items' && purchase.paidAmount < purchase.totalAmount) {
             purchase.status = "Returned Items Pending";
         }
 
         this.props.dispatch(updatePurchase(purchase));
     }
 
-    handleInputQuantity = (event, stock, index,item) => {
+    handleInputQuantity = (event, stock, index, item) => {
 
         const qty = event.target.value;
         let p = this.state.purchase;
 
-        if(item){
-            if (qty >= 0 && qty <= stock &&  qty <= item.pqty ) {
+        if (item) {
+            if (qty >= 0 && qty <= stock && qty <= item.pqty) {
                 if (qty == 0) {
                     const total = p.productDetails[index].pprice * (p.productDetails[index].pqty - qty);
                     p.productDetails[index] = {
@@ -131,7 +130,7 @@ class PurchaseReturn extends Component {
                         ptotal: (p.productDetails[index].pqty - Number(qty)) * Number(p.productDetails[index].pprice)
                     }
                 }
-    
+
                 this.setState({
                     ...this.state,
                     purchase: p
@@ -224,10 +223,10 @@ class PurchaseReturn extends Component {
         );
     };
 
-   
-    
-    checkDisabled = (item)=>{
-        if(item.pqty === 0)
+
+
+    checkDisabled = (item) => {
+        if (item.pqty === 0)
             return true;
         return false;
     }
@@ -287,7 +286,7 @@ class PurchaseReturn extends Component {
                                             type="number"
                                             maxLength={7}
                                             value={item.returnQty}
-                                            onChange={(event) => { this.handleInputQuantity(event, product.stock, key,item) }}
+                                            onChange={(event) => { this.handleInputQuantity(event, product.stock, key, item) }}
                                             min={0}
                                             // defaultValue={this.getDefaultValue(product,item,key)}
                                             max={item.pqty}
@@ -319,8 +318,8 @@ class PurchaseReturn extends Component {
         const purchase = this.state.purchase;
         const products = this.state.products;
 
-        if(this.state.redirect){
-            return <Redirect to="/purchases"/>
+        if (this.state.redirect) {
+            return <Redirect to="/purchases" />
         }
 
         return (
@@ -342,7 +341,7 @@ class PurchaseReturn extends Component {
 }
 
 function mapStateToProps(state) {
-    console.log("Response got",state);
+    console.log("Response got", state);
     return {
         purchaseReturned: state.purchase.post
         // productsList: state.product.productList,

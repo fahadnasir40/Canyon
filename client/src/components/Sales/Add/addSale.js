@@ -10,7 +10,6 @@ import { getActiveProducts, saveTransaction, getCustomers } from '../../../actio
 import Moment from 'react-moment';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Salestab from '../../Sales/itemsreturn'
 
 class AddSale extends Component {
 

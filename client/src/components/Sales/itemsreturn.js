@@ -1,7 +1,4 @@
-import React, { useState } from 'react';
-// import logo from './logo.svg';
-// import './App.css';
-import { Tabs, Tab } from 'react-bootstrap';
+import React from 'react';
 import SaleDetailsProduct from '../Sales/Add/SaleDetailsProduct'
 import SaleDetailsTransaction from '../Sales/Add/SaleDetailsTransaction'
 import SaleDetailsPayment from '../Sales/Add/SaleDetailsPayment'

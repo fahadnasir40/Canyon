@@ -376,6 +376,16 @@ export function updatePurchase(data) {
     }
 }
 
+export function updatePurchasePaid(data) {
+    const request = axios.post(`/api/purchase_paid_update`, data)
+        .then(response => response.data);
+
+    return {
+        type: 'UPDATE_PURCHASE_PAID',
+        payload: request
+    }
+}
+
 export function saveCustomer(document) {
     const request = axios.post('/api/addCustomer', document)
         .then(response => response.data);

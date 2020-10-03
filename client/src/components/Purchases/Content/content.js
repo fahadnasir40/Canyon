@@ -2,11 +2,13 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import DataTable from 'react-data-table-component';
 import Moment from 'react-moment';
-import $ from 'jquery'
+import $ from 'jquery';
+import Swal from 'sweetalert2';
 class Content extends Component {
 
     state = {
-        purchaseList: this.props.purchaseList
+        purchaseList: this.props.purchaseList,
+        editPaidAmount: 0
     }
 
     columns = [
@@ -133,6 +135,8 @@ class Content extends Component {
                         <Link to={{
                             pathname: `/purchase_invoice_id=${row._id}`,
                         }} className="btn btn-dim btn-sm btn-primary">View</Link>
+
+                        <div onClick={() => { this.editPaidAmount(row) }} class="btn btn-icon btn-white btn-dim btn-lg  btn-primary py-n1 ml-3"><em class="iconicon ni ni-edit"></em></div>
                     </div>
                     <Link to={{
                         pathname: `/purchase_invoice_id=${row._id}`,
@@ -170,9 +174,6 @@ class Content extends Component {
         )
     };
 
-    check = (toggle) => {
-
-    }
 
     componentDidUpdate(prevProps) {
         if (prevProps.purchaseList !== this.props.purchaseList) {
@@ -279,6 +280,47 @@ class Content extends Component {
         }
     }
 
+    editPaidAmount = (purchase) => {
+        openModal(this);
+        async function openModal(object) {
+            const { value: formValues } = await Swal.fire({
+                title: 'Edit Purchase',
+                input: 'number',
+                inputAttributes: {
+                    max: purchase.totalAmount,
+                    min: 0,
+                    maxlength: 2
+                },
+
+                inputPlaceholder: 'Enter Paid Amount',
+                inputValue: purchase.paidAmount,
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to write something!'
+                    }
+                    else if (value > purchase.totalAmount)
+                        return 'Paid Amount must be less than total amount'
+                    else if (value < 0) {
+                        return 'Paid Amount must be greater or equal to zero'
+                    }
+                    if (value) {
+                        purchase.paidAmount = value;
+                        object.props.updatePurchase(purchase)
+                    }
+                },
+                html:
+                    `<div><span class="fs-10">Purchase # </span><span>${purchase._id}</span></div >
+                    <div class="mt-3"><span class="fw-bold">Total Amount: </span><span> Rs. ${purchase.totalAmount}</span></div >
+                    <div class="fw-bold mt-2">Paid Amount</div>`,
+                focusConfirm: false,
+            })
+            if (formValues) {
+                Swal.fire("Paid Amount Changed", JSON.stringify(formValues))
+            }
+        }
+
+    }
 
     render() {
         return (
