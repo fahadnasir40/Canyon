@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import axios from 'axios'
 import $ from 'jquery'
-
+import DatePicker from 'react-datepicker';
+import Moment from 'react-moment';
 class ProfileContent extends Component {
 
 
@@ -23,6 +24,7 @@ class ProfileContent extends Component {
         newPassword: '',
         pwstatus: '',
         pwmessage: '',
+        newDob: '',
         logout: false
     }
 
@@ -55,9 +57,13 @@ class ProfileContent extends Component {
     handleInputPhone = (event) => {
         this.setState({ phone: event.target.value })
     }
-    handleInputDob = (event) => {
-        this.setState({ dob: event.target.value })
-    }
+
+    handleInputDob = date => {
+        this.setState({
+            dob: date,
+            newDob: date
+        });
+    };
 
     handleInputNewPassword = (event) => {
         this.setState({ newPassword: event.target.value })
@@ -198,8 +204,6 @@ class ProfileContent extends Component {
         }
     }
 
-
-
     renderProfile = (user) => (
         <div id="container">
             <div className="nk-content ml-md-4 mt-5 ">
@@ -255,7 +259,7 @@ class ProfileContent extends Component {
                                                             <div className="data-item" data-toggle="modal" data-target="#profile-edit">
                                                                 <div className="data-col">
                                                                     <span className="data-label">Date of Birth</span>
-                                                                    <span className="data-value">{user.dob}</span>
+                                                                    <span className="data-value"><Moment format="DD MMMM, YYYY">{user.dob}</Moment></span>
                                                                 </div>
                                                                 <div className="data-col data-col-end"><span className="data-more"><em className="icon ni ni-forward-ios"></em></span></div>
                                                             </div>
@@ -387,7 +391,15 @@ class ProfileContent extends Component {
                                         <div className="col-md-6">
                                             <div className="form-group">
                                                 <label className="form-label" htmlFor="birth-day">Date of Birth</label>
-                                                <input type="date" value={this.state.dob} onChange={this.handleInputDob} className="form-control form-control-lg date-picker" id="birth-day" placeholder="Enter your name" />
+
+                                                <DatePicker
+                                                    selected={this.state.newDob}
+                                                    onChange={this.handleInputDob}
+                                                    dateFormat={'dd-MMM-yyyy'}
+                                                    className="form-control ml-2"
+                                                    id="birth-day"
+                                                    placeholder="Enter date of birth"
+                                                />
                                             </div>
                                         </div>
 

@@ -4,12 +4,24 @@ import Header from '../Header/header'
 import Footer from '../Footer/footer'
 import Content from './Content/content';
 import { connect } from 'react-redux';
-import { getPurchases } from '../../actions';
+import { getPurchases, updatePurchasePaid } from '../../actions';
 
 class Purchase extends Component {
 
     componentDidMount() {
         this.props.dispatch(getPurchases());
+    }
+
+    updatePurchase = (purchase) => {
+        this.props.dispatch(updatePurchasePaid(purchase))
+    }
+
+    static getDerivedStateFromProps(nextProps) {
+        if (nextProps.updatePurchase) {
+            if (nextProps.updatePurchase === true) {
+                window.location.reload(false);
+            }
+        }
     }
 
     render() {
@@ -21,7 +33,7 @@ class Purchase extends Component {
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
-                            <Content purchaseList = {this.props.purchaseList} />
+                            <Content updatePurchase={this.updatePurchase} purchaseList={this.props.purchaseList} />
                             <Footer />
                         </div>
                     </div>
@@ -33,7 +45,8 @@ class Purchase extends Component {
 
 function mapStateToProps(state) {
     return {
-        purchaseList: state.purchase.purchaseList
+        purchaseList: state.purchase.purchaseList,
+        updatePurchase: state.purchase.post
         // productsList: state.product.productList,
         // removeSupplier: state.supplier.postDeleted,
         // editSupplier: state.supplier.post

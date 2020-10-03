@@ -11,6 +11,11 @@ export default function (state = {}, action) {
                 ...state,
                 post: action.payload.success
             }
+        case 'UPDATE_PURCHASE_PAID':
+            return {
+                ...state,
+                post: action.payload.success
+            }
         case 'DELETE_PURCHASE':
             return {
                 ...state,

@@ -41,9 +41,9 @@ class Itemsreturn extends PureComponent {
     }
 
     handleInputLimit = (event) => {
-            if (this.state.currentLimit) {
-                this.setState({ currentLimit: event.target.value })
-            }
+        if (this.state.currentLimit) {
+            this.setState({ currentLimit: event.target.value })
+        }
     }
 
     getProductRate = (currentProduct) => {
@@ -57,11 +57,11 @@ class Itemsreturn extends PureComponent {
                 else
                     return currentProduct.price.total;
             }
-            else if(customer.salePrice.find(x=>x._id === currentProduct._id)) {
-                return customer.salePrice.find(x=>x._id === currentProduct._id).rate + ' ( C ) ';
+            else if (customer.salePrice.find(x => x._id === currentProduct._id)) {
+                return customer.salePrice.find(x => x._id === currentProduct._id).rate + ' ( C ) ';
             }
             else {
-                return currentProduct.price.total; 
+                return currentProduct.price.total;
             }
         }
         else
@@ -93,7 +93,7 @@ class Itemsreturn extends PureComponent {
                     </div>
                 </td>
                 <td>{currentProduct ? currentProduct.uom : 'N/A'}</td>
-                <td><input type="number" value={this.state.currentLimit} onChange={this.handleInputLimit} className="form-control" id="limit" placeholder="0" disabled = 'true' /></td>
+                <td><input type="number" value={this.state.currentLimit} onChange={this.handleInputLimit} className="form-control" id="limit" placeholder="0" disabled='true' /></td>
                 <td><input type="number" min={1} maxLength={7} value={this.state.currentQuantity} onChange={this.handleInputQuantity} className="form-control" id="quantity" placeholder="Quantity" /></td>
                 <td>{this.getProductRate(currentProduct)}</td>
                 <td>{currentProduct ? (Number(currentProduct.price.total) * Number(this.state.currentQuantity)) : 'N/A'}</td>
