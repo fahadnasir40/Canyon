@@ -69,6 +69,9 @@ const saleSchema = mongoose.Schema({
     secAmount: {
         type: Number
     },
+    status: {
+        type: String
+    },
     paidAmount: {
         type: Number,
         required: true

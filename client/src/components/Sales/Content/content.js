@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import DataTable from 'react-data-table-component';
 import Moment from 'react-moment';
+import Swal from 'sweetalert2';
 
 class Content extends Component {
 
@@ -68,12 +69,13 @@ class Content extends Component {
                             <span className="amount">Rs. {row.totalAmount}</span>
                         </span>
                         <span className="tb-odr-status d-sm-none">
-                            {
+                            <span className="badge badge-dot badge-warning">row.status</span>
+                            {/* {
                                 row.paidAmount < row.totalAmount ?
                                     <span className="badge badge-dot badge-warning">Pending</span>
                                     :
                                     <span className="badge badge-dot badge-success">Complete</span>
-                            }
+                            } */}
                         </span>
                     </td>
                 </div>
@@ -122,30 +124,25 @@ class Content extends Component {
                 <div>
                     <div className="d-none d-md-inline">
                         <Link to={{
-                            pathname: "/sale_Invoice",
-                            state: {
-                                purchaseInfo: row
-                            }
+                            pathname: `/sale_invoice_id=${row._id}`,
                         }} className="btn btn-dim btn-sm btn-primary">View</Link>
+
+                        <div onClick={() => { this.editPaidAmount(row) }} class="btn btn-icon btn-white btn-dim btn-lg  btn-primary py-n1 ml-3"><em class="iconicon ni ni-edit"></em></div>
                     </div>
                     <Link to={{
-                        pathname: "/sale_Invoice",
-                        state: {
-                            purchaseInfo: row
-                        }
+                        pathname: `/sale_invoice_id=${row._id}`,
                     }} className="btn btn-pd-auto d-md-none"><em className="icon ni ni-chevron-right"></em></Link>
                 </div>
-
             )
         },
 
     ];
 
 
-    SampleExpandedComponent = ({data}) => {
+    SampleExpandedComponent = ({ data }) => {
         return (
             <div className="container-fluid">
-                  <div className="row d-lg-none">
+                <div className="row d-lg-none">
                     <div className="col">
                         <span className="title fw-medium">Name: </span> <span className="fw-normal"> {data.customerName}</span>
                     </div>
@@ -167,15 +164,15 @@ class Content extends Component {
                 </div>
                 <div className="row">
                     <div className="col">
-                    <br/><span className=" fw-medium">Products List </span><br/>
+                        <br /><span className=" fw-medium">Products List </span><br />
                     </div>
                 </div>
             </div>
         )
     };
 
-    check = (toggle) =>{
-        
+    check = (toggle) => {
+
     }
 
     componentDidUpdate(prevProps) {
@@ -218,10 +215,53 @@ class Content extends Component {
         });
     }
 
-    getProductDetails = (toggleState,data) =>{
-        if(toggleState === true){
-           
+    getProductDetails = (toggleState, data) => {
+        if (toggleState === true) {
+
         }
+    }
+
+
+    editPaidAmount = (sale) => {
+        openModal(this);
+        async function openModal(object) {
+            const { value: formValues } = await Swal.fire({
+                title: 'Edit Sale',
+                input: 'number',
+                inputAttributes: {
+                    max: sale.totalAmount,
+                    min: 0,
+                    maxlength: 2
+                },
+
+                inputPlaceholder: 'Enter Paid Amount',
+                inputValue: sale.paidAmount,
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to write something!'
+                    }
+                    else if (value > sale.totalAmount)
+                        return 'Paid Amount must be less than total amount'
+                    else if (value < 0) {
+                        return 'Paid Amount must be greater or equal to zero'
+                    }
+                    if (value) {
+                        sale.paidAmount = value;
+                        object.props.updateSale(sale)
+                    }
+                },
+                html:
+                    `<div><span class="fs-10">Sale # </span><span>${sale._id}</span></div >
+                    <div class="mt-3"><span class="fw-bold">Total Amount: </span><span> Rs. ${sale.totalAmount}</span></div >
+                    <div class="fw-bold mt-2">Paid Amount</div>`,
+                focusConfirm: false,
+            })
+            if (formValues) {
+                Swal.fire("Paid Amount Changed", JSON.stringify(formValues))
+            }
+        }
+
     }
 
     render() {
@@ -266,7 +306,7 @@ class Content extends Component {
                                 pagination
                                 expandableRows={true}
                                 expandableRowsComponent={<this.SampleExpandedComponent />}
-                                onRowExpandToggled = {(toggleState,row)=>{this.getProductDetails(toggleState,row)}}
+                                onRowExpandToggled={(toggleState, row) => { this.getProductDetails(toggleState, row) }}
                                 paginationPerPage={10}
                             />
                         </div>

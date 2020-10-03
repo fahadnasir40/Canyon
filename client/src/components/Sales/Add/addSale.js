@@ -308,9 +308,15 @@ class AddSale extends Component {
                 saleDate: this.state.saleDate,
                 addedBy: this.props.user.login.id,
                 totalAmount: this.totalAmount,
-                secAmount: this.sectotal,
+                secAmount: this.state.secamount,
                 paidAmount: this.paidAmount
             }
+
+            if (sale.paidAmount < sale.totalAmount)
+                sale.status = 'Pending';
+            else
+                sale.status = 'Complete';
+
             let productDetails = [];
 
             // console.log("inner :", this.products)
