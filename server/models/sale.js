@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const shortid = require('shortid');
 
 
-const productSchema = mongoose.Schema({
+const saleSchema = mongoose.Schema({
     _id: {
         type: String,
         default: shortid.generate()
@@ -40,10 +40,22 @@ const productSchema = mongoose.Schema({
         puom: {
             type: String
         },
-        pqty: {
+        rqty: {
             type: Number
         },
+        dqty: {
+            type: Number
+        },
+        disc: {
+            type: Number
+        },
+        pmethod: {
+            type: String
+        },
         pprice: {
+            type: Number
+        },
+        secpaid: {
             type: Number
         },
         ptotal: {
@@ -54,12 +66,15 @@ const productSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    secAmount: {
+        type: Number
+    },
     paidAmount: {
         type: Number,
         required: true
     }
 }, { timestamps: true })
 
-const Sale = mongoose.model('Sale', productSchema);
+const Sale = mongoose.model('Sale', saleSchema);
 
 module.exports = { Sale }

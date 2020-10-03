@@ -1,38 +1,118 @@
-import React, { useState } from 'react';
-// import logo from './logo.svg';
-// import './App.css';
-import { Tabs, Tab } from 'react-bootstrap';
-import SaleDetailsProduct from '../Sales/Add/SaleDetailsProduct'
-import SaleDetailsTransaction from '../Sales/Add/SaleDetailsTransaction'
-import SaleDetailsPayment from '../Sales/Add/SaleDetailsPayment'
+import React, { PureComponent } from 'react'
+class Itemsreturn extends PureComponent {
 
-function Salestab() {
-    const [key, setKey] = useState('home');
+    state = {
+        currentProduct: '',
+        currentQuantity: '',
+        currentdiscount: '',
+        currentTotal: '',
+        currentLimit: ''
+    }
 
-    return (
-        <div className="Product">
+    handleProductDropdown = (event) => {
 
+        if (this.props.productsList) {
+            if (event.target.value === -1 && this.state.currentProduct) {
+                this.setState({ currentProduct: '', currentQuantity: '' });
+                this.props.removeSelectedItem(this.props.index);
+            }
+            else {
+                this.setState({
+                    currentProduct: this.props.productsList[event.target.value],
+                    currentQuantity: 1
+                })
+                if (this.state.currentProduct)
+                    this.props.removeSelectedItem(this.props.index);
+                this.props.addSelectedItem(this.props.productsList[event.target.value]);
+                this.props.updateTotalAmount(this.props.index, 1, this.props.productsList[event.target.value].price.total);
+            }
+        }
+    }
 
-            <Tabs
-                id="controlled-tab-example"
-                activeKey={key}
-                onSelect={(k) => setKey(k)}
-            >
+    handleInputQuantity = (event) => {
+        if (event.target.value <= 100000 && event.target.value >= 0) {
+            if (this.state.currentQuantity) {
+                this.setState({
+                    currentQuantity: event.target.value
+                })
+                this.props.updateTotalAmount(this.props.index, event.target.value, this.state.currentProduct.price.total);
+            }
+        }
+    }
 
-                <Tab eventKey="Product" title="Product Detail">
-                    <SaleDetailsProduct />
-                </Tab>
-                <Tab eventKey="Transaction" title="Transaction">
-                    <SaleDetailsTransaction />
-                </Tab>
-                <Tab eventKey="Payment" title="Payment">
-                    <SaleDetailsPayment />
-                </Tab>
+    handleInputLimit = (event) => {
+            if (this.state.currentLimit) {
+                this.setState({ currentLimit: event.target.value })
+            }
+    }
 
-            </Tabs>
+    getProductRate = (currentProduct) => {
 
-        </div>
-    );
+        const customer = this.props.customer;
+        if (currentProduct) {
+            if (customer.flatRate === true) {
+                if (Number(currentProduct.price.cost_flatRate)) {
+                    return currentProduct.price.cost_flatRate;
+                }
+                else
+                    return currentProduct.price.total;
+            }
+            else if(customer.salePrice.find(x=>x._id === currentProduct._id)) {
+                return customer.salePrice.find(x=>x._id === currentProduct._id).rate + ' ( C ) ';
+            }
+            else {
+                return currentProduct.price.total; 
+            }
+        }
+        else
+            return 'N/A'
+
+    }
+
+    render() {
+        let currentProduct = this.state.currentProduct;
+        return (
+            <tr>
+                <th scope="row">
+                    <span className="text-primary">{this.props.index + 1}</span>
+                </th>
+                <td>
+                    <div className="form-control-wrap">
+                        <div className="form-control-select">
+                            <select className="form-control" onChange={this.handleProductDropdown} data-search="on">
+                                <option value={-1}>Select Item</option>
+                                {
+                                    this.props.productsList ?
+                                        this.props.productsList.map((item, key) => {
+                                            return <option key={key} value={key} className="ccap" >{item.name}</option>;
+                                        })
+                                        : null
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </td>
+                <td>{currentProduct ? currentProduct.uom : 'N/A'}</td>
+                <td><input type="number" value={this.state.currentLimit} onChange={this.handleInputLimit} className="form-control" id="limit" placeholder="0" disabled = 'true' /></td>
+                <td><input type="number" min={1} maxLength={7} value={this.state.currentQuantity} onChange={this.handleInputQuantity} className="form-control" id="quantity" placeholder="Quantity" /></td>
+                <td>{this.getProductRate(currentProduct)}</td>
+                <td>{currentProduct ? (Number(currentProduct.price.total) * Number(this.state.currentQuantity)) : 'N/A'}</td>
+
+                <td>{currentProduct ? (Number(currentProduct.price.total) * Number(this.state.currentQuantity)) : 'N/A'}</td>
+                <td className="tb-tnx-action">
+                    <div className="dropdown">
+                        <a className="text-soft dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
+                        <div className="dropdown-menu dropdown-menu-right dropdown-menu-xs">
+                            <ul className="link-list-plain">
+                                <li><a onClick={() => { this.props.remove(this.props.item.key) }}>Remove</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        )
+    }
 }
 
-export default Salestab;
+
+export default Itemsreturn
