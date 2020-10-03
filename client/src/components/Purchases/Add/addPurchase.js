@@ -144,7 +144,7 @@ class AddPurchase extends Component {
                     purchase.status = 'Complete';
 
                 let productDetails = [];
-                console.log("This products",this.products);
+                console.log("This products", this.products);
                 this.products.forEach(item => {
                     const product = productDetails.find(element => element._id === item._id);
 
