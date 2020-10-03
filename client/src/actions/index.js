@@ -17,7 +17,7 @@ export function getSuppliers(
             }
         })
         .catch(error => {
-            console.log(error)
+
         });
 
     return {
@@ -33,7 +33,7 @@ export function getSupplier(id) {
             return response.data;
         })
         .catch(error => {
-            console.log(error)
+
         });
 
     return {
@@ -42,13 +42,30 @@ export function getSupplier(id) {
     }
 }
 
+export function getDashboard() {
+
+    const request = axios.get(`/api/getDashboard`)
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+
+        });
+
+    return {
+        type: 'GET_DASHBOARD',
+        payload: request
+    }
+}
+
+
 export function getSupplierDetails(_id) {
     const request = axios.get(`/api/getSupplierDetails?id=${_id}`)
         .then(response => {
             return response.data;
         })
         .catch(error => {
-            console.log(error)
+
         });
 
     return {
@@ -75,7 +92,7 @@ export function getSuppliersTransactions(
             }
         })
         .catch(error => {
-            console.log(error)
+
         });
 
     return {
@@ -101,7 +118,7 @@ export function getCustomersTransactions(
             }
         })
         .catch(error => {
-            console.log(error)
+
         });
 
     return {
@@ -127,7 +144,7 @@ export function getEmployeesTransactions(
             }
         })
         .catch(error => {
-            console.log(error)
+
         });
 
     return {
@@ -153,7 +170,7 @@ export function getActiveSuppliers(
             }
         })
         .catch(error => {
-            console.log(error)
+
         });
 
     return {
@@ -260,7 +277,7 @@ export function getTransactions(
 export function getPurchases(
     start = 0,
     limit = 0,
-    order = 'asc',
+    order = 'desc',
     list = ''
 ) {
     const request = axios.get(`api/getPurchases?skip=${start}&limit=${limit}&order=${order}`)
@@ -319,11 +336,11 @@ export function getBookWithReviewer(id) {
                     })
                 })
                 .catch(err => {
-                    console.log("Error getting reviewer data. " + err);
+
                 })
         })
             .catch(err => {
-                console.log(err);
+
             })
     }
 }

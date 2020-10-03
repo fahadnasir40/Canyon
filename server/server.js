@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
+const moment = require("moment")
 
 const config = require("./config/config").get(process.env.NODE_ENV);
 const app = express();
@@ -44,6 +45,169 @@ app.get("/api/auth", auth, (req, res) => {
         role: req.user.role,
     });
 });
+
+
+app.get('/api/getDashboard', auth, (req, res) => {
+
+    getData();
+    async function getData() {
+
+        let data = '';
+        const recentOrders = '';
+        Sale.find().skip().sort({ createdAt: -1 }).limit(5).select('_id customerName createdAt saleDate status totalAmount').exec((err, doc) => {
+            if (err) return res.status(400).send(err);
+            data = { recentOrders: [...doc] };
+
+            Transaction.find({ transaction_action: 'Sale Added', status: 'active' }).select('rate createdAt').exec((err, trans) => {
+                if (err) return res.status(400).send(err);
+
+                var totalSales = 0;
+                var lastMonthSale = 0;
+                var lastWeekSale = 0;
+                var prevLastWeekSale = 0;
+
+                trans.forEach(element => {
+                    totalSales = totalSales + element.rate;
+                })
+
+                const currentDate = new Date();
+                const currentDateTime = currentDate.getTime();
+                const last30DaysDate = new Date(currentDate.setDate(currentDate.getDate() - 30));
+                const last30DaysDateTime = last30DaysDate.getTime();
+
+                const last30DaysList = trans.filter(x => {
+                    const elementDateTime = new Date(x.createdAt).getTime();
+                    if (elementDateTime <= currentDateTime && elementDateTime > last30DaysDateTime) {
+                        return true;
+                    }
+                    return false
+                }).sort((a, b) => {
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                });
+
+
+                var prevMonthFirstDay = new moment().subtract(1, 'months').date(1).toDate();
+                var prevMonthLastDay = new moment().subtract(1, 'months').endOf('month').toDate();
+
+
+                const prevMonthFirstDateTime = prevMonthFirstDay.getTime();
+                const prev30DaysDate = prevMonthLastDay;
+                const prev30DaysDateTime = prev30DaysDate.getTime();
+
+                const prevMonthList = trans.filter(x => {
+                    const elementDateTime = new Date(x.createdAt).getTime();
+                    if (elementDateTime <= prev30DaysDateTime && elementDateTime > prevMonthFirstDateTime) {
+                        return true;
+                    }
+                    return false
+                }).sort((a, b) => {
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                });
+
+                prevMonthList.forEach(element => {
+                    lastMonthSale += element.rate;
+                })
+
+                const lastWeekList = trans.filter(x => {
+                    const elementDateTime = new Date(x.createdAt).getTime();
+                    if (elementDateTime <= new Date() && elementDateTime >= new moment().subtract(7, 'days').toDate()) {
+                        return true;
+                    }
+                    return false
+                }).sort((a, b) => {
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                });
+
+                const prevLastWeekList = trans.filter(x => {
+                    const elementDateTime = new Date(x.createdAt).getTime();
+                    if (elementDateTime <= new moment().subtract(7, 'days').toDate() && elementDateTime >= new moment().subtract(14, 'days').toDate()) {
+                        return true;
+                    }
+                    return false
+                }).sort((a, b) => {
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                });
+
+
+                lastWeekList.forEach(element => {
+                    lastWeekSale += element.rate;
+                })
+
+                prevLastWeekList.forEach(element => {
+                    prevLastWeekSale += element.rate;
+                })
+
+                Customer.find({ status: 'active' }).countDocuments((err, count) => {
+                    if (err) return res.status(400).send(err);
+                    const customerCount = count;
+                    Supplier.find({ status: 'active' }).countDocuments((err, count) => {
+                        if (err) return res.status(400).send(err);
+
+                        const supplierCount = count;
+                        Product.find({ status: 'active' }).countDocuments((err, count) => {
+                            if (err) return res.status(400).send(err);
+
+                            const productCount = count;
+                            Sale.find().skip().sort({ createdAt: 'desc' }).limit().lean().exec((err, doc) => {
+                                if (err) return res.status(400).send(err);
+                                let productsList = [];
+
+
+                                const functionWithPromise = item => { //a function that returns a promise
+                                    return Promise.resolve()
+                                }
+
+                                const anAsyncFunction = async item => {
+                                    item.productDetails.forEach((element, key) => {
+                                        if (!productsList.find(x => x._id === element._id)) {
+                                            productsList.push({ _id: element._id, totalAmount: element.ptotal, count: (element.dqty - element.rqty) })
+                                        }
+                                        else {
+                                            const index = productsList.indexOf(productsList.find(x => x._id === element._id));
+                                            productsList[index].totalAmount += element.ptotal;
+                                            productsList[index].count += (element.dqty - element.rqty)
+                                        }
+                                    })
+                                    return functionWithPromise(item)
+                                }
+
+                                const getData = async () => {
+                                    return Promise.all(doc.map(item => anAsyncFunction(item)))
+                                }
+
+                                getData().then(newData => {
+                                    data = {
+                                        ...data,
+                                        totalSales: totalSales,
+                                        lastMonthSale: lastMonthSale,
+                                        lastWeekSale: lastWeekSale,
+                                        prevWeekSale: prevLastWeekSale,
+                                        totalSalesAmount: trans.length,
+                                        lastMonthSaleList: last30DaysList,
+                                        productCount: productCount,
+                                        supplierCount: supplierCount,
+                                        customerCount: customerCount,
+                                        topProducts: productsList
+                                    }
+                                    res.status(200).send(data);
+                                })
+
+
+                            })
+                        })
+                    })
+
+                })
+
+
+            })
+
+
+        })
+    }
+
+
+})
 
 app.get('/api/getSupplier', auth, (req, res) => {
     let id = req.query.id;
@@ -92,7 +256,7 @@ app.get('/api/getSuppliers', auth, (req, res) => {
     let order = req.query.order;
 
     // ORDER = asc || desc
-    Supplier.find().skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+    Supplier.find().skip(skip).sort({ createdAt: order }).limit(limit).exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.send(doc);
     })
@@ -105,7 +269,7 @@ app.get('/api/getSuppliersTransactions', auth, (req, res) => {
     let order = req.query.order;
 
     // ORDER = asc || desc
-    Supplier.find({ status: "active" }).skip(skip).sort({ _id: order }).limit(limit).select('_id name brand').lean().exec((err, doc) => {
+    Supplier.find({ status: "active" }).skip(skip).sort({ createdAt: order }).limit(limit).select('_id name brand').lean().exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.send(doc);
     })
@@ -127,7 +291,7 @@ app.get('/api/getCustomersTransactions', auth, (req, res) => {
     let order = req.query.order;
 
     // ORDER = asc || desc
-    Customer.find({ status: "active" }).skip(skip).sort({ _id: order }).limit(limit).select('_id name brand').exec((err, doc) => {
+    Customer.find({ status: "active" }).skip(skip).sort({ createdAt: order }).limit(limit).select('_id name brand').exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.send(doc);
     })
@@ -140,7 +304,7 @@ app.get('/api/getEmployeesTransactions', auth, (req, res) => {
     let order = req.query.order;
 
     // ORDER = asc || desc
-    User.find().skip(skip).sort({ _id: order }).limit(limit).select('_id name').exec((err, doc) => {
+    User.find().skip(skip).sort({ createdAt: order }).limit(limit).select('_id name').exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.send(doc);
     })
@@ -154,7 +318,7 @@ app.get('/api/getActiveSuppliers', auth, (req, res) => {
     let order = req.query.order;
 
     // ORDER = asc || desc
-    Supplier.find({ status: 'active' }).skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+    Supplier.find({ status: 'active' }).skip(skip).sort({ createdAt: order }).limit(limit).exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.send(doc);
     })
@@ -167,7 +331,7 @@ app.get('/api/getCustomers', auth, (req, res) => {
     let order = req.query.order;
 
     // ORDER = asc || desc
-    Customer.find().skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+    Customer.find().skip(skip).sort({ createdAt: order }).limit(limit).exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.send(doc);
     })
@@ -180,7 +344,7 @@ app.get('/api/getProducts', auth, (req, res) => {
     let order = req.query.order;
 
     // ORDER = asc || desc
-    Product.find().skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+    Product.find().skip(skip).sort({ createdAt: order }).limit(limit).exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.send(doc);
     })
@@ -193,7 +357,7 @@ app.get('/api/getActiveProducts', auth, (req, res) => {
     let order = req.query.order;
 
     // ORDER = asc || desc
-    Product.find({ status: 'active' }).skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+    Product.find({ status: 'active' }).skip(skip).sort({ createdAt: order }).limit(limit).exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.send(doc);
     })
@@ -207,7 +371,7 @@ app.get('/api/getPurchases', auth, (req, res) => {
     let order = req.query.order;
 
     // ORDER = asc || desc
-    Purchase.find().skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+    Purchase.find().skip(skip).sort({ createdAt: order }).limit(limit).exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.send(doc);
     })
@@ -220,7 +384,7 @@ app.get('/api/getSales', auth, (req, res) => {
     let order = req.query.order;
 
     // ORDER = asc || desc
-    Sale.find().skip(skip).sort({ _id: order }).limit(limit).exec((err, doc) => {
+    Sale.find().skip(skip).sort({ createdAt: order }).limit(limit).exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.send(doc);
     });
@@ -256,7 +420,7 @@ app.get('/api/getTransactions', auth, (req, res) => {
     let order = req.query.order;
 
     // ORDER = asc || desc
-    Transaction.find().skip(skip).sort({ _id: order }).limit(limit).exec((err, docs) => {
+    Transaction.find().skip(skip).sort({ createdAt: order }).limit(limit).exec((err, docs) => {
         if (err) return res.status(400).send(err);
         res.send(docs);
     })
