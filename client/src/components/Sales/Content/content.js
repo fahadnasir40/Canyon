@@ -127,7 +127,7 @@ class Content extends Component {
                             pathname: `/sale_invoice_id=${row._id}`,
                         }} className="btn btn-dim btn-sm btn-primary">View</Link>
 
-                        <div onClick={() => { this.editPaidAmount(row) }} class="btn btn-icon btn-white btn-dim btn-lg  btn-primary py-n1 ml-3"><em class="iconicon ni ni-edit"></em></div>
+                        <div onClick={() => { this.editPaidAmount(row) }} className="btn btn-icon btn-white btn-dim btn-lg  btn-primary py-n1 ml-3"><em class="iconicon ni ni-edit"></em></div>
                     </div>
                     <Link to={{
                         pathname: `/sale_invoice_id=${row._id}`,
@@ -265,6 +265,7 @@ class Content extends Component {
     }
 
     render() {
+        console.log("Product List", this.state)
         return (
             <div className="nk-content ml-md-5 ">
                 <div className="container-fluid">
