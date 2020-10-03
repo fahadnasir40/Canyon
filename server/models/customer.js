@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const supplierSchema = mongoose.Schema({
+const customerSchema = mongoose.Schema({
     name:{
         type: String,
         required: true,
@@ -27,6 +27,14 @@ const supplierSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
+    customerLimit:{
+        type: Number,
+        default: 0
+    },
+    customerBottles:{
+        type: Number,
+        default: 0
+    },
     salePrice:[{
         _id:{
             type: String
@@ -41,6 +49,6 @@ const supplierSchema = mongoose.Schema({
     }
 },{timestamps:true})
 
-const Customer = mongoose.model('Customer',supplierSchema);
+const Customer = mongoose.model('Customer',customerSchema);
 
 module.exports = { Customer }

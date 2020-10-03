@@ -26,6 +26,7 @@ const { Product } = require("./models/product");
 const { Transaction } = require("./models/transaction");
 const { Purchase } = require("./models/purchase");
 const { Sale } = require("./models/sale");
+const customer = require("./models/customer");
 
 
 
@@ -625,16 +626,72 @@ app.post('/api/addPurchase', auth, (req, res) => {
 })
 
 app.post('/api/addSale', (req, res) => {
+
+    let products = req.body.productDetails;
+    let productTotalQty = 0;
+    let retProduct = 0;
+    let delProduct = 0;
+    let BottleswithCustomer = 0;
+
+    products.forEach(element => {
+        if (element.secpaid)
+            productTotalQty += Number(element.secpaid);
+        if (element.customerBottles)
+            BottleswithCustomer += Number(element.customerBottles);
+        if (element.rqty)
+            retProduct += Number(element.rqty);
+        if (element.dqty)
+            delProduct -= Number(element.dqty);
+    })
+
     const sale = new Sale(req.body);
 
     sale.save((error, sale) => {
         if (error) {
             return res.status(400).send(error);
         }
-        return res.status(200).json({
-            post: true,
-            saleId: sale._id
-        })
+
+        updateWallet(sale);
+        async function updateWallet(sale) {
+            const session = await Sale.startSession();
+            console.log("Server : ",BottleswithCustomer);
+            session.startTransaction();
+            try {
+                Customer.findByIdAndUpdate(sale.customerId, {
+                    $inc: { customerLimit: productTotalQty, customerBottles: BottleswithCustomer }
+                }, (error) => {
+                    if (error) {
+                        console.log("Error update stock", error);
+                    }
+                });
+
+                await products.forEach(item => {
+
+                    Product.findByIdAndUpdate(item._id, {
+                        $inc: { stock: item.rqty, stock: -item.dqty }
+
+                    }, (error) => {
+                        if (error) {
+                            console.log("Error update stock", error);
+                        }
+                    })
+                });
+
+                await session.commitTransaction();
+                session.endSession();
+                return res.status(200).json({
+                    post: true,
+                    saleId: sale._id
+                })
+
+            } catch (error) {
+                // If an error occurred, abort the whole transaction and
+                // undo any changes that might have happened
+                await session.abortTransaction();
+                session.endSession();
+                return res.status(400).send(error);
+            }
+        }
     });
 })
 

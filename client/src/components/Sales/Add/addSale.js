@@ -36,13 +36,15 @@ class AddSale extends Component {
         discount: 0,
         paymethod: 'Cash',
         secpaid: '',
+        secpaidValidity: true,
         customerlimit: 0,
         totalAmount: 0,
-        secamount: 0
+        paidAmount: 0,
+        secamount: 0,
+        customerBottles: 0
     }
 
     products = [];
-    paidAmount = 0
 
     addItemRow = () => {
         var itemsList = [...this.state.itemsList];
@@ -74,20 +76,21 @@ class AddSale extends Component {
     }
 
 
-    handleProductDropdown = (event, key) => {
-
+    handleProductDropdown = (currentCustomer, event, key) => {
+        console.log("Item List : ",this.state.itemsList)
         if (this.props.productsList) {
             if (event.target.value === -1 && this.state.currentProduct) {
                 this.setState({ currentProduct: '', currentQuantity: '' });
                 this.props.removeSelectedItem(this.props.index);
             }
             else {
-
                 let items = this.state.itemsList;
+                let limit;
                 items[key].currentProduct = this.props.productsList[event.target.value];
+                
+                if (items[key].currentProduct.sku === "CN19LL") { items[key].currentProduct.customerLimit = this.state.currentCustomer.customerLimit }
                 this.setState({
-                    itemsList: items,
-                    currentQuantity: 1
+                    itemsList: items
                 })
                 if (this.state.currentProduct)
                     console.log(this.state.itemsList[event.target.value])
@@ -121,7 +124,7 @@ class AddSale extends Component {
     }
 
     handleInputLimit = (event) => {
-        this.setState({ customerlimit: Number(event.target.value) })
+        this.setState({ customerlimit: this.state.customerlimit })
     }
 
     handleInputQuantityrec = (event, key) => {
@@ -138,8 +141,11 @@ class AddSale extends Component {
             let rate = 0;
 
             items[key].Quantitydel = event.target.value;
-            items[key].excessBottles = Number(event.target.value) - Number(this.state.customerlimit);
-            items[key].secpaid = Number(event.target.value) - Number(this.state.customerlimit);
+
+            if (currentProduct.sku === "CN19LL") {
+                items[key].excessBottles = Number(event.target.value) - Number(this.state.customerlimit);
+                items[key].secpaid = Number(event.target.value) - Number(this.state.customerlimit);
+            }
             rate = Number(this.getProductRate(currentProduct)) * Number(items[key].Quantitydel)
             items[key].totalAmount = rate
 
@@ -148,10 +154,22 @@ class AddSale extends Component {
         this.calculateTotal();
     }
 
+    disableSecCheck = (currentProduct) => {
+        if (currentProduct.sku === "CN19LL") {
+            return false
+        }
+        else
+            return true;
+    }
+
     handleInputDiscount = (event, key) => {
         let items = this.state.itemsList;
+        let tamount = this.getProductRate(items[key].currentProduct) * Number(items[key].Quantitydel);
         items[key].discount = event.target.value;
+        items[key].totalAmount = tamount - items[key].discount;
         this.setState({ itemsList: items })
+
+        this.calculateTotal();
 
     }
 
@@ -169,7 +187,8 @@ class AddSale extends Component {
             items[key].secamount = Number(currentProduct.price.cost_security) * (Number(items[key].excessBottles) - Number(items[key].secpaid));
             this.setState({ itemsList: items })
         }
-        this.calculateSecTotal();
+        // this.calculateSecTotal();
+        this.calculateTotal();
     }
 
     handleInputPaidAmount = (event) => {
@@ -180,31 +199,37 @@ class AddSale extends Component {
 
     calculateTotal = () => {
         let total = 0;
+        let sectotal = 0;
+        let disctotal = 0;
 
+        //calculate total unpaid amount
         this.state.itemsList.forEach(element => {
             if (element.totalAmount) {
                 total += element.totalAmount
             }
         });
-        console.log("total Amount: ", total)
 
-        this.setState({
-            totalAmount: total,
-            paidAmount: total
-        })
-    }
-
-    calculateSecTotal = () => {
-
-        let sectotal = 0;
+        //calculate total unpaid security 
         this.state.itemsList.forEach(element => {
             if (element.secamount) {
                 sectotal += element.secamount
             }
         });
 
+        //calculate total discount
+        this.state.itemsList.forEach(element => {
+            if (element.discount) {
+                disctotal += element.discount
+            }
+        });
+
+        console.log("Sec Amount: ", sectotal)
+
         this.setState({
-            secamount: sectotal
+            secamount: sectotal,
+            discount: disctotal,
+            totalAmount: Number(total),
+            paidAmount: Number(total)// + Number(sectotal)
         })
     }
 
@@ -279,14 +304,6 @@ class AddSale extends Component {
         return (<Moment format="MMM DD, YYYY">{date}</Moment>)
     }
 
-    // getProductsList = (productsList, paidAmount, totalAmount) => {
-    //     this.products = productsList;
-    //     this.paidAmount = paidAmount;
-    //     this.totalAmount = totalAmount;
-
-    //     this.submitForm();
-    // }
-
     submitForm = () => {
         if (!this.state.currentCustomer) {
             this.setState({
@@ -307,14 +324,29 @@ class AddSale extends Component {
                 description: this.state.description,
                 saleDate: this.state.saleDate,
                 addedBy: this.props.user.login.id,
-                totalAmount: this.totalAmount,
-                secAmount: this.sectotal,
+                totalAmount: Number(this.totalAmount) + Number(this.state.secamount) - Number(this.state.discount),
+                secAmount: this.state.secamount,
                 paidAmount: this.paidAmount
             }
+
+            if (sale.paidAmount < sale.totalAmount)
+                sale.status = 'Pending';
+            else
+                sale.status = 'Complete';
+
             let productDetails = [];
+            let customerwithBottles = 0;
 
             // console.log("inner :", this.products)
             this.products.forEach(item => {
+
+                if (item.currentProduct.sku === "CN19LL") {
+                    if (item.Quantitydel && item.Quantityrec ) {
+                        customerwithBottles = Number(item.Quantitydel) - Number(item.Quantityrec);
+                    }
+                }
+
+                
                 productDetails.push({
                     _id: item.currentProduct._id,
                     puom: item.currentProduct.uom,
@@ -323,6 +355,7 @@ class AddSale extends Component {
                     pprice: 0,
                     rqty: Number(item.Quantityrec),
                     dqty: Number(item.Quantitydel),
+                    customerBottles: Number(customerwithBottles),
                     disc: Number(item.discount),
                     pmethod: item.paymethod,
                     secpaid: Number(item.secpaid),
@@ -333,15 +366,15 @@ class AddSale extends Component {
 
             // console.log("Sale Details: ", sale)
             // console.log("Product Details: ", productDetails)
-            
+
             sale = { ...sale, productDetails };
 
             console.log("Sale Details: ", sale)
             // console.log("Product Details: ", productDetails)
             // if (this.state.request === false) {
-                // console.log("save sale about to call", sale)
-                this.props.dispatch(saveSale(sale));
-                this.saveTransaction();
+            // console.log("save sale about to call", sale)
+            this.props.dispatch(saveSale(sale));
+            this.saveTransaction();
             //     this.setState({
             //         request: true
             //     })
@@ -485,6 +518,7 @@ class AddSale extends Component {
                                                             <th scope="col">#</th>
                                                             <th scope="col">Item Name</th>
                                                             <th scope="col">UOM</th>
+                                                            <th scope="col">Bottles With Customer</th>
                                                             <th scope="col">Customer Limit</th>
                                                             <th scope="col">Rate</th>
                                                         </tr>
@@ -499,7 +533,7 @@ class AddSale extends Component {
                                                                         </th>
                                                                         <div className="form-control-wrap">
                                                                             <div className="form-control-select">
-                                                                                <select className="form-control" onChange={(event) => { this.handleProductDropdown(event, key) }} data-search="on">
+                                                                                <select className="form-control" onChange={(event) => { this.handleProductDropdown(this.currentCustomer, event, key) }} data-search="on">
                                                                                     <option value={-1}>Select Item</option>
                                                                                     {
                                                                                         this.props.productsList ?
@@ -512,7 +546,9 @@ class AddSale extends Component {
                                                                             </div>
                                                                         </div>
                                                                         <td>{item.currentProduct ? item.currentProduct.uom : 'N/A'}</td>
-                                                                        <td><input type="number" value={this.state.customerLimit} onChange={this.handleInputLimit} className="form-control" id="limit" placeholder="0" disabled='true' /></td>
+                                                                        <td>{item.currentProduct ? item.currentProduct.customerBottles : 0}</td>
+                                                                        
+                                                                        <span>{item.currentProduct.customerLimit}</span>
                                                                         <td>{this.getProductRate(item.currentProduct)}</td>
                                                                     </tr>
                                                                 )
@@ -547,8 +583,8 @@ class AddSale extends Component {
                                                                         <td>
                                                                             <span>{item.currentProduct.name}</span>
                                                                         </td>
-                                                                        <td><input type="number" min={1} maxLength={7} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(event, key) }} className="form-control" id="quantityrec" placeholder="Quantityrec" /></td>
-                                                                        <td><input type="number" min={1} maxLength={7} value={item.Quantitydel} onChange={(event) => { this.handleInputQuantitydel(item.currentProduct, event, key) }} className="form-control" id="quantitydel" placeholder="Quantitydel" /></td>
+                                                                        <td><input type="number" min={1} maxLength={7} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(event, key) }} className="form-control" id="quantityrec" placeholder= {0} /></td>
+                                                                        <td><input type="number" min={1} maxLength={7} value={item.Quantitydel} onChange={(event) => { this.handleInputQuantitydel(item.currentProduct, event, key) }} className="form-control" id="quantitydel" placeholder={0} /></td>
                                                                         <td>{item.excessBottles}</td>
                                                                     </tr>
 
@@ -589,9 +625,10 @@ class AddSale extends Component {
                                                                         <td><input type="number" min={1} maxLength={7} value={item.discount} onChange={(event) => { this.handleInputDiscount(event, key) }} className="form-control" id="discount" placeholder="discount" /></td>
                                                                         <select className="form-control" data-search="on" onChange={(event) => { this.handleInputPaymentMethod(event, key) }}>
                                                                             <option value={"Cash"}>Cash</option>
-                                                                            <option value={"Bottle Exchange"}>Bottle Exchange</option>
+                                                                            <option value={"Bottle Exchange with Buffering Charges"}>Bottle Exchange with buffering</option>
+                                                                            <option value={"Bottle Exchange without Buffering Charges"}>Bottle Exchange without buffering</option>
                                                                         </select>
-                                                                        <td><input type="number" min={0} max={Number(item.Quantitydel) - Number(item.customerlimit)} value={item.secpaid} onChange={(event) => { this.handleInputSecurityPaid(item.currentProduct, event, key) }} className="form-control" id="secpaid" placeholder="secpaid" /></td>
+                                                                        <td><input type="number" min={0} max={Number(item.Quantitydel) - Number(item.customerlimit)} value={item.secpaid} onChange={(event) => { this.handleInputSecurityPaid(item.currentProduct, event, key) }} className="form-control" id="secpaid" placeholder="secpaid" disabled={this.disableSecCheck(item.currentProduct)} /></td>
                                                                         {/* <td><input type="number" min={1} maxLength={7} value={item.discount} onChange={(event) => { this.handleInputDiscount(event, key) }} className="form-control" id="totalamount" placeholder="totalamount" /></td> */}
                                                                         <span>{item.totalAmount}</span>
                                                                         {/* <td>{item.total}</td> */}
@@ -682,8 +719,8 @@ class AddSale extends Component {
 function mapStateToProps(state) {
     return {
         customersList: state.customer.customerList,
-        productsList: state.product.productList
-        // sale: state.sale.sale
+        productsList: state.product.productList,
+        sale: state.sale.sale
     }
 }
 
