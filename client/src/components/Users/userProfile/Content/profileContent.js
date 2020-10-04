@@ -30,8 +30,19 @@ class UserProfileContent extends Component {
 
     static getDerivedStateFromProps(nextProps, prevState) {
         if (!prevState.name) {
-
+            if (nextProps.profile) {
+                return {
+                    id: nextProps.profile.id,
+                    email: nextProps.profile.email,
+                    name: nextProps.profile.name,
+                    dob: nextProps.profile.dob,
+                    address: nextProps.profile.address,
+                    phone: nextProps.profile.phone,
+                    city: nextProps.profile.city,
+                }
+            }
         }
+        return null;
     }
     setValidated(value) {
         this.setState({
