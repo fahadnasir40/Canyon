@@ -556,6 +556,16 @@ export function getUserDocuments(userId) {
     }
 }
 
+export function getDashboardProducts(products) {
+    const request = axios.post(`/api/getDashboardProducts`, products)
+        .then(response => response.data);
+
+    return {
+        type: 'GET_DASHBOARD_PRODUCTS',
+        payload: request
+    }
+}
+
 export function getPurchaseProduct(id) {
     const request = axios.get(`/api/getPurchaseProduct?id=${id}`)
         .then(response => response.data);

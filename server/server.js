@@ -8,7 +8,6 @@ const config = require("./config/config").get(process.env.NODE_ENV);
 const app = express();
 const { auth } = require("./middleware/auth");
 const shortid = require('shortid');
-
 const http = require("http");
 
 mongoose.Promise = global.Promise;
@@ -90,7 +89,6 @@ app.get('/api/getDashboard', auth, (req, res) => {
                 var prevMonthFirstDay = new moment().subtract(1, 'months').date(1).toDate();
                 var prevMonthLastDay = new moment().subtract(1, 'months').endOf('month').toDate();
 
-
                 const prevMonthFirstDateTime = prevMonthFirstDay.getTime();
                 const prev30DaysDate = prevMonthLastDay;
                 const prev30DaysDateTime = prev30DaysDate.getTime();
@@ -128,7 +126,6 @@ app.get('/api/getDashboard', auth, (req, res) => {
                 }).sort((a, b) => {
                     return new Date(b.createdAt) - new Date(a.createdAt);
                 });
-
 
                 lastWeekList.forEach(element => {
                     lastWeekSale += element.rate;
@@ -192,22 +189,13 @@ app.get('/api/getDashboard', auth, (req, res) => {
                                     }
                                     res.status(200).send(data);
                                 })
-
-
                             })
                         })
                     })
-
                 })
-
-
             })
-
-
         })
     }
-
-
 })
 
 app.get('/api/getSupplier', auth, (req, res) => {
@@ -391,6 +379,17 @@ app.get('/api/getSales', auth, (req, res) => {
     });
 });
 
+app.post('/api/getDashboardProducts', auth, async function (req, res) {
+
+    let data = req.body;
+    data.splice(5, data.length);
+
+    //Getting only top 5 products data
+    Product.find({ _id: { $in: data } }).limit(5).select('name sku price.total').exec((err, products) => {
+        if (err) return res.status(400).send(err);
+        return res.status(200).send({ data, products });
+    });
+})
 
 app.get('/api/getPurchaseProduct', auth, (req, res) => {
 
@@ -622,10 +621,9 @@ app.post('/api/addPurchase', auth, (req, res) => {
             return res.status(400).send(error);
         }
     }
-
 })
 
-app.post('/api/addSale', (req, res) => {
+app.post('/api/addSale', auth, (req, res) => {
 
     let products = req.body.productDetails;
     let productTotalQty = 0;
@@ -654,7 +652,7 @@ app.post('/api/addSale', (req, res) => {
         updateWallet(sale);
         async function updateWallet(sale) {
             const session = await Sale.startSession();
-            console.log("Server : ",BottleswithCustomer);
+            console.log("Server : ", BottleswithCustomer);
             session.startTransaction();
             try {
                 Customer.findByIdAndUpdate(sale.customerId, {

@@ -52,12 +52,6 @@ const SideNavItems = (props) => {
             text: 'Users',
             link: '/users',
             login: true
-        },
-        {
-            icon: 'icon ni ni-server-fill',
-            text: 'Settings',
-            link: '/settings',
-            login: false
         }
     ]
 
