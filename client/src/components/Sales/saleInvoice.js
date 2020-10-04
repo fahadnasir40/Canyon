@@ -3,7 +3,7 @@ import Sidebar from '../Sidebar/sidebar'
 import Header from '../Header/header'
 import Footer from '../Footer/footer'
 import { Link } from 'react-router-dom'
-import { clearSale, getCustomers, getSales } from '../../actions'
+import { clearSale, getCustomer, getSaleProduct } from '../../actions'
 import { connect } from 'react-redux'
 import Moment from 'react-moment'
 import ReactToPrint from 'react-to-print'
@@ -11,11 +11,11 @@ import ReactToPrint from 'react-to-print'
 class SaleInvoice extends Component {
     state = {
         customer: '',
-        products: '',
+        products: ''
     }
 
     componentDidMount() {
-        this.props.dispatch(getSales(this.props.match.params.id));
+        this.props.dispatch(getSaleProduct(this.props.match.params.id));
     }
 
     componentWillUnmount() {
@@ -23,10 +23,11 @@ class SaleInvoice extends Component {
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
+        console.log("State Next", nextProps)
         if (!prevState.sale) {
             if (nextProps.sale) {
                 if (nextProps.sale.doc) {
-                    nextProps.dispatch(getCustomers(nextProps.sale.doc.customerId))
+                    nextProps.dispatch(getCustomer(nextProps.sale.doc.customerId))
                     return {
                         sale: nextProps.sale.doc,
                         products: nextProps.sale.products
@@ -53,6 +54,7 @@ class SaleInvoice extends Component {
 
 
     renderBody = (sale, products) => (
+
         sale ?
             <div className="nk-content bg-white ml-md-5">
                 <div className="container wide-xl">
@@ -124,10 +126,12 @@ class SaleInvoice extends Component {
                                                             <h4 className="title">{sale.customerName}</h4>
                                                             <ul className="list-plain">
                                                                 <li><em className="icon ni ni-map-pin-fill mt-1"></em><span style={{ whiteSpace: " pre-wrap" }}> {this.getCustomerAddress(sale.customerAddress.name)}<br /></span></li>
-                                                                {this.props.supplier ?
-                                                                    this.props.supplier.phone ?
-                                                                        <li><em className="icon ni ni-call-fill mt-1 "></em><span>{this.props.supplier.phone}</span></li>
+                                                                {this.props.customer ?
+                                                                    this.props.customer.phone ?
+                                                                        <li><em className="icon ni ni-call-fill mt-1 "></em><span>{this.props.customer.phone}</span></li>
                                                                         : null
+                                                                    // this.props.customer.customer.phone ?
+                                                                    //     : null
                                                                     : null}
                                                             </ul>
                                                         </div>
@@ -162,19 +166,57 @@ class SaleInvoice extends Component {
                                                     </thead>
                                                     <tbody>
                                                         {
-                                                            sale.productDetails.map((item, key) => (
-                                                                <tr key={key}>
-                                                                    <td>{products.find(x => x._id === item._id).sku}</td>
-                                                                    <td>{item.pname}</td>
-                                                                    <td>{item.pprice}</td>
-                                                                    <td>{item.pqty}</td>
-                                                                    {/* {purchase.status === 'Returned' || purchase.status === 'Returned Items'  || purchase.status === 'Returned Items Pending'?
-                                                                        <td>{item.returnQty}</td>
-                                                                        : null} */}
-                                                                    <td>{item.ptotal}</td>
-                                                                </tr>
-                                                            ))
-                                                        }
+                                                            sale.productDetails.map((item, key) => {
+                                                                console.log("Item", item)
+                                                                if (item.rqty > 0 && item.dqty > 0) {
+                                                                    return (
+                                                                        // <tr>
+                                                                        //     {/* <tr key={key}>
+                                                                        //         <td>{products.find(x => x._id === item._id).sku}</td>
+                                                                        //         <td>{item.pname}</td>
+                                                                        //         <td>{item.pprice}</td>
+                                                                        //         <td>{item.dqty}</td>
+                                                                        //         <td>{item.ptotal}</td>
+                                                                        //     </tr> */}
+                                                                        // </tr>
+                                                                        <tr key={key + '-returned'}>
+                                                                            <td>{products.find(x => x._id === item._id).sku}</td>
+                                                                            <td>{item.pname + '( Returned ) '}</td>
+                                                                            <td>{item.pprice}</td>
+                                                                            <td>{item.rqty}</td>
+                                                                            <td>{item.ptotal}</td>
+                                                                        </tr>
+
+
+
+                                                                    )
+                                                                }
+                                                                else {
+                                                                    if (item.rqty > 0 && item.dqty === 0) {
+                                                                        return (
+                                                                            <tr key={key}>
+                                                                                <td>{products.find(x => x._id === item._id).sku}</td>
+                                                                                <td>{item.pname + ' ( Returned )'} </td>
+                                                                                <td>{item.pprice}</td>
+                                                                                <td>{item.rqty}</td>
+                                                                                <td>{item.ptotal}</td>
+                                                                            </tr>
+                                                                        )
+                                                                    }
+                                                                    else if (item.rqty === 0 || !item.rqty) {
+                                                                        return (<tr key={key}>
+                                                                            <td>{products.find(x => x._id === item._id).sku}</td>
+                                                                            <td>{item.pname} </td>
+                                                                            <td>{item.pprice}</td>
+                                                                            <td>{item.dqty}</td>
+                                                                            <td>{item.ptotal}</td>
+                                                                        </tr>)
+                                                                    }
+                                                                }
+
+                                                            })}
+
+
                                                     </tbody>
                                                     {/* <tfoot>
                                                         <tr>
@@ -208,8 +250,11 @@ class SaleInvoice extends Component {
 
 
     render() {
+
         let sale = this.state.sale;
+        console.log("sale", sale)
         let products = this.state.products;
+        console.log("products", products)
         return (
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">
@@ -235,5 +280,4 @@ function mapStateToProps(state) {
         sale: state.sale.sale
     }
 }
-
 export default connect(mapStateToProps)(SaleInvoice)

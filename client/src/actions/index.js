@@ -42,6 +42,22 @@ export function getSupplier(id) {
     }
 }
 
+export function getCustomer(id) {
+
+    const request = axios.get(`/api/getCustomer?id=${id}`)
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+
+        });
+
+    return {
+        type: 'GET_CUSTOMER',
+        payload: request
+    }
+}
+
 export function getDashboard() {
 
     const request = axios.get(`/api/getDashboard`)
@@ -312,6 +328,16 @@ export function getSales(
         });
     return {
         type: 'GET_SALES',
+        payload: request
+    }
+}
+
+export function getSaleProduct(id) {
+    const request = axios.get(`/api/getSaleProduct?id=${id}`)
+        .then(response => response.data);
+
+    return {
+        type: 'GET_SALE',
         payload: request
     }
 }
