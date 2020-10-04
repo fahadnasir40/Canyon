@@ -162,11 +162,6 @@ class Content extends Component {
                         <span className=" fw-medium">Added on: </span> <span className="fw-normal"><Moment format="DD MMM, YYYY hh:mm A">{data.createdAt}</Moment></span>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col">
-                        <br /><span className=" fw-medium">Products List </span><br />
-                    </div>
-                </div>
             </div>
         )
     };
@@ -315,7 +310,6 @@ class Content extends Component {
                                 pagination
                                 expandableRows={true}
                                 expandableRowsComponent={<this.SampleExpandedComponent />}
-                                onRowExpandToggled={(toggleState, row) => { this.getProductDetails(toggleState, row) }}
                                 paginationPerPage={10}
                             />
                         </div>
