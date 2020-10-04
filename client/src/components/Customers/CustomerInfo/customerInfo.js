@@ -23,9 +23,9 @@ class customerInfo extends Component {
 
     static getDerivedStateFromProps(nextProps, prevState) {
 
-        if (nextProps.purchaseDetails) {
-            if (nextProps.editSupplier) {
-                if (nextProps.editSupplier.post === true) {
+        if (nextProps.saleDetails) {
+            if (nextProps.editCustomer) {
+                if (nextProps.editCustomer.post === true) {
                     return {
                         customer: nextProps.editCustomer.customer,
                         totalOrders: nextProps.saleDetails.totalOrders,
@@ -197,10 +197,13 @@ class customerInfo extends Component {
                                             <li className="nav-item">
                                                 <a className="nav-link active" href="#"><em className="icon ni ni-user-circle"></em><span>Personal</span></a>
                                             </li>
-
-                                            <li className="nav-item nav-item-trigger d-xxl-none">
-                                                <a onClick={this.showBar} className="toggle btn btn-icon btn-trigger" data-target="userAside"><em className="icon ni ni-user-list-fill"></em></a>
-                                            </li>
+                                            {
+                                                this.props.user.login.role !== 'worker' ?
+                                                    <li className="nav-item nav-item-trigger d-xxl-none">
+                                                        <a onClick={this.showBar} className="toggle btn btn-icon btn-trigger" data-target="userAside"><em className="icon ni ni-user-list-fill"></em></a>
+                                                    </li>
+                                                    : null
+                                            }
                                         </ul>
                                         <div className="card-inner">
                                             <div className="nk-block">
@@ -253,7 +256,7 @@ class customerInfo extends Component {
                                                 <div className="nk-block-head nk-block-head-sm nk-block-between">
                                                     <h5 className="title">Admin Note</h5>
                                                     {
-                                                        customer.notes.length < 3 ?
+                                                        customer.notes.length < 3 && this.props.user.login.role !== 'worker' ?
                                                             <span className="text-azure fw-medium link-sm" style={{ cursor: "pointer" }} onClick={this.addNote}>+ Add Note</span>
                                                             : null
                                                     }
@@ -275,7 +278,12 @@ class customerInfo extends Component {
                                                                       <span className="time"> <Moment format="hh:mm A">{item.createdOn}</Moment></span></span>
                                                                     <span className="bq-note-sep sep">|</span>
                                                                     <span className="bq-note-by">By <span>{item.addedByName}</span></span>
-                                                                    <span className="text-danger  link-sm" style={{ cursor: "pointer" }} onClick={() => { this.deleteNote(item._id) }}>&nbsp;&nbsp;&nbsp;&nbsp;Delete Note</span>
+                                                                    {
+                                                                        this.props.user.login.role !== 'worker' ?
+                                                                            <span className="text-danger  link-sm" style={{ cursor: "pointer" }} onClick={() => { this.deleteNote(item._id) }}>&nbsp;&nbsp;&nbsp;&nbsp;Delete Note</span>
+
+                                                                            : null
+                                                                    }
                                                                 </div>
                                                             </div>
                                                         ))
@@ -410,7 +418,7 @@ class customerInfo extends Component {
             <div className="nk-body bg-lighter npc-default has-sidebar " id="container">
                 <div className="nk-app-root">
                     <div className="nk-main"></div>
-                    <Sidebar />
+                    <Sidebar {...this.props} />
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">

@@ -1,45 +1,61 @@
 const mongoose = require("mongoose");
 
 const customerSchema = mongoose.Schema({
-    name:{
+    name: {
         type: String,
         required: true,
         trim: true
     },
-    addedBy:{
+    addedBy: {
         type: String,
         required: true,
     },
-    email:{
+    email: {
         type: String,
         trim: true
     },
-    phone:{
+    phone: {
         type: String,
         trim: true
     },
-    address:[{
-        name:{
+    address: [{
+        name: {
             type: String
         }
     }],
-    flatRate:{
+    notes: [{
+        data: {
+            type: String,
+            trim: true
+        },
+        addedById: {
+            type: String,
+        },
+        addedByName: {
+            type: String
+        },
+        createdOn: ({
+            type: Date,
+            default: new Date()
+        })
+    }],
+    flatRate: {
         type: Boolean,
         default: false
     },
-    customerLimit:{
+    customerLimit: {
         type: Number,
         default: 0
     },
-    customerBottles:{
+    customerBottles: {
         type: Number,
         default: 0
     },
-    salePrice:[{
-        _id:{
+    salePrice: [{
+        _id: {
             type: String
         },
-        rate:{
+        rate: {
             type: String
         }
     }],
@@ -47,8 +63,8 @@ const customerSchema = mongoose.Schema({
         type: String,
         default: 'active'
     }
-},{timestamps:true})
+}, { timestamps: true })
 
-const Customer = mongoose.model('Customer',customerSchema);
+const Customer = mongoose.model('Customer', customerSchema);
 
 module.exports = { Customer }
