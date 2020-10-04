@@ -7,8 +7,8 @@ const moment = require("moment")
 const config = require("./config/config").get(process.env.NODE_ENV);
 const app = express();
 const { auth } = require("./middleware/auth");
+const { auth2 } = require("./middleware/auth2");
 const shortid = require('shortid');
-
 const http = require("http");
 
 mongoose.Promise = global.Promise;
@@ -37,7 +37,7 @@ app.use(express.static("client/build"));
 
 // GET //
 
-app.get("/api/auth", auth, (req, res) => {
+app.get("/api/auth", auth2, (req, res) => {
     res.json({
         isAuth: true,
         id: req.user.id,
@@ -90,7 +90,6 @@ app.get('/api/getDashboard', auth, (req, res) => {
                 var prevMonthFirstDay = new moment().subtract(1, 'months').date(1).toDate();
                 var prevMonthLastDay = new moment().subtract(1, 'months').endOf('month').toDate();
 
-
                 const prevMonthFirstDateTime = prevMonthFirstDay.getTime();
                 const prev30DaysDate = prevMonthLastDay;
                 const prev30DaysDateTime = prev30DaysDate.getTime();
@@ -128,7 +127,6 @@ app.get('/api/getDashboard', auth, (req, res) => {
                 }).sort((a, b) => {
                     return new Date(b.createdAt) - new Date(a.createdAt);
                 });
-
 
                 lastWeekList.forEach(element => {
                     lastWeekSale += element.rate;
@@ -192,22 +190,13 @@ app.get('/api/getDashboard', auth, (req, res) => {
                                     }
                                     res.status(200).send(data);
                                 })
-
-
                             })
                         })
                     })
-
                 })
-
-
             })
-
-
         })
     }
-
-
 })
 
 app.get('/api/getSupplier', auth, (req, res) => {
@@ -276,7 +265,7 @@ app.get('/api/getSuppliersTransactions', auth, (req, res) => {
     })
 })
 
-app.get('/api/getCustomer', auth, (req, res) => {
+app.get('/api/getCustomer', auth2, (req, res) => {
     let id = req.query.id;
 
     Customer.findById(id, (err, doc) => {
@@ -286,7 +275,7 @@ app.get('/api/getCustomer', auth, (req, res) => {
 })
 
 
-app.get('/api/getCustomersTransactions', auth, (req, res) => {
+app.get('/api/getCustomersTransactions', auth2, (req, res) => {
     let skip = parseInt(req.query.skip);
     let limit = parseInt(req.query.limit);
     let order = req.query.order;
@@ -325,7 +314,7 @@ app.get('/api/getActiveSuppliers', auth, (req, res) => {
     })
 })
 
-app.get('/api/getCustomers', auth, (req, res) => {
+app.get('/api/getCustomers', auth2, (req, res) => {
     // locahost:3001/api/books?skip=3&limit=2&order=asc
     let skip = parseInt(req.query.skip);
     let limit = parseInt(req.query.limit);
@@ -351,7 +340,7 @@ app.get('/api/getProducts', auth, (req, res) => {
     })
 })
 
-app.get('/api/getActiveProducts', auth, (req, res) => {
+app.get('/api/getActiveProducts', auth2, (req, res) => {
     // locahost:3001/api/books?skip=3&limit=2&order=asc
     let skip = parseInt(req.query.skip);
     let limit = parseInt(req.query.limit);
@@ -378,17 +367,26 @@ app.get('/api/getPurchases', auth, (req, res) => {
     })
 })
 
-app.get('/api/getSales', auth, (req, res) => {
+app.get('/api/getSales', auth2, (req, res) => {
     // locahost:3001/api/books?skip=3&limit=2&order=asc
     let skip = parseInt(req.query.skip);
     let limit = parseInt(req.query.limit);
     let order = req.query.order;
 
-    // ORDER = asc || desc
-    Sale.find().skip(skip).sort({ createdAt: order }).limit(limit).exec((err, doc) => {
-        if (err) return res.status(400).send(err);
-        res.send(doc);
-    });
+    if (req.user.role === 'worker') {
+        // ORDER = asc || desc
+        Sale.find({ addedBy: req.user.role }).skip(skip).sort({ createdAt: order }).limit(limit).exec((err, doc) => {
+            if (err) return res.status(400).send(err);
+            res.send(doc);
+        });
+    }
+    else {
+        Sale.find().skip(skip).sort({ createdAt: order }).limit(limit).exec((err, doc) => {
+            if (err) return res.status(400).send(err);
+            res.send(doc);
+        });
+    }
+
 });
 
 app.get('/api/getSaleProduct', auth, (req, res) => {
@@ -409,6 +407,18 @@ app.get('/api/getSaleProduct', auth, (req, res) => {
                 res.status(200).send({ doc, products });
             });
     })
+});
+
+app.post('/api/getDashboardProducts', auth, async function (req, res) {
+
+    let data = req.body;
+    data.splice(5, data.length);
+
+    //Getting only top 5 products data
+    Product.find({ _id: { $in: data } }).limit(5).select('name sku price.total').exec((err, products) => {
+        if (err) return res.status(400).send(err);
+        return res.status(200).send({ data, products });
+    });
 })
 
 app.get('/api/getPurchaseProduct', auth, (req, res) => {
@@ -446,7 +456,7 @@ app.get('/api/getTransactions', auth, (req, res) => {
     })
 })
 
-app.get("/api/profile", auth, (req, res) => {
+app.get("/api/profile", auth2, (req, res) => {
     res.json({
         id: req.user.id,
         email: req.user.email,
@@ -459,7 +469,7 @@ app.get("/api/profile", auth, (req, res) => {
     });
 });
 
-app.get("/api/logout", auth, (req, res) => {
+app.get("/api/logout", auth2, (req, res) => {
     req.user.deleteToken(req.token, (err, user) => {
         if (err) return res.status(400).send(err);
         res.sendStatus(200);
@@ -510,6 +520,7 @@ app.post("/api/login", (req, res) => {
                     isAuth: true,
                     id: user._id,
                     email: user.email,
+                    role: user.role
                 });
             });
         });
@@ -641,10 +652,9 @@ app.post('/api/addPurchase', auth, (req, res) => {
             return res.status(400).send(error);
         }
     }
-
 })
 
-app.post('/api/addSale', (req, res) => {
+app.post('/api/addSale', auth2, (req, res) => {
 
     let products = req.body.productDetails;
     let productTotalQty = 0;
@@ -673,7 +683,7 @@ app.post('/api/addSale', (req, res) => {
         updateWallet(sale);
         async function updateWallet(sale) {
             const session = await Sale.startSession();
-            console.log("Server : ",BottleswithCustomer);
+            console.log("Server : ", BottleswithCustomer);
             session.startTransaction();
             try {
                 Customer.findByIdAndUpdate(sale.customerId, {
@@ -714,7 +724,7 @@ app.post('/api/addSale', (req, res) => {
     });
 })
 
-app.post('/api/addProduct', auth, (req, res) => {
+app.post('/api/addProduct', auth2, (req, res) => {
 
     const product = new Product(req.body);
     const total = Number(product.price.cost_seal) + Number(product.price.cost_wrapper) +

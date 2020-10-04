@@ -544,6 +544,14 @@ export function clearCustomerList() {
     }
 }
 
+export function clearDashboard() {
+    console.log("Component Will Unmount Called")
+    return {
+        type: 'CLEAR_DASHBOARD',
+        payload: {}
+    }
+}
+
 export function clearNewBook() {
     return {
         type: 'CLEAR_NEWBOOK',
@@ -578,6 +586,16 @@ export function getUserDocuments(userId) {
 
     return {
         type: 'GET_USER_DOCUMENTS',
+        payload: request
+    }
+}
+
+export function getDashboardProducts(products) {
+    const request = axios.post(`/api/getDashboardProducts`, products)
+        .then(response => response.data);
+
+    return {
+        type: 'GET_DASHBOARD_PRODUCTS',
         payload: request
     }
 }

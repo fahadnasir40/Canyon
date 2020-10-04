@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import DataTable from 'react-data-table-component';
 import Moment from 'react-moment';
 import Swal from 'sweetalert2';
-
+import $ from 'jquery'
 class Content extends Component {
 
     state = {
@@ -69,7 +69,7 @@ class Content extends Component {
                             <span className="amount">Rs. {row.totalAmount}</span>
                         </span>
                         <span className="tb-odr-status d-sm-none">
-                            <span className="badge badge-dot badge-warning">row.status</span>
+                            <span className="badge badge-dot badge-warning">{row.status}</span>
                             {/* {
                                 row.paidAmount < row.totalAmount ?
                                     <span className="badge badge-dot badge-warning">Pending</span>
@@ -163,18 +163,11 @@ class Content extends Component {
                         <span className=" fw-medium">Sale Date: </span> <span className="fw-normal"><Moment format="DD MMM, YYYY hh:mm A">{data.saleDate}</Moment></span>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col">
-                        <br /><span className=" fw-medium">Products List </span><br />
-                    </div>
-                </div>
             </div>
         )
     };
 
-    check = (toggle) => {
 
-    }
 
     componentDidUpdate(prevProps) {
         if (prevProps.saleList !== this.props.saleList) {
@@ -216,11 +209,21 @@ class Content extends Component {
         });
     }
 
-    getProductDetails = (toggleState, data) => {
-        if (toggleState === true) {
+    showBar = () => {
+        if (!$('#showButton').hasClass('active')) {
 
+            $('#showButton').addClass('active');
+            $('#expandBar').addClass('expanded');
+            $('#expandBar').css('display', 'block');
+        }
+        else {
+            $('#showButton').removeClass('active');
+            $('#expandBar').removeClass('expanded');
+            $('#expandBar').css('display', 'none');
         }
     }
+
+
 
 
     editPaidAmount = (sale) => {
@@ -279,8 +282,8 @@ class Content extends Component {
                                     </div>
                                     <div className="nk-block-head-content">
                                         <div className="toggle-wrap nk-block-tools-toggle">
-                                            <a href="#" className="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu2"><em className="icon ni ni-more-v"></em></a>
-                                            <div className="toggle-expand-content" data-content="pageMenu2">
+                                            <a onClick={this.showBar} id="showButton" className="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu2"><em className="icon ni ni-more-v"></em></a>
+                                            <div className="toggle-expand-content" id="expandBar" data-content="pageMenu2">
                                                 <ul className="nk-block-tools g-3">
                                                     <li>
                                                         <div className="form-control-wrap">
@@ -291,7 +294,7 @@ class Content extends Component {
                                                         </div>
                                                     </li>
                                                     <li className="nk-block-tools-opt">
-                                                        <button data-toggle="modal" data-target="#addmodal" className="toggle btn btn-icon btn-primary d-md-none"><em className="icon ni ni-plus"></em></button>
+                                                        <Link to="/addSale" className="toggle btn btn-icon btn-primary d-md-none mr-4"><em className="icon ni ni-plus "></em></Link>
                                                         <Link to="/addSale"><button className="toggle btn btn-primary d-none d-md-inline-flex"><em className="icon ni ni-plus"></em><span>Add Sale</span></button></Link>
                                                     </li>
                                                 </ul>
@@ -308,7 +311,6 @@ class Content extends Component {
                                 pagination
                                 expandableRows={true}
                                 expandableRowsComponent={<this.SampleExpandedComponent />}
-                                onRowExpandToggled={(toggleState, row) => { this.getProductDetails(toggleState, row) }}
                                 paginationPerPage={10}
                             />
                         </div>

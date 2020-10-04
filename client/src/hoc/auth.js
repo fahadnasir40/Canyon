@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { auth } from '../actions'
 import { connect } from 'react-redux';
 
-export default function (ComposedClass, reload) {
+export default function (ComposedClass, reload, access) {
     class AuthenticationCheck extends Component {
 
         state = {
@@ -22,8 +22,17 @@ export default function (ComposedClass, reload) {
                     this.props.history.push('/');
                 }
             } else {
-                if (reload === false) {
-                    this.props.history.push('/dashboard')
+                if (nextProps.user.login.role === 'worker' && access === true) {
+                    if (reload === false) {
+                        this.props.history.push('/orders')
+                    }
+                }
+                else if (nextProps.user.login.role === 'worker' && access === false) {
+                    this.props.history.push('/orders');
+                }
+
+                else if (nextProps.user.login.role === 'worker' && !access) {
+                    this.props.history.push('/404');
                 }
             }
         }

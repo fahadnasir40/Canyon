@@ -25,10 +25,14 @@ class Login extends Component {
 
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        if(nextProps.user.login){
-            if (nextProps.user.login.isAuth) {
+        if (nextProps.user.login) {
+            console.log(nextProps.user.login)
+            if (nextProps.user.login.isAuth && nextProps.user.login.role == 'worker') {
+                nextProps.history.push('/orders')
+            }
+            else if (nextProps.user.login.isAuth) {
                 nextProps.history.push('/dashboard')
-            }    
+            }
         }
 
         return null;
@@ -193,7 +197,7 @@ class Login extends Component {
 
         if (this.state.redirectMessage) {
             rm = this.props.location.redirect.message
-        }  
+        }
 
         if (user.login) {
             if (user.login.message === 'Request failed with status code 504') {

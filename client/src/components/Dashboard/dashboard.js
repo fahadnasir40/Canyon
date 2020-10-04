@@ -1,19 +1,31 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import Sidebar from '../Sidebar/sidebar'
 import Header from './../Header/header'
 import Content from './Content/content'
 import Footer from '../Footer/footer'
 import { connect } from 'react-redux'
-import { getDashboard } from '../../actions';
+import { getDashboard, getDashboardProducts, clearDashboard } from '../../actions';
 
-class Dashboard extends Component {
+class Dashboard extends PureComponent {
+
+    state = {
+        productsList: []
+    }
 
     componentDidMount() {
+        console.log("Component Did Mount");
         this.props.dispatch(getDashboard())
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        console.log(("Next Props", nextProps));
+        console.log("This props", nextProps)
+        if (nextProps.data) {
+            if (nextProps.data.topProducts) {
+                if (!nextProps.topProducts)
+                    nextProps.dispatch(getDashboardProducts(nextProps.data.topProducts));
+            }
+        }
+        return null;
     }
 
     renderDashboard = () => {
@@ -34,8 +46,8 @@ class Dashboard extends Component {
         )
     }
 
-
     render() {
+
         return (
             <div>
                 {this.renderDashboard()}
@@ -44,12 +56,10 @@ class Dashboard extends Component {
     }
 }
 
-
 function mapStateToProps(state) {
-    console.log("State", state)
     return {
         data: state.dashboard.data,
-        // salesList: state.dashboard.data.salesList
+        topProducts: state.dashboard.topProduct
     }
 }
 
