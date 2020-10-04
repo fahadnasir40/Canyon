@@ -71,7 +71,7 @@ class SaleInvoice extends Component {
                                         </div>
                                     </div>
                                     <div className="nk-block-head-content">
-                                        <Link to="/sales" className="btn btn-outline-light bg-white d-none d-sm-inline-flex mr-md-3"><em className="icon ni ni-arrow-left"></em><span>Back</span></Link>
+                                        <Link to="/orders" className="btn btn-outline-light bg-white d-none d-sm-inline-flex mr-md-3"><em className="icon ni ni-arrow-left"></em><span>Back</span></Link>
                                         {/* {
 
                                             purchase.status !== 'Returned' ?

@@ -274,6 +274,34 @@ app.get('/api/getCustomer', auth2, (req, res) => {
     })
 })
 
+app.get('/api/getCustomerDetails', auth2, (req, res) => {
+    const id = req.query.id;
+
+    Sale.find({ customerId: id }).select('_id totalAmount status').exec((err, sale) => {
+        if (err) return res.status(400).send(err);
+
+        const totalOrders = sale.length;
+        var completedOrders = 0;
+        // var returnedOrders = 0;
+        var pendingOrders = 0;
+        var totalOrdersAmount = 0;
+
+        sale.forEach(element => {
+            if (element.status === 'Complete')
+                completedOrders++;
+            // else if (element.status === 'Returned' || element.status === 'Returned Items')
+            //     returnedOrders++;
+            else if (element.status === 'Pending' || element.status === 'Returned Items Pending')
+                pendingOrders++;
+
+            totalOrdersAmount += element.totalAmount;
+        })
+        const ordersDetails = {
+            completedOrders, pendingOrders, totalOrdersAmount, totalOrders
+        }
+        res.status(200).send(ordersDetails);
+    })
+})
 
 app.get('/api/getCustomersTransactions', auth2, (req, res) => {
     let skip = parseInt(req.query.skip);

@@ -4,78 +4,11 @@ import Header from '../../Header/header'
 import Footer from '../../Footer/footer'
 import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
-import NumberFormat from 'react-number-format'
-import { clearCustomer, getCustomerDetails, updateCustomer } from '../../../actions'
-import { connect } from 'react-redux';
-import Swal from 'sweetalert2';
-import $ from 'jquery'
-class customerInfo extends Component {
+
+class CustomerInfo extends Component {
 
     state = {
-        customer: '',
-        completeOrderAmount: 0,
-        totalOrders: 0,
-        completeOrders: 0,
-        pendingOrders: 0,
-        // returnedOrders: 0,
-        changeState: false,
-    }
-
-    static getDerivedStateFromProps(nextProps, prevState) {
-
-        if (nextProps.purchaseDetails) {
-            if (nextProps.editSupplier) {
-                if (nextProps.editSupplier.post === true) {
-                    return {
-                        customer: nextProps.editCustomer.customer,
-                        totalOrders: nextProps.saleDetails.totalOrders,
-                        completeOrders: nextProps.saleDetails.completedOrders,
-                        pendingOrders: nextProps.saleDetails.pendingOrders,
-                        // returnedOrders: nextProps.purchaseDetails.returnedOrders,
-                        completeOrderAmount: nextProps.saleDetails.totalOrdersAmount
-                    }
-                }
-            }
-            return ({
-                totalOrders: nextProps.saleDetails.totalOrders,
-                completeOrders: nextProps.saleDetails.completedOrders,
-                pendingOrders: nextProps.saleDetails.pendingOrders,
-                // returnedOrders: nextProps.purchaseDetails.returnedOrders,
-                completeOrderAmount: nextProps.saleDetails.totalOrdersAmount
-            })
-        }
-        return null;
-    }
-
-
-    changeStatus = () => {
-        const customer = this.state.customer;
-
-        if (customer.status === 'active') {
-            customer.status = 'suspended'
-            this.props.dispatch(updateCustomer(customer))
-        }
-        else if (customer.status === 'suspended') {
-            customer.status = 'active'
-            this.props.dispatch(updateCustomer(customer))
-        }
-
-
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Customer status has been changed',
-            showConfirmButton: false,
-            timer: 1500
-        })
-
-        this.setState({
-            changeState: true
-        })
-    }
-
-    componentWillUnmount() {
-        this.props.dispatch(clearCustomer());
+        customer: null
     }
 
     getInitials = (name) => {
@@ -95,84 +28,13 @@ class customerInfo extends Component {
             this.props.history.push('/customers')
         }
         else {
-            this.props.dispatch(getCustomerDetails(this.props.location.state.customerInfo._id));
             this.setState({
                 customer: this.props.location.state.customerInfo
             })
         }
-        $('#container').on('click', function (e) {
-            if ($('#sidebarProfile').hasClass('content-active'))
-                $('#sidebarProfile').removeClass('content-active');
-        });
     }
 
-    addNote = () => {
-
-        OpenSwal(this);
-
-        async function OpenSwal(selfObject) {
-            const { value: text } = await Swal.fire({
-                title: 'Add a new note',
-                input: 'textarea',
-                inputPlaceholder: 'Type your message here...',
-                inputAttributes: {
-                    maxlength: 300,
-                    'aria-label': 'Type your message here'
-                },
-                showCancelButton: true
-            })
-            if (text) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'New Note Added',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                {
-                    let newCustomer = selfObject.state.customer;
-                    newCustomer.notes.push({ data: text, addedById: selfObject.props.user.login._id, addedByName: selfObject.props.user.login.name });
-                    selfObject.props.dispatch(updateCustomer(newCustomer));
-                }
-            }
-        }
-    }
-
-
-
-    deleteNote = (id) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                let newCustomer = this.state.customer;
-                const note = newCustomer.notes.find(x => x._id === id);
-                newCustomer.notes.splice(newCustomer.notes.indexOf(note), 1);
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Your note has been deleted',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                if (note)
-                    this.props.dispatch(updateCustomer(newCustomer));
-            }
-        })
-    }
-
-    showBar = () => {
-        if (!$('#sidebarProfile').hasClass('content-active')) {
-            $('#sidebarProfile').addClass('content-active');
-        }
-    }
-
-    renderSupplierInfo = (customer) => (
+    renderCustomerInfo = (customer) => (
 
         <div className="nk-content ml-md-5">
             <div className="container-fluid">
@@ -197,9 +59,12 @@ class customerInfo extends Component {
                                             <li className="nav-item">
                                                 <a className="nav-link active" href="#"><em className="icon ni ni-user-circle"></em><span>Personal</span></a>
                                             </li>
+                                            <li className="nav-item">
+                                                <a className="nav-link" href="#"><em className="icon ni ni-repeat"></em><span>Orders</span></a>
+                                            </li>
 
                                             <li className="nav-item nav-item-trigger d-xxl-none">
-                                                <a onClick={this.showBar} className="toggle btn btn-icon btn-trigger" data-target="userAside"><em className="icon ni ni-user-list-fill"></em></a>
+                                                <a href="#" className="toggle btn btn-icon btn-trigger" data-target="userAside"><em className="icon ni ni-user-list-fill"></em></a>
                                             </li>
                                         </ul>
                                         <div className="card-inner">
@@ -216,6 +81,7 @@ class customerInfo extends Component {
                                                             {this.getColText(customer.name)}
                                                         </div>
                                                     </div>
+
                                                     <div className="profile-ud-item">
                                                         <div className="profile-ud wider">
                                                             <span className="profile-ud-label">Email Address</span>
@@ -237,6 +103,7 @@ class customerInfo extends Component {
                                                 </div>
                                                 <div className="profile-ud-list">
                                                     {
+
                                                         customer.address.map((item, i) => {
                                                             return (<div className="profile-ud-item" key={i}>
                                                                 <div className="profile-ud wider">
@@ -252,39 +119,36 @@ class customerInfo extends Component {
                                             <div className="nk-block">
                                                 <div className="nk-block-head nk-block-head-sm nk-block-between">
                                                     <h5 className="title">Admin Note</h5>
-                                                    {
-                                                        customer.notes.length < 3 ?
-                                                            <span className="text-azure fw-medium link-sm" style={{ cursor: "pointer" }} onClick={this.addNote}>+ Add Note</span>
-                                                            : null
-                                                    }
+                                                    <a href="#" className="link link-sm">+ Add Note</a>
                                                 </div>
                                                 <div className="bq-note">
-                                                    {
-                                                        customer.notes.length === 0 ?
-                                                            <span className="text-muted"> No notes added.</span>
-                                                            : null
-                                                    }
-                                                    {
-                                                        customer.notes.map((item, key) => (
-                                                            <div key={key} className="bq-note-item">
-                                                                <div className="bq-note-text">
-                                                                    <p className="text-break">{item.data}</p>
-                                                                </div>
-                                                                <div className="bq-note-meta">
-                                                                    <span className="bq-note-added">Added on <span className="date"><Moment format="MMMM DD, YYYY">{item.createdOn}</Moment></span> at
-                                                                      <span className="time"> <Moment format="hh:mm A">{item.createdOn}</Moment></span></span>
-                                                                    <span className="bq-note-sep sep">|</span>
-                                                                    <span className="bq-note-by">By <span>{item.addedByName}</span></span>
-                                                                    <span className="text-danger  link-sm" style={{ cursor: "pointer" }} onClick={() => { this.deleteNote(item._id) }}>&nbsp;&nbsp;&nbsp;&nbsp;Delete Note</span>
-                                                                </div>
-                                                            </div>
-                                                        ))
-                                                    }
+                                                    <div className="bq-note-item">
+                                                        <div className="bq-note-text">
+                                                            <p>Aproin at metus et dolor tincidunt feugiat eu id quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean sollicitudin non nunc vel pharetra. </p>
+                                                        </div>
+                                                        <div className="bq-note-meta">
+                                                            <span className="bq-note-added">Added on <span className="date">November 18, 2019</span> at <span className="time">5:34 PM</span></span>
+                                                            <span className="bq-note-sep sep">|</span>
+                                                            <span className="bq-note-by">By <span>Softnio</span></span>
+                                                            <a href="#" className="link link-sm link-danger">Delete Note</a>
+                                                        </div>
+                                                    </div>
+                                                    <div className="bq-note-item">
+                                                        <div className="bq-note-text">
+                                                            <p>Aproin at metus et dolor tincidunt feugiat eu id quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean sollicitudin non nunc vel pharetra. </p>
+                                                        </div>
+                                                        <div className="bq-note-meta">
+                                                            <span className="bq-note-added">Added on <span className="date">November 18, 2019</span> at <span className="time">5:34 PM</span></span>
+                                                            <span className="bq-note-sep sep">|</span>
+                                                            <span className="bq-note-by">By <span>Softnio</span></span>
+                                                            <a href="#" className="link link-sm link-danger">Delete Note</a>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="card-aside card-aside-right user-aside toggle-slide toggle-slide-right toggle-break-xxl" id="sidebarProfile" data-content="userAside" data-toggle-screen="xxl" data-toggle-overlay="true" data-toggle-body="true">
+                                    <div className="card-aside card-aside-right user-aside toggle-slide toggle-slide-right toggle-break-sm" data-content="userAside" data-toggle-screen="sm" data-toggle-overlay="true" data-toggle-body="true">
                                         <div className="card-inner-group" data-simplebar>
                                             <div className="card-inner">
                                                 <div className="user-card user-card-s2">
@@ -300,14 +164,9 @@ class customerInfo extends Component {
                                             </div>
                                             <div className="card-inner card-inner-sm">
                                                 <ul className="btn-toolbar justify-center gx-1">
-                                                    {
-                                                        customer.status === 'suspended' ?
-                                                            <li><div onClick={this.changeStatus} className="btn btn-trigger btn-icon text-info"><em className="icon ni ni-shield-off"></em></div></li>
-                                                            : null
-                                                    }
-
-                                                    <li><a href={"mailto:" + customer.email} className="btn btn-trigger btn-icon"><em className="icon ni ni-mail"></em></a></li>
-                                                    {/* <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-download-cloud"></em></a></li> */}
+                                                    <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-shield-off"></em></a></li>
+                                                    <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-mail"></em></a></li>
+                                                    <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-download-cloud"></em></a></li>
                                                     <li> <Link to={{
                                                         pathname: "/editCustomer",
                                                         state: {
@@ -316,12 +175,7 @@ class customerInfo extends Component {
 
                                                     }} className="btn btn-trigger btn-icon">
                                                         <em className="icon ni ni-edit-alt"></em></Link></li>
-                                                    {
-                                                        customer.status === 'active' ?
-                                                            <li><div onClick={this.changeStatus} className="btn btn-trigger btn-icon text-danger"><em className="icon ni ni-na"></em></div></li>
-                                                            : null
-                                                    }
-
+                                                    <li><a href="#" className="btn btn-trigger btn-icon text-danger"><em className="icon ni ni-na"></em></a></li>
                                                 </ul>
                                             </div>
                                             <div className="card-inner">
@@ -330,7 +184,7 @@ class customerInfo extends Component {
                                                     <div className="profile-balance-group gx-4">
                                                         <div className="profile-balance-sub">
                                                             <div className="profile-balance-amount">
-                                                                <div className="number"> <small className="currency currency-usd">Rs.</small> <NumberFormat value={this.state.completeOrderAmount} displayType={'text'} thousandSeparator={true} /></div>
+                                                                <div className="number"> <small className="currency currency-usd">Rs.</small> 2,556.57</div>
                                                             </div>
                                                             <div className="profile-balance-subtitle">Complete Order</div>
                                                         </div>
@@ -340,27 +194,21 @@ class customerInfo extends Component {
                                             </div>
                                             <div className="card-inner">
                                                 <div className="row text-center">
-                                                    <div className="col-3">
+                                                    <div className="col-4">
                                                         <div className="profile-stats">
-                                                            <span className="amount">{this.state.totalOrders}</span>
+                                                            <span className="amount">23</span>
                                                             <span className="sub-text">Total Order</span>
                                                         </div>
                                                     </div>
-                                                    <div className="col-3">
+                                                    <div className="col-4">
                                                         <div className="profile-stats">
-                                                            <span className="amount">{this.state.completeOrders}</span>
+                                                            <span className="amount">20</span>
                                                             <span className="sub-text">Complete</span>
                                                         </div>
                                                     </div>
-                                                    {/* <div className="col-3">
+                                                    <div className="col-4">
                                                         <div className="profile-stats">
-                                                            <span className="amount">{this.state.returnedOrders}</span>
-                                                            <span className="sub-text">Returned</span>
-                                                        </div>
-                                                    </div> */}
-                                                    <div className="col-3">
-                                                        <div className="profile-stats">
-                                                            <span className="amount">{this.state.pendingOrders}</span>
+                                                            <span className="amount">3</span>
                                                             <span className="sub-text">Progress</span>
                                                         </div>
                                                     </div>
@@ -376,17 +224,9 @@ class customerInfo extends Component {
 
                                                     <div className="col-6">
                                                         <span className="sub-text">Register At:</span>
-                                                        <span>    <Moment format="MMM DD, YYYY hh:mm A">
+                                                        <span>    <Moment format="MMM DD, YYYY">
                                                             {customer.createdAt}
                                                         </Moment></span>
-                                                    </div>
-                                                    <div className="col-6">
-                                                        <span className="sub-text">Status:</span>
-                                                        {
-                                                            customer.status === 'active' ?
-                                                                <span className="tb-status text-success fs-12px ccap">{customer.status}</span>
-                                                                : <span className="tb-status text-danger fs-12px ccap"><strong>{customer.status}</strong></span>
-                                                        }
                                                     </div>
                                                 </div>
                                             </div>
@@ -404,17 +244,19 @@ class customerInfo extends Component {
     )
 
     render() {
-        const customer = this.state.customer;
-
         return (
-            <div className="nk-body bg-lighter npc-default has-sidebar " id="container">
+            <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">
                     <div className="nk-main"></div>
-                    <Sidebar />
+                    <Sidebar {...this.props} />
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
-                            {customer ? this.renderCustomerInfo(customer) : null}
+                            {
+                                this.state.customer ?
+                                    this.renderCustomerInfo(this.state.customer)
+                                    : null
+                            }
                             <Footer />
                         </div>
                     </div>
@@ -424,12 +266,4 @@ class customerInfo extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    console.log("State Recieved", state)
-    return {
-        saleDetails: state.customer.saleDetails,
-        editCustomer: state.customer
-    }
-}
-
-export default connect(mapStateToProps)(customerInfo)
+export default CustomerInfo;
