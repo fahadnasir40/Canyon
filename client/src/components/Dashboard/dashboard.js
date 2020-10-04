@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import Sidebar from '../Sidebar/sidebar'
 import Header from './../Header/header'
 import Content from './Content/content'
@@ -6,17 +6,19 @@ import Footer from '../Footer/footer'
 import { connect } from 'react-redux'
 import { getDashboard, getDashboardProducts, clearDashboard } from '../../actions';
 
-class Dashboard extends Component {
+class Dashboard extends PureComponent {
 
     state = {
         productsList: []
     }
 
     componentDidMount() {
+        console.log("Component Did Mount");
         this.props.dispatch(getDashboard())
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
+        console.log("This props", nextProps)
         if (nextProps.data) {
             if (nextProps.data.topProducts) {
                 if (!nextProps.topProducts)
@@ -24,10 +26,6 @@ class Dashboard extends Component {
             }
         }
         return null;
-    }
-
-    componentWillUnmount() {
-        this.props.dispatch(clearDashboard());
     }
 
     renderDashboard = () => {
@@ -49,6 +47,7 @@ class Dashboard extends Component {
     }
 
     render() {
+
         return (
             <div>
                 {this.renderDashboard()}
