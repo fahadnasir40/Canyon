@@ -78,6 +78,8 @@ class AddSale extends Component {
 
     handleProductDropdown = (currentCustomer, event, key) => {
         console.log("Item List : ", this.state.itemsList)
+        let items = this.state.itemsList;
+
         if (this.props.productsList) {
             if (event.target.value === -1 && this.state.currentProduct) {
                 this.props.removeSelectedItem(this.props.index);
@@ -86,16 +88,15 @@ class AddSale extends Component {
                 let items = this.state.itemsList;
 
                 items[key].currentProduct = this.props.productsList[event.target.value];
-
+                items[key].Quantitydel = 0
+                items[key].Quantityrec = 0
+                items[key].customerBottles = 0
+                items[key].excessBottles = 0
+                items[key].discount = 0
                 if (items[key].currentProduct.sku === "CN19LL") { items[key].currentProduct.customerLimit = this.state.currentCustomer.customerLimit }
                 this.setState({
                     itemsList: items
                 })
-                if (this.state.currentProduct)
-                    console.log(this.state.itemsList[event.target.value])
-                // this.props.removeSelectedItem(this.props.index);
-                // this.props.addSelectedItem(this.props.productsList[event.target.value]);
-                // this.props.updateTotalAmount(this.props.index, 1, this.props.productsList[event.target.value].price.total);
             }
         }
     }
@@ -136,6 +137,11 @@ class AddSale extends Component {
                     items[key].Quantityrec = event.target.value;
                     this.setState({ itemsList: items })
                 }
+            }
+            else {
+                let items = this.state.itemsList;
+                items[key].Quantityrec = event.target.value;
+                this.setState({ itemsList: items })
             }
         }
     }
@@ -387,7 +393,7 @@ class AddSale extends Component {
             // if (this.state.request === false) {
             // console.log("save sale about to call", sale)
             this.props.dispatch(saveSale(sale));
-            this.saveTransaction();
+            // this.saveTransaction();
             //     this.setState({
             //         request: true
             //     })
