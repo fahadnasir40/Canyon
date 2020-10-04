@@ -136,42 +136,8 @@ class Content extends Component {
                                             <div className="nk-tb-col"><span className="sub-text">User</span></div>
                                             <div className="nk-tb-col tb-col-mb"><span className="sub-text">Role</span></div>
                                             <div className="nk-tb-col tb-col-md"><span className="sub-text">Phone</span></div>
-                                            <div className="nk-tb-col tb-col-lg"><span className="sub-text">Verified</span></div>
-                                            <div className="nk-tb-col tb-col-lg"><span className="sub-text">Last Login</span></div>
+                                            <div className="nk-tb-col tb-col-lg"><span className="sub-text">City</span></div>
                                             <div className="nk-tb-col tb-col-md"><span className="sub-text">Status</span></div>
-                                            <div className="nk-tb-col nk-tb-col-tools text-right">
-                                                <div className="dropdown">
-                                                    <a href="#" className="btn btn-xs btn-outline-light btn-icon dropdown-toggle" data-toggle="dropdown" data-offset="0,5"><em className="icon ni ni-plus"></em></a>
-                                                    <div className="dropdown-menu dropdown-menu-xs dropdown-menu-right">
-                                                        <ul className="link-tidy sm no-bdr">
-                                                            <li>
-                                                                <div className="custom-control custom-control-sm custom-checkbox">
-                                                                    <input type="checkbox" className="custom-control-input" checked="" id="bl" />
-                                                                    <label className="custom-control-label" htmlFor="bl">Role</label>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div className="custom-control custom-control-sm custom-checkbox">
-                                                                    <input type="checkbox" className="custom-control-input" checked="" id="ph" />
-                                                                    <label className="custom-control-label" htmlFor="ph">Phone</label>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div className="custom-control custom-control-sm custom-checkbox">
-                                                                    <input type="checkbox" className="custom-control-input" id="vri" />
-                                                                    <label className="custom-control-label" htmlFor="vri">Verified</label>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div className="custom-control custom-control-sm custom-checkbox">
-                                                                    <input type="checkbox" className="custom-control-input" id="st" />
-                                                                    <label className="custom-control-label" htmlFor="st">Status</label>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                         {this.renderUserList()}
                                     </div>
