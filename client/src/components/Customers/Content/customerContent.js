@@ -192,26 +192,31 @@ class CustomersContent extends Component {
                                                 }}
                                                 ><em className="icon ni ni-eye"></em><span>View Details</span></Link></li>
                                                 <li className="divider"></li>
-                                                <li><a href="#"><em className="icon ni ni-activity-round"></em><span>View Orders</span></a></li>
-                                                <li> <Link to={{
-                                                    pathname: "/editCustomer",
-                                                    state: {
-                                                        customerInfo: customer
-                                                    }
-                                                }}>
-                                                    <em className="icon ni ni-pen"></em><span>Edit details</span></Link></li>
                                                 {
-                                                    customer.status === "active" ?
-                                                        <li><a onClick={() => { this.props.changeStatus(customer) }}>
-                                                            <em className="icon ni ni-na"></em><span style={{ cursor: "pointer" }} className="text-warning">Suspend</span>
-                                                        </a></li>
-                                                        :
-                                                        <li><a onClick={() => { this.props.changeStatus(customer) }}>
-                                                            <em className="icon ni ni-user-check"></em><span style={{ cursor: "pointer" }} className="text-info">Active Customer</span>
-                                                        </a></li>
+                                                    this.props.user.login.role !== 'worker' ?
+                                                        <li> <Link to={{
+                                                            pathname: "/editCustomer",
+                                                            state: {
+                                                                customerInfo: customer
+                                                            }
+                                                        }}>
+                                                            <em className="icon ni ni-pen"></em><span>Edit details</span></Link></li>
+                                                        : null
+                                                }{
+                                                    this.props.user.login.role !== 'worker' ?
+                                                        customer.status === "active" ?
+                                                            <li><a onClick={() => { this.props.changeStatus(customer) }}>
+                                                                <em className="icon ni ni-na"></em><span style={{ cursor: "pointer" }} className="text-warning">Suspend</span>
+                                                            </a></li>
+                                                            :
+                                                            <li><a onClick={() => { this.props.changeStatus(customer) }}>
+                                                                <em className="icon ni ni-user-check"></em><span style={{ cursor: "pointer" }} className="text-info">Active Customer</span>
+                                                            </a></li>
+                                                        : null
                                                 }
 
-                                                <li><a onClick={() => { this.props.deleteCustomer(customer) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }} className="text-danger ">Remove Customer</span></a></li>
+                                                {/* <li><a onClick={() => { this.props.deleteCustomer(customer) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }} className="text-danger ">Remove Customer</span></a></li> */}
+
                                             </ul>
                                         </div>
                                     </div>
