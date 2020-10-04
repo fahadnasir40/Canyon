@@ -6,8 +6,8 @@ export default function (state = {}, action) {
             return { ...state, topProduct: action.payload }
         case 'ADD_SALE':
             return { ...state, sale: action.payload }
-        case 'CLEAR_SALE':
-            return { ...state, sale: action.payload, post: action.payload }
+        case 'CLEAR_DASHBOARD':
+            return { ...state, data: action.payload, topProducts: action.payload }
         default:
             return state;
     }

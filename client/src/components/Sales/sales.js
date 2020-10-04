@@ -18,11 +18,11 @@ class Sale extends Component {
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">
                     <div className="nk-main"></div>
-                    <Sidebar />
+                    <Sidebar {...this.props} />
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
-                            <Content saleList = {this.props.saleList} />
+                            <Content saleList={this.props.saleList} />
                             <Footer />
                         </div>
                     </div>

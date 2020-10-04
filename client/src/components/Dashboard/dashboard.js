@@ -4,7 +4,7 @@ import Header from './../Header/header'
 import Content from './Content/content'
 import Footer from '../Footer/footer'
 import { connect } from 'react-redux'
-import { getDashboard, getDashboardProducts } from '../../actions';
+import { getDashboard, getDashboardProducts, clearDashboard } from '../../actions';
 
 class Dashboard extends Component {
 
@@ -23,6 +23,11 @@ class Dashboard extends Component {
                     nextProps.dispatch(getDashboardProducts(nextProps.data.topProducts));
             }
         }
+        return null;
+    }
+
+    componentWillUnmount() {
+        this.props.dispatch(clearDashboard());
     }
 
     renderDashboard = () => {

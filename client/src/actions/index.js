@@ -518,6 +518,13 @@ export function clearCustomerList() {
     }
 }
 
+export function clearDashboard() {
+    return {
+        type: 'CLEAR_DASHBOARD',
+        payload: {}
+    }
+}
+
 export function clearNewBook() {
     return {
         type: 'CLEAR_NEWBOOK',

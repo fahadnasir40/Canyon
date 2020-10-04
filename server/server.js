@@ -7,6 +7,7 @@ const moment = require("moment")
 const config = require("./config/config").get(process.env.NODE_ENV);
 const app = express();
 const { auth } = require("./middleware/auth");
+const { auth2 } = require("./middleware/auth2");
 const shortid = require('shortid');
 const http = require("http");
 
@@ -36,7 +37,7 @@ app.use(express.static("client/build"));
 
 // GET //
 
-app.get("/api/auth", auth, (req, res) => {
+app.get("/api/auth", auth2, (req, res) => {
     res.json({
         isAuth: true,
         id: req.user.id,
@@ -264,7 +265,7 @@ app.get('/api/getSuppliersTransactions', auth, (req, res) => {
     })
 })
 
-app.get('/api/getCustomer', auth, (req, res) => {
+app.get('/api/getCustomer', auth2, (req, res) => {
     let id = req.query.id;
 
     Customer.findById(id, (err, doc) => {
@@ -274,7 +275,7 @@ app.get('/api/getCustomer', auth, (req, res) => {
 })
 
 
-app.get('/api/getCustomersTransactions', auth, (req, res) => {
+app.get('/api/getCustomersTransactions', auth2, (req, res) => {
     let skip = parseInt(req.query.skip);
     let limit = parseInt(req.query.limit);
     let order = req.query.order;
@@ -313,7 +314,7 @@ app.get('/api/getActiveSuppliers', auth, (req, res) => {
     })
 })
 
-app.get('/api/getCustomers', auth, (req, res) => {
+app.get('/api/getCustomers', auth2, (req, res) => {
     // locahost:3001/api/books?skip=3&limit=2&order=asc
     let skip = parseInt(req.query.skip);
     let limit = parseInt(req.query.limit);
@@ -339,7 +340,7 @@ app.get('/api/getProducts', auth, (req, res) => {
     })
 })
 
-app.get('/api/getActiveProducts', auth, (req, res) => {
+app.get('/api/getActiveProducts', auth2, (req, res) => {
     // locahost:3001/api/books?skip=3&limit=2&order=asc
     let skip = parseInt(req.query.skip);
     let limit = parseInt(req.query.limit);
@@ -366,17 +367,26 @@ app.get('/api/getPurchases', auth, (req, res) => {
     })
 })
 
-app.get('/api/getSales', auth, (req, res) => {
+app.get('/api/getSales', auth2, (req, res) => {
     // locahost:3001/api/books?skip=3&limit=2&order=asc
     let skip = parseInt(req.query.skip);
     let limit = parseInt(req.query.limit);
     let order = req.query.order;
 
-    // ORDER = asc || desc
-    Sale.find().skip(skip).sort({ createdAt: order }).limit(limit).exec((err, doc) => {
-        if (err) return res.status(400).send(err);
-        res.send(doc);
-    });
+    if (req.user.role === 'worker') {
+        // ORDER = asc || desc
+        Sale.find({ addedBy: req.user.role }).skip(skip).sort({ createdAt: order }).limit(limit).exec((err, doc) => {
+            if (err) return res.status(400).send(err);
+            res.send(doc);
+        });
+    }
+    else {
+        Sale.find().skip(skip).sort({ createdAt: order }).limit(limit).exec((err, doc) => {
+            if (err) return res.status(400).send(err);
+            res.send(doc);
+        });
+    }
+
 });
 
 app.post('/api/getDashboardProducts', auth, async function (req, res) {
@@ -426,7 +436,7 @@ app.get('/api/getTransactions', auth, (req, res) => {
     })
 })
 
-app.get("/api/profile", auth, (req, res) => {
+app.get("/api/profile", auth2, (req, res) => {
     res.json({
         id: req.user.id,
         email: req.user.email,
@@ -439,7 +449,7 @@ app.get("/api/profile", auth, (req, res) => {
     });
 });
 
-app.get("/api/logout", auth, (req, res) => {
+app.get("/api/logout", auth2, (req, res) => {
     req.user.deleteToken(req.token, (err, user) => {
         if (err) return res.status(400).send(err);
         res.sendStatus(200);
@@ -490,6 +500,7 @@ app.post("/api/login", (req, res) => {
                     isAuth: true,
                     id: user._id,
                     email: user.email,
+                    role: user.role
                 });
             });
         });
@@ -623,7 +634,7 @@ app.post('/api/addPurchase', auth, (req, res) => {
     }
 })
 
-app.post('/api/addSale', auth, (req, res) => {
+app.post('/api/addSale', auth2, (req, res) => {
 
     let products = req.body.productDetails;
     let productTotalQty = 0;
@@ -693,7 +704,7 @@ app.post('/api/addSale', auth, (req, res) => {
     });
 })
 
-app.post('/api/addProduct', auth, (req, res) => {
+app.post('/api/addProduct', auth2, (req, res) => {
 
     const product = new Product(req.body);
     const total = Number(product.price.cost_seal) + Number(product.price.cost_wrapper) +

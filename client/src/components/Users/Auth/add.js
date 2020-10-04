@@ -123,8 +123,21 @@ class AddUser extends Component {
         // }
     }
 
-
-
+    getRoles = () => {
+        if (this.props.user.login.role == 'adminsitrator') {
+            return (
+                <select required onChange={this.handleInputRole} className="form-control form-control-md">
+                    <option value="worker">Worker</option>
+                    <option value="supervisor">Supervisor</option>
+                    <option value="adminsitrator">Administrator</option>
+                </select>
+            )
+        }
+        else if (this.props.user.login.role === 'supervisor') {
+            return (<select required onChange={this.handleInputRole} className="form-control form-control-md">
+                <option value="worker">Worker</option></select>);
+        }
+    }
 
     renderBody = () => (
         <div className="container mt-5">
@@ -160,10 +173,7 @@ class AddUser extends Component {
                                 <div className="form-group">
                                     <label className="form-label">Role</label>
                                     <div className="form-control-wrap ">
-                                        <select required onChange={this.handleInputRole} className="form-control form-control-md">
-                                            <option value="worker">Worker</option>
-                                            <option value="adminsitrator">Administrator</option>
-                                        </select>
+                                        {this.getRoles()}
                                     </div>
                                 </div>
                             </div>
