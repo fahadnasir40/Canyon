@@ -127,7 +127,7 @@ class Content extends Component {
                             pathname: `/sale_invoice_id=${row._id}`,
                         }} className="btn btn-dim btn-sm btn-primary">View</Link>
 
-                        <div onClick={() => { this.editPaidAmount(row) }} className="btn btn-icon btn-white btn-dim btn-lg  btn-primary py-n1 ml-3"><em class="iconicon ni ni-edit"></em></div>
+                        <div onClick={() => { this.editPaidAmount(row) }} className="btn btn-icon btn-white btn-dim btn-lg  btn-primary py-n1 ml-3"><em className="iconicon ni ni-edit"></em></div>
                     </div>
                     <Link to={{
                         pathname: `/sale_invoice_id=${row._id}`,
@@ -140,6 +140,7 @@ class Content extends Component {
 
 
     SampleExpandedComponent = ({ data }) => {
+        console.log("data", data)
         return (
             <div className="container-fluid">
                 <div className="row d-lg-none">
@@ -159,7 +160,7 @@ class Content extends Component {
                 </div>
                 <div className="row">
                     <div className="col">
-                        <span className=" fw-medium">Added on: </span> <span className="fw-normal"><Moment format="DD MMM, YYYY hh:mm A">{data.createdAt}</Moment></span>
+                        <span className=" fw-medium">Sale Date: </span> <span className="fw-normal"><Moment format="DD MMM, YYYY hh:mm A">{data.saleDate}</Moment></span>
                     </div>
                 </div>
                 <div className="row">
@@ -252,9 +253,9 @@ class Content extends Component {
                     }
                 },
                 html:
-                    `<div><span class="fs-10">Sale # </span><span>${sale._id}</span></div >
-                    <div class="mt-3"><span class="fw-bold">Total Amount: </span><span> Rs. ${sale.totalAmount}</span></div >
-                    <div class="fw-bold mt-2">Paid Amount</div>`,
+                    `<div><span className="fs-10">Sale # </span><span>${sale._id}</span></div >
+                    <div className="mt-3"><span className="fw-bold">Total Amount: </span><span> Rs. ${sale.totalAmount}</span></div >
+                    <div className="fw-bold mt-2">Paid Amount</div>`,
                 focusConfirm: false,
             })
             if (formValues) {

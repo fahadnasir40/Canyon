@@ -391,6 +391,25 @@ app.get('/api/getSales', auth, (req, res) => {
     });
 });
 
+app.get('/api/getSaleProduct', auth, (req, res) => {
+
+    let id = req.query.id.toString();
+
+    Sale.findById(id, (err, doc) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        if (!doc) {
+            return res.status(400).send({ message: 'Not found' });
+        }
+
+        if (doc.productDetails.length > 0)
+            Product.find({ _id: { $in: doc.productDetails } }).select('_id name sku stock brand uom').exec((err, products) => {
+                if (err) return res.status(400).send(err);
+                res.status(200).send({ doc, products });
+            });
+    })
+})
 
 app.get('/api/getPurchaseProduct', auth, (req, res) => {
 

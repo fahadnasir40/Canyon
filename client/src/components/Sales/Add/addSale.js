@@ -53,14 +53,14 @@ class AddSale extends Component {
             itemName: '',
             uom: 'N/A',
             customerlimit: 0,
-            rate: '0',
-            qtyrec: '0',
-            qtydel: '0',
-            excessBottles: '0',
-            discount: '0',
-            paymethod: '',
-            secpaid: '0',
-            total: '0',
+            rate: 0,
+            qtyrec: 0,
+            qtydel: 0,
+            excessBottles: 0,
+            discount: 0,
+            paymethod: 'Cash',
+            secpaid: 0,
+            total: 0,
             currentProduct: ''
         })
         this.setState({
@@ -77,17 +77,24 @@ class AddSale extends Component {
 
 
     handleProductDropdown = (currentCustomer, event, key) => {
-        console.log("Item List : ",this.state.itemsList)
+        console.log("Item List : ", this.state.itemsList)
         if (this.props.productsList) {
             if (event.target.value === -1 && this.state.currentProduct) {
-                this.setState({ currentProduct: '', currentQuantity: '' });
                 this.props.removeSelectedItem(this.props.index);
             }
             else {
                 let items = this.state.itemsList;
-                let limit;
+                // items[key].currentProduct.customerBottles = 0;
+                // items[key].currentProduct.Quantityrec = 0,
+                // items[key].currentProduct.Quantitydel = 0,
+                // items[key].currentProduct.excessBottles = 0,
+                // items[key].currentProduct.discount = 0,
+                // items[key].currentProduct.paymethod = "Cash",
+                // items[key].currentProduct.secpaid = 0,
+                // items[key].currentProduct.customerlimit = 0,
+
                 items[key].currentProduct = this.props.productsList[event.target.value];
-                
+
                 if (items[key].currentProduct.sku === "CN19LL") { items[key].currentProduct.customerLimit = this.state.currentCustomer.customerLimit }
                 this.setState({
                     itemsList: items
@@ -127,29 +134,38 @@ class AddSale extends Component {
         this.setState({ customerlimit: this.state.customerlimit })
     }
 
-    handleInputQuantityrec = (event, key) => {
-        let items = this.state.itemsList;
-        items[key].Quantityrec = event.target.value;
-        this.setState({ itemsList: items })
-
+    handleInputQuantityrec = (currentProduct, currentCustomer, event, key) => {
+        console.log("Current Product", currentProduct)
+        console.log("Current Customer", currentCustomer)
+        if (currentProduct) {
+            if (currentProduct.sku !== "O19L") {
+                if (event.target.value <= currentCustomer.customerBottles) {
+                    let items = this.state.itemsList;
+                    items[key].Quantityrec = event.target.value;
+                    this.setState({ itemsList: items })
+                }
+            }
+        }
     }
 
     handleInputQuantitydel = (currentProduct, event, key) => {
-        console.log("Current Product", currentProduct.price.cost_security)
+        // console.log("Current Product", currentProduct.price.cost_security)
         if (currentProduct) {
-            let items = this.state.itemsList;
-            let rate = 0;
+            if (currentProduct.stock >= event.target.value) {
+                let items = this.state.itemsList;
+                let rate = 0;
 
-            items[key].Quantitydel = event.target.value;
+                items[key].Quantitydel = event.target.value;
 
-            if (currentProduct.sku === "CN19LL") {
-                items[key].excessBottles = Number(event.target.value) - Number(this.state.customerlimit);
-                items[key].secpaid = Number(event.target.value) - Number(this.state.customerlimit);
+                if (currentProduct.sku === "CN19LL") {
+                    items[key].excessBottles = Number(event.target.value) - Number(this.state.customerlimit);
+                    items[key].secpaid = Number(event.target.value) - Number(this.state.customerlimit);
+                }
+                rate = Number(this.getProductRate(currentProduct)) * Number(items[key].Quantitydel)
+                items[key].totalAmount = rate
+
+                this.setState({ itemsList: items })
             }
-            rate = Number(this.getProductRate(currentProduct)) * Number(items[key].Quantitydel)
-            items[key].totalAmount = rate
-
-            this.setState({ itemsList: items })
         }
         this.calculateTotal();
     }
@@ -277,11 +293,16 @@ class AddSale extends Component {
     }
 
     handleInputDropdown = (event) => {
+        console.log("customer: ", event.target.value)
         if (this.state.customersList && event.target.value != -1) {
             this.setState({
                 currentCustomer: this.state.customersList[event.target.value],
                 address: this.state.customersList[event.target.value].address[0]
             });
+        }
+        else if (event.target.value == -1) {
+            this.clearAllItems();
+            this.setState({ currentCustomer: '' })
         }
     }
 
@@ -341,12 +362,12 @@ class AddSale extends Component {
             this.products.forEach(item => {
 
                 if (item.currentProduct.sku === "CN19LL") {
-                    if (item.Quantitydel && item.Quantityrec ) {
+                    if (item.Quantitydel && item.Quantityrec) {
                         customerwithBottles = Number(item.Quantitydel) - Number(item.Quantityrec);
                     }
                 }
 
-                
+
                 productDetails.push({
                     _id: item.currentProduct._id,
                     puom: item.currentProduct.uom,
@@ -381,9 +402,9 @@ class AddSale extends Component {
             // }
             // }
             // else {
-            //     this.setState({
-            //         loading: true
-            //     })
+            this.setState({
+                loading: true
+            })
             // }
         }
     }
@@ -483,15 +504,14 @@ class AddSale extends Component {
                                         <div className="nk-block-head-content">
                                             <ul className="nk-block-tools-opt">
                                                 {
-                                                    // this.state.itemsList.length < 20 && this.props.customer ?
-                                                    // <div onClick={this.addItemRow} className="btn btn-primary"><em className="icon ni ni-plus"></em><span>Add Item</span></div>
-                                                    <div onClick={this.addItemRow} className="btn btn-primary"><em className="icon ni ni-plus"></em><span>Add Item</span></div>
-                                                    // : null
+                                                    this.state.currentCustomer ?
+                                                        <div onClick={this.addItemRow} className="btn btn-primary"><em className="icon ni ni-plus"></em><span>Add Item</span></div>
+                                                        : null
                                                 }
                                                 {
-                                                    // this.state.itemsList.length > 0 ?
-                                                    <div className="d-flex justify-content-end text-primary " ><span style={{ cursor: "pointer" }} onClick={this.clearAllItems}>Clear all items</span></div>
-                                                    // : null
+                                                    this.state.itemsList.length > 0 ?
+                                                        <div className="d-flex justify-content-end text-primary " ><span style={{ cursor: "pointer" }} onClick={this.clearAllItems}>Clear all items</span></div>
+                                                        : null
                                                 }
                                             </ul>
                                         </div>
@@ -536,10 +556,12 @@ class AddSale extends Component {
                                                                                 <select className="form-control" onChange={(event) => { this.handleProductDropdown(this.currentCustomer, event, key) }} data-search="on">
                                                                                     <option value={-1}>Select Item</option>
                                                                                     {
-                                                                                        this.props.productsList ?
-                                                                                            this.props.productsList.map((item, key) => {
-                                                                                                return <option key={key} value={key} className="ccap" >{item.name}</option>;
-                                                                                            })
+                                                                                        this.state.currentCustomer ?
+                                                                                            this.props.productsList ?
+                                                                                                this.props.productsList.map((item, key) => {
+                                                                                                    return <option key={key} value={key} className="ccap" >{item.name}</option>;
+                                                                                                })
+                                                                                                : null
                                                                                             : null
                                                                                     }
                                                                                 </select>
@@ -547,7 +569,7 @@ class AddSale extends Component {
                                                                         </div>
                                                                         <td>{item.currentProduct ? item.currentProduct.uom : 'N/A'}</td>
                                                                         <td>{item.currentProduct ? item.currentProduct.customerBottles : 0}</td>
-                                                                        
+
                                                                         <span>{item.currentProduct.customerLimit}</span>
                                                                         <td>{this.getProductRate(item.currentProduct)}</td>
                                                                     </tr>
@@ -567,6 +589,7 @@ class AddSale extends Component {
                                                         <tr>
                                                             <th scope="col">#</th>
                                                             <th scope="col">Item Name</th>
+                                                            <th scope="col">Current Stock</th>
                                                             <th scope="col">Quantity Received.</th>
                                                             <th scope="col">Quantity Delivered.</th>
                                                             <th scope="col">Excess Bottles.</th>
@@ -583,8 +606,11 @@ class AddSale extends Component {
                                                                         <td>
                                                                             <span>{item.currentProduct.name}</span>
                                                                         </td>
-                                                                        <td><input type="number" min={1} maxLength={7} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(event, key) }} className="form-control" id="quantityrec" placeholder= {0} /></td>
-                                                                        <td><input type="number" min={1} maxLength={7} value={item.Quantitydel} onChange={(event) => { this.handleInputQuantitydel(item.currentProduct, event, key) }} className="form-control" id="quantitydel" placeholder={0} /></td>
+                                                                        <td>
+                                                                            <span>{item.currentProduct.stock}</span>
+                                                                        </td>
+                                                                        <td><input type="number" min={1} maxLength={7} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(item.currentProduct, this.state.currentCustomer, event, key) }} className="form-control" id="quantityrec" placeholder={0} /></td>
+                                                                        <td><input type="number" min={1} maxLength={Number(item.Quantitydel) - Number(item.currentProduct.stock)} value={item.Quantitydel} onChange={(event) => { this.handleInputQuantitydel(item.currentProduct, event, key) }} className="form-control" id="quantitydel" placeholder={0} /></td>
                                                                         <td>{item.excessBottles}</td>
                                                                     </tr>
 

@@ -2,10 +2,10 @@ export default function (state = {}, action) {
     switch (action.type) {
         case 'GET_CUSTOMERS':
             return { ...state, customerList: action.payload }
+        case 'GET_CUSTOMER':
+            return { ...state, customer: action.payload }
         case 'GET_CUSTOMERS_TRANSACTIONS':
             return { ...state, customerList: action.payload }
-        case 'GET_SHARED_DOCUMENT':
-            return { ...state, sharedDocument: action.payload }
         case 'UPDATE_CUSTOMER':
             return {
                 ...state,
@@ -24,11 +24,6 @@ export default function (state = {}, action) {
             return { ...state, customer: action.payload, post: action.payload }
         case 'CLEAR_CUSTOMER_LIST':
             return { ...state, customerList: action.payload }
-
-        case 'DOWNLOAD_DOCUMENT':
-            return { ...state, downloadStatus: action.payload }
-        case 'INVITE_USER':
-            return { ...state, userInvited: action.payload }
         default:
             return state;
     }
