@@ -6,6 +6,11 @@ export default function (state = {}, action) {
             return { ...state, sale: action.payload }
         case 'ADD_SALE':
             return { ...state, sale: action.payload }
+        case 'UPDATE_SALE_PAID':
+            return {
+                ...state,
+                post: action.payload.success
+            }
         case 'CLEAR_SALE':
             return { ...state, sale: action.payload, post: action.payload }
         default:

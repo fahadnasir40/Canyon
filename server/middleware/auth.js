@@ -11,11 +11,8 @@ const auth = (req, res, next) => {
         if (!user) return res.json({
             error: true
         });
-
-        console.log("User Role", user.role)
         if (roles.length && !roles.includes(user.role)) {
             // user's role is not authorized
-            console.log(roles.includes(user.role))
             return res.status(401).json({ message: 'Unauthorized' });
         }
 
