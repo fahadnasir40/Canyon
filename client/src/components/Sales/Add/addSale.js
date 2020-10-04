@@ -84,14 +84,6 @@ class AddSale extends Component {
             }
             else {
                 let items = this.state.itemsList;
-                // items[key].currentProduct.customerBottles = 0;
-                // items[key].currentProduct.Quantityrec = 0,
-                // items[key].currentProduct.Quantitydel = 0,
-                // items[key].currentProduct.excessBottles = 0,
-                // items[key].currentProduct.discount = 0,
-                // items[key].currentProduct.paymethod = "Cash",
-                // items[key].currentProduct.secpaid = 0,
-                // items[key].currentProduct.customerlimit = 0,
 
                 items[key].currentProduct = this.props.productsList[event.target.value];
 
@@ -109,7 +101,7 @@ class AddSale extends Component {
     }
 
     getProductRate = (currentProduct) => {
-
+        console.log(currentProduct)
         if (currentProduct) {
             if (this.state.currentCustomer.flatRate === true) {
                 if (Number(currentProduct.price.cost_flatRate)) {
