@@ -1,38 +1,43 @@
 import React, { Component } from 'react'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 class Content extends Component {
 
-   
 
-    getInitials = (name) =>{
+
+    getInitials = (name) => {
         var initials = name.match(/\b\w/g) || [];
         initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
         return initials;
     }
 
-    bg  = ["bg-primary","bg-warning","bg-info","bg-secondary","bg-danger","bg-dark"];
+    bg = ["bg-primary", "bg-warning", "bg-info", "bg-secondary", "bg-danger", "bg-dark"];
     count = 0;
-    
-    getCustomBg = ()=>{
-        if(this.count > this.bg.length){
+
+    getCustomBg = () => {
+        if (this.count > this.bg.length) {
             this.count = 0;
         }
         return (this.bg[this.count++]);
     }
-    
-    renderUserList =()=>{
-        if(this.props.userList){
-            return this.props.userList.map((user,i)=>(
+
+    renderUserList = () => {
+        if (this.props.userList) {
+            return this.props.userList.map((user, i) => (
                 <div key={i} className="nk-tb-item">
                     <div className="nk-tb-col nk-tb-col-check">
                         <div className="custom-control custom-control-sm custom-checkbox notext">
-                            <input type="checkbox" className="custom-control-input" id={"uid1-"+i}/>
-                            <label className="custom-control-label" htmlFor={"uid1-"+i}></label>
+                            <input type="checkbox" className="custom-control-input" id={"uid1-" + i} />
+                            <label className="custom-control-label" htmlFor={"uid1-" + i}></label>
                         </div>
                     </div>
                     <div className="nk-tb-col">
-                        <a href="html/user-details-regular.html">
+                        <Link to={{
+                            pathname: "/userInfo",
+                            state: {
+                                userInfo: user
+                            }
+                        }}>
                             <div className="user-card">
                                 <div className={"user-avatar " + this.getCustomBg()}>
                                     <span>{this.getInitials(user.name)}</span>
@@ -42,7 +47,7 @@ class Content extends Component {
                                     <span>{user.email}</span>
                                 </div>
                             </div>
-                        </a>
+                        </Link>
                     </div>
                     <div className="nk-tb-col tb-col-mb">
                         <span className="tb-status ccap">{user.role}</span>
@@ -53,30 +58,29 @@ class Content extends Component {
                     <div className="nk-tb-col tb-col-lg">
                         <ul className="list-status">
                             <li><em className="icon text-success ni ni-check-circle"></em> <span>Email</span></li>
-                            <li><em className="icon ni ni-alert-circle"></em> <span>KYC</span></li>
                         </ul>
                     </div>
-                    <div className="nk-tb-col tb-col-lg">
-                        <span>10 Feb 2020</span>
-                    </div>
+
                     <div className="nk-tb-col tb-col-md">
                         <span className="tb-status text-success">Active</span>
                     </div>
                     <div className="nk-tb-col nk-tb-col-tools">
                         <ul className="nk-tb-actions gx-1">
-                        
+
                             <li>
                                 <div className="drodown">
                                     <a href="#" className="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
                                     <div className="dropdown-menu dropdown-menu-right">
                                         <ul className="link-list-opt no-bdr">
-                                            <li><a href="#"><em className="icon ni ni-focus"></em><span>Quick View</span></a></li>
-                                            <li><a href="#"><em className="icon ni ni-eye"></em><span>View Details</span></a></li>
-                                            <li><a href="#"><em className="icon ni ni-repeat"></em><span>Transaction</span></a></li>
-                                            <li><a href="#"><em className="icon ni ni-activity-round"></em><span>Activities</span></a></li>
+                                            <li>  <Link to={{
+                                                pathname: "/userInfo",
+                                                state: {
+                                                    userInfo: user
+                                                }
+                                            }}
+                                            ><em className="icon ni ni-eye"></em><span>View Details</span></Link></li>
+
                                             <li className="divider"></li>
-                                            <li><a href="#"><em className="icon ni ni-shield-star"></em><span>Reset Pass</span></a></li>
-                                            <li><a href="#"><em className="icon ni ni-shield-off"></em><span>Reset 2FA</span></a></li>
                                             <li><a href="#"><em className="icon ni ni-na"></em><span>Suspend User</span></a></li>
                                         </ul>
                                     </div>
@@ -89,14 +93,14 @@ class Content extends Component {
         }
     }
 
-    getUsersLength(){
-        if(this.props.userList){
+    getUsersLength() {
+        if (this.props.userList) {
             return this.props.userList.length;
-        }        
+        }
     }
 
     render() {
-       
+
         return (
             <div>
                 <div className="nk-content ml-md-5 ">
@@ -112,87 +116,71 @@ class Content extends Component {
                                             </div>
                                         </div>
                                         <div className="nk-block-head-content">
-                                            <div className="toggle-wrap nk-block-tools-toggle">
-                                                <a href="#" className="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em className="icon ni ni-menu-alt-r"></em></a>
-                                                <div className="toggle-expand-content" data-content="pageMenu">
-                                                    <ul className="nk-block-tools g-3">
-                                                        <li><a href="#" className="btn btn-white btn-outline-light"><em className="icon ni ni-download-cloud"></em><span>Export</span></a></li>
-                                                        <li className="nk-block-tools-opt">
-                                                            <div className="drodown">
-                                                                <a href="#" className="dropdown-toggle btn btn-icon btn-primary" data-toggle="dropdown"><em className="icon ni ni-plus"></em></a>
-                                                                <div className="dropdown-menu dropdown-menu-right">
-                                                                    <ul className="link-list-opt no-bdr">
-                                                                        
-                                                                        <li><Link to="/add"><span>Add User</span></Link></li>
-                                                                        <li><a href="#"><span>Add Team</span></a></li>
-                                                                        <li><a href="#"><span>Import User</span></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
+                                            <ul className="nk-block-tools g-3">
+                                                <li className="nk-block-tools-opt">
+                                                    <Link to="/add" className="btn btn-icon btn-primary"><em className="icon ni ni-plus"></em> <span className="mr-2">Add User </span></Link></li>
+                                            </ul>
+
                                         </div>
                                     </div>
                                 </div>
                                 <div className="card-inner p-0 bg-white">
-                                                <div className="nk-tb-list nk-tb-ulist">
-                                                    <div className="nk-tb-item nk-tb-head">
-                                                        <div className="nk-tb-col nk-tb-col-check">
-                                                            <div className="custom-control custom-control-sm custom-checkbox notext">
-                                                                <input type="checkbox" className="custom-control-input" id="uid"/>
-                                                                <label className="custom-control-label" htmlFor="uid"></label>
-                                                            </div>
-                                                        </div>
-                                                        <div className="nk-tb-col"><span className="sub-text">User</span></div>
-                                                        <div className="nk-tb-col tb-col-mb"><span className="sub-text">Role</span></div>
-                                                        <div className="nk-tb-col tb-col-md"><span className="sub-text">Phone</span></div>
-                                                        <div className="nk-tb-col tb-col-lg"><span className="sub-text">Verified</span></div>
-                                                        <div className="nk-tb-col tb-col-lg"><span className="sub-text">Last Login</span></div>
-                                                        <div className="nk-tb-col tb-col-md"><span className="sub-text">Status</span></div>
-                                                        <div className="nk-tb-col nk-tb-col-tools text-right">
-                                                            <div className="dropdown">
-                                                                <a href="#" className="btn btn-xs btn-outline-light btn-icon dropdown-toggle" data-toggle="dropdown" data-offset="0,5"><em className="icon ni ni-plus"></em></a>
-                                                                <div className="dropdown-menu dropdown-menu-xs dropdown-menu-right">
-                                                                    <ul className="link-tidy sm no-bdr">
-                                                                        <li>
-                                                                            <div className="custom-control custom-control-sm custom-checkbox">
-                                                                                <input type="checkbox" className="custom-control-input" checked="" id="bl"/>
-                                                                                <label className="custom-control-label" htmlFor="bl">Role</label>
-                                                                            </div>
-                                                                        </li>
-                                                                        <li>
-                                                                            <div className="custom-control custom-control-sm custom-checkbox">
-                                                                                <input type="checkbox" className="custom-control-input" checked="" id="ph"/>
-                                                                                <label className="custom-control-label" htmlFor="ph">Phone</label>
-                                                                            </div>
-                                                                        </li>
-                                                                        <li>
-                                                                            <div className="custom-control custom-control-sm custom-checkbox">
-                                                                                <input type="checkbox" className="custom-control-input" id="vri"/>
-                                                                                <label className="custom-control-label" htmlFor="vri">Verified</label>
-                                                                            </div>
-                                                                        </li>
-                                                                        <li>
-                                                                            <div className="custom-control custom-control-sm custom-checkbox">
-                                                                                <input type="checkbox" className="custom-control-input" id="st"/>
-                                                                                <label className="custom-control-label" htmlFor="st">Status</label>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
+                                    <div className="nk-tb-list nk-tb-ulist">
+                                        <div className="nk-tb-item nk-tb-head">
+                                            <div className="nk-tb-col nk-tb-col-check">
+                                                <div className="custom-control custom-control-sm custom-checkbox notext">
+                                                    <input type="checkbox" className="custom-control-input" id="uid" />
+                                                    <label className="custom-control-label" htmlFor="uid"></label>
+                                                </div>
+                                            </div>
+                                            <div className="nk-tb-col"><span className="sub-text">User</span></div>
+                                            <div className="nk-tb-col tb-col-mb"><span className="sub-text">Role</span></div>
+                                            <div className="nk-tb-col tb-col-md"><span className="sub-text">Phone</span></div>
+                                            <div className="nk-tb-col tb-col-lg"><span className="sub-text">Verified</span></div>
+                                            <div className="nk-tb-col tb-col-lg"><span className="sub-text">Last Login</span></div>
+                                            <div className="nk-tb-col tb-col-md"><span className="sub-text">Status</span></div>
+                                            <div className="nk-tb-col nk-tb-col-tools text-right">
+                                                <div className="dropdown">
+                                                    <a href="#" className="btn btn-xs btn-outline-light btn-icon dropdown-toggle" data-toggle="dropdown" data-offset="0,5"><em className="icon ni ni-plus"></em></a>
+                                                    <div className="dropdown-menu dropdown-menu-xs dropdown-menu-right">
+                                                        <ul className="link-tidy sm no-bdr">
+                                                            <li>
+                                                                <div className="custom-control custom-control-sm custom-checkbox">
+                                                                    <input type="checkbox" className="custom-control-input" checked="" id="bl" />
+                                                                    <label className="custom-control-label" htmlFor="bl">Role</label>
                                                                 </div>
-                                                            </div>
-                                                        </div>
+                                                            </li>
+                                                            <li>
+                                                                <div className="custom-control custom-control-sm custom-checkbox">
+                                                                    <input type="checkbox" className="custom-control-input" checked="" id="ph" />
+                                                                    <label className="custom-control-label" htmlFor="ph">Phone</label>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div className="custom-control custom-control-sm custom-checkbox">
+                                                                    <input type="checkbox" className="custom-control-input" id="vri" />
+                                                                    <label className="custom-control-label" htmlFor="vri">Verified</label>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div className="custom-control custom-control-sm custom-checkbox">
+                                                                    <input type="checkbox" className="custom-control-input" id="st" />
+                                                                    <label className="custom-control-label" htmlFor="st">Status</label>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
                                                     </div>
-                                                   {this.renderUserList()}
+                                                </div>
                                             </div>
-                                            </div>
-                                  </div>
+                                        </div>
+                                        {this.renderUserList()}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
         )
     }
 }

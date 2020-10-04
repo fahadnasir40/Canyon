@@ -94,7 +94,7 @@ class SaleInvoice extends Component {
                                                 }} className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none mr-md-3"><em className="icon ni ni-histroy"></em></Link>
                                                 : null
                                         } */}
-                                        <Link to="/sales" className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none "><em className="icon ni ni-arrow-left"></em></Link>
+                                        <Link to="/orders" className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none "><em className="icon ni ni-arrow-left"></em></Link>
                                     </div>
                                 </div>
                             </div>

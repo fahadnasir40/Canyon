@@ -81,11 +81,11 @@ app.get('/api/getDashboard', auth, (req, res) => {
                     if (elementDateTime <= currentDateTime && elementDateTime > last30DaysDateTime) {
                         return true;
                     }
-                    return false
+                    else
+                        return false
                 }).sort((a, b) => {
                     return new Date(b.createdAt) - new Date(a.createdAt);
                 });
-
 
                 var prevMonthFirstDay = new moment().subtract(1, 'months').date(1).toDate();
                 var prevMonthLastDay = new moment().subtract(1, 'months').endOf('month').toDate();
@@ -504,12 +504,20 @@ app.get("/api/logout", auth2, (req, res) => {
     });
 });
 
-app.get("/api/users", (req, res) => {
-    User.find({}, (err, users) => {
+
+
+app.get('/api/users', auth, (req, res) => {
+    // locahost:3001/api/books?skip=3&limit=2&order=asc
+    let skip = parseInt(req.query.skip);
+    let limit = parseInt(req.query.limit);
+    let order = req.query.order;
+
+    // ORDER = asc || desc
+    User.find().skip(skip).sort({ createdAt: 'desc' }).limit(limit).exec((err, doc) => {
         if (err) return res.status(400).send(err);
-        res.status(200).send(users);
-    });
-});
+        res.send(doc);
+    })
+})
 
 //POST
 
@@ -835,6 +843,24 @@ app.post('/api/purchase_paid_update', auth, (req, res) => {
     });
 })
 
+app.post('/api/sale_paid_update', auth, (req, res) => {
+    let sale = req.body;
+
+    if (sale.paidAmount < sale.totalAmount && sale.totalAmount > 0) {
+        if (sale.status === 'Complete')
+            sale.status = 'Pending'
+    }
+    else if (sale.paidAmount >= sale.totalAmount) {
+        if (sale.status === 'Pending')
+            sale.status = 'Complete'
+    }
+    Sale.findByIdAndUpdate(req.body._id, sale, { new: true }, (err, doc) => {
+        if (err) return res.status(400).send(err);
+        return res.status(200).json({
+            success: true
+        });
+    });
+})
 
 
 app.post('/api/purchase_update', auth, async function (req, res) {

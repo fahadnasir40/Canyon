@@ -69,13 +69,12 @@ class Content extends Component {
                             <span className="amount">Rs. {row.totalAmount}</span>
                         </span>
                         <span className="tb-odr-status d-sm-none">
-                            <span className="badge badge-dot badge-warning">{row.status}</span>
-                            {/* {
-                                row.paidAmount < row.totalAmount ?
-                                    <span className="badge badge-dot badge-warning">Pending</span>
+                            {
+                                row.status === 'Pending' ?
+                                    <span className="badge badge-dot badge-warning">{row.status}</span>
                                     :
-                                    <span className="badge badge-dot badge-success">Complete</span>
-                            } */}
+                                    <span className="badge badge-dot badge-success">{row.status}</span>
+                            }
                         </span>
                     </td>
                 </div>

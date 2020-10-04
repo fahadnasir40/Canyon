@@ -4,6 +4,7 @@ import moment from 'moment';
 import Chart from 'chart.js';
 import NumberFormat from 'react-number-format'
 import $ from 'jquery';
+import { Link } from 'react-router-dom'
 
 class DashboardContent extends Component {
 
@@ -45,14 +46,16 @@ class DashboardContent extends Component {
                     const elementDate = moment(element.createdAt);
                     if (currentDate.getMonth() == elementDate.toDate().getMonth()) {
 
-                        const days = elementDate.diff(moment().date(1), 'days')
-                        data[i - days + 1] += element.rate;
+                        const days = elementDate.diff(new Date(), 'days')
+                        console.log("Days", days, i, elementDate)
+                        data[days] += element.rate;
                     }
                     else
                         data[i] += element.rate;
                 }
             });
         }
+        console.log("List Data", data)
         return data.reverse();
     }
 
@@ -230,7 +233,7 @@ class DashboardContent extends Component {
                                                                     <h6 className="sub-title">This week so far</h6>
                                                                     <div className="data-group">
                                                                         <div className="amount">Rs. <NumberFormat value={data.lastWeekSale} displayType={'text'} thousandSeparator={true} /></div>
-                                                                        <div className="info text-right"><span className="change up text-danger"><em className="icon ni ni-arrow-long-up"></em>{((data.lastWeekSale - data.prevWeekSale) / data.lastWeekSale) * 100}%</span><br /><span>vs. last week</span></div>
+                                                                        <div className="info text-right"><span className="change up text-danger"><em className="icon ni ni-arrow-long-up"></em>{data.lastWeekSale === 0 ? 0 : ((data.lastWeekSale - data.prevWeekSale) / data.lastWeekSale) * 100}%</span><br /><span>vs. last week</span></div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -311,7 +314,10 @@ class DashboardContent extends Component {
                                                             this.props.data.recentOrders.map((item, key) => (
                                                                 <div className="nk-tb-item" key={key}>
                                                                     <div className="nk-tb-col">
-                                                                        <span className="tb-lead"><a href="#">#{item._id}</a></span>
+                                                                        <span className="tb-lead">
+                                                                            <Link to={{
+                                                                                pathname: `/sale_invoice_id=${item._id}`,
+                                                                            }} >#{item._id}</Link></span>
                                                                     </div>
                                                                     <div className="nk-tb-col ">
                                                                         <div className="user-card ">
@@ -330,7 +336,13 @@ class DashboardContent extends Component {
                                                                         <span className="tb-sub tb-amount"> <span>Rs.</span> {item.totalAmount}</span>
                                                                     </div>
                                                                     <div className="nk-tb-col  tb-col-md">
-                                                                        <span className="badge badge-dot badge-dot-xs badge-success">{item.status}</span>
+                                                                        {
+                                                                            item.status === 'Pending' ?
+                                                                                <span className="badge badge-dot badge-dot-xs badge-warning">{item.status}</span>
+                                                                                :
+                                                                                <span className="badge badge-dot badge-dot-xs badge-success">{item.status}</span>
+                                                                        }
+
                                                                     </div>
                                                                 </div>
                                                             ))
