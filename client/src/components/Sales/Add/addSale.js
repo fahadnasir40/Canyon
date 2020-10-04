@@ -393,7 +393,7 @@ class AddSale extends Component {
             // if (this.state.request === false) {
             // console.log("save sale about to call", sale)
             this.props.dispatch(saveSale(sale));
-            // this.saveTransaction();
+            this.saveTransaction();
             //     this.setState({
             //         request: true
             //     })
@@ -719,7 +719,7 @@ class AddSale extends Component {
     render() {
 
         if (this.state.redirect === true) {
-            return <Redirect to="/sales" />
+            return <Redirect to="/orders" />
         }
 
         return (

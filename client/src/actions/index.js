@@ -428,6 +428,15 @@ export function updatePurchasePaid(data) {
         payload: request
     }
 }
+export function updateSalePaid(data) {
+    const request = axios.post(`/api/sale_paid_update`, data)
+        .then(response => response.data);
+
+    return {
+        type: 'UPDATE_SALE_PAID',
+        payload: request
+    }
+}
 
 export function saveCustomer(document) {
     const request = axios.post('/api/addCustomer', document)
@@ -739,17 +748,32 @@ export function getProfile() {
 }
 
 
-export function getUsers() {
+export function getUsers(
+    start = 0,
+    limit = 0,
+    order = 'desc',
+    list = ''
+) {
 
-    const request = axios.get('/api/users')
-        .then(response => response.data);
+    const request = axios.get(`api/users?skip=${start}&limit=${limit}&order=${order}`)
+        .then(response => {
+            if (list) {
+                return [...list, ...response.data];
+            }
+            else {
+                return response.data;
+            }
+        })
+        .catch(error => {
+
+        });
 
     return {
         type: 'GET_USERS',
         payload: request
     }
-
 }
+
 
 export function userRegister(user) {
     const request = axios.post(`/api/register`, user)

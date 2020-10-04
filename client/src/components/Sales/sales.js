@@ -4,7 +4,7 @@ import Header from '../Header/header'
 import Footer from '../Footer/footer'
 import Content from './Content/content';
 import { connect } from 'react-redux';
-import { getSales } from '../../actions';
+import { getSales, updateSalePaid } from '../../actions';
 
 
 class Sale extends Component {
@@ -12,6 +12,19 @@ class Sale extends Component {
     componentDidMount() {
         this.props.dispatch(getSales());
     }
+
+    updateSale = (sale) => {
+        this.props.dispatch(updateSalePaid(sale))
+    }
+
+    static getDerivedStateFromProps(nextProps) {
+        if (nextProps.updateSale) {
+            if (nextProps.updateSale === true) {
+                window.location.reload(false);
+            }
+        }
+    }
+
 
     render() {
         return (
@@ -22,7 +35,7 @@ class Sale extends Component {
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
-                            <Content saleList={this.props.saleList} />
+                            <Content updateSale={this.updateSale} saleList={this.props.saleList} />
                             <Footer />
                         </div>
                     </div>
@@ -34,10 +47,8 @@ class Sale extends Component {
 
 function mapStateToProps(state) {
     return {
-        saleList: state.sale.saleList
-        // productsList: state.product.productList,
-        // removeSupplier: state.supplier.postDeleted,
-        // editSupplier: state.supplier.post
+        saleList: state.sale.saleList,
+        updateSale: state.sale.post
     }
 }
 
