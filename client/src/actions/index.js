@@ -518,6 +518,14 @@ export function clearCustomerList() {
     }
 }
 
+export function clearDashboard() {
+    console.log("Component Will Unmount Called")
+    return {
+        type: 'CLEAR_DASHBOARD',
+        payload: {}
+    }
+}
+
 export function clearNewBook() {
     return {
         type: 'CLEAR_NEWBOOK',

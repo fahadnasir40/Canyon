@@ -17,10 +17,10 @@ class CustomerInfo extends Component {
         return initials;
     }
 
-    getColText=(value)=>{
-        if(value)
-            return ( <span className="profile-ud-value">{value}</span>)
-        return ( <span className="profile-ud-value ff-italic text-muted">Not added yet</span>)
+    getColText = (value) => {
+        if (value)
+            return (<span className="profile-ud-value">{value}</span>)
+        return (<span className="profile-ud-value ff-italic text-muted">Not added yet</span>)
     }
 
     componentDidMount() {
@@ -94,7 +94,7 @@ class CustomerInfo extends Component {
                                                             {this.getColText(customer.phone)}
                                                         </div>
                                                     </div>
-                                                  
+
                                                 </div>
                                             </div>
                                             <div className="nk-block">
@@ -248,7 +248,7 @@ class CustomerInfo extends Component {
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">
                     <div className="nk-main"></div>
-                    <Sidebar />
+                    <Sidebar {...this.props} />
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">

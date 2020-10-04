@@ -357,98 +357,103 @@ class ProfileContent extends Component {
             </div>
 
             {/* <!-- @@ Profile Edit Modal @e --> */}
-            <div className="modal fade" tabIndex="-1" role="dialog" id="profile-edit">
-                <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
-                    <div className="modal-content">
-                        <a href="#" className="close" data-dismiss="modal"><em className="icon ni ni-cross-sm"></em></a>
-                        <div className="modal-body modal-body-lg">
-                            <h5 className="title">Update Profile</h5>
-                            <ul className="nk-nav nav nav-tabs">
-                                <li className="nav-item">
-                                    <a className="nav-link active" data-toggle="tab" href="#personal-tab">Personal</a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link" data-toggle="tab" href="#address">Address</a>
-                                </li>
-                            </ul>
+            {
+                this.props.user.login.role !== 'worker' ?
+                    <div className="modal fade" tabIndex="-1" role="dialog" id="profile-edit">
+                        <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
+                            <div className="modal-content">
+                                <a href="#" className="close" data-dismiss="modal"><em className="icon ni ni-cross-sm"></em></a>
+                                <div className="modal-body modal-body-lg">
+                                    <h5 className="title">Update Profile</h5>
+                                    <ul className="nk-nav nav nav-tabs">
+                                        <li className="nav-item">
+                                            <a className="nav-link active" data-toggle="tab" href="#personal-tab">Personal</a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a className="nav-link" data-toggle="tab" href="#address">Address</a>
+                                        </li>
+                                    </ul>
 
-                            <div className="tab-content">
-                                <div className="tab-pane active" id="personal-tab">
-                                    <div className="row gy-4">
-                                        <div className="col-md-6">
-                                            <div className="form-group">
-                                                <label className="form-label" htmlFor="full-name">Full Name</label>
-                                                <input type="text" required value={this.state.name} onChange={this.handleInputName} className="form-control form-control-lg" id="full-name" placeholder="Enter Full name" />
+                                    <div className="tab-content">
+                                        <div className="tab-pane active" id="personal-tab">
+                                            <div className="row gy-4">
+                                                <div className="col-md-6">
+                                                    <div className="form-group">
+                                                        <label className="form-label" htmlFor="full-name">Full Name</label>
+                                                        <input type="text" required value={this.state.name} onChange={this.handleInputName} className="form-control form-control-lg" id="full-name" placeholder="Enter Full name" />
+                                                    </div>
+                                                </div>
+
+                                                <div className="col-md-6">
+                                                    <div className="form-group">
+                                                        <label className="form-label" htmlFor="phone-no">Phone Number</label>
+                                                        <input value={this.state.phone} onChange={this.handleInputPhone} type="phone" className="form-control form-control-lg" id="phone-no" placeholder="Phone Number" />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="form-group">
+                                                        <label className="form-label" htmlFor="birth-day">Date of Birth</label>
+
+                                                        <DatePicker
+                                                            selected={this.state.newDob}
+                                                            onChange={this.handleInputDob}
+                                                            dateFormat={'dd-MMM-yyyy'}
+                                                            className="form-control ml-2"
+                                                            id="birth-day"
+                                                            placeholder="Enter date of birth"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div className="col-12">
+                                                    <ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
+                                                        <li>
+                                                            <button onClick={this.submitForm} className="btn btn-lg btn-primary">Update Profile</button>
+                                                        </li>
+                                                        <li>
+                                                            <button data-dismiss="modal" className="link link-light">Cancel</button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
+                                        <div className="tab-pane" id="address">
+                                            <div className="row gy-4">
+                                                <div className="col-md-6">
+                                                    <div className="form-group">
+                                                        <label className="form-label" htmlFor="address-l1">Address Line 1</label>
+                                                        <input type="text" className="form-control form-control-lg" id="address-l1" value={this.state.address} onChange={this.handleInputAddress} />
+                                                    </div>
+                                                </div>
 
-                                        <div className="col-md-6">
-                                            <div className="form-group">
-                                                <label className="form-label" htmlFor="phone-no">Phone Number</label>
-                                                <input value={this.state.phone} onChange={this.handleInputPhone} type="phone" className="form-control form-control-lg" id="phone-no" placeholder="Phone Number" />
+                                                <div className="col-md-6">
+                                                    <div className="form-group">
+                                                        <label className="form-label" htmlFor="address-st">City</label>
+                                                        <input type="text" className="form-control form-control-lg" id="address-st" value={this.state.city} onChange={this.handleInputCity} />
+                                                    </div>
+                                                </div>
+
+
+                                                <div className="col-12">
+                                                    <ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
+                                                        <li>
+                                                            <button onClick={this.submitForm} className="btn btn-lg btn-primary">Update Address</button>
+                                                        </li>
+                                                        <li>
+                                                            <button data-dismiss="modal" className="link link-light">Cancel</button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <div className="form-group">
-                                                <label className="form-label" htmlFor="birth-day">Date of Birth</label>
-
-                                                <DatePicker
-                                                    selected={this.state.newDob}
-                                                    onChange={this.handleInputDob}
-                                                    dateFormat={'dd-MMM-yyyy'}
-                                                    className="form-control ml-2"
-                                                    id="birth-day"
-                                                    placeholder="Enter date of birth"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className="col-12">
-                                            <ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
-                                                <li>
-                                                    <button onClick={this.submitForm} className="btn btn-lg btn-primary">Update Profile</button>
-                                                </li>
-                                                <li>
-                                                    <button data-dismiss="modal" className="link link-light">Cancel</button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="tab-pane" id="address">
-                                    <div className="row gy-4">
-                                        <div className="col-md-6">
-                                            <div className="form-group">
-                                                <label className="form-label" htmlFor="address-l1">Address Line 1</label>
-                                                <input type="text" className="form-control form-control-lg" id="address-l1" value={this.state.address} onChange={this.handleInputAddress} />
-                                            </div>
-                                        </div>
-
-                                        <div className="col-md-6">
-                                            <div className="form-group">
-                                                <label className="form-label" htmlFor="address-st">City</label>
-                                                <input type="text" className="form-control form-control-lg" id="address-st" value={this.state.city} onChange={this.handleInputCity} />
-                                            </div>
-                                        </div>
-
-
-                                        <div className="col-12">
-                                            <ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
-                                                <li>
-                                                    <button onClick={this.submitForm} className="btn btn-lg btn-primary">Update Address</button>
-                                                </li>
-                                                <li>
-                                                    <button data-dismiss="modal" className="link link-light">Cancel</button>
-                                                </li>
-                                            </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+
+                    : null
+            }
 
             {/* <!-- @@ Change Password Modal @e --> */}
             <div className="modal fade" tabIndex="-1" role="dialog" id="change-password-modal">

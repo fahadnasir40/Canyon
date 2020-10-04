@@ -29,11 +29,11 @@ class Profile extends Component {
             <div className="nk-body bg-lighter npc-general has-sidebar" id="container">
                 <div className="nk-app-root">
                     <div className="nk-main "></div>
-                    <Sidebar />
+                    <Sidebar {...this.props} />
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard">
-                            <Content profile={this.props.user} />
+                            <Content {...this.props} profile={this.props.user} />
                             <Footer />
                         </div>
                     </div>

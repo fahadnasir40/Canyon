@@ -3,7 +3,7 @@ import Sidebar from '../Sidebar/sidebar'
 import Header from '../Header/header'
 import Footer from '../Footer/footer'
 import Content from './Content/customerContent'
-import { getCustomers, deleteCustomer, updateCustomer,clearNewCustomer } from '../../actions'
+import { getCustomers, deleteCustomer, updateCustomer, clearNewCustomer } from '../../actions'
 
 import Swal from 'sweetalert2'
 import { connect } from 'react-redux'
@@ -15,7 +15,7 @@ class Customers extends Component {
         redirect: false,
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.dispatch(getCustomers());
     }
 
@@ -32,7 +32,7 @@ class Customers extends Component {
     }
 
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.props.dispatch(clearNewCustomer());
     }
 
@@ -56,7 +56,7 @@ class Customers extends Component {
     static getDerivedStateFromProps(nextProps, prevState) {
 
         if (nextProps.editCustomer === true) {
-                    
+
             Swal.fire({
                 position: 'center',
                 icon: 'success',
@@ -87,15 +87,15 @@ class Customers extends Component {
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">
                     <div className="nk-main"></div>
-                    <Sidebar />
+                    <Sidebar {...this.props} />
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
-                      {
+                            {
                                 this.props.customersList ?
-                                <Content {...this.props} deleteCustomer={this.deleteAlert} changeStatus={this.changeStatus} />
-                                : null
-                      }
+                                    <Content {...this.props} deleteCustomer={this.deleteAlert} changeStatus={this.changeStatus} />
+                                    : null
+                            }
                             <Footer />
                         </div>
                     </div>

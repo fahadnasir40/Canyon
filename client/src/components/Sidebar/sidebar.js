@@ -9,7 +9,7 @@ class SideBar extends Component {
     renderMenuItem = () => {
         return (
             <ul className="nk-menu">
-                <SidebarItems />
+                <SidebarItems {...this.props} />
             </ul>
         )
     }

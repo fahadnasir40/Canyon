@@ -255,32 +255,34 @@ class DashboardContent extends Component {
                                                     <ul className="nk-top-products">
                                                         {
                                                             this.props.topProducts ?
-                                                                this.props.topProducts.data.map((item, key) => {
-                                                                    const product = this.props.topProducts.products.find(x => x._id === item._id);
-                                                                    if (key < 5) {
-                                                                        return (
-                                                                            <li className="item">
-                                                                                <div className="thumb">
-                                                                                    <div className={"user-avatar " + this.prArray[key]}>
-                                                                                        <em className="icon ni ni-award"></em>
-                                                                                        <span>{key + 1}</span>
+                                                                this.props.topProducts.data ?
+                                                                    this.props.topProducts.data.map((item, key) => {
+                                                                        const product = this.props.topProducts.products.find(x => x._id === item._id);
+                                                                        if (key < 5) {
+                                                                            return (
+                                                                                <li className="item">
+                                                                                    <div className="thumb">
+                                                                                        <div className={"user-avatar " + this.prArray[key]}>
+                                                                                            <em className="icon ni ni-award"></em>
+                                                                                            <span>{key + 1}</span>
+                                                                                        </div>
                                                                                     </div>
-                                                                                </div>
-                                                                                <div className="info">
-                                                                                    <div className="title">{product.name}</div>
-                                                                                    <div className="price">{product.sku}</div>
-                                                                                    <div className="price">Rs. {product.price.total}</div>
+                                                                                    <div className="info">
+                                                                                        <div className="title">{product.name}</div>
+                                                                                        <div className="price">{product.sku}</div>
+                                                                                        <div className="price">Rs. {product.price.total}</div>
 
-                                                                                </div>
-                                                                                <div className="total">
-                                                                                    <div className="amount">Rs. {item.totalAmount}</div>
-                                                                                    <div className="count">{item.count} Sold</div>
-                                                                                </div>
-                                                                            </li>
-                                                                        )
-                                                                    }
-                                                                    return null;
-                                                                })
+                                                                                    </div>
+                                                                                    <div className="total">
+                                                                                        <div className="amount">Rs. {item.totalAmount}</div>
+                                                                                        <div className="count">{item.count} Sold</div>
+                                                                                    </div>
+                                                                                </li>
+                                                                            )
+                                                                        }
+                                                                        return null;
+                                                                    })
+                                                                    : null
                                                                 : null
                                                         }
                                                     </ul>

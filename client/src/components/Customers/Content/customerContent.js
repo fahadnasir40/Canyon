@@ -269,11 +269,15 @@ class CustomersContent extends Component {
                                                             <input type="text" onChange={this.handleChange} className="form-control" id="default-04" placeholder="Search by name" />
                                                         </div>
                                                     </li>
+                                                    {
+                                                        this.props.user.login.role !== 'worker' ?
+                                                            <li className="nk-block-tools-opt">
+                                                                <Link to={"/addCustomer"} className="toggle btn btn-icon btn-primary d-md-none mr-4"><em className="icon ni ni-plus"></em></Link>
+                                                                <Link to={"/addCustomer"}><button className="toggle btn btn-primary d-none d-md-inline-flex"><em className="icon ni ni-plus"></em><span>Add Customer</span></button></Link>
+                                                            </li>
+                                                            : null
+                                                    }
 
-                                                    <li className="nk-block-tools-opt">
-                                                        <Link to={"/addCustomer"} className="toggle btn btn-icon btn-primary d-md-none mr-4"><em className="icon ni ni-plus"></em></Link>
-                                                        <Link to={"/addCustomer"}><button className="toggle btn btn-primary d-none d-md-inline-flex"><em className="icon ni ni-plus"></em><span>Add Customer</span></button></Link>
-                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>

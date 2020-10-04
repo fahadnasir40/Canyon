@@ -77,7 +77,7 @@ class AddSale extends Component {
 
 
     handleProductDropdown = (currentCustomer, event, key) => {
-        console.log("Item List : ",this.state.itemsList)
+        console.log("Item List : ", this.state.itemsList)
         if (this.props.productsList) {
             if (event.target.value === -1 && this.state.currentProduct) {
                 this.setState({ currentProduct: '', currentQuantity: '' });
@@ -87,7 +87,7 @@ class AddSale extends Component {
                 let items = this.state.itemsList;
                 let limit;
                 items[key].currentProduct = this.props.productsList[event.target.value];
-                
+
                 if (items[key].currentProduct.sku === "CN19LL") { items[key].currentProduct.customerLimit = this.state.currentCustomer.customerLimit }
                 this.setState({
                     itemsList: items
@@ -341,12 +341,12 @@ class AddSale extends Component {
             this.products.forEach(item => {
 
                 if (item.currentProduct.sku === "CN19LL") {
-                    if (item.Quantitydel && item.Quantityrec ) {
+                    if (item.Quantitydel && item.Quantityrec) {
                         customerwithBottles = Number(item.Quantitydel) - Number(item.Quantityrec);
                     }
                 }
 
-                
+
                 productDetails.push({
                     _id: item.currentProduct._id,
                     puom: item.currentProduct.uom,
@@ -547,7 +547,7 @@ class AddSale extends Component {
                                                                         </div>
                                                                         <td>{item.currentProduct ? item.currentProduct.uom : 'N/A'}</td>
                                                                         <td>{item.currentProduct ? item.currentProduct.customerBottles : 0}</td>
-                                                                        
+
                                                                         <span>{item.currentProduct.customerLimit}</span>
                                                                         <td>{this.getProductRate(item.currentProduct)}</td>
                                                                     </tr>
@@ -583,7 +583,7 @@ class AddSale extends Component {
                                                                         <td>
                                                                             <span>{item.currentProduct.name}</span>
                                                                         </td>
-                                                                        <td><input type="number" min={1} maxLength={7} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(event, key) }} className="form-control" id="quantityrec" placeholder= {0} /></td>
+                                                                        <td><input type="number" min={1} maxLength={7} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(event, key) }} className="form-control" id="quantityrec" placeholder={0} /></td>
                                                                         <td><input type="number" min={1} maxLength={7} value={item.Quantitydel} onChange={(event) => { this.handleInputQuantitydel(item.currentProduct, event, key) }} className="form-control" id="quantitydel" placeholder={0} /></td>
                                                                         <td>{item.excessBottles}</td>
                                                                     </tr>
@@ -702,7 +702,7 @@ class AddSale extends Component {
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">
                     <div className="nk-main"></div>
-                    <Sidebar />
+                    <Sidebar {...this.props} />
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">

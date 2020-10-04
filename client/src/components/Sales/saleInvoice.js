@@ -3,7 +3,7 @@ import Sidebar from '../Sidebar/sidebar'
 import Header from '../Header/header'
 import Footer from '../Footer/footer'
 import { Link } from 'react-router-dom'
-import { clearSale, getCustomers ,getSales } from '../../actions'
+import { clearSale, getCustomers, getSales } from '../../actions'
 import { connect } from 'react-redux'
 import Moment from 'react-moment'
 import ReactToPrint from 'react-to-print'
@@ -214,7 +214,7 @@ class SaleInvoice extends Component {
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">
                     <div className="nk-main"></div>
-                    <Sidebar />
+                    <Sidebar {...this.props} />
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
