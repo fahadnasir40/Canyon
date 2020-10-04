@@ -172,7 +172,7 @@ class customerInfo extends Component {
         }
     }
 
-    renderSupplierInfo = (customer) => (
+    renderCustomerInfo = (customer) => (
 
         <div className="nk-content ml-md-5">
             <div className="container-fluid">
