@@ -383,13 +383,9 @@ class AddSale extends Component {
                 });
             });
 
-            // console.log("Sale Details: ", sale)
-            // console.log("Product Details: ", productDetails)
-
             sale = { ...sale, productDetails };
 
             console.log("Sale Details: ", sale)
-            // console.log("Product Details: ", productDetails)
             // if (this.state.request === false) {
             // console.log("save sale about to call", sale)
             this.props.dispatch(saveSale(sale));

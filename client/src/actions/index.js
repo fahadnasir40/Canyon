@@ -220,6 +220,21 @@ export function getCustomers(
     }
 }
 
+export function getCustomerDetails(_id) {
+    const request = axios.get(`/api/getCustomerDetails?id=${_id}`)
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+
+        });
+
+    return {
+        type: 'GET_CUSTOMER_DETAILS',
+        payload: request
+    }
+}
+
 
 export function getProducts(
     start = 0,
@@ -542,6 +557,13 @@ export function clearSupplier() {
 export function clearSupplierList() {
     return {
         type: 'CLEAR_SUPPLIER_LIST',
+        payload: {}
+    }
+}
+
+export function clearCustomer() {
+    return {
+        type: 'CLEAR_CUSTOMER',
         payload: {}
     }
 }

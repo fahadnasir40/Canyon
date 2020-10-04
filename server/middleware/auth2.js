@@ -2,7 +2,7 @@ const { User } = require('../models/user');
 
 const auth2 = (req, res, next) => {
 
-    const roles = ["adminsitrator", "supervisor", "worker"];
+    const roles = ["administrator", "supervisor", "worker"];
     let token = req.cookies.auth;
 
     User.findByToken(token, (err, user) => {

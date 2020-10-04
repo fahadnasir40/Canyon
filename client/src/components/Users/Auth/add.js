@@ -124,12 +124,12 @@ class AddUser extends Component {
     }
 
     getRoles = () => {
-        if (this.props.user.login.role == 'adminsitrator') {
+        if (this.props.user.login.role == 'administrator') {
             return (
                 <select required onChange={this.handleInputRole} className="form-control form-control-md">
                     <option value="worker">Worker</option>
                     <option value="supervisor">Supervisor</option>
-                    <option value="adminsitrator">Administrator</option>
+                    <option value="administrator">Administrator</option>
                 </select>
             )
         }

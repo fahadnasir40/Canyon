@@ -2,7 +2,7 @@ const { User } = require('./../models/user');
 
 const auth = (req, res, next) => {
 
-    const roles = ["adminsitrator", "supervisor"];
+    const roles = ["administrator", "supervisor"];
 
     let token = req.cookies.auth;
 

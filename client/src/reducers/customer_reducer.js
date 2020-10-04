@@ -2,6 +2,8 @@ export default function (state = {}, action) {
     switch (action.type) {
         case 'GET_CUSTOMERS':
             return { ...state, customerList: action.payload }
+        case 'GET_CUSTOMER_DETAILS':
+            return { ...state, saleDetails: action.payload }
         case 'GET_CUSTOMER':
             return { ...state, customer: action.payload }
         case 'GET_CUSTOMERS_TRANSACTIONS':
@@ -21,7 +23,10 @@ export default function (state = {}, action) {
                 postDeleted: action.payload
             }
         case 'CLEAR_CUSTOMER':
-            return { ...state, customer: action.payload, post: action.payload }
+            return {
+                ...state, customer: action.payload, post: action.payload,
+                saleDetails: action.payload
+            }
         case 'CLEAR_CUSTOMER_LIST':
             return { ...state, customerList: action.payload }
         default:
