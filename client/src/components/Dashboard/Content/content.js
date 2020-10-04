@@ -4,15 +4,7 @@ import moment from 'moment';
 import Chart from 'chart.js';
 import NumberFormat from 'react-number-format'
 import $ from 'jquery';
-
 class DashboardContent extends Component {
-
-
-
-    getListData = (saleData) => {
-
-    }
-
 
     getDates = () => {
         Date.prototype.addDays = function (days) {
@@ -62,16 +54,14 @@ class DashboardContent extends Component {
                 }
             });
         }
-        console.log("Data", data)
         return data.reverse();
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps.data !== this.props.data) {
             const lastThirtyDays = [...new Array(30)].map((i, idx) => moment().startOf("day").subtract(idx, "days").format('DD MMM'));
-            console.log("Last", lastThirtyDays.reverse())
             var salesStatistics = {
-                labels: lastThirtyDays,
+                labels: lastThirtyDays.reverse(),
                 dataUnit: 'Rs. ',
                 lineTension: .4,
                 datasets: [{
@@ -205,8 +195,10 @@ class DashboardContent extends Component {
     }
 
     bgArray = ['bg-purple-dim', 'bg-azure-dim', 'bg-success-dim', 'bg-warning-dim', 'bg-primary-dim'];
+    prArray = ['bg-warning-dim', 'bg-success-dim', 'bg-azure-dim', 'bg-purple-dim', 'bg-primary-dim'];
 
     render() {
+        console.log(this.props)
         let data = this.props.data;
         return (
             <div>
@@ -256,8 +248,103 @@ class DashboardContent extends Component {
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-xxl-4 col-md-8 col-lg-6 order-xxl-last ">
+                                            <div class="card h-100">
+                                                <div class="card-inner">
+                                                    <div class="card-title-group mb-2">
+                                                        <div class="card-title">
+                                                            <h6 class="title">Top products</h6>
+                                                        </div>
 
+                                                    </div>
+                                                    <ul class="nk-top-products">
+                                                        {
+                                                            this.props.topProducts ?
+                                                                this.props.topProducts.data.map((item, key) => {
+                                                                    const product = this.props.topProducts.products.find(x => x._id === item._id);
+                                                                    if (key < 5) {
+                                                                        return (
+                                                                            <li class="item">
+                                                                                <div class="thumb">
+                                                                                    <div className={"user-avatar " + this.prArray[key]}>
+                                                                                        <em class="icon ni ni-award"></em>
+                                                                                        <span>{key + 1}</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="info">
+                                                                                    <div class="title">{product.name}</div>
+                                                                                    <div class="price">{product.sku}</div>
+                                                                                    <div class="price">Rs. {product.price.total}</div>
 
+                                                                                </div>
+                                                                                <div class="total">
+                                                                                    <div class="amount">Rs. {item.totalAmount}</div>
+                                                                                    <div class="count">{item.count} Sold</div>
+                                                                                </div>
+                                                                            </li>
+                                                                        )
+                                                                    }
+                                                                    return null;
+                                                                })
+                                                                : null
+                                                        }
+
+                                                        {/* <li class="item">
+                                                            <div class="thumb">
+                                                                <img src="./images/product/b.png" alt="" />
+                                                            </div>
+                                                            <div class="info">
+                                                                <div class="title">Purple Smartwatch</div>
+                                                                <div class="price">$99.00</div>
+                                                            </div>
+                                                            <div class="total">
+                                                                <div class="amount">$990.00</div>
+                                                                <div class="count">10 Sold</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="item">
+                                                            <div class="thumb">
+                                                                <img src="./images/product/c.png" alt="" />
+                                                            </div>
+                                                            <div class="info">
+                                                                <div class="title">Black Mi Band Smartwatch</div>
+                                                                <div class="price">$99.00</div>
+                                                            </div>
+                                                            <div class="total">
+                                                                <div class="amount">$990.00</div>
+                                                                <div class="count">10 Sold</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="item">
+                                                            <div class="thumb">
+                                                                <img src="./images/product/d.png" alt="" />
+                                                            </div>
+                                                            <div class="info">
+                                                                <div class="title">Black Headphones</div>
+                                                                <div class="price">$99.00</div>
+                                                            </div>
+                                                            <div class="total">
+                                                                <div class="amount">$990.00</div>
+                                                                <div class="count">10 Sold</div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="item">
+                                                            <div class="thumb">
+                                                                <img src="./images/product/e.png" alt="" />
+                                                            </div>
+                                                            <div class="info">
+                                                                <div class="title">iPhone 7 Headphones</div>
+                                                                <div class="price">$99.00</div>
+                                                            </div>
+                                                            <div class="total">
+                                                                <div class="amount">$990.00</div>
+                                                                <div class="count">10 Sold</div>
+                                                            </div>
+                                                        </li> */}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div className="col-xxl-8">
                                             <div className="card card-full">
                                                 <div className="card-inner">
@@ -270,10 +357,10 @@ class DashboardContent extends Component {
                                                 <div className="nk-tb-list mt-n2">
                                                     <div className="nk-tb-item nk-tb-head">
                                                         <div className="nk-tb-col"><span>Order No.</span></div>
-                                                        <div className="nk-tb-col tb-col-sm"><span>Customer</span></div>
+                                                        <div className="nk-tb-col"><span>Customer</span></div>
                                                         <div className="nk-tb-col tb-col-md"><span>Date</span></div>
                                                         <div className="nk-tb-col"><span>Amount</span></div>
-                                                        <div className="nk-tb-col"><span className="d-none d-sm-inline">Status</span></div>
+                                                        <div className="nk-tb-col"><span className="d-none d-md-inline">Status</span></div>
                                                     </div>
                                                     {
                                                         this.props.data ?
@@ -298,7 +385,7 @@ class DashboardContent extends Component {
                                                                     <div className="nk-tb-col">
                                                                         <span className="tb-sub tb-amount"> <span>Rs.</span> {item.totalAmount}</span>
                                                                     </div>
-                                                                    <div className="nk-tb-col">
+                                                                    <div className="nk-tb-col  tb-col-md">
                                                                         <span className="badge badge-dot badge-dot-xs badge-success">{item.status}</span>
                                                                     </div>
                                                                 </div>
@@ -357,96 +444,7 @@ class DashboardContent extends Component {
                                             }
 
                                         </div>
-                                        <div class="col-xxl-4 col-md-8 col-lg-6 order-sm-last">
-                                            <div class="card h-100">
-                                                <div class="card-inner">
-                                                    <div class="card-title-group mb-2">
-                                                        <div class="card-title">
-                                                            <h6 class="title">Top products</h6>
-                                                        </div>
-                                                        <div class="card-tools">
-                                                            <div class="dropdown">
-                                                                <a href="#" class="dropdown-toggle link link-light link-sm dropdown-indicator" data-toggle="dropdown">Weekly</a>
-                                                                <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                                                                    <ul class="link-list-opt no-bdr">
-                                                                        <li><a href="#"><span>Daily</span></a></li>
-                                                                        <li><a href="#" class="active"><span>Weekly</span></a></li>
-                                                                        <li><a href="#"><span>Monthly</span></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <ul class="nk-top-products">
-                                                        <li class="item">
-                                                            <div class="thumb">
-                                                                <img src="./images/product/a.png" alt="" />
-                                                            </div>
-                                                            <div class="info">
-                                                                <div class="title">Pink Fitness Tracker</div>
-                                                                <div class="price">$99.00</div>
-                                                            </div>
-                                                            <div class="total">
-                                                                <div class="amount">$990.00</div>
-                                                                <div class="count">10 Sold</div>
-                                                            </div>
-                                                        </li>
-                                                        <li class="item">
-                                                            <div class="thumb">
-                                                                <img src="./images/product/b.png" alt="" />
-                                                            </div>
-                                                            <div class="info">
-                                                                <div class="title">Purple Smartwatch</div>
-                                                                <div class="price">$99.00</div>
-                                                            </div>
-                                                            <div class="total">
-                                                                <div class="amount">$990.00</div>
-                                                                <div class="count">10 Sold</div>
-                                                            </div>
-                                                        </li>
-                                                        <li class="item">
-                                                            <div class="thumb">
-                                                                <img src="./images/product/c.png" alt="" />
-                                                            </div>
-                                                            <div class="info">
-                                                                <div class="title">Black Mi Band Smartwatch</div>
-                                                                <div class="price">$99.00</div>
-                                                            </div>
-                                                            <div class="total">
-                                                                <div class="amount">$990.00</div>
-                                                                <div class="count">10 Sold</div>
-                                                            </div>
-                                                        </li>
-                                                        <li class="item">
-                                                            <div class="thumb">
-                                                                <img src="./images/product/d.png" alt="" />
-                                                            </div>
-                                                            <div class="info">
-                                                                <div class="title">Black Headphones</div>
-                                                                <div class="price">$99.00</div>
-                                                            </div>
-                                                            <div class="total">
-                                                                <div class="amount">$990.00</div>
-                                                                <div class="count">10 Sold</div>
-                                                            </div>
-                                                        </li>
-                                                        <li class="item">
-                                                            <div class="thumb">
-                                                                <img src="./images/product/e.png" alt="" />
-                                                            </div>
-                                                            <div class="info">
-                                                                <div class="title">iPhone 7 Headphones</div>
-                                                                <div class="price">$99.00</div>
-                                                            </div>
-                                                            <div class="total">
-                                                                <div class="amount">$990.00</div>
-                                                                <div class="count">10 Sold</div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>

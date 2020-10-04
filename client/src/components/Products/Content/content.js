@@ -33,6 +33,7 @@ class Content extends Component {
                         } </span>
                         <span className="tb-odr-date d-sm-none">{row.sku}</span>
                         <span className="tb-odr-item text-muted d-sm-none">Rs. {row.price.total}</span>
+                        <span className="tb-odr-item text-muted d-sm-none">Stock {row.stock}</span>
                     </td>
                 </div>
             )
@@ -47,6 +48,7 @@ class Content extends Component {
         {
             name: 'Stock',
             selector: 'stock',
+            hide: 'md',
             sortable: true,
         },
         {
