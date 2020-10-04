@@ -43,7 +43,6 @@ class Dashboard extends Component {
         )
     }
 
-
     render() {
         return (
             <div>
@@ -53,9 +52,7 @@ class Dashboard extends Component {
     }
 }
 
-
 function mapStateToProps(state) {
-    console.log("State", state)
     return {
         data: state.dashboard.data,
         topProducts: state.dashboard.topProduct

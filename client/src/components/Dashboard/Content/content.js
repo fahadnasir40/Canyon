@@ -4,6 +4,7 @@ import moment from 'moment';
 import Chart from 'chart.js';
 import NumberFormat from 'react-number-format'
 import $ from 'jquery';
+
 class DashboardContent extends Component {
 
     getDates = () => {
@@ -27,7 +28,6 @@ class DashboardContent extends Component {
         let result = [];
 
         for (var i = 0; i < dateArray.length; i++) {
-            console.log(dateArray[i])
             result.push(dateArray[i].getDate() + ' ' + dateArray[i].getMonth());
         }
 
@@ -41,7 +41,6 @@ class DashboardContent extends Component {
 
         for (var i = 0; i < data.length; i++) {
             dataList.forEach(element => {
-                // console.log("Created at", moment(element.createdAt).toDate().getDate());
                 if (moment(element.createdAt).toDate().getDate() === (i + 1)) {
                     const elementDate = moment(element.createdAt);
                     if (currentDate.getMonth() == elementDate.toDate().getMonth()) {
@@ -120,7 +119,6 @@ class DashboardContent extends Component {
                 options: {
                     legend: {
                         display: _get_data.legend ? _get_data.legend : false,
-                        // rtl: NioApp.State.isRTL,
                         labels: {
                             boxWidth: 12,
                             padding: 20,
@@ -130,7 +128,6 @@ class DashboardContent extends Component {
                     maintainAspectRatio: false,
                     tooltips: {
                         enabled: true,
-                        // rtl: NioApp.State.isRTL,
                         callbacks: {
                             title: function title(tooltipItem, data) {
                                 return data['labels'][tooltipItem[0]['index']];
@@ -173,7 +170,6 @@ class DashboardContent extends Component {
                                 fontColor: '#9eaecf',
                                 source: 'auto',
                                 padding: 0,
-                                // reverse: NioApp.State.isRTL
                             },
                             gridLines: {
                                 color: "transparent",
@@ -198,7 +194,6 @@ class DashboardContent extends Component {
     prArray = ['bg-warning-dim', 'bg-success-dim', 'bg-azure-dim', 'bg-purple-dim', 'bg-primary-dim'];
 
     render() {
-        console.log(this.props)
         let data = this.props.data;
         return (
             <div>
@@ -248,38 +243,38 @@ class DashboardContent extends Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xxl-4 col-md-8 col-lg-6 order-xxl-last ">
-                                            <div class="card h-100">
-                                                <div class="card-inner">
-                                                    <div class="card-title-group mb-2">
-                                                        <div class="card-title">
-                                                            <h6 class="title">Top products</h6>
+                                        <div className="col-xxl-4 col-md-8 col-lg-6 order-xxl-last ">
+                                            <div className="card h-100">
+                                                <div className="card-inner">
+                                                    <div className="card-title-group mb-2">
+                                                        <div className="card-title">
+                                                            <h6 className="title">Top products</h6>
                                                         </div>
 
                                                     </div>
-                                                    <ul class="nk-top-products">
+                                                    <ul className="nk-top-products">
                                                         {
                                                             this.props.topProducts ?
                                                                 this.props.topProducts.data.map((item, key) => {
                                                                     const product = this.props.topProducts.products.find(x => x._id === item._id);
                                                                     if (key < 5) {
                                                                         return (
-                                                                            <li class="item">
-                                                                                <div class="thumb">
+                                                                            <li className="item">
+                                                                                <div className="thumb">
                                                                                     <div className={"user-avatar " + this.prArray[key]}>
-                                                                                        <em class="icon ni ni-award"></em>
+                                                                                        <em className="icon ni ni-award"></em>
                                                                                         <span>{key + 1}</span>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="info">
-                                                                                    <div class="title">{product.name}</div>
-                                                                                    <div class="price">{product.sku}</div>
-                                                                                    <div class="price">Rs. {product.price.total}</div>
+                                                                                <div className="info">
+                                                                                    <div className="title">{product.name}</div>
+                                                                                    <div className="price">{product.sku}</div>
+                                                                                    <div className="price">Rs. {product.price.total}</div>
 
                                                                                 </div>
-                                                                                <div class="total">
-                                                                                    <div class="amount">Rs. {item.totalAmount}</div>
-                                                                                    <div class="count">{item.count} Sold</div>
+                                                                                <div className="total">
+                                                                                    <div className="amount">Rs. {item.totalAmount}</div>
+                                                                                    <div className="count">{item.count} Sold</div>
                                                                                 </div>
                                                                             </li>
                                                                         )
@@ -288,59 +283,6 @@ class DashboardContent extends Component {
                                                                 })
                                                                 : null
                                                         }
-
-                                                        {/* <li class="item">
-                                                            <div class="thumb">
-                                                                <img src="./images/product/b.png" alt="" />
-                                                            </div>
-                                                            <div class="info">
-                                                                <div class="title">Purple Smartwatch</div>
-                                                                <div class="price">$99.00</div>
-                                                            </div>
-                                                            <div class="total">
-                                                                <div class="amount">$990.00</div>
-                                                                <div class="count">10 Sold</div>
-                                                            </div>
-                                                        </li>
-                                                        <li class="item">
-                                                            <div class="thumb">
-                                                                <img src="./images/product/c.png" alt="" />
-                                                            </div>
-                                                            <div class="info">
-                                                                <div class="title">Black Mi Band Smartwatch</div>
-                                                                <div class="price">$99.00</div>
-                                                            </div>
-                                                            <div class="total">
-                                                                <div class="amount">$990.00</div>
-                                                                <div class="count">10 Sold</div>
-                                                            </div>
-                                                        </li>
-                                                        <li class="item">
-                                                            <div class="thumb">
-                                                                <img src="./images/product/d.png" alt="" />
-                                                            </div>
-                                                            <div class="info">
-                                                                <div class="title">Black Headphones</div>
-                                                                <div class="price">$99.00</div>
-                                                            </div>
-                                                            <div class="total">
-                                                                <div class="amount">$990.00</div>
-                                                                <div class="count">10 Sold</div>
-                                                            </div>
-                                                        </li>
-                                                        <li class="item">
-                                                            <div class="thumb">
-                                                                <img src="./images/product/e.png" alt="" />
-                                                            </div>
-                                                            <div class="info">
-                                                                <div class="title">iPhone 7 Headphones</div>
-                                                                <div class="price">$99.00</div>
-                                                            </div>
-                                                            <div class="total">
-                                                                <div class="amount">$990.00</div>
-                                                                <div class="count">10 Sold</div>
-                                                            </div>
-                                                        </li> */}
                                                     </ul>
                                                 </div>
                                             </div>
@@ -390,7 +332,6 @@ class DashboardContent extends Component {
                                                                     </div>
                                                                 </div>
                                                             ))
-
                                                             : null
                                                     }
 
@@ -400,41 +341,41 @@ class DashboardContent extends Component {
                                         <div className="col-xxl-4 col-md-6">
                                             {
                                                 data ?
-                                                    <div class="card h-100">
-                                                        <div class="card-inner">
-                                                            <div class="card-title-group mb-2">
-                                                                <div class="card-title">
-                                                                    <h6 class="title">Store Statistics</h6>
+                                                    <div className="card h-100">
+                                                        <div className="card-inner">
+                                                            <div className="card-title-group mb-2">
+                                                                <div className="card-title">
+                                                                    <h6 className="title">Store Statistics</h6>
                                                                 </div>
                                                             </div>
-                                                            <ul class="nk-store-statistics">
-                                                                <li class="item">
-                                                                    <div class="info">
-                                                                        <div class="title">Orders</div>
-                                                                        <div class="count"><NumberFormat value={data.totalSalesAmount} displayType={'text'} thousandSeparator={true} /></div>
+                                                            <ul className="nk-store-statistics">
+                                                                <li className="item">
+                                                                    <div className="info">
+                                                                        <div className="title">Orders</div>
+                                                                        <div className="count"><NumberFormat value={data.totalSalesAmount} displayType={'text'} thousandSeparator={true} /></div>
                                                                     </div>
-                                                                    <em class="icon bg-primary-dim ni ni-bag"></em>
+                                                                    <em className="icon bg-primary-dim ni ni-bag"></em>
                                                                 </li>
-                                                                <li class="item">
-                                                                    <div class="info">
-                                                                        <div class="title">Customers</div>
-                                                                        <div class="count"><NumberFormat value={data.customerCount} displayType={'text'} thousandSeparator={true} /></div>
+                                                                <li className="item">
+                                                                    <div className="info">
+                                                                        <div className="title">Customers</div>
+                                                                        <div className="count"><NumberFormat value={data.customerCount} displayType={'text'} thousandSeparator={true} /></div>
                                                                     </div>
-                                                                    <em class="icon bg-info-dim ni ni-users"></em>
+                                                                    <em className="icon bg-info-dim ni ni-users"></em>
                                                                 </li>
-                                                                <li class="item">
-                                                                    <div class="info">
-                                                                        <div class="title">Suppliers</div>
-                                                                        <div class="count"><NumberFormat value={data.supplierCount} displayType={'text'} thousandSeparator={true} /></div>
+                                                                <li className="item">
+                                                                    <div className="info">
+                                                                        <div className="title">Suppliers</div>
+                                                                        <div className="count"><NumberFormat value={data.supplierCount} displayType={'text'} thousandSeparator={true} /></div>
                                                                     </div>
-                                                                    <em class="icon bg-purple-dim ni ni-truck"></em>
+                                                                    <em className="icon bg-purple-dim ni ni-truck"></em>
                                                                 </li>
-                                                                <li class="item">
-                                                                    <div class="info">
-                                                                        <div class="title">Products</div>
-                                                                        <div class="count"><NumberFormat value={data.productCount} displayType={'text'} thousandSeparator={true} /></div>
+                                                                <li className="item">
+                                                                    <div className="info">
+                                                                        <div className="title">Products</div>
+                                                                        <div className="count"><NumberFormat value={data.productCount} displayType={'text'} thousandSeparator={true} /></div>
                                                                     </div>
-                                                                    <em class="icon bg-pink-dim ni ni-box"></em>
+                                                                    <em className="icon bg-pink-dim ni ni-box"></em>
                                                                 </li>
 
                                                             </ul>
@@ -442,9 +383,7 @@ class DashboardContent extends Component {
                                                     </div>
                                                     : null
                                             }
-
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
