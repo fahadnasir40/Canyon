@@ -48,7 +48,7 @@ class DashboardContent extends Component {
 
                         const days = elementDate.diff(new Date(), 'days')
                         console.log("Days", days, i, elementDate)
-                        data[days] += element.rate;
+                        data[Math.abs(days)] += element.rate;
                     }
                     else
                         data[i] += element.rate;
