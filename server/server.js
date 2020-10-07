@@ -979,26 +979,26 @@ app.delete('/api/delete_transaction', auth, (req, res) => {
 })
 
 
-const path = require("path");
-app.get("/*", (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build/index.html'), function (err) {
-        if (err) {
-            res.status(500).send(err)
-        }
-    })
-});
+// const path = require("path");
+// app.get("/*", (req, res) => {
+//     res.sendFile(path.join(__dirname, '../client/build/index.html'), function (err) {
+//         if (err) {
+//             res.status(500).send(err)
+//         }
+//     })
+// });
 
 
-// if (process.env.NODE_ENV === "production") {
-//     const path = require("path");
-//     app.get("/*", (req, res) => {
-//         res.sendFile(path.join(__dirname, '../client/build/index.html'), function (err) {
-//             if (err) {
-//                 res.status(500).send(err)
-//             }
-//         })
-//     });
-// }
+if (process.env.NODE_ENV === "production") {
+    const path = require("path");
+    app.get("/*", (req, res) => {
+        res.sendFile(path.join(__dirname, '../client/build/index.html'), function (err) {
+            if (err) {
+                res.status(500).send(err)
+            }
+        })
+    });
+}
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
