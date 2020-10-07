@@ -348,13 +348,13 @@ class customerInfo extends Component {
                                             </div>
                                             <div className="card-inner">
                                                 <div className="row text-center">
-                                                    <div className="col-3">
+                                                    <div className="col-4">
                                                         <div className="profile-stats">
                                                             <span className="amount">{this.state.totalOrders}</span>
                                                             <span className="sub-text">Total Order</span>
                                                         </div>
                                                     </div>
-                                                    <div className="col-3">
+                                                    <div className="col-4">
                                                         <div className="profile-stats">
                                                             <span className="amount">{this.state.completeOrders}</span>
                                                             <span className="sub-text">Complete</span>
@@ -366,7 +366,7 @@ class customerInfo extends Component {
                                                             <span className="sub-text">Returned</span>
                                                         </div>
                                                     </div> */}
-                                                    <div className="col-3">
+                                                    <div className="col-4">
                                                         <div className="profile-stats">
                                                             <span className="amount">{this.state.pendingOrders}</span>
                                                             <span className="sub-text">Progress</span>

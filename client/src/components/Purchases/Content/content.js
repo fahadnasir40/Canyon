@@ -170,6 +170,11 @@ class Content extends Component {
                         <span className=" fw-medium">Added on: </span> <span className="fw-normal"><Moment format="DD MMM, YYYY hh:mm A">{data.createdAt}</Moment></span>
                     </div>
                 </div>
+                <div className="row d-md-none">
+                    <div width="20px">
+                        <div onClick={() => { this.editPaidAmount(data) }} class="btn btn-icon btn-white btn-dim btn-lg  btn-primary py-n1 ml-3 d-sm-block"><em class="iconicon ni ni-edit"></em></div>
+                    </div>
+                </div>
             </div>
         )
     };

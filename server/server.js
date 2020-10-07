@@ -26,14 +26,13 @@ const { Product } = require("./models/product");
 const { Transaction } = require("./models/transaction");
 const { Purchase } = require("./models/purchase");
 const { Sale } = require("./models/sale");
-const customer = require("./models/customer");
-
 
 
 app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use(express.static("client/build"));
+
 
 // GET //
 
@@ -980,13 +979,26 @@ app.delete('/api/delete_transaction', auth, (req, res) => {
 })
 
 
+const path = require("path");
+app.get("/*", (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'), function (err) {
+        if (err) {
+            res.status(500).send(err)
+        }
+    })
+});
 
-if (process.env.NODE_ENV === "production") {
-    const path = require("path");
-    app.get("/*", (req, res) => {
-        res.sendfile(path, resolve(__dirname, "../client", "build", "index.html"));
-    });
-}
+
+// if (process.env.NODE_ENV === "production") {
+//     const path = require("path");
+//     app.get("/*", (req, res) => {
+//         res.sendFile(path.join(__dirname, '../client/build/index.html'), function (err) {
+//             if (err) {
+//                 res.status(500).send(err)
+//             }
+//         })
+//     });
+// }
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
