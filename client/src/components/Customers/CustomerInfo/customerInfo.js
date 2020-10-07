@@ -315,7 +315,6 @@ class customerInfo extends Component {
                                                     }
 
                                                     <li><a href={"mailto:" + customer.email} className="btn btn-trigger btn-icon"><em className="icon ni ni-mail"></em></a></li>
-                                                    {/* <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-download-cloud"></em></a></li> */}
                                                     <li> <Link to={{
                                                         pathname: "/editCustomer",
                                                         state: {
@@ -360,12 +359,6 @@ class customerInfo extends Component {
                                                             <span className="sub-text">Complete</span>
                                                         </div>
                                                     </div>
-                                                    {/* <div className="col-3">
-                                                        <div className="profile-stats">
-                                                            <span className="amount">{this.state.returnedOrders}</span>
-                                                            <span className="sub-text">Returned</span>
-                                                        </div>
-                                                    </div> */}
                                                     <div className="col-4">
                                                         <div className="profile-stats">
                                                             <span className="amount">{this.state.pendingOrders}</span>
