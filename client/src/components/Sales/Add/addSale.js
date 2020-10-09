@@ -428,13 +428,14 @@ class AddSale extends Component {
                     sale.status = 'Complete';
 
                 let productDetails = [];
-                let customerwithBottles = 0;
+                let bottlesWithCustomer = 0;
                 let custExBottles = 0;
 
                 this.products.forEach(item => {
 
                     if (item.currentProduct.sku === "CN19LL") {
-                        customerwithBottles = (Number(this.state.currentCustomer.customerBottles) - (Number(item.Quantityrec) - Number(item.Quantitydel)))
+                        // bottlesWithCustomer = (Number(this.state.currentCustomer.customerBottles) - (Number(item.Quantityrec) - Number(item.Quantitydel)))
+                        bottlesWithCustomer = (Number(item.Quantitydel) - (Number(item.Quantityrec)))
                         custExBottles += Number(item.excessBottles)
                     }
 
@@ -454,7 +455,9 @@ class AddSale extends Component {
                     });
                 });
 
-                sale = { ...sale, custExBottles, productDetails };
+                const totalPaidAmount = Number(this.state.paidAmount) + Number(this.state.secPaidAmount) - Number(this.state.secamount);
+
+                sale = { ...sale, custExBottles, bottlesWithCustomer, productDetails, totalPaidAmount };
                 console.log("Product Details: ", sale)
                 if (this.state.request === false) {
                     // console.log("Sale Details: ", sale)
@@ -464,22 +467,6 @@ class AddSale extends Component {
                 }
             }
         }
-    }
-
-
-    saveTransaction = () => {
-        this.props.dispatch(saveTransaction({
-            transaction_date: new Date(),
-            primary_quantity: 0,
-            rate: this.totalAmount,
-            transaction_source: 'Customer',
-            transaction_type: 'Sale',
-            transaction_action: 'Sale Added',
-            transaction_value: this.state.currentCustomer.name,
-            transaction_value_id: this.state.currentCustomer._id,
-            comments: this.state.description,
-            addedBy: this.props.user.login.id
-        }))
     }
 
     checkValid = () => {

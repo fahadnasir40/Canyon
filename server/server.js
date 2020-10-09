@@ -701,17 +701,14 @@ app.post('/api/addSale', auth2, (req, res) => {
 
     let products = req.body.productDetails;
     let productTotalQty = 0;
-    let BottleswithCustomer = 0;
 
     products.forEach(element => {
         if (element.secpaid)
             productTotalQty += Number(element.secpaid);
-        if (element.customerBottles)
-            BottleswithCustomer += Number(element.customerBottles);
     })
 
     const sale = new Sale(req.body);
-
+    console.log("Customer Bottles : ", req.body.bottlesWithCustomer)
     sale.save((error, sale) => {
         if (error) {
             console.log("Error", error);
@@ -721,14 +718,13 @@ app.post('/api/addSale', auth2, (req, res) => {
         updateWallet(sale);
         async function updateWallet(sale) {
             const session = await Sale.startSession();
-            console.log("Server : ", BottleswithCustomer);
             session.startTransaction();
             try {
                 Customer.findByIdAndUpdate(sale.customerId, {
-                    $inc: { customerLimit: productTotalQty, customerBottles: BottleswithCustomer }
+                    $inc: { customerLimit: productTotalQty, customerBottles: req.body.bottlesWithCustomer }
                 }, (error) => {
                     if (error) {
-                        console.log("Error update stock", error);
+                        console.log("Error update customer", error);
                     }
                 });
 
@@ -744,6 +740,23 @@ app.post('/api/addSale', auth2, (req, res) => {
                         console.log("Item Updated");
                     })
                 });
+
+                const trans = {
+                    transaction_date: new Date(),
+                    primary_quantity: 0,
+                    rate: req.body.totalPaidAmount,
+                    transaction_source: 'Customer',
+                    transaction_type: 'Sale',
+                    transaction_action: 'Sale Added',
+                    primary_quantity: 0,
+                    transaction_value: req.body.customerName,
+                    transaction_value_id: sale._id,
+                    comments: req.body.description,
+                    addedBy: req.user._id
+                };
+
+                const transaction = new Transaction(trans);
+                await transaction.save();
 
                 await session.commitTransaction();
                 session.endSession();
