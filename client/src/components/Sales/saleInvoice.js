@@ -38,7 +38,7 @@ class SaleInvoice extends Component {
                     }
                     else {
                         const s = nextProps.sale.doc.productDetails.find(x => x._id === p._id);
-                        console.log("Value", s.custExBottles, s.secRate)
+                        // console.log("Value", s.custExBottles, s.secRate)
                         return {
                             sale: nextProps.sale.doc,
                             products: nextProps.sale.products,
@@ -176,71 +176,26 @@ class SaleInvoice extends Component {
                                                             <th>Name</th>
                                                             <th>Price</th>
                                                             {this.state.totalSecurity ? <th>Received Qty</th> : null}
-
                                                             <th>Qty</th>
-                                                            {/* {purchase.status === 'Returned' || purchase.status === 'Returned Items'  || purchase.status === 'Returned Items Pending' ?
-                                                                <th>Returned Qty</th>
-                                                                : null} */}
+                                                            <th>Discount</th>
                                                             <th>Amount</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         {
                                                             sale.productDetails.map((item, key) => {
-                                                                console.log("Item", item)
-                                                                // if (item.rqty > 0 && item.dqty > 0) {
                                                                 return (
-                                                                    // <tr>
-                                                                    //     {/* <tr key={key}>
-                                                                    //         <td>{products.find(x => x._id === item._id).sku}</td>
-                                                                    //         <td>{item.pname}</td>
-                                                                    //         <td>{item.pprice}</td>
-                                                                    //         <td>{item.dqty}</td>
-                                                                    //         <td>{item.ptotal}</td>
-                                                                    //     </tr> */}
-                                                                    // </tr>
-                                                                    // <tr key={key + '-Received'}>
-                                                                    //     <td>{products.find(x => x._id === item._id).sku}</td>
-                                                                    //     <td>{item.pname + '( Received ) '}</td>
-                                                                    //     <td>{item.pprice}</td>
-                                                                    //     <td>{item.rqty}</td>
-                                                                    //     <td>{item.ptotal}</td>
-                                                                    // </tr>
+
                                                                     <tr key={key}>
                                                                         <td>{products.find(x => x._id === item._id).sku}</td>
                                                                         <td>{item.pname}</td>
                                                                         <td>{item.pprice}</td>
                                                                         {this.state.totalSecurity ? <td>{item.rqty}</td> : null}
                                                                         <td>{item.dqty}</td>
+                                                                        <td>{item.disc}</td>
                                                                         <td>{item.ptotal}</td>
                                                                     </tr>
-
-
                                                                 )
-                                                                // }
-                                                                // else {
-                                                                //     if (item.rqty > 0 && item.dqty === 0) {
-                                                                //         return (
-                                                                //             <tr key={key}>
-                                                                //                 <td>{products.find(x => x._id === item._id).sku}</td>
-                                                                //                 <td>{item.pname + ' ( Received )'} </td>
-                                                                //                 <td>{item.pprice}</td>
-                                                                //                 <td>{item.rqty}</td>
-                                                                //                 <td>{item.ptotal}</td>
-                                                                //             </tr>
-                                                                //         )
-                                                                //     }
-                                                                //     else if (item.rqty === 0 || !item.rqty) {
-                                                                //         return (<tr key={key}>
-                                                                //             <td>{products.find(x => x._id === item._id).sku}</td>
-                                                                //             <td>{item.pname} </td>
-                                                                //             <td>{item.pprice}</td>
-                                                                //             <td>{item.dqty}</td>
-                                                                //             <td>{item.ptotal}</td>
-                                                                //         </tr>)
-                                                                //     }
-                                                                // }
-
                                                             })}
 
 
@@ -301,9 +256,9 @@ class SaleInvoice extends Component {
     render() {
 
         let sale = this.state.sale;
-        console.log("State", this.state)
+        // console.log("State", this.state)
         let products = this.state.products;
-        console.log("products", products)
+        // console.log("products", products)
         return (
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">

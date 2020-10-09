@@ -708,7 +708,7 @@ app.post('/api/addSale', auth2, (req, res) => {
     })
 
     const sale = new Sale(req.body);
-    console.log("Customer Bottles : ", req.body.bottlesWithCustomer)
+    // console.log("Customer Bottles : ", req.body.bottlesWithCustomer)
     sale.save((error, sale) => {
         if (error) {
             console.log("Error", error);
@@ -729,7 +729,7 @@ app.post('/api/addSale', auth2, (req, res) => {
                 });
 
                 await products.forEach(item => {
-                    console.log("Item", item, item.rqty);
+                    // console.log("Item", item, item.rqty);
                     Product.findByIdAndUpdate(item._id, {
                         $inc: { stock: (item.rqty - item.dqty) }
 

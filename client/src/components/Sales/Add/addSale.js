@@ -84,7 +84,7 @@ class AddSale extends Component {
     }
 
     removeSelectedItem = (index) => {
-        console.log("Calling")
+        // console.log("Calling")
         let itemsArray = this.state.itemsList;
 
         itemsArray.splice(index, 1);
@@ -166,14 +166,12 @@ class AddSale extends Component {
                     if (currentProduct.price.cost_security && event.target.value <= (excessBottles - paidBottles)) {
 
                         if (items[key].paymethod === 'Bottle Exchange with Buffering Charges') {
-                            console.log("With", this.state.secPaidAmount, currentProduct.price.cost_security, event.target.value);
                             if ((this.state.secPaidAmount - (Number(currentProduct.price.cost_security) + 100) >= 0))
                                 this.setState({ secamount: this.state.secPaidAmount - (((Number(currentProduct.price.cost_security) + 100) * (Number(event.target.value) + Number(item.secpaid)))) })
                             else
                                 this.setState({ secamount: 0 })
                         }
                         else if (items[key].paymethod === 'Bottle Exchange without Buffering Charges') {
-                            console.log("Without", this.state.secPaidAmount - (Number(currentProduct.price.cost_security) * event.target.value));
                             if ((this.state.secPaidAmount - (Number(currentProduct.price.cost_security) * event.target.value) >= 0))
                                 this.setState({ secamount: (this.state.secPaidAmount - (Number(currentProduct.price.cost_security) * (Number(event.target.value) + Number(item.secpaid)))) })
                             else
@@ -458,7 +456,7 @@ class AddSale extends Component {
                 const totalPaidAmount = Number(this.state.paidAmount) + Number(this.state.secPaidAmount) - Number(this.state.secamount);
 
                 sale = { ...sale, custExBottles, bottlesWithCustomer, productDetails, totalPaidAmount };
-                console.log("Product Details: ", sale)
+                // console.log("Product Details: ", sale)
                 if (this.state.request === false) {
                     // console.log("Sale Details: ", sale)
                     this.props.dispatch(saveSale(sale));

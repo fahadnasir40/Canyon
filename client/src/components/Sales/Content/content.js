@@ -140,7 +140,7 @@ class Content extends Component {
 
 
     SampleExpandedComponent = ({ data }) => {
-        console.log("data", data)
+        // console.log("data", data)
         return (
             <div className="container-fluid">
                 <div className="row d-lg-none">
@@ -279,7 +279,7 @@ class Content extends Component {
 
     }
     calculateTotalAmount = (row) => {
-        console.log("row: ", row)
+        // console.log("row: ", row)
 
 
         if (row.productDetails.some(x => x.secRate > 0)) {
@@ -314,7 +314,7 @@ class Content extends Component {
     }
 
     render() {
-        console.log("Product List", this.state)
+        // console.log("Product List", this.state)
         return (
             <div className="nk-content ml-md-5 ">
                 <div className="container-fluid">
