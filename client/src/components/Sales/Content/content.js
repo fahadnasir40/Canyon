@@ -7,7 +7,7 @@ import $ from 'jquery'
 class Content extends Component {
 
     state = {
-        saleList: this.props.saleList
+        saleList: this.props.saleList,
     }
 
     columns = [
@@ -66,7 +66,8 @@ class Content extends Component {
                 <div className="tb-odr-item">
                     <td className="tb-odr-amount">
                         <span className="tb-odr-total">
-                            <span className="amount">Rs. {row.totalAmount}</span>
+                            {/* <span className="amount">Rs. {row.totalAmount}</span> */}
+                            <span className="amount">Rs. {this.calculateTotalAmount(row)}</span>
                         </span>
                         <span className="tb-odr-status d-sm-none">
                             {
@@ -154,7 +155,18 @@ class Content extends Component {
                 </div>
                 <div className="row">
                     <div className="col">
-                        <span className=" fw-medium">Paid Amount: </span> <span className="fw-normal">Rs. {data.paidAmount}</span>
+                        <span className=" fw-medium">Items Paid Amount: </span> <span className="fw-normal">Rs. {Number(data.paidAmount)}</span>
+
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <span className=" fw-medium">Total Paid Amount: </span> <span className="fw-normal">Rs. {Number(data.paidAmount) + (Number(this.calculateTotalSecurity(data)) - Number(data.secAmount))}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <span className=" fw-medium">Security Due: </span> <span className="fw-normal">Rs. {Number(data.secAmount)}</span>
                     </div>
                 </div>
                 <div className="row">
@@ -265,6 +277,40 @@ class Content extends Component {
             }
         }
 
+    }
+    calculateTotalAmount = (row) => {
+        console.log("row: ", row)
+
+
+        if (row.productDetails.some(x => x.secRate > 0)) {
+
+            let srate = 0;
+            row.productDetails.forEach(item => {
+                srate += Number(item.secRate);
+            })
+            let totalSecurity = this.calculateTotalSecurity(row) //Number(row.custExBottles) * Number(srate)
+            let totalAmountPaid = Number(row.totalAmount) + Number(totalSecurity)
+
+            return totalAmountPaid
+        }
+        else
+            return row.totalAmount
+    }
+
+    calculateTotalSecurity = (row) => {
+
+        if (row.productDetails.some(x => x.secRate > 0)) {
+
+            let srate = 0;
+            row.productDetails.forEach(item => {
+                srate += Number(item.secRate);
+            })
+            let totalSecurity = Number(row.custExBottles) * Number(srate)
+
+            return totalSecurity
+        }
+        else
+            return 0
     }
 
     render() {

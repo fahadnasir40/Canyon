@@ -11,7 +11,8 @@ import ReactToPrint from 'react-to-print'
 class SaleInvoice extends Component {
     state = {
         customer: '',
-        products: ''
+        products: '',
+        totalSecurity: ''
     }
 
     componentDidMount() {
@@ -23,16 +24,33 @@ class SaleInvoice extends Component {
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        console.log("State Next", nextProps)
+
         if (!prevState.sale) {
             if (nextProps.sale) {
                 if (nextProps.sale.doc) {
                     nextProps.dispatch(getCustomer(nextProps.sale.doc.customerId))
+                    const p = nextProps.sale.products.find(x => x.sku == 'CN19LL');
+                    if (!p) {
+                        return {
+                            sale: nextProps.sale.doc,
+                            products: nextProps.sale.products,
+                        }
+                    }
+                    else {
+                        const s = nextProps.sale.doc.productDetails.find(x => x._id === p._id);
+                        console.log("Value", s.custExBottles, s.secRate)
+                        return {
+                            sale: nextProps.sale.doc,
+                            products: nextProps.sale.products,
+                            totalSecurity: Number(nextProps.sale.doc.custExBottles) * Number(s.secRate)
+                        }
+                    }
+                }
+                else {
                     return {
                         sale: nextProps.sale.doc,
                         products: nextProps.sale.products
                     }
-
                 }
             }
         }
@@ -157,6 +175,8 @@ class SaleInvoice extends Component {
                                                             <th>Item ID</th>
                                                             <th>Name</th>
                                                             <th>Price</th>
+                                                            {this.state.totalSecurity ? <th>Received Qty</th> : null}
+
                                                             <th>Qty</th>
                                                             {/* {purchase.status === 'Returned' || purchase.status === 'Returned Items'  || purchase.status === 'Returned Items Pending' ?
                                                                 <th>Returned Qty</th>
@@ -168,72 +188,101 @@ class SaleInvoice extends Component {
                                                         {
                                                             sale.productDetails.map((item, key) => {
                                                                 console.log("Item", item)
-                                                                if (item.rqty > 0 && item.dqty > 0) {
-                                                                    return (
-                                                                        // <tr>
-                                                                        //     {/* <tr key={key}>
-                                                                        //         <td>{products.find(x => x._id === item._id).sku}</td>
-                                                                        //         <td>{item.pname}</td>
-                                                                        //         <td>{item.pprice}</td>
-                                                                        //         <td>{item.dqty}</td>
-                                                                        //         <td>{item.ptotal}</td>
-                                                                        //     </tr> */}
-                                                                        // </tr>
-                                                                        <tr key={key + '-returned'}>
-                                                                            <td>{products.find(x => x._id === item._id).sku}</td>
-                                                                            <td>{item.pname + '( Returned ) '}</td>
-                                                                            <td>{item.pprice}</td>
-                                                                            <td>{item.rqty}</td>
-                                                                            <td>{item.ptotal}</td>
-                                                                        </tr>
+                                                                // if (item.rqty > 0 && item.dqty > 0) {
+                                                                return (
+                                                                    // <tr>
+                                                                    //     {/* <tr key={key}>
+                                                                    //         <td>{products.find(x => x._id === item._id).sku}</td>
+                                                                    //         <td>{item.pname}</td>
+                                                                    //         <td>{item.pprice}</td>
+                                                                    //         <td>{item.dqty}</td>
+                                                                    //         <td>{item.ptotal}</td>
+                                                                    //     </tr> */}
+                                                                    // </tr>
+                                                                    // <tr key={key + '-Received'}>
+                                                                    //     <td>{products.find(x => x._id === item._id).sku}</td>
+                                                                    //     <td>{item.pname + '( Received ) '}</td>
+                                                                    //     <td>{item.pprice}</td>
+                                                                    //     <td>{item.rqty}</td>
+                                                                    //     <td>{item.ptotal}</td>
+                                                                    // </tr>
+                                                                    <tr key={key}>
+                                                                        <td>{products.find(x => x._id === item._id).sku}</td>
+                                                                        <td>{item.pname}</td>
+                                                                        <td>{item.pprice}</td>
+                                                                        {this.state.totalSecurity ? <td>{item.rqty}</td> : null}
+                                                                        <td>{item.dqty}</td>
+                                                                        <td>{item.ptotal}</td>
+                                                                    </tr>
 
 
-
-                                                                    )
-                                                                }
-                                                                else {
-                                                                    if (item.rqty > 0 && item.dqty === 0) {
-                                                                        return (
-                                                                            <tr key={key}>
-                                                                                <td>{products.find(x => x._id === item._id).sku}</td>
-                                                                                <td>{item.pname + ' ( Returned )'} </td>
-                                                                                <td>{item.pprice}</td>
-                                                                                <td>{item.rqty}</td>
-                                                                                <td>{item.ptotal}</td>
-                                                                            </tr>
-                                                                        )
-                                                                    }
-                                                                    else if (item.rqty === 0 || !item.rqty) {
-                                                                        return (<tr key={key}>
-                                                                            <td>{products.find(x => x._id === item._id).sku}</td>
-                                                                            <td>{item.pname} </td>
-                                                                            <td>{item.pprice}</td>
-                                                                            <td>{item.dqty}</td>
-                                                                            <td>{item.ptotal}</td>
-                                                                        </tr>)
-                                                                    }
-                                                                }
+                                                                )
+                                                                // }
+                                                                // else {
+                                                                //     if (item.rqty > 0 && item.dqty === 0) {
+                                                                //         return (
+                                                                //             <tr key={key}>
+                                                                //                 <td>{products.find(x => x._id === item._id).sku}</td>
+                                                                //                 <td>{item.pname + ' ( Received )'} </td>
+                                                                //                 <td>{item.pprice}</td>
+                                                                //                 <td>{item.rqty}</td>
+                                                                //                 <td>{item.ptotal}</td>
+                                                                //             </tr>
+                                                                //         )
+                                                                //     }
+                                                                //     else if (item.rqty === 0 || !item.rqty) {
+                                                                //         return (<tr key={key}>
+                                                                //             <td>{products.find(x => x._id === item._id).sku}</td>
+                                                                //             <td>{item.pname} </td>
+                                                                //             <td>{item.pprice}</td>
+                                                                //             <td>{item.dqty}</td>
+                                                                //             <td>{item.ptotal}</td>
+                                                                //         </tr>)
+                                                                //     }
+                                                                // }
 
                                                             })}
 
 
                                                     </tbody>
-                                                    {/* <tfoot>
+                                                    <tfoot>
                                                         <tr>
-                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items'  || purchase.status === 'Returned Items Pending' ?
-                                                                <td colSpan="4"></td> : <td colSpan="2"></td>}
-                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items'  || purchase.status === 'Returned Items Pending' ?
+                                                            {this.state.totalSecurity ?
+                                                                <td colSpan="4"></td> : <td colSpan="3"></td>}
+                                                            {this.state.totalSecurity ?
                                                                 <td colSpan="1">Subtotal</td> : <td colSpan="2">Subtotal</td>}
-                                                            <td>{purchase.totalAmount}</td>
+                                                            <td>{sale.paidAmount}</td>
+                                                        </tr>
+                                                        {this.state.totalSecurity > 0 ?
+                                                            <tr>
+                                                                <td colSpan="4"></td>
+                                                                <td colSpan="1">Security</td>
+                                                                <td>{this.state.totalSecurity}</td>
+                                                            </tr>
+                                                            : null
+                                                        }
+                                                        <tr>
+                                                            {this.state.totalSecurity ?
+                                                                <td colSpan="4"></td> : <td colSpan="3"></td>}
+                                                            {this.state.totalSecurity ?
+                                                                <td colSpan="1"><strong>Grand Total</strong></td> : <td colSpan="2"><strong>Grand Total</strong></td>}
+                                                            <td>Rs. {Number(sale.totalAmount) + Number(this.state.totalSecurity)}</td>
                                                         </tr>
                                                         <tr>
-                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' || purchase.status === 'Returned Items Pending'?
-                                                                <td colSpan="4"></td> : <td colSpan="2"></td>}
-                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items'  || purchase.status === 'Returned Items Pending'? 
-                                                                <td colSpan="1"><strong>Grand Total</strong></td> : <td colSpan="2"><strong>Grand Total</strong></td>}
-                                                            <td>Rs. {purchase.totalAmount}</td>
+                                                            {this.state.totalSecurity ?
+                                                                <td colSpan="4"></td> : <td colSpan="3"></td>}
+                                                            {this.state.totalSecurity ?
+                                                                <td colSpan="1"><strong>Paid Amount</strong></td> : <td colSpan="2"><strong>Paid Amount</strong></td>}
+                                                            <td>Rs. {Number(sale.paidAmount) + Number(this.state.totalSecurity) - Number(sale.secAmount)}</td>
                                                         </tr>
-                                                    </tfoot> */}
+                                                        <tr>
+                                                            {this.state.totalSecurity ?
+                                                                <td colSpan="4"></td> : <td colSpan="3"></td>}
+                                                            {this.state.totalSecurity ?
+                                                                <td colSpan="1"><strong>Due</strong></td> : <td colSpan="2"><strong>Due</strong></td>}
+                                                            <td>{(Number(sale.totalAmount) + Number(this.state.totalSecurity) - (Number(sale.paidAmount) + Number(this.state.totalSecurity) - Number(sale.secAmount))) == 0 ? <span> Nil</span> : <span className="text-danger"><strong>Rs. {(Number(sale.totalAmount) + Number(this.state.totalSecurity) - (Number(sale.paidAmount) + Number(this.state.totalSecurity) - Number(sale.secAmount)))}</strong></span>}</td>
+                                                        </tr>
+                                                    </tfoot>
                                                 </table>
                                                 <div className="nk-notes ff-italic fs-12px text-soft mt-5"> Invoice was created on a computer and is valid without the signature and seal. </div>
                                             </div>
@@ -252,7 +301,7 @@ class SaleInvoice extends Component {
     render() {
 
         let sale = this.state.sale;
-        console.log("sale", sale)
+        console.log("State", this.state)
         let products = this.state.products;
         console.log("products", products)
         return (
