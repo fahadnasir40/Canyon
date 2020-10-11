@@ -19,7 +19,7 @@ import Purchases from './components/Purchases/purchase';
 import PurchaseInvoice from './components/Purchases/purchaseInvoice';
 import Transactions from './components/Transactions/transactions';
 import AddTransaction from './components/Transactions/Add/addTransaction';
-import EditTransaction from './components/transactions/Add/editTransaction';
+import EditTransaction from './components/Transactions/Add/editTransaction';
 import Sales from './components/Sales/sales';
 import AddSale from './components/Sales/Add/addSale';
 import SaleInvoice from './components/Sales/saleInvoice';
