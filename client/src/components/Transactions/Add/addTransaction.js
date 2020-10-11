@@ -3,7 +3,7 @@ import Header from "../../Header/header";
 import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
 import { saveTransaction } from '../../../actions';
-import { getActiveProducts, getCustomersTransactions, getEmployeesTransactions, getSuppliersTransactions } from '../../../actions';
+import { getActiveProducts, getStockProducts, getCustomersTransactions, getEmployeesTransactions, getSuppliersTransactions, clearProduct } from '../../../actions';
 import { connect } from 'react-redux';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -18,10 +18,13 @@ class AddTransaction extends Component {
         svalue: '',
         ttype: 'Other Expense',
         taction: 'Pay Salary',
-        qty: 1,
-        rate: 1,
+        qty: 0,
+        rate: 0,
+        gTotal: 0,
+        total: 0,
         comments: '',
         fromitem: '',
+        currentProductStock: 0,
         toitem: '',
         ritem: '',
         suppliersList: '',
@@ -50,16 +53,14 @@ class AddTransaction extends Component {
         return null;
     }
 
-    // componentWillUnmount() {
-    //     this.props.dispatch(clearProduct());
-    // }
+    componentWillUnmount() {
+        this.props.dispatch(clearProduct());
+    }
 
     handleInputTaction = (event) => {
         this.setState({ taction: event.target.value })
-        // if (event.target.value === "Transfer Inventory") {
-        console.log("Hello List", this.state.productsList)
+        // this.props.dispatch(getStockProducts())
         this.props.dispatch(getActiveProducts())
-        // }
     }
 
 
@@ -75,7 +76,6 @@ class AddTransaction extends Component {
             this.props.dispatch(getSuppliersTransactions())
         }
         else if (event.target.value === "Customer" && !this.props.customerList) {
-            console.log("customer list calling", event.target.value)
             this.props.dispatch(getCustomersTransactions())
         }
         else if (event.target.value === "Employees" && !this.props.userList) {
@@ -112,11 +112,37 @@ class AddTransaction extends Component {
     };
 
     handleInputQty = event => {
-        this.setState({ qty: event.target.value })
+        let result = 0;
+        if (this.state.taction === 'Inventory Transfer' && this.state.fromitem && this.state.toitem && Number(event.target.value) <= Number(this.state.currentProductStock)) {
+            this.setState({ qty: event.target.value })
+        }
+
+        else if (this.state.taction !== 'Inventory Transfer') {
+            this.setState({ qty: event.target.value })
+        }
+        if (event.target.value) {
+            if (this.state.rate) {
+                result = this.calculateTotal(Number(this.state.rate), Number(event.target.value))
+            }
+            this.setState({ gTotal: result });
+        }
+
+        return 0;
     };
 
     handleInputRate = event => {
         this.setState({ rate: event.target.value })
+
+        let result = 0;
+        if (this.state.qty) {
+            if (event.target.value) {
+                result = this.calculateTotal(Number(this.state.qty), Number(event.target.value))
+            }
+            this.setState({ gTotal: result });
+        }
+
+        return 0;
+
     };
 
     handleInputComments = event => {
@@ -125,7 +151,8 @@ class AddTransaction extends Component {
 
     handleInputFitem = event => {
         this.setState({
-            fromitem: this.props.productsList[event.target.value]._id
+            fromitem: this.props.productsList[event.target.value]._id,
+            currentProductStock: this.props.productsList[event.target.value].stock
         })
     };
 
@@ -140,6 +167,26 @@ class AddTransaction extends Component {
             ritem: this.props.productsList[event.target.value]._id
         })
     };
+
+    checkValid = () => {
+        if (this.state.source && this.state.svalue && this.state.ttype && this.state.taction) {
+            if (this.state.taction === 'Inventory Transfer') {
+                if (this.state.fromitem && this.state.toitem) {
+                    if (this.state.qty == 0 || this.state.rate == 0) {
+                        return true
+                    }
+                    else { return false }
+                }
+                else
+                    return true
+            }
+            else if (this.state.qty == 0 || this.state.rate == 0) {
+                return true
+            }
+            else { return false }
+        }
+        return true
+    }
 
     submitForm = (event) => {
 
@@ -170,6 +217,10 @@ class AddTransaction extends Component {
     //         return 0;
     //     return total;
     // }
+    calculateTotal = (qty, rate) => {
+
+        return Number(qty) * Number(rate)
+    }
 
 
     getCurrentDate = () => {
@@ -178,7 +229,6 @@ class AddTransaction extends Component {
     }
 
     renderBody = (total) => {
-        console.log("products List ", this.props.productList)
         return (
             <div className="container mt-5">
                 <div className="card ml-md-3">
@@ -295,7 +345,8 @@ class AddTransaction extends Component {
                                                             {
                                                                 this.props.productsList ?
                                                                     this.props.productsList.map((item, key) => {
-                                                                        return <option key={key} value={key} className="ccap" >{item.name} ({item.brand})</option>;
+                                                                        // return <option key={key} value={key} className="ccap" >{item.name} ({item.brand})</option>;
+                                                                        return <option key={key} value={key} className="ccap" disabled={(item.stock === 0) ? true : false}>{item.stock === 0 ? item.name + ' (Out of stock)' : item.name}</option>;
                                                                     })
                                                                     : null
                                                             }
@@ -353,7 +404,8 @@ class AddTransaction extends Component {
                                     <div className="form-group">
                                         <label className="form-label" htmlFor="qty">Quantity</label>
                                         <div className="form-control-wrap">
-                                            <input type="number" min={0} value={this.state.qty} onChange={this.handleInputQty} className="form-control" id="qty" placeholder="Transaction Quantity" />
+                                            {/* <input type="number" min={0} value={this.state.qty} onChange={this.handleInputQty} className="form-control" id="qty" placeholder="Transaction Quantity" /> */}
+                                            <input type="number" min={0} max={this.state.taction === 'Inventory Transfer' && this.state.fromitem && this.state.toitem ? this.state.currentProductStock : 1000000} value={this.state.qty} onChange={this.handleInputQty} className="form-control" id="qty" placeholder="Transaction Quantity" />
                                         </div>
                                     </div>
                                 </div>
@@ -373,9 +425,11 @@ class AddTransaction extends Component {
                                         <strong className="ff-base  h6 ccap">Total</strong>
                                     </div>
 
-                                    {/* <div className="col-md-6 d-flex justify-content-end">
-                                        <span className="fw-medium ccap ">Rs. {this.calculateTotal(total)}</span>
-                                    </div> */}
+                                    <div className="col-md-6 d-flex justify-content-end">
+                                        {/* <span className="fw-medium ccap ">Rs. {this.calculateTotal(total)}</span> */}
+                                        {/* <span className="fw-medium ccap ">Rs. {this.calculateTotal}</span> */}
+                                        <span className="fw-medium ccap ">Rs. {this.state.gTotal}</span>
+                                    </div>
 
                                 </div>
 
@@ -403,7 +457,7 @@ class AddTransaction extends Component {
 
                                 <div className="col-12 mt-4 ml-2">
                                     <div className="form-group">
-                                        <button onClick={this.submitForm} className="btn btn-lg btn-primary">
+                                        <button onClick={this.submitForm} className="btn btn-lg btn-primary" disabled={this.checkValid()}>
                                             <em className="icon ni ni-plus-c"></em> <span>  Save </span>
                                         </button>
                                     </div>
@@ -429,7 +483,6 @@ class AddTransaction extends Component {
         }
 
         let total = 0;
-        console.log("List", this.state)
         return (
 
             <div className="nk-body bg-lighter npc-default has-sidebar ">

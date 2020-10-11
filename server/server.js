@@ -381,6 +381,19 @@ app.get('/api/getActiveProducts', auth2, (req, res) => {
     })
 })
 
+app.get('/api/getStockProducts', auth2, (req, res) => {
+    // locahost:3001/api/books?skip=3&limit=2&order=asc
+    let skip = parseInt(req.query.skip);
+    let limit = parseInt(req.query.limit);
+    let order = req.query.order;
+
+    // ORDER = asc || desc
+    Product.find({ stock: { $gte: 1 } }).skip(skip).sort({ createdAt: order }).limit(limit).exec((err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.send(doc);
+    })
+})
+
 
 app.get('/api/getPurchases', auth, (req, res) => {
     // locahost:3001/api/books?skip=3&limit=2&order=asc
@@ -701,14 +714,16 @@ app.post('/api/addSale', auth2, (req, res) => {
 
     let products = req.body.productDetails;
     let productTotalQty = 0;
+    let linesQuantity = 0;
 
     products.forEach(element => {
         if (element.secpaid)
             productTotalQty += Number(element.secpaid);
+        linesQuantity += Number(element.dqty);
     })
 
     const sale = new Sale(req.body);
-    // console.log("Customer Bottles : ", req.body.bottlesWithCustomer)
+
     sale.save((error, sale) => {
         if (error) {
             console.log("Error", error);
@@ -729,7 +744,7 @@ app.post('/api/addSale', auth2, (req, res) => {
                 });
 
                 await products.forEach(item => {
-                    // console.log("Item", item, item.rqty);
+                    console.log("Item", item, item.rqty);
                     Product.findByIdAndUpdate(item._id, {
                         $inc: { stock: (item.rqty - item.dqty) }
 
@@ -748,7 +763,7 @@ app.post('/api/addSale', auth2, (req, res) => {
                     transaction_source: 'Customer',
                     transaction_type: 'Sale',
                     transaction_action: 'Sale Added',
-                    primary_quantity: 0,
+                    primary_quantity: linesQuantity,
                     transaction_value: req.body.customerName,
                     transaction_value_id: sale._id,
                     comments: req.body.description,
@@ -768,6 +783,7 @@ app.post('/api/addSale', auth2, (req, res) => {
             } catch (error) {
                 // If an error occurred, abort the whole transaction and
                 // undo any changes that might have happened
+                console.log("Transaction Error", error)
                 await session.abortTransaction();
                 session.endSession();
                 return res.status(400).send(error);

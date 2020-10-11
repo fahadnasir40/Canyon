@@ -258,6 +258,7 @@ export function getProducts(
     }
 }
 
+//get active Products
 export function getActiveProducts(
     start = 0,
     limit = 0,
@@ -279,6 +280,30 @@ export function getActiveProducts(
         payload: request
     }
 }
+
+//get Stock Products
+export function getStockProducts(
+    start = 0,
+    limit = 0,
+    order = 'desc',
+    list = ''
+) {
+
+    const request = axios.get(`api/getStockProducts?skip=${start}&limit=${limit}&order=${order}`)
+        .then(response => {
+            if (list) {
+                return [...list, ...response.data];
+            }
+            else {
+                return response.data;
+            }
+        });
+    return {
+        type: 'GET_STOCK_PRODUCTS',
+        payload: request
+    }
+}
+
 
 //getTransactions
 export function getTransactions(

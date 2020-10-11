@@ -47,7 +47,10 @@ class Content extends Component {
             },
             cell: row => (
                 <div>
-                    <span>{row.transaction_action}<br /></span>{row.transaction_type === 'Purchase' ? <Link to={`/purchase_invoice_id=${row.transaction_value_id}`} className="text-info">#{row.transaction_value_id}</Link> : null}
+                    <span>{row.transaction_action}<br /></span>{row.transaction_type === 'Purchase' ? <Link to={`/purchase_invoice_id=${row.transaction_value_id}`} className="text-info">#{row.transaction_value_id}</Link>
+                        : row.transaction_type === 'Sale' ? <Link to={`/sale_invoice_id=${row.transaction_value_id}`} className="text-info">#{row.transaction_value_id}</Link>
+                            : null
+                    }
                 </div>
             )
         },
@@ -77,7 +80,7 @@ class Content extends Component {
             )
         },
         {
-            name: 'Rate',
+            name: 'Amount',
             selector: 'rate',
             sortable: true,
             style: {
