@@ -112,8 +112,7 @@ class Content extends Component {
                                     <ul className="link-list-opt no-bdr">
                                         <li><a href="#"><em className="icon ni ni-edit"></em><span>Edit</span></a></li>
                                         <li><a href="#"><em className="icon ni ni-eye"></em><span>View</span></a></li>
-                                        <li><a onClick={() => { this.props.deleteTransaction(transactions) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }}>Remove Transaction</span></a></li>
-                                        {/* <li><a onClick={() => { this.props.deleteSupplier(supplier) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }} className="text-danger ">Remove Supplier</span></a></li> */}
+                                        <li><a onClick={() => { this.props.inactiveTransaction(transactions) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }}>Inactive</span></a></li>
                                     </ul>
                                 </div>
                             </div>

@@ -3,13 +3,13 @@ import Header from "../../Header/header";
 import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
 import { saveTransaction } from '../../../actions';
-import { getActiveProducts, getStockProducts, getCustomersTransactions, getEmployeesTransactions, getSuppliersTransactions, clearProduct } from '../../../actions';
+import { getActiveProducts, getCustomersTransactions, getEmployeesTransactions, getSuppliersTransactions, clearProduct } from '../../../actions';
 import { connect } from 'react-redux';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Moment from 'react-moment';
 
-class AddTransaction extends Component {
+class editTransaction extends Component {
 
     state = {
         startDate: new Date(),
@@ -37,15 +37,15 @@ class AddTransaction extends Component {
 
     static getDerivedStateFromProps(nextProps, prevState) {
 
-        if (nextProps.addTransaction) {
-            if (nextProps.addTransaction.post === true) {
+        if (nextProps.editTransaction) {
+            if (nextProps.editTransaction.post === true) {
                 return {
                     redirect: true
                 }
             }
-            else if (nextProps.addTransaction.post === false) {
+            else if (nextProps.editTransaction.post === false) {
                 return {
-                    error: 'Error adding the transaction.'
+                    error: 'Error updating the transaction.'
                 }
             }
         }
@@ -59,7 +59,6 @@ class AddTransaction extends Component {
 
     handleInputTaction = (event) => {
         this.setState({ taction: event.target.value })
-        // this.props.dispatch(getStockProducts())
         this.props.dispatch(getActiveProducts())
     }
 
@@ -542,8 +541,8 @@ function mapStateToProps(state) {
         suppliersList: state.supplier.supplierList,
         customerList: state.customer.customerList,
         userList: state.user.userList,
-        addTransaction: state.transaction.transaction
+        editTransaction: state.transaction.transaction
     }
 }
 
-export default connect(mapStateToProps)(AddTransaction)
+export default connect(mapStateToProps)(editTransaction)

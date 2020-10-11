@@ -1,63 +1,67 @@
 const mongoose = require("mongoose");
 
 const transactionSchema = mongoose.Schema({
-    transaction_date:{
+    transaction_date: {
         type: Date,
         required: true
     },
-    addedBy:{
+    addedBy: {
         type: String,
         required: true,
     },
-    primary_quantity:{
+    primary_quantity: {
         type: Number,
         required: true,
-        default:0
+        default: 0
     },
-    transaction_source:{
+    transaction_source: {
         type: String,
         required: true
     },
-    transaction_type:{
+    transaction_type: {
         type: String,
         required: true
     },
-    transaction_action:{
+    transaction_action: {
         type: String,
         required: true
     },
-    transaction_action_id:{
+    transaction_action_id: {
         type: String,
     },
-    transaction_value_id:{
+    transaction_value_id: {
         type: String,
         required: true
     },
-    transaction_value:{
+    transaction_value: {
         type: String,
         required: true
     },
     rate: {
-        type:Number
+        type: Number
     },
-    comments:{
+    comments: {
         type: String
     },
     from_item: {
-        type:String
+        type: String
     },
     to_item: {
-        type:String
+        type: String
     },
     ritem: {
-        type:String
+        type: String
+    },
+    category: {
+        type: String,
+        default: 'External'
     },
     status: {
         type: String,
         default: 'active'
     }
-},{timestamps:true})
+}, { timestamps: true })
 
-const Transaction = mongoose.model('Transaction',transactionSchema);
+const Transaction = mongoose.model('Transaction', transactionSchema);
 
 module.exports = { Transaction }

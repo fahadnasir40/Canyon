@@ -706,6 +706,16 @@ export function updateSupplier(data) {
     }
 }
 
+export function updateTransaction(data) {
+    const request = axios.post(`/api/transaction_update`, data)
+        .then(response => response.data);
+
+    return {
+        type: 'UPDATE_TRANSACTION',
+        payload: request
+    }
+}
+
 export function updateCustomer(data) {
     const request = axios.post(`/api/customer_update`, data)
         .then(response => response.data);
