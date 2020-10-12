@@ -468,11 +468,8 @@ class AddSale extends Component {
                 const totalPaidAmount = Number(this.state.paidAmount) + Number(this.state.secPaidAmount) - Number(this.state.secamount);
 
                 sale = { ...sale, custExBottles, bottlesWithCustomer, productDetails, totalPaidAmount };
-                // console.log("Product Details: ", sale)
                 if (this.state.request === false) {
-                    // console.log("Sale Details: ", sale)
                     this.props.dispatch(saveSale(sale));
-                    // this.saveTransaction();
                     this.setState({ request: true, loading: true })
                 }
             }
@@ -814,7 +811,6 @@ class AddSale extends Component {
                                 </div>
                             </div>
                             <div className="row g-4">
-
                                 <div className="col-12 mt-4 ml-2">
                                     <div className="form-group">
                                         <button type="button" onClick={this.submitForm} className="btn btn-lg btn-primary" disabled={this.checkValid()}>

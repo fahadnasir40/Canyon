@@ -45,17 +45,14 @@ class DashboardContent extends Component {
                 if (moment(element.createdAt).toDate().getDate() === (i + 1)) {
                     const elementDate = moment(element.createdAt);
                     if (currentDate.getMonth() == elementDate.toDate().getMonth()) {
-
                         const days = elementDate.diff(new Date(), 'days')
-                        console.log("Days", days, i, elementDate)
-                        data[days] += element.rate;
+                        data[Math.abs(days)] += element.rate;
                     }
                     else
                         data[i] += element.rate;
                 }
             });
         }
-        console.log("List Data", data)
         return data.reverse();
     }
 
@@ -74,8 +71,13 @@ class DashboardContent extends Component {
                     data: this.getListData(this.props.data.lastMonthSaleList.reverse())
                 }]
             };
-
             this.ecommerceLineS1(salesStatistics)
+            if (this.props.topProducts) {
+                this.props.topProducts.data.sort(function (a, b) {
+                    return a.totalAmount - b.totalAmount;
+                });
+
+            }
         }
     }
 
@@ -196,6 +198,7 @@ class DashboardContent extends Component {
     bgArray = ['bg-purple-dim', 'bg-azure-dim', 'bg-success-dim', 'bg-warning-dim', 'bg-primary-dim'];
     prArray = ['bg-warning-dim', 'bg-success-dim', 'bg-azure-dim', 'bg-purple-dim', 'bg-primary-dim'];
 
+
     render() {
         let data = this.props.data;
         return (
@@ -233,7 +236,7 @@ class DashboardContent extends Component {
                                                                     <h6 className="sub-title">This week so far</h6>
                                                                     <div className="data-group">
                                                                         <div className="amount">Rs. <NumberFormat value={data.lastWeekSale} displayType={'text'} thousandSeparator={true} /></div>
-                                                                        <div className="info text-right"><span className="change up text-danger"><em className="icon ni ni-arrow-long-up"></em>{data.lastWeekSale === 0 ? 0 : ((data.lastWeekSale - data.prevWeekSale) / data.lastWeekSale) * 100}%</span><br /><span>vs. last week</span></div>
+                                                                        <div className="info text-right"><span className="change up text-danger"><em className="icon ni ni-arrow-long-up"></em>{data.lastWeekSale === 0 ? 0 : (((data.lastWeekSale - data.prevWeekSale) / data.lastWeekSale) * 100).toFixed(2)}%</span><br /><span>vs. last week</span></div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -277,7 +280,7 @@ class DashboardContent extends Component {
 
                                                                                     </div>
                                                                                     <div className="total">
-                                                                                        <div className="amount">Rs. {item.totalAmount}</div>
+                                                                                        <div className="amount">Rs. <NumberFormat value={item.totalAmount} displayType={'text'} thousandSeparator={true} /></div>
                                                                                         <div className="count">{item.count} Sold</div>
                                                                                     </div>
                                                                                 </li>
@@ -333,7 +336,7 @@ class DashboardContent extends Component {
                                                                         <span className="tb-sub"><Moment format="DD/MM/YYYY">{item.saleDate}</Moment></span>
                                                                     </div>
                                                                     <div className="nk-tb-col">
-                                                                        <span className="tb-sub tb-amount"> <span>Rs.</span> {item.totalAmount}</span>
+                                                                        <span className="tb-sub tb-amount"> <span>Rs.</span> <NumberFormat value={item.totalAmount} displayType={'text'} thousandSeparator={true} /></span>
                                                                     </div>
                                                                     <div className="nk-tb-col  tb-col-md">
                                                                         {

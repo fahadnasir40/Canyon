@@ -4,6 +4,7 @@ import DataTable from 'react-data-table-component';
 import Moment from 'react-moment';
 import $ from 'jquery';
 import Swal from 'sweetalert2';
+import NumberFormat from 'react-number-format'
 class Content extends Component {
 
     state = {
@@ -54,7 +55,7 @@ class Content extends Component {
                     <td className="tb-odr-amount">
                         <span className="tb-odr-total">
                             {
-                                <span className="amount">Rs. {row.totalAmount}</span>
+                                <span className="amount">Rs. <NumberFormat value={row.totalAmount} displayType={'text'} thousandSeparator={true} /></span>
                             }
 
                         </span>
@@ -65,7 +66,7 @@ class Content extends Component {
                                     : row.status === 'Returned' || row.status === 'Returned Items' ?
                                         <span className="badge badge-dot badge-info">{row.status}</span>
                                         : row.status === 'Returned Items Pending' ?
-                                            <span className="badge badge-dot badge-warning">Returned Items</span>
+                                            <span className="badge badge-dot badge-warning text-break">Returned Items</span>
                                             :
                                             <span className="badge badge-dot badge-success">{row.status}</span>
                             }
@@ -168,6 +169,11 @@ class Content extends Component {
                 <div className="row">
                     <div className="col">
                         <span className=" fw-medium">Added on: </span> <span className="fw-normal"><Moment format="DD MMM, YYYY hh:mm A">{data.createdAt}</Moment></span>
+                    </div>
+                </div>
+                <div className="row d-md-none">
+                    <div width="20px">
+                        <div onClick={() => { this.editPaidAmount(data) }} class="btn btn-icon btn-white btn-dim btn-lg  btn-primary  ml-3 d-sm-block px-2"><em class="iconicon ni ni-edit"> Edit</em></div>
                     </div>
                 </div>
             </div>

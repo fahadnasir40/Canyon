@@ -26,14 +26,13 @@ const { Product } = require("./models/product");
 const { Transaction } = require("./models/transaction");
 const { Purchase } = require("./models/purchase");
 const { Sale } = require("./models/sale");
-const customer = require("./models/customer");
-
 
 
 app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use(express.static("client/build"));
+
 
 // GET //
 
@@ -164,7 +163,7 @@ app.get('/api/getDashboard', auth, (req, res) => {
                                         else {
                                             const index = productsList.indexOf(productsList.find(x => x._id === element._id));
                                             productsList[index].totalAmount += element.ptotal;
-                                            productsList[index].count += (element.dqty - element.rqty)
+                                            productsList[index].count += (element.dqty - element.rqty);
                                         }
                                     })
                                     return functionWithPromise(item)
@@ -175,6 +174,12 @@ app.get('/api/getDashboard', auth, (req, res) => {
                                 }
 
                                 getData().then(newData => {
+                                    let t = productsList;
+                                    for (var i = 0; i < t.length; i++) {
+                                        if (productsList[i].count < 0)
+                                            productsList.splice(i, 1);
+                                    }
+
                                     data = {
                                         ...data,
                                         totalSales: totalSales,
@@ -445,7 +450,6 @@ app.get('/api/getSaleProduct', auth, (req, res) => {
         if (doc.productDetails.length > 0)
             Product.find({ _id: { $in: doc.productDetails } }).select('_id name sku stock brand uom').exec((err, products) => {
                 if (err) return res.status(400).send(err);
-                console.log("object", products);
                 res.status(200).send({ doc, products });
             });
     })
@@ -527,7 +531,7 @@ app.get('/api/users', auth, (req, res) => {
     let order = req.query.order;
 
     // ORDER = asc || desc
-    User.find().skip(skip).sort({ createdAt: 'desc' }).limit(limit).exec((err, doc) => {
+    User.find().skip(skip).sort({ createdAt: 'desc' }).limit(limit).select('_id phone address city dob email name role status').exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.send(doc);
     })
@@ -535,7 +539,7 @@ app.get('/api/users', auth, (req, res) => {
 
 //POST
 
-app.post("/api/register", (req, res) => {
+app.post("/api/register", auth, (req, res) => {
     const user = new User(req.body);
 
     user.save((err, doc) => {
@@ -723,10 +727,9 @@ app.post('/api/addSale', auth2, (req, res) => {
     })
 
     const sale = new Sale(req.body);
-
     sale.save((error, sale) => {
         if (error) {
-            console.log("Error", error);
+            console.log("Error in saving sale", error);
             return res.status(400).send(error);
         }
 
@@ -744,7 +747,6 @@ app.post('/api/addSale', auth2, (req, res) => {
                 });
 
                 await products.forEach(item => {
-                    console.log("Item", item, item.rqty);
                     Product.findByIdAndUpdate(item._id, {
                         $inc: { stock: (item.rqty - item.dqty) }
 
@@ -752,7 +754,6 @@ app.post('/api/addSale', auth2, (req, res) => {
                         if (error) {
                             console.log("Error update stock", error);
                         }
-                        console.log("Item Updated");
                     })
                 });
 
@@ -850,7 +851,7 @@ app.post('/api/addTransaction', auth, (req, res) => {
 
 // UPDATE //
 
-app.post('/api/supplier_update', (req, res) => {
+app.post('/api/supplier_update', auth, (req, res) => {
     Supplier.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, doc) => {
         if (err) return res.status(400).send(err);
         res.json({
@@ -860,7 +861,7 @@ app.post('/api/supplier_update', (req, res) => {
     });
 })
 
-app.post('/api/product_update', (req, res) => {
+app.post('/api/product_update', auth, (req, res) => {
     Product.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, doc) => {
         if (err) return res.status(400).send(err);
         res.json({
@@ -977,7 +978,7 @@ app.post('/api/purchase_update', auth, async function (req, res) {
     }
 });
 
-app.post('/api/customer_update', (req, res) => {
+app.post('/api/customer_update', auth, (req, res) => {
     Customer.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, doc) => {
         if (err) return res.status(400).send(err);
         res.json({
@@ -1030,9 +1031,32 @@ app.post("/api/user_update", (req, res) => {
     });
 });
 
+app.post("/api/userchange", auth, (req, res) => {
 
+    User.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, user) => {
+        if (err) return res.status(400).send(err);
+        return res.status(200).send({ success: true })
+    });
+});
 
+app.post("/api/userchangepwd", auth, (req, res) => {
 
+    User.findById(req.body._id, (err, user) => {
+        if (err) return res.status(400).send(err);
+        if (user) {
+            user.password = req.body.password;
+
+            user.save((error, user) => {
+                if (error) {
+                    return res.status(400).send({ success: false });
+                }
+                if (user) {
+                    return res.status(200).send({ success: true });
+                }
+            })
+        }
+    })
+});
 
 
 // DELETE //
@@ -1064,12 +1088,14 @@ app.delete('/api/delete_transaction', auth, (req, res) => {
     })
 })
 
-
-
 if (process.env.NODE_ENV === "production") {
     const path = require("path");
     app.get("/*", (req, res) => {
-        res.sendfile(path, resolve(__dirname, "../client", "build", "index.html"));
+        res.sendFile(path.join(__dirname, '../client/build/index.html'), function (err) {
+            if (err) {
+                res.status(500).send(err)
+            }
+        })
     });
 }
 

@@ -5,24 +5,43 @@ import Content from './Content/content'
 import Footer from '../Footer/footer'
 import { connect } from 'react-redux'
 import { getDashboard, getDashboardProducts, clearDashboard } from '../../actions';
+import { data } from 'jquery'
 
 class Dashboard extends PureComponent {
 
     state = {
-        productsList: []
+        productsList: [],
+        data: '',
+        topProducts: ''
     }
 
     componentDidMount() {
-        console.log("Component Did Mount");
         this.props.dispatch(getDashboard())
+
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (!this.state.data) {
+            this.props.dispatch(getDashboard())
+        }
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        console.log("This props", nextProps)
+
         if (nextProps.data) {
+            if (nextProps.data.error) {
+                return {
+                    error: true
+                }
+            }
             if (nextProps.data.topProducts) {
                 if (!nextProps.topProducts)
                     nextProps.dispatch(getDashboardProducts(nextProps.data.topProducts));
+            }
+
+            return {
+                data: nextProps.data,
+                topProducts: nextProps.topProducts
             }
         }
         return null;
@@ -37,7 +56,7 @@ class Dashboard extends PureComponent {
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard">
-                            <Content {...this.props} />
+                            <Content data={this.state.data} topProducts={this.state.topProducts} />
                             <Footer />
                         </div>
                     </div>

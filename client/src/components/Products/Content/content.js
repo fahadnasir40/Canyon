@@ -125,7 +125,6 @@ class Content extends Component {
 
 
     showData = (row) => {
-        console.log("Row", row);
         return (
             Swal.fire({
                 title: '<strong>Product Info</strong>',
@@ -288,6 +287,7 @@ class Content extends Component {
                                 highlightOnHover
                                 pointerOnHover
                                 pagination
+                                onRowClicked={(data) => { this.showData(data) }}
                                 paginationPerPage={10}
                             />
                         </div>

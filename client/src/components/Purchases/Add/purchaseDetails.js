@@ -23,30 +23,6 @@ class PurchaseDetails extends Component {
         })
     }
 
-    // removeItem = (index) => {
-    //     // var newItemsList = JSON.tothis.state.itemsList;
-
-    //     // console.log("Before") 
-    //     // newItemsList.forEach(element=>{
-    //     //     console.log("Index of items",newItemsList.indexOf(element));
-    //     //     console.log("Items",element);
-    //     // })
-
-    //     // console.log("Delete Index",index)
-    //     // newItemsList.shift();
-
-    //     // console.log("After")
-    //     // newItemsList.forEach(element=>{
-    //     //     console.log("Index of items",newItemsList.indexOf(element));
-    //     //     console.log("Items",element);
-    //     // })
-
-    //     this.setState({
-    //         itemsList ''
-    //     })
-    //     this.removeSelectedItem(index);
-    // }
-
     clearAllItems = () => {
         this.setState({
             itemsList: [],
@@ -61,21 +37,22 @@ class PurchaseDetails extends Component {
     addSelectedItem = (product) => {
         this.productsList.push(product);
 
-        if (this.props.valid === false && this.productsList.length > 0) {
+        if (this.props.valid === false && !this.productsList.some(item => item == -1)) {
             this.props.setValid();
         }
     }
 
     removeSelectedItem = (index) => {
-        this.productsList.splice(index, 1);
-        this.calculateTotal();
+        this.productsList[index] = -1;
         if (this.productsList.length == 0 && this.props.valid === true) {
             this.props.setValid()
         }
     }
 
-    updateTotalAmount = (index, qty, price) => {
-        this.productsList[index] = { ...this.productsList[index], qty: qty, totalAmount: (Number(qty) * Number(price)) }
+    updateTotalAmount = (index2, qty, product) => {
+        const p = this.productsList.find(x => x._id === product._id);
+        const index = this.productsList.indexOf(p)
+        this.productsList[index] = { ...this.productsList[index], qty: qty, totalAmount: (Number(qty) * Number(product.price.total)) }
         this.calculateTotal();
     }
 
@@ -101,7 +78,6 @@ class PurchaseDetails extends Component {
     }
 
     render() {
-        console.log("This state", this.productsList, this.state)
         if (this.props.loading === true) {
             this.props.getProductsList(this.productsList, this.state.paidAmount, this.state.totalAmount);
         }
@@ -137,22 +113,21 @@ class PurchaseDetails extends Component {
                                     <th scope="col">Rate</th>
                                     <th scope="col">UOM</th>
                                     <th scope="col">Total</th>
-                                    {/* <th scope="col">Action</th> */}
                                 </tr>
                             </thead>
                             <tbody>
                                 {
                                     this.state.itemsList.map((item, i) => (
-                                            <ItemRow
-                                                key={i}
-                                                productsList={this.state.productsList}
-                                                remove={this.removeItem}
-                                                item={item}
-                                                updateTotalAmount={this.updateTotalAmount}
-                                                addSelectedItem={this.addSelectedItem}
-                                                removeSelectedItem={this.removeSelectedItem}
-                                                index={i} />
-                                        ))
+                                        <ItemRow
+                                            key={i}
+                                            productsList={this.state.productsList}
+                                            remove={this.removeItem}
+                                            item={item}
+                                            updateTotalAmount={this.updateTotalAmount}
+                                            addSelectedItem={this.addSelectedItem}
+                                            removeSelectedItem={this.removeSelectedItem}
+                                            index={i} />
+                                    ))
                                 }
                             </tbody>
                         </table>
@@ -161,7 +136,7 @@ class PurchaseDetails extends Component {
                 <div className="row mt-5">
                     <div className="d-flex col-md-6 ml-md-auto">
                         <label className="col-md-4 offset-md-2 form-label">Amount to be paid</label>
-                        <span className="col-md-8 offset-md-2"> Rs. {this.state.totalAmount} </span>
+                        <span className="col-md-8 offset-md-2"> Rs. {Number(this.state.totalAmount)} </span>
                     </div>
                 </div>
 

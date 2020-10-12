@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Sidebar from '../../Sidebar/sidebar'
 import Header from './../../Header/header'
 import Footer from '../../Footer/footer'
-import { userRegister } from '../../../actions';
+import { clearUser, userRegister } from '../../../actions';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
@@ -86,7 +86,6 @@ class AddUser extends Component {
 
     submitForm = (event) => {
 
-        // const form = event.currentTarget;
 
         event.preventDefault();
 
@@ -110,17 +109,6 @@ class AddUser extends Component {
             }))
 
         }
-        // e.preventDefault();
-
-        // // perform all neccassary validations
-        // if (this.state.password !== this.state.cpassword) {
-        //     this.setState({error:'Passwords does not match'})
-        // } else {
-        //     // make API call        
-        //     this.setState({error:''});
-
-
-        // }
     }
 
     getRoles = () => {
@@ -288,6 +276,10 @@ class AddUser extends Component {
                 }
             }
         }
+    }
+
+    componentWillUnmount() {
+        this.props.dispatch(clearUser());
     }
 
     render() {

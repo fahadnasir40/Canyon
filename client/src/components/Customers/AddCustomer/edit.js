@@ -202,23 +202,47 @@ class EditCustomer extends Component {
     event.preventDefault();
 
     let customer = this.props.location.state.customerInfo;
+<<<<<<< HEAD
     let newList = this.state.products;
     this.state.products.forEach(element => {
       if (element._id === '') {
         newList.splice(this.state.products.indexOf(element), 1);
+=======
+
+
+    let addressFound = false;
+    this.state.address.forEach(element => {
+      if (element.name.length > 0) {
+        addressFound = true;
+>>>>>>> c5e8d80ddb8a833f5f6c60354167bea7f86ab179
       }
     })
 
+    if (!addressFound) {
+      this.setState({
+        error: "Address is required."
+      })
+    }
+    else if (!this.state.name) {
+      this.setState({ error: 'Name is required.' })
+    }
+    else {
+      let newList = this.state.products;
+      this.state.products.forEach(element => {
+        if (element._id === '') {
+          newList.splice(this.state.products.indexOf(element), 1);
+        }
+      })
 
-    customer.name = this.state.name;
-    customer.email = this.state.email;
-    customer.phone = this.state.phone;
-    customer.address = this.state.address;
-    customer.flatRate = this.state.flatrate;
-    customer.salePrice = newList;
+      customer.name = this.state.name;
+      customer.email = this.state.email;
+      customer.phone = this.state.phone;
+      customer.address = this.state.address;
+      customer.flatRate = this.state.flatrate;
+      customer.salePrice = newList;
 
-    this.props.dispatch(updateCustomer(customer));
-
+      this.props.dispatch(updateCustomer(customer));
+    }
   }
 
   addressRow = (i) => (
