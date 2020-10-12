@@ -235,6 +235,22 @@ export function getCustomerDetails(_id) {
     }
 }
 
+export function getTransactionDetails(_id) {
+    const request = axios.get(`/api/getTransactionDetails?id=${_id}`)
+        .then(response => {
+            // console.log("transaction Details: ", response.data)
+            return response.data;
+        })
+        .catch(error => {
+            // console.log("Error transaction Details: ", error)
+        });
+
+    return {
+        type: 'GET_TRANSACTION_DETAILS',
+        payload: request
+    }
+}
+
 
 export function getProducts(
     start = 0,
@@ -258,6 +274,7 @@ export function getProducts(
     }
 }
 
+//get active Products
 export function getActiveProducts(
     start = 0,
     limit = 0,
@@ -279,6 +296,30 @@ export function getActiveProducts(
         payload: request
     }
 }
+
+//get Stock Products
+export function getStockProducts(
+    start = 0,
+    limit = 0,
+    order = 'desc',
+    list = ''
+) {
+
+    const request = axios.get(`api/getStockProducts?skip=${start}&limit=${limit}&order=${order}`)
+        .then(response => {
+            if (list) {
+                return [...list, ...response.data];
+            }
+            else {
+                return response.data;
+            }
+        });
+    return {
+        type: 'GET_STOCK_PRODUCTS',
+        payload: request
+    }
+}
+
 
 //getTransactions
 export function getTransactions(
@@ -530,6 +571,13 @@ export function clearCustomer() {
     }
 }
 
+export function clearTransaction() {
+    return {
+        type: 'CLEAR_TRANSACTION',
+        payload: {}
+    }
+}
+
 export function clearCustomerList() {
     return {
         type: 'CLEAR_CUSTOMER_LIST',
@@ -589,6 +637,17 @@ export function updateSupplier(data) {
 
     return {
         type: 'UPDATE_SUPPLIER',
+        payload: request
+    }
+}
+
+//get single transaction
+export function updateTransaction(data) {
+    const request = axios.post(`/api/transaction_update`, data)
+        .then(response => response.data);
+    // console.log("Data Updated Successfully", data)
+    return {
+        type: 'UPDATE_TRANSACTION',
         payload: request
     }
 }

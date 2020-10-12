@@ -25,6 +25,7 @@ class EditCustomer extends Component {
 
   componentDidMount() {
 
+    console.log("did mount", this.props.location.state)
     if (this.props.location.state) {
       if (this.props.location.state.customerInfo) {
         let customer = this.props.location.state.customerInfo;
@@ -335,7 +336,7 @@ class EditCustomer extends Component {
                   </div>
                 </div>
                 <div className="col-lg-4 mt-4 text-right">
-                  <div class="custom-control custom-control-sm custom-checkbox">
+                  <div className="custom-control custom-control-sm custom-checkbox">
                     <input
                       type="checkbox"
                       className="custom-control-input"

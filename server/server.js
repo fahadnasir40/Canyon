@@ -386,6 +386,19 @@ app.get('/api/getActiveProducts', auth2, (req, res) => {
     })
 })
 
+app.get('/api/getStockProducts', auth2, (req, res) => {
+    // locahost:3001/api/books?skip=3&limit=2&order=asc
+    let skip = parseInt(req.query.skip);
+    let limit = parseInt(req.query.limit);
+    let order = req.query.order;
+
+    // ORDER = asc || desc
+    Product.find({ stock: { $gte: 1 } }).skip(skip).sort({ createdAt: order }).limit(limit).exec((err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.send(doc);
+    })
+})
+
 
 app.get('/api/getPurchases', auth, (req, res) => {
     // locahost:3001/api/books?skip=3&limit=2&order=asc
@@ -705,10 +718,12 @@ app.post('/api/addSale', auth2, (req, res) => {
 
     let products = req.body.productDetails;
     let productTotalQty = 0;
+    let linesQuantity = 0;
 
     products.forEach(element => {
         if (element.secpaid)
             productTotalQty += Number(element.secpaid);
+        linesQuantity += Number(element.dqty);
     })
 
     const sale = new Sale(req.body);
@@ -745,11 +760,11 @@ app.post('/api/addSale', auth2, (req, res) => {
                 const trans = {
                     transaction_date: new Date(),
                     primary_quantity: 0,
-                    rate: req.body.totalPaidAmount,
+                    rate: req.body.totalAmount,
                     transaction_source: 'Customer',
                     transaction_type: 'Sale',
                     transaction_action: 'Sale Added',
-                    primary_quantity: 0,
+                    primary_quantity: linesQuantity,
                     transaction_value: req.body.customerName,
                     transaction_value_id: sale._id,
                     comments: req.body.description,
@@ -769,6 +784,7 @@ app.post('/api/addSale', auth2, (req, res) => {
             } catch (error) {
                 // If an error occurred, abort the whole transaction and
                 // undo any changes that might have happened
+                console.log("Transaction Error", error)
                 await session.abortTransaction();
                 session.endSession();
                 return res.status(400).send(error);
@@ -799,6 +815,26 @@ app.post('/api/addProduct', auth2, (req, res) => {
 app.post('/api/addTransaction', auth, (req, res) => {
 
     const transaction = new Transaction(req.body);
+
+    if (transaction.transaction_action === "Inventory Transfer") {
+        if (transaction.from_item && transaction.to_item && transaction.primary_quantity > 0) {
+            Product.findByIdAndUpdate(Transaction.to_item, {
+                $inc: { stock: transaction.primary_quantity }
+            }, (error) => {
+                if (error) {
+                    console.log("Error Adding Stock Transaction", error);
+                }
+            });
+
+            Product.findByIdAndUpdate(Transaction.from_item, {
+                $inc: { stock: -transaction.primary_quantity }
+            }, (error) => {
+                if (error) {
+                    console.log("Error transferring Stock", error);
+                }
+            });
+        }
+    }
 
     transaction.save((error, transaction) => {
         if (error) {
@@ -952,7 +988,40 @@ app.post('/api/customer_update', auth, (req, res) => {
     });
 })
 
-app.post("/api/user_profile_update", auth, (req, res) => {
+app.post('/api/transaction_update', (req, res) => {
+    const transaction = new Transaction(req.body);
+
+    if (transaction.transaction_action === "Inventory Transfer") {
+        if (transaction.from_item && transaction.to_item && transaction.primary_quantity > 0) {
+            Product.findByIdAndUpdate(Transaction.to_item, {
+                $inc: { stock: transaction.primary_quantity }
+            }, (error) => {
+                if (error) {
+                    console.log("Error Adding Stock Transaction", error);
+                }
+            });
+
+            Product.findByIdAndUpdate(Transaction.from_item, {
+                $inc: { stock: -transaction.primary_quantity }
+            }, (error) => {
+                if (error) {
+                    console.log("Error transferring Stock", error);
+                }
+            });
+        }
+    }
+
+    Transaction.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.json({
+            success: true,
+            doc
+        })
+    });
+})
+
+
+app.post("/api/user_update", (req, res) => {
     User.findByIdAndUpdate(req.body.id, req.body, { new: true }, (err, user) => {
         if (err) return res.status(400).send(err);
         res.json({

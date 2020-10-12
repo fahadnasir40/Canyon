@@ -2,6 +2,8 @@ export default function (state = {}, action) {
     switch (action.type) {
         case 'GET_PRODUCTS':
             return { ...state, productList: action.payload }
+        case 'GET_STOCK_PRODUCTS':
+            return { ...state, productList: action.payload }
         case 'UPDATE_PRODUCT':
             return {
                 ...state,

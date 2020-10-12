@@ -17,6 +17,7 @@ class customerInfo extends Component {
         totalOrders: 0,
         completeOrders: 0,
         pendingOrders: 0,
+        // returnedOrders: 0,
         changeState: false,
     }
 
@@ -30,6 +31,7 @@ class customerInfo extends Component {
                         totalOrders: nextProps.saleDetails.totalOrders,
                         completeOrders: nextProps.saleDetails.completedOrders,
                         pendingOrders: nextProps.saleDetails.pendingOrders,
+                        // returnedOrders: nextProps.purchaseDetails.returnedOrders,
                         completeOrderAmount: nextProps.saleDetails.totalOrdersAmount
                     }
                 }
@@ -38,6 +40,7 @@ class customerInfo extends Component {
                 totalOrders: nextProps.saleDetails.totalOrders,
                 completeOrders: nextProps.saleDetails.completedOrders,
                 pendingOrders: nextProps.saleDetails.pendingOrders,
+                // returnedOrders: nextProps.purchaseDetails.returnedOrders,
                 completeOrderAmount: nextProps.saleDetails.totalOrdersAmount
             })
         }
@@ -289,112 +292,115 @@ class customerInfo extends Component {
                                             </div>
                                         </div>
                                     </div>
-                                    {
-                                        this.props.user.login.role !== 'worker' ?
-                                            <div className="card-aside card-aside-right user-aside toggle-slide toggle-slide-right toggle-break-xxl" id="sidebarProfile" data-content="userAside" data-toggle-screen="xxl" data-toggle-overlay="true" data-toggle-body="true">
-                                                <div className="card-inner-group" data-simplebar>
-                                                    <div className="card-inner">
-                                                        <div className="user-card user-card-s2">
-                                                            <div className="user-avatar lg bg-primary">
-                                                                <span>{this.getInitials(customer.name)}</span>
-                                                            </div>
-                                                            <div className="user-info">
-                                                                <div className="badge badge-outline-light badge-pill ucap">Customer</div>
-                                                                <h5>{customer.name}</h5>
-                                                                <span className="sub-text">{customer.email}</span>
-                                                            </div>
-                                                        </div>
+                                    <div className="card-aside card-aside-right user-aside toggle-slide toggle-slide-right toggle-break-xxl" id="sidebarProfile" data-content="userAside" data-toggle-screen="xxl" data-toggle-overlay="true" data-toggle-body="true">
+                                        <div className="card-inner-group" data-simplebar>
+                                            <div className="card-inner">
+                                                <div className="user-card user-card-s2">
+                                                    <div className="user-avatar lg bg-primary">
+                                                        <span>{this.getInitials(customer.name)}</span>
                                                     </div>
-                                                    <div className="card-inner card-inner-sm">
-                                                        <ul className="btn-toolbar justify-center gx-1">
-                                                            {
-                                                                customer.status === 'suspended' ?
-                                                                    <li><div onClick={this.changeStatus} className="btn btn-trigger btn-icon text-info"><em className="icon ni ni-shield-off"></em></div></li>
-                                                                    : null
-                                                            }
-
-                                                            <li><a href={"mailto:" + customer.email} className="btn btn-trigger btn-icon"><em className="icon ni ni-mail"></em></a></li>
-                                                            <li> <Link to={{
-                                                                pathname: "/editCustomer",
-                                                                state: {
-                                                                    customerInfo: customer
-                                                                }
-
-                                                            }} className="btn btn-trigger btn-icon">
-                                                                <em className="icon ni ni-edit-alt"></em></Link></li>
-                                                            {
-                                                                customer.status === 'active' ?
-                                                                    <li><div onClick={this.changeStatus} className="btn btn-trigger btn-icon text-danger"><em className="icon ni ni-na"></em></div></li>
-                                                                    : null
-                                                            }
-
-                                                        </ul>
+                                                    <div className="user-info">
+                                                        <div className="badge badge-outline-light badge-pill ucap">Customer</div>
+                                                        <h5>{customer.name}</h5>
+                                                        <span className="sub-text">{customer.email}</span>
                                                     </div>
-                                                    <div className="card-inner">
-                                                        <div className="overline-title-alt mb-2">Ordered Amount</div>
-                                                        <div className="profile-balance">
-                                                            <div className="profile-balance-group gx-4">
-                                                                <div className="profile-balance-sub">
-                                                                    <div className="profile-balance-amount">
-                                                                        <div className="number"> <small className="currency currency-usd">Rs.</small> <NumberFormat value={this.state.completeOrderAmount} displayType={'text'} thousandSeparator={true} /></div>
-                                                                    </div>
-                                                                    <div className="profile-balance-subtitle">Complete Order</div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-inner">
-                                                        <div className="row text-center">
-                                                            <div className="col-4">
-                                                                <div className="profile-stats">
-                                                                    <span className="amount">{this.state.totalOrders}</span>
-                                                                    <span className="sub-text">Total Order</span>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-4">
-                                                                <div className="profile-stats">
-                                                                    <span className="amount">{this.state.completeOrders}</span>
-                                                                    <span className="sub-text">Complete</span>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-4">
-                                                                <div className="profile-stats">
-                                                                    <span className="amount">{this.state.pendingOrders}</span>
-                                                                    <span className="sub-text">Progress</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-inner">
-                                                        <h6 className="overline-title-alt mb-2">Additional</h6>
-                                                        <div className="row g-3">
-                                                            <div className="col-6">
-                                                                <span className="sub-text">User ID:</span>
-                                                                <span className="sub-text-sm">{customer._id}</span>
-                                                            </div>
-
-                                                            <div className="col-6">
-                                                                <span className="sub-text">Register At:</span>
-                                                                <span>    <Moment format="MMM DD, YYYY hh:mm A">
-                                                                    {customer.createdAt}
-                                                                </Moment></span>
-                                                            </div>
-                                                            <div className="col-6">
-                                                                <span className="sub-text">Status:</span>
-                                                                {
-                                                                    customer.status === 'active' ?
-                                                                        <span className="tb-status text-success fs-12px ccap">{customer.status}</span>
-                                                                        : <span className="tb-status text-danger fs-12px ccap"><strong>{customer.status}</strong></span>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
                                                 </div>
                                             </div>
-                                            : null
-                                    }
+                                            <div className="card-inner card-inner-sm">
+                                                <ul className="btn-toolbar justify-center gx-1">
+                                                    {
+                                                        customer.status === 'suspended' ?
+                                                            <li><div onClick={this.changeStatus} className="btn btn-trigger btn-icon text-info"><em className="icon ni ni-shield-off"></em></div></li>
+                                                            : null
+                                                    }
+
+                                                    <li><a href={"mailto:" + customer.email} className="btn btn-trigger btn-icon"><em className="icon ni ni-mail"></em></a></li>
+                                                    {/* <li><a href="#" className="btn btn-trigger btn-icon"><em className="icon ni ni-download-cloud"></em></a></li> */}
+                                                    <li> <Link to={{
+                                                        pathname: "/editCustomer",
+                                                        state: {
+                                                            customerInfo: customer
+                                                        }
+
+                                                    }} className="btn btn-trigger btn-icon">
+                                                        <em className="icon ni ni-edit-alt"></em></Link></li>
+                                                    {
+                                                        customer.status === 'active' ?
+                                                            <li><div onClick={this.changeStatus} className="btn btn-trigger btn-icon text-danger"><em className="icon ni ni-na"></em></div></li>
+                                                            : null
+                                                    }
+
+                                                </ul>
+                                            </div>
+                                            <div className="card-inner">
+                                                <div className="overline-title-alt mb-2">Ordered Amount</div>
+                                                <div className="profile-balance">
+                                                    <div className="profile-balance-group gx-4">
+                                                        <div className="profile-balance-sub">
+                                                            <div className="profile-balance-amount">
+                                                                <div className="number"> <small className="currency currency-usd">Rs.</small> <NumberFormat value={this.state.completeOrderAmount} displayType={'text'} thousandSeparator={true} /></div>
+                                                            </div>
+                                                            <div className="profile-balance-subtitle">Complete Order</div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="card-inner">
+                                                <div className="row text-center">
+                                                    <div className="col-3">
+                                                        <div className="profile-stats">
+                                                            <span className="amount">{this.state.totalOrders}</span>
+                                                            <span className="sub-text">Total Order</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-3">
+                                                        <div className="profile-stats">
+                                                            <span className="amount">{this.state.completeOrders}</span>
+                                                            <span className="sub-text">Complete</span>
+                                                        </div>
+                                                    </div>
+                                                    {/* <div className="col-3">
+                                                        <div className="profile-stats">
+                                                            <span className="amount">{this.state.returnedOrders}</span>
+                                                            <span className="sub-text">Returned</span>
+                                                        </div>
+                                                    </div> */}
+                                                    <div className="col-3">
+                                                        <div className="profile-stats">
+                                                            <span className="amount">{this.state.pendingOrders}</span>
+                                                            <span className="sub-text">Progress</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="card-inner">
+                                                <h6 className="overline-title-alt mb-2">Additional</h6>
+                                                <div className="row g-3">
+                                                    <div className="col-6">
+                                                        <span className="sub-text">User ID:</span>
+                                                        <span className="sub-text-sm">{customer._id}</span>
+                                                    </div>
+
+                                                    <div className="col-6">
+                                                        <span className="sub-text">Register At:</span>
+                                                        <span>    <Moment format="MMM DD, YYYY hh:mm A">
+                                                            {customer.createdAt}
+                                                        </Moment></span>
+                                                    </div>
+                                                    <div className="col-6">
+                                                        <span className="sub-text">Status:</span>
+                                                        {
+                                                            customer.status === 'active' ?
+                                                                <span className="tb-status text-success fs-12px ccap">{customer.status}</span>
+                                                                : <span className="tb-status text-danger fs-12px ccap"><strong>{customer.status}</strong></span>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -427,6 +433,7 @@ class customerInfo extends Component {
 }
 
 function mapStateToProps(state) {
+    console.log("State Recieved", state)
     return {
         saleDetails: state.customer.saleDetails,
         editCustomer: state.customer

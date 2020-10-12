@@ -6,6 +6,14 @@ export default function (state = {}, action) {
             return { ...state, transaction: action.payload }
         case 'GET_TRANSACTIONS':
             return { ...state, transactionList: action.payload }
+        case 'UPDATE_TRANSACTION':
+            return {
+                ...state,
+                post: action.payload.success,
+                transaction: action.payload.doc
+            }
+        case 'GET_TRANSACTION_DETAILS':
+            return { ...state, transactionList: action.payload }
         case 'DELETE_TRANSACTION':
             return {
                 ...state,

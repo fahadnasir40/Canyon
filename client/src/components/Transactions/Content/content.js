@@ -28,6 +28,13 @@ class Content extends Component {
             name: 'Value',
             selector: 'transaction_value',
             sortable: true,
+            cell: row => (
+                <div>
+                    <span>
+                        {row.transaction_value}
+                    </span>
+                </div>
+            )
 
         },
         {
@@ -47,7 +54,10 @@ class Content extends Component {
             },
             cell: row => (
                 <div>
-                    <span>{row.transaction_action}<br /></span>{row.transaction_type === 'Purchase' ? <Link to={`/purchase_invoice_id=${row.transaction_value_id}`} className="text-info">#{row.transaction_value_id}</Link> : null}
+                    <span>{row.transaction_action}<br /></span>{row.transaction_type === 'Purchase' ? <Link to={`/purchase_invoice_id=${row.transaction_value_id}`} className="text-info">#{row.transaction_value_id}</Link>
+                        : row.transaction_type === 'Sale' ? <Link to={`/sale_invoice_id=${row.transaction_value_id}`} className="text-info">#{row.transaction_value_id}</Link>
+                            : null
+                    }
                 </div>
             )
         },
@@ -77,7 +87,7 @@ class Content extends Component {
             )
         },
         {
-            name: 'Rate',
+            name: 'Amount',
             selector: 'rate',
             sortable: true,
             style: {
@@ -107,10 +117,24 @@ class Content extends Component {
                                 <a href="#" className="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
                                 <div className="dropdown-menu dropdown-menu-right">
                                     <ul className="link-list-opt no-bdr">
-                                        <li><a href="#"><em className="icon ni ni-edit"></em><span>Edit</span></a></li>
-                                        <li><a href="#"><em className="icon ni ni-eye"></em><span>View</span></a></li>
-                                        <li><a onClick={() => { this.props.deleteTransaction(transactions) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }}>Remove Transaction</span></a></li>
-                                        {/* <li><a onClick={() => { this.props.deleteSupplier(supplier) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }} className="text-danger ">Remove Supplier</span></a></li> */}
+                                        {/* {
+                                            <li> <Link to={{
+                                                pathname: "/editTransaction",
+                                                state: {
+                                                    transactionInfo: row
+                                                }
+                                            }}>
+                                                <em className="icon ni ni-pen"></em><span>Edit details</span></Link></li>
+                                        } */}
+                                        {/* <li><a href="#"><em className="icon ni ni-eye"></em><span>View</span></a></li> */}
+                                        {
+                                            row.status === 'active' ?
+                                                <li><a onClick={() => { this.props.changeStatus(row) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }}>Inactive</span></a></li>
+
+                                                :
+                                                <li><a onClick={() => { this.props.changeStatus(row) }}><em className="icon ni ni-check-circle"></em><span style={{ cursor: "pointer" }}>Active</span></a></li>
+
+                                        }
                                     </ul>
                                 </div>
                             </div>
@@ -123,11 +147,6 @@ class Content extends Component {
         },
     ];
 
-    // componentDidUpdate(prevProps) {
-    //     if (prevProps.productsList !== this.props.productsList) {
-    //         this.setState({ productsList: this.props.productsList });
-    //     }
-    // }
     componentDidUpdate(prevProps) {
         if (prevProps.transactionsList !== this.props.transactionsList) {
             this.setState({ transactionsList: this.props.transactionsList });
