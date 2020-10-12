@@ -4,8 +4,10 @@ export default function (state = {}, action) {
             return { ...state, login: action.payload }
         case 'USER_AUTH':
             return { ...state, login: action.payload }
-        case 'GET_USER_DOCUMENTS':
-            return { ...state, userDocuments: action.payload }
+        case 'CHANGE_USER':
+            return { ...state, userUpdate: action.payload.data }
+        case 'CHANGE_USER_PASSWORD':
+            return { ...state, userUpdate: action.payload }
         case 'GET_USERS':
             return { ...state, userList: action.payload }
         case 'GET_USERS_TRANSACTIONS':
@@ -27,6 +29,13 @@ export default function (state = {}, action) {
                 ...state,
                 changePassword: action.payload.changePassword,
                 profile: action.payload.data
+            }
+        case 'CLEAR_USER':
+            return {
+                ...state,
+                success: action.payload.success,
+                error: action.payload.error,
+                userUpdate: action.payload.error,
             }
         default:
             return state;

@@ -71,8 +71,13 @@ class DashboardContent extends Component {
                     data: this.getListData(this.props.data.lastMonthSaleList.reverse())
                 }]
             };
-
             this.ecommerceLineS1(salesStatistics)
+            if (this.props.topProducts) {
+                this.props.topProducts.data.sort(function (a, b) {
+                    return a.totalAmount - b.totalAmount;
+                });
+
+            }
         }
     }
 
@@ -193,16 +198,6 @@ class DashboardContent extends Component {
     bgArray = ['bg-purple-dim', 'bg-azure-dim', 'bg-success-dim', 'bg-warning-dim', 'bg-primary-dim'];
     prArray = ['bg-warning-dim', 'bg-success-dim', 'bg-azure-dim', 'bg-purple-dim', 'bg-primary-dim'];
 
-    componentDidUpdate(prevProps, prevState) {
-        if (this.props != prevProps) {
-            if (this.props.topProducts) {
-                this.props.topProducts.data.sort(function (a, b) {
-                    return a.totalAmount - b.totalAmount;
-                });
-
-            }
-        }
-    }
 
     render() {
         let data = this.props.data;
@@ -241,7 +236,7 @@ class DashboardContent extends Component {
                                                                     <h6 className="sub-title">This week so far</h6>
                                                                     <div className="data-group">
                                                                         <div className="amount">Rs. <NumberFormat value={data.lastWeekSale} displayType={'text'} thousandSeparator={true} /></div>
-                                                                        <div className="info text-right"><span className="change up text-danger"><em className="icon ni ni-arrow-long-up"></em>{data.lastWeekSale === 0 ? 0 : ((data.lastWeekSale - data.prevWeekSale) / data.lastWeekSale) * 100}%</span><br /><span>vs. last week</span></div>
+                                                                        <div className="info text-right"><span className="change up text-danger"><em className="icon ni ni-arrow-long-up"></em>{data.lastWeekSale === 0 ? 0 : (((data.lastWeekSale - data.prevWeekSale) / data.lastWeekSale) * 100).toFixed(2)}%</span><br /><span>vs. last week</span></div>
                                                                     </div>
                                                                 </div>
                                                             </div>

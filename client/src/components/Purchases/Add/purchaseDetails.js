@@ -23,30 +23,6 @@ class PurchaseDetails extends Component {
         })
     }
 
-    // removeItem = (index) => {
-    //     // var newItemsList = JSON.tothis.state.itemsList;
-
-    //     // console.log("Before") 
-    //     // newItemsList.forEach(element=>{
-    //     //     console.log("Index of items",newItemsList.indexOf(element));
-    //     //     console.log("Items",element);
-    //     // })
-
-    //     // console.log("Delete Index",index)
-    //     // newItemsList.shift();
-
-    //     // console.log("After")
-    //     // newItemsList.forEach(element=>{
-    //     //     console.log("Index of items",newItemsList.indexOf(element));
-    //     //     console.log("Items",element);
-    //     // })
-
-    //     this.setState({
-    //         itemsList ''
-    //     })
-    //     this.removeSelectedItem(index);
-    // }
-
     clearAllItems = () => {
         this.setState({
             itemsList: [],
@@ -101,7 +77,6 @@ class PurchaseDetails extends Component {
     }
 
     render() {
-        console.log("This state", this.productsList, this.state)
         if (this.props.loading === true) {
             this.props.getProductsList(this.productsList, this.state.paidAmount, this.state.totalAmount);
         }
@@ -137,22 +112,21 @@ class PurchaseDetails extends Component {
                                     <th scope="col">Rate</th>
                                     <th scope="col">UOM</th>
                                     <th scope="col">Total</th>
-                                    {/* <th scope="col">Action</th> */}
                                 </tr>
                             </thead>
                             <tbody>
                                 {
                                     this.state.itemsList.map((item, i) => (
-                                            <ItemRow
-                                                key={i}
-                                                productsList={this.state.productsList}
-                                                remove={this.removeItem}
-                                                item={item}
-                                                updateTotalAmount={this.updateTotalAmount}
-                                                addSelectedItem={this.addSelectedItem}
-                                                removeSelectedItem={this.removeSelectedItem}
-                                                index={i} />
-                                        ))
+                                        <ItemRow
+                                            key={i}
+                                            productsList={this.state.productsList}
+                                            remove={this.removeItem}
+                                            item={item}
+                                            updateTotalAmount={this.updateTotalAmount}
+                                            addSelectedItem={this.addSelectedItem}
+                                            removeSelectedItem={this.removeSelectedItem}
+                                            index={i} />
+                                    ))
                                 }
                             </tbody>
                         </table>

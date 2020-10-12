@@ -144,13 +144,11 @@ class AddPurchase extends Component {
                     purchase.status = 'Complete';
 
                 let productDetails = [];
-                console.log("This products", this.products);
                 this.products.forEach(item => {
                     const product = productDetails.find(element => element._id === item._id);
 
                     if (product) {
                         const index = productDetails.indexOf(product);
-                        console.log("Existing Product", productDetails[index], item.qty);
                         productDetails[index].pqty = Number(productDetails[index].pqty) + Number(item.qty);
                         productDetails[index].pprice = Number(item.price.total);
                         productDetails[index].ptotal = Number(productDetails[index].ptotal) + Number(item.totalAmount);

@@ -357,44 +357,6 @@ export function getSaleProduct(id) {
     }
 }
 
-export function getBookWithReviewer(id) {
-    const request = axios.get(`/api/getBook?id=${id}`)
-
-    return (dispatch) => {
-        request.then(({ data }) => {
-            let book = data;
-
-            axios.get(`/api/getReviewer?id=${book.ownerId}`)
-                .then(({ data }) => {
-                    let response = {
-                        book,
-                        reviewer: data
-                    }
-
-                    dispatch({
-                        type: 'GET_BOOK_W_REVIEWER',
-                        payload: response
-                    })
-                })
-                .catch(err => {
-
-                })
-        })
-            .catch(err => {
-
-            })
-    }
-}
-
-export function clearBookWithReviewer() {
-    return {
-        type: 'CLEAR_BOOK_W_REVIEWER',
-        payload: {
-            book: {},
-            reviewer: {}
-        }
-    }
-}
 
 
 
@@ -576,50 +538,20 @@ export function clearCustomerList() {
 }
 
 export function clearDashboard() {
-    console.log("Component Will Unmount Called")
     return {
         type: 'CLEAR_DASHBOARD',
         payload: {}
     }
 }
 
-export function clearNewBook() {
+export function clearUser() {
     return {
-        type: 'CLEAR_NEWBOOK',
+        type: 'CLEAR_USER',
         payload: {}
     }
 }
 
 
-
-export function getSharedDocuments() {
-    const request = axios.get(`/api/shared_documents`)
-        .then(response => response.data);
-
-    return {
-        type: 'GET_SHARED_DOCUMENT',
-        payload: request
-    }
-}
-
-export function inviteUser(document) {
-    const request = axios.post('/api/invite', document)
-        .then(response => response.data);
-    return {
-        type: 'INVITE_USER',
-        payload: request
-    }
-}
-
-export function getUserDocuments(userId) {
-    const request = axios.get(`/api/user_documents?user=${userId}`)
-        .then(response => response.data)
-
-    return {
-        type: 'GET_USER_DOCUMENTS',
-        payload: request
-    }
-}
 
 export function getDashboardProducts(products) {
     const request = axios.post(`/api/getDashboardProducts`, products)
@@ -637,26 +569,6 @@ export function getPurchaseProduct(id) {
 
     return {
         type: 'GET_PURCHASE',
-        payload: request
-    }
-}
-
-export function getBook(id) {
-    const request = axios.get(`/api/getBook?id=${id}`)
-        .then(response => response.data);
-
-    return {
-        type: 'GET_BOOK',
-        payload: request
-    }
-}
-
-export function updateDocument(data) {
-    const request = axios.post(`/api/document_update`, data)
-        .then(response => response.data);
-
-    return {
-        type: 'UPDATE_BOOK',
         payload: request
     }
 }
@@ -710,32 +622,6 @@ export function deleteCustomer(id) {
         payload: request
     }
 }
-
-export function clearBook() {
-    return {
-        type: 'CLEAR_BOOK',
-        payload: {
-            book: null,
-            updatBook: false,
-            postDeleted: false
-        }
-    }
-}
-
-// export function downloadPdf(id,title){
-
-//     const request = axios.get(`/api/pdf?id=${id}`,{responseType: 'blob'})
-//     .then(response => {
-//         const pdfBlob = new Blob([response.data], { type: 'application/pdf' }); 
-//         saveAs(pdfBlob,title+".pdf");
-//             return response.data}        
-//         );
-
-//     return{
-//         type: 'DOWNLOAD_DOCUMENT',
-//         payload: request
-//     }
-// }
 
 /* =========== USER ============== */
 
@@ -821,23 +707,11 @@ export function changePassword(data) {
         type: 'CHANGE_PASSWORD',
         payload: request
     }
-    // return (dispatch) =>{
-    //     request.then(({data})=>{
-    //         let response = {
-    //             success:data.success,
-    //             user
-    //         }
-    //         dispatch({
-    //             type:'USER_PASSCHANGE',
-    //             payload:response
-    //         })
-    //     })
-    // }
 }
 
 
 export function updateUser(user) {
-    const request = axios.post(`/api/user_update`, user);
+    const request = axios.post(`/api/user_profile_update`, user);
 
     return (dispatch) => {
         request.then(({ data }) => {
@@ -853,13 +727,23 @@ export function updateUser(user) {
     }
 
 }
-// export function createAndDownloadPdf(){
 
-//     const request = axios.post('/api/create-pdf', "<p>Hello</p><h1>World</h1>")
-//       .then(() => axios.get('/api/fetch-pdf', { responseType: 'blob' }))
-//       .then((res) => {
-//         const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
 
-//         saveAs(pdfBlob, 'newPdf.pdf');
-//       })
-// }
+export function changeUser(user) {
+    const request = axios.post(`/api/userchange`, user);
+
+    return {
+        type: 'CHANGE_USER',
+        payload: request
+    }
+
+}
+
+export function changeUserPassword(user) {
+    const request = axios.post(`/api/userchangepwd`, user);
+
+    return {
+        type: 'CHANGE_USER_PASSWORD',
+        payload: request
+    }
+}

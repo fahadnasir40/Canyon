@@ -78,7 +78,7 @@ class AddCustomer extends Component {
     if (event.target.value !== -1) {
       const newProduct = this.state.products.map((product, sidx) => {
         if (id !== sidx) return product;
-        return { ...product, _id: this.props.productsList[event.target.value]._id, rate: Number(this.props.productsList[event.target.value].price.total)};
+        return { ...product, _id: this.props.productsList[event.target.value]._id, rate: Number(this.props.productsList[event.target.value].price.total) };
       });
 
       this.setState({ products: newProduct });
@@ -91,10 +91,10 @@ class AddCustomer extends Component {
   };
 
   handleProductRateChange = id => event => {
-    if (event.target.value>= 0) {
+    if (event.target.value >= 0) {
       const newProduct = this.state.products.map((product, sidx) => {
         if (id !== sidx) return product;
-        return { ...product, rate: Number(event.target.value)};
+        return { ...product, rate: Number(event.target.value) };
       });
 
       this.setState({ products: newProduct });
@@ -137,8 +137,8 @@ class AddCustomer extends Component {
     if (value === true && !this.props.productsList) {
       this.props.dispatch(this.props.dispatch(getActiveProducts()))
     }
-    else if( value === false){
-      this.setState({products:[]})
+    else if (value === false) {
+      this.setState({ products: [] })
     }
   }
 
@@ -173,20 +173,38 @@ class AddCustomer extends Component {
 
     let newList = this.state.products;
     this.state.products.forEach(element => {
-      if(element._id===''){
-          newList.splice(this.state.products.indexOf(element),1);
+      if (element._id === '') {
+        newList.splice(this.state.products.indexOf(element), 1);
       }
     })
 
-    this.props.dispatch(saveCustomer({
-      email: this.state.email,
-      name: this.state.name,
-      address: this.state.address,
-      phone: this.state.phone,
-      addedBy: this.props.user.login.id,
-      flatRate: this.state.flatrate,
-      salePrice: newList 
-    }))
+    let addressFound = false;
+    this.state.address.forEach(element => {
+      if (element.name.length > 0) {
+        addressFound = true;
+      }
+    })
+
+    if (!addressFound) {
+      this.setState({
+        error: "Address is required."
+      })
+    }
+    else if (!this.state.name) {
+      this.setState({ error: 'Name is required.' })
+    }
+    else {
+
+      this.props.dispatch(saveCustomer({
+        email: this.state.email,
+        name: this.state.name,
+        address: this.state.address,
+        phone: this.state.phone,
+        addedBy: this.props.user.login.id,
+        flatRate: this.state.flatrate,
+        salePrice: newList
+      }))
+    }
   }
 
   addressRow = (i) => (
@@ -261,7 +279,7 @@ class AddCustomer extends Component {
 
   renderBody = () => {
     return (
-      <div className="container mt-5">
+      <div className="container mt-5  ml-md-5">
         <div className="card">
           <div className="card-inner">
             <div className="card-head mt-1">

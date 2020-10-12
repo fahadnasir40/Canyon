@@ -6,8 +6,6 @@ export default function (state = {}, action) {
             return { ...state, saleDetails: action.payload }
         case 'GET_CUSTOMER':
             return { ...state, customer: action.payload }
-        case 'GET_CUSTOMERS_TRANSACTIONS':
-            return { ...state, customerList: action.payload }
         case 'UPDATE_CUSTOMER':
             return {
                 ...state,

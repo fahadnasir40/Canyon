@@ -172,7 +172,7 @@ class Content extends Component {
                 </div>
                 <div className="row d-md-none">
                     <div width="20px">
-                        <div onClick={() => { this.editPaidAmount(data) }} class="btn btn-icon btn-white btn-dim btn-lg  btn-primary py-n1 ml-3 d-sm-block"><em class="iconicon ni ni-edit"></em></div>
+                        <div onClick={() => { this.editPaidAmount(data) }} class="btn btn-icon btn-white btn-dim btn-lg  btn-primary  ml-3 d-sm-block px-2"><em class="iconicon ni ni-edit"> Edit</em></div>
                     </div>
                 </div>
             </div>

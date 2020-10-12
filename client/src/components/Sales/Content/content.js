@@ -140,7 +140,6 @@ class Content extends Component {
 
 
     SampleExpandedComponent = ({ data }) => {
-        // console.log("data", data)
         return (
             <div className="container-fluid">
                 <div className="row d-lg-none">
@@ -172,6 +171,11 @@ class Content extends Component {
                 <div className="row">
                     <div className="col">
                         <span className=" fw-medium">Sale Date: </span> <span className="fw-normal"><Moment format="DD MMM, YYYY hh:mm A">{data.saleDate}</Moment></span>
+                    </div>
+                </div>
+                <div className="row d-md-none">
+                    <div width="20px">
+                        <div onClick={() => { this.editPaidAmount(data) }} class="btn btn-icon btn-white btn-dim btn-lg  btn-primary  ml-3 d-sm-block px-2"><em class="iconicon ni ni-edit"> Edit</em></div>
                     </div>
                 </div>
             </div>
@@ -279,9 +283,6 @@ class Content extends Component {
 
     }
     calculateTotalAmount = (row) => {
-        // console.log("row: ", row)
-
-
         if (row.productDetails.some(x => x.secRate > 0)) {
 
             let srate = 0;
@@ -314,7 +315,6 @@ class Content extends Component {
     }
 
     render() {
-        // console.log("Product List", this.state)
         return (
             <div className="nk-content ml-md-5 ">
                 <div className="container-fluid">

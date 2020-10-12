@@ -30,7 +30,6 @@ class UserProfile extends Component {
     }
 
     renderProfile = () => {
-        console.log("User Profile State", this.state.profile)
         return (
             <div className="nk-body bg-lighter npc-general has-sidebar" id="container">
                 <div className="nk-app-root">

@@ -31,9 +31,19 @@ class SaleInvoice extends Component {
                     nextProps.dispatch(getCustomer(nextProps.sale.doc.customerId))
                     const p = nextProps.sale.products.find(x => x.sku == 'CN19LL');
                     if (!p) {
-                        return {
-                            sale: nextProps.sale.doc,
-                            products: nextProps.sale.products,
+                        const other = nextProps.sale.products.find(x => x.sku == 'O19L');
+                        if (other) {
+                            return {
+                                sale: nextProps.sale.doc,
+                                products: nextProps.sale.products,
+                                totalSecurity: 0.00001
+                            }
+                        }
+                        else {
+                            return {
+                                sale: nextProps.sale.doc,
+                                products: nextProps.sale.products,
+                            }
                         }
                     }
                     else {
@@ -203,38 +213,35 @@ class SaleInvoice extends Component {
                                                     <tfoot>
                                                         <tr>
                                                             {this.state.totalSecurity ?
-                                                                <td colSpan="4"></td> : <td colSpan="3"></td>}
-                                                            {this.state.totalSecurity ?
-                                                                <td colSpan="1">Subtotal</td> : <td colSpan="2">Subtotal</td>}
+                                                                <td colSpan="5"></td> : <td colSpan="4"></td>}
+
+                                                            <td colSpan="1">Subtotal</td>
                                                             <td>{sale.paidAmount}</td>
                                                         </tr>
                                                         {this.state.totalSecurity > 0 ?
                                                             <tr>
-                                                                <td colSpan="4"></td>
+                                                                <td colSpan="5"></td>
                                                                 <td colSpan="1">Security</td>
-                                                                <td>{this.state.totalSecurity}</td>
+                                                                <td>{Math.trunc(this.state.totalSecurity)}</td>
                                                             </tr>
                                                             : null
                                                         }
                                                         <tr>
                                                             {this.state.totalSecurity ?
-                                                                <td colSpan="4"></td> : <td colSpan="3"></td>}
-                                                            {this.state.totalSecurity ?
-                                                                <td colSpan="1"><strong>Grand Total</strong></td> : <td colSpan="2"><strong>Grand Total</strong></td>}
-                                                            <td>Rs. {Number(sale.totalAmount) + Number(this.state.totalSecurity)}</td>
+                                                                <td colSpan="5"></td> : <td colSpan="4"></td>}
+                                                            <td colSpan="1"><strong>Grand Total</strong></td>
+                                                            <td>Rs. {Math.trunc(Number(sale.totalAmount) + Number(this.state.totalSecurity))}</td>
                                                         </tr>
                                                         <tr>
                                                             {this.state.totalSecurity ?
-                                                                <td colSpan="4"></td> : <td colSpan="3"></td>}
-                                                            {this.state.totalSecurity ?
-                                                                <td colSpan="1"><strong>Paid Amount</strong></td> : <td colSpan="2"><strong>Paid Amount</strong></td>}
-                                                            <td>Rs. {Number(sale.paidAmount) + Number(this.state.totalSecurity) - Number(sale.secAmount)}</td>
+                                                                <td colSpan="5"></td> : <td colSpan="4"></td>}
+                                                            <td colSpan="1"><strong>Paid Amount</strong></td>
+                                                            <td>Rs. {Math.trunc(Number(sale.paidAmount) + Number(this.state.totalSecurity) - Number(sale.secAmount))}</td>
                                                         </tr>
                                                         <tr>
                                                             {this.state.totalSecurity ?
-                                                                <td colSpan="4"></td> : <td colSpan="3"></td>}
-                                                            {this.state.totalSecurity ?
-                                                                <td colSpan="1"><strong>Due</strong></td> : <td colSpan="2"><strong>Due</strong></td>}
+                                                                <td colSpan="5"></td> : <td colSpan="4"></td>}
+                                                            <td colSpan="1"><strong>Due</strong></td>
                                                             <td>{(Number(sale.totalAmount) + Number(this.state.totalSecurity) - (Number(sale.paidAmount) + Number(this.state.totalSecurity) - Number(sale.secAmount))) == 0 ? <span> Nil</span> : <span className="text-danger"><strong>Rs. {(Number(sale.totalAmount) + Number(this.state.totalSecurity) - (Number(sale.paidAmount) + Number(this.state.totalSecurity) - Number(sale.secAmount)))}</strong></span>}</td>
                                                         </tr>
                                                     </tfoot>
@@ -256,9 +263,8 @@ class SaleInvoice extends Component {
     render() {
 
         let sale = this.state.sale;
-        // console.log("State", this.state)
         let products = this.state.products;
-        // console.log("products", products)
+
         return (
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">

@@ -21,6 +21,17 @@ class Content extends Component {
         return (this.bg[this.count++]);
     }
 
+    getUserStatus = (row) => (
+        row.status === "active" ?
+            <li><a onClick={() => { this.props.changeStatus(row) }}>
+                <em className="icon ni ni-na"></em><span style={{ cursor: "pointer" }} className="text-danger">Change Status</span>
+            </a></li>
+            :
+            <li><a onClick={() => { this.props.changeStatus(row) }}>
+                <em class="icon ni ni-check-thick"></em><span style={{ cursor: "pointer" }}>Change Status</span>
+            </a></li>
+    )
+
     renderUserList = () => {
         if (this.props.userList) {
             return this.props.userList.map((user, i) => (
@@ -44,7 +55,8 @@ class Content extends Component {
                                         <span>{this.getInitials(user.name)}</span>
                                     </div>
                                     <div className="user-info">
-                                        <span className="tb-lead ccap">{user.name}<span className="dot dot-success d-md-none ml-1"> </span></span>
+                                        <span className="tb-lead ccap">{user.name}{user.status ? user.status == 'suspended' ? <span className="dot dot-danger d-md-none ml-1"> </span>
+                                            : <span className="dot dot-success d-md-none ml-1"> </span> : <span className="dot dot-success d-md-none ml-1"> </span>}</span>
                                         <span>{user.email}</span>
                                     </div>
                                 </div>
@@ -71,20 +83,26 @@ class Content extends Component {
                     </div>
                     <div className="nk-tb-col tb-col-lg">
                         <ul className="list-status">
-                            <li><em className="icon text-success ni ni-check-circle"></em> <span>Email</span></li>
+                            <li> <span>{user.city ? user.city : 'N/A'}</span></li>
                         </ul>
                     </div>
 
                     <div className="nk-tb-col tb-col-md">
-                        <span className="tb-status text-success">Active</span>
+                        {
+                            user.status ?
+                                user.status === 'suspended' ?
+                                    <span className="tb-status ccap text-danger">{user.status}</span>
+                                    :
+                                    <span className="tb-status ccap text-success">{user.status}</span>
+                                :
+                                <span className="tb-status text-success">Active</span>
+                        }
                     </div>
                     {
                         this.props.user.login.id != user._id ?
                             <div className="nk-tb-col nk-tb-col-tools">
                                 <ul className="nk-tb-actions gx-1">
-
                                     <li>
-
                                         <div className="drodown">
                                             <a href="#" className="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
                                             <div className="dropdown-menu dropdown-menu-right">
@@ -97,14 +115,10 @@ class Content extends Component {
                                                     }}
                                                     ><em className="icon ni ni-eye"></em><span>View Details</span></Link></li>
 
-                                                    <li className="divider"></li>
                                                     {
-
-                                                        this.props.user.login.role === 'supervisor' && user.role === 'worker' ?
-                                                            <li><a href="#"><em className="icon ni ni-na"></em><span>Suspend User</span></a></li>
-                                                            : this.props.user.login.role === 'administrator' && user.role != 'adminsitrator' ?
-                                                                <li><a href="#"><em className="icon ni ni-na"></em><span>Suspend User</span></a></li>
-                                                                : null
+                                                        this.props.user.login.role === 'administrator' && user.role != 'administrator' ?
+                                                            this.getUserStatus(user)
+                                                            : null
                                                     }
                                                 </ul>
                                             </div>
@@ -112,7 +126,6 @@ class Content extends Component {
                                     </li>
                                 </ul>
                             </div>
-
                             : null
                     }
                 </div>
@@ -146,7 +159,6 @@ class Content extends Component {
                                                 <li className="nk-block-tools-opt">
                                                     <Link to="/add" className="btn btn-icon btn-primary"><em className="icon ni ni-plus"></em> <span className="mr-2">Add User </span></Link></li>
                                             </ul>
-
                                         </div>
                                     </div>
                                 </div>
@@ -164,6 +176,7 @@ class Content extends Component {
                                             <div className="nk-tb-col tb-col-md"><span className="sub-text">Phone</span></div>
                                             <div className="nk-tb-col tb-col-lg"><span className="sub-text">City</span></div>
                                             <div className="nk-tb-col tb-col-md"><span className="sub-text">Status</span></div>
+                                            <div className="nk-tb-col tb-col text-right"><span className="sub-text">Action</span></div>
                                         </div>
                                         {this.renderUserList()}
                                     </div>

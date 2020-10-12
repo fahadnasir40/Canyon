@@ -92,17 +92,35 @@ class addSupplier extends Component {
 
     // const form = event.currentTarget;
 
+
     event.preventDefault();
 
-    this.props.dispatch(saveSupplier({
-      email: this.state.email,
-      name: this.state.name,
-      brand: this.state.brand,
-      address: this.state.address,
-      phone: this.state.phone,
-      city: this.state.city,
-      addedBy: this.props.user.login.id
-    }))
+    let addressFound = false;
+    this.state.address.forEach(element => {
+      if (element.name.length > 0) {
+        addressFound = true;
+      }
+    })
+
+    if (!addressFound) {
+      this.setState({
+        error: "Address is required."
+      })
+    }
+    else if (!this.state.name) {
+      this.setState({ error: 'Name is required.' })
+    }
+    else {
+      this.props.dispatch(saveSupplier({
+        email: this.state.email,
+        name: this.state.name,
+        brand: this.state.brand,
+        address: this.state.address,
+        phone: this.state.phone,
+        city: this.state.city,
+        addedBy: this.props.user.login.id
+      }))
+    }
   }
 
 
@@ -190,8 +208,8 @@ class addSupplier extends Component {
 
   renderBody = () => {
     return (
-      <div className="container mt-5">
-        <div className="card ml-md-3">
+      <div className="container mt-5  ml-md-5">
+        <div className="card">
           <div className="card-inner">
             <div className="card-head mt-1">
               <h4 className="ff-base fw-medium">Add Supplier</h4>
@@ -257,8 +275,6 @@ class addSupplier extends Component {
 
               <div className="row g-4">
                 <div className="col-lg-12">
-
-
                   {
                     this.state.address.map((address, idx) => (
                       <div className="col-lg-4" key={idx}>

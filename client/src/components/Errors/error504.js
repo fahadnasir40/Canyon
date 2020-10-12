@@ -15,7 +15,7 @@ const Error504 = () => {
                                     <div className="wide-xs mx-auto">
                                         <h3 className="nk-error-title">Gateway Timeout Error</h3>
                                         <p className="nk-error-text">We are very sorry for inconvenience. It looks like some how our server did not receive a timely response.</p>
-                                        <Link to="/dashboard" className="btn btn-lg btn-primary mt-2">Back To Home</Link>
+                                        <Link to="/" className="btn btn-lg btn-primary mt-2">Back To Home</Link>
                                     </div>
                                 </div>
                             </div>
