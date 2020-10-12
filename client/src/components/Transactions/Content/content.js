@@ -132,7 +132,7 @@ class Content extends Component {
                                                 <li><a onClick={() => { this.props.changeStatus(row) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }}>Inactive</span></a></li>
 
                                                 :
-                                                <li><a onClick={() => { this.props.changeStatus(row) }}><em class="icon ni ni-check-circle"></em><span style={{ cursor: "pointer" }}>Active</span></a></li>
+                                                <li><a onClick={() => { this.props.changeStatus(row) }}><em className="icon ni ni-check-circle"></em><span style={{ cursor: "pointer" }}>Active</span></a></li>
 
                                         }
                                     </ul>
