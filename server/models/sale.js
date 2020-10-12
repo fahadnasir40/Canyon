@@ -61,12 +61,19 @@ const saleSchema = mongoose.Schema({
         ptotal: {
             type: Number
         },
+        secRate: {
+            type: Number,
+            default: 0
+        },
     }],
     totalAmount: {
         type: Number,
         required: true
     },
     secAmount: {
+        type: Number
+    },
+    custExBottles: {
         type: Number
     },
     status: {
