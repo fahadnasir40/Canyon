@@ -110,7 +110,15 @@ class Content extends Component {
                                 <a href="#" className="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
                                 <div className="dropdown-menu dropdown-menu-right">
                                     <ul className="link-list-opt no-bdr">
-                                        <li><a href="#"><em className="icon ni ni-edit"></em><span>Edit</span></a></li>
+                                        {
+                                            <li> <Link to={{
+                                                pathname: "/editTransaction",
+                                                state: {
+                                                    transactionInfo: row
+                                                }
+                                            }}>
+                                                <em className="icon ni ni-pen"></em><span>Edit details</span></Link></li>
+                                        }
                                         <li><a href="#"><em className="icon ni ni-eye"></em><span>View</span></a></li>
                                         <li><a onClick={() => { this.props.inactiveTransaction(transactions) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }}>Inactive</span></a></li>
                                     </ul>

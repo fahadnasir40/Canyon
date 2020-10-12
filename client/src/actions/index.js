@@ -733,7 +733,7 @@ export function updateSupplier(data) {
 export function updateTransaction(data) {
     const request = axios.get(`/api/transaction_update`, data)
         .then(response => response.data);
-
+    console.log("Data Updated Successfully", data)
     return {
         type: 'UPDATE_TRANSACTION',
         payload: request

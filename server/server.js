@@ -968,6 +968,8 @@ app.post('/api/customer_update', (req, res) => {
 })
 
 app.post('/api/transaction_update', (req, res) => {
+    console.log("req", req)
+    console.log("req", res)
     Transaction.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, doc) => {
         if (err) return res.status(400).send(err);
         res.json({

@@ -2,17 +2,16 @@ import React, { Component } from "react";
 import Header from "../../Header/header";
 import Sidebar from "../../Sidebar/sidebar";
 import Footer from "../../Footer/footer";
-import { saveTransaction } from '../../../actions';
-import { getActiveProducts, getStockProducts, getCustomersTransactions, getEmployeesTransactions, getSuppliersTransactions, clearProduct } from '../../../actions';
+import { getEmployeesTransactions, getCustomersTransactions, getSuppliersTransactions, getActiveProducts, updateTransaction, clearNewTransaction } from '../../../actions';
 import { connect } from 'react-redux';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Moment from 'react-moment';
 
-class AddTransaction extends Component {
+class EditTransaction extends Component {
 
     state = {
-        startDate: new Date(),
+        startDate: '',//new Date(),
         source: '',
         svalueid: '',
         svalue: '',
@@ -35,26 +34,84 @@ class AddTransaction extends Component {
         error: ''
     }
 
+
+    componentDidMount() {
+
+        console.log("did mount", this.props.location.state)
+        if (this.props.location.state) {
+            if (this.props.location.state.transactionInfo) {
+                let transaction = this.props.location.state.transactionInfo;
+                // const salerate = customer.salePrice.length === 0 ? false : true;
+
+                this.setState({
+                    startDate: transaction.transaction_date,
+                    source: transaction.transaction_source,
+                    ttype: transaction.transaction_type,
+                    taction: transaction.transaction_action,
+                    svalue: transaction.transaction_value,
+                    rate: transaction.rate,
+                    qty: transaction.primary_quantity,
+                    comments: transaction.comments,
+                    fromitem: transaction.from_item,
+                    toitem: transaction.to_item,
+                    gTotal: Number(transaction.primary_quantity) * Number(transaction.rate),
+                    products: '',//customer.salePrice,
+                    // salerate: salerate
+                })
+
+                // if (salerate)
+                //     this.props.dispatch(getActiveProducts());
+            }
+        }
+        else {
+            this.setState({
+                redirect: true
+            })
+        }
+    }
+
     static getDerivedStateFromProps(nextProps, prevState) {
 
-        if (nextProps.addTransaction) {
-            if (nextProps.addTransaction.post === true) {
+        if (nextProps.editTransactions) {
+            if (nextProps.editTransactions.post === true) {
                 return {
                     redirect: true
                 }
             }
-            else if (nextProps.addTransaction.post === false) {
+            else if (nextProps.editTransactions.post === false) {
                 return {
-                    error: 'Error adding the transaction.'
+                    error: 'Error updating transaction'
                 }
             }
         }
-
         return null;
     }
 
+
     componentWillUnmount() {
-        this.props.dispatch(clearProduct());
+        this.props.dispatch(clearNewTransaction());
+    }
+
+    submitForm = (event) => {
+
+        event.preventDefault();
+
+        let transaction = this.props.location.state.transactionInfo;
+
+        transaction.transaction_source = this.state.source;
+        transaction.transaction_type = this.state.ttype;
+        transaction.transaction_action = this.state.taction;
+        transaction.transaction_value = this.state.svalue;
+        transaction.comments = this.state.comments;
+        transaction.from_item = this.state.fromitem;
+        transaction.to_item = this.state.toitem;
+        transaction.rate = this.state.rate;
+        transaction.transaction_date = this.state.startDate;
+        transaction.primary_quantity = this.state.qty;
+
+        console.log("Transaction Details : ", transaction)
+        this.props.dispatch(updateTransaction(transaction));
+
     }
 
     handleInputTaction = (event) => {
@@ -168,12 +225,26 @@ class AddTransaction extends Component {
         })
     };
 
+
+    calculateTotal = (qty, rate) => {
+
+        return Number(qty) * Number(rate)
+    }
+
+    getCurrentDate = () => {
+        var t = new Date();
+        t = this.state.startDate
+        var formatted = t.format("dd.mm.yyyy");
+        return formatted
+    }
+
     getTransactionType = () => {
 
         if (this.state.source) {
             if (this.state.source === "Employees") {
                 return (
                     <select required onChange={this.handleInputTtype} className="form-control" id="ttype" required>
+                        <option defaultValue={this.state.ttype}>Other Expense</option>
                         <option value="Other Expense">Other Expense</option>
                     </select>
                 )
@@ -181,6 +252,7 @@ class AddTransaction extends Component {
             else if (this.state.source === "Supplier") {
                 return (
                     <select required onChange={this.handleInputTtype} className="form-control" id="ttype" required>
+                        <option defaultValue={this.state.ttype}>Other Expense</option>
                         <option value="Purchase">Purchase</option>
                     </select>
                 )
@@ -188,6 +260,7 @@ class AddTransaction extends Component {
             else if (this.state.source === "Customer") {
                 return (
                     <select required onChange={this.handleInputTtype} className="form-control" id="ttype" required>
+                        <option defaultValue={this.state.ttype}>Other Expense</option>
                         <option value="Sales">Sales</option>
                     </select>
                 )
@@ -201,6 +274,7 @@ class AddTransaction extends Component {
             if (this.state.source === "Employees") {
                 return (
                     <select required onChange={this.handleInputTaction} className="form-control" id="taction" required>
+                        <option defaultValue={this.state.taction} >{this.state.taction}</option>
                         <option value="Pay Salary" >Pay Salary</option>
                         <option value="Fuel Cost">Fuel Cost</option>
                         <option value="Vehicle Maintenance">Vehicle Maintenance</option>
@@ -246,49 +320,18 @@ class AddTransaction extends Component {
         return true
     }
 
-    submitForm = (event) => {
-
-        event.preventDefault();
-
-        this.props.dispatch(saveTransaction({
-            transaction_date: this.state.startDate,
-            primary_quantity: this.state.qty,
-            rate: this.state.rate,
-            transaction_source: this.state.source,
-            transaction_type: this.state.ttype,
-            transaction_action: this.state.taction,
-            transaction_value: this.state.svalue,
-            transaction_value_id: this.state.svalueid,
-            comments: this.state.comments,
-            from_item: this.state.fromitem,
-            to_item: this.state.toitem,
-            category: 'Internal',
-            addedBy: this.props.user.login.id
-        }))
-    }
-
-    calculateTotal = (qty, rate) => {
-
-        return Number(qty) * Number(rate)
-    }
-
-
-    getCurrentDate = () => {
-        const date = new Date();
-        return (<Moment format="MMM DD, YYYY">{date}</Moment>)
-    }
-
-    renderBody = (total) => {
+    renderBody = () => {
         return (
             <div className="container mt-5">
                 <div className="card ml-md-3">
                     <div className="card-inner">
                         <div className="card-head mt-2">
                             <h4 className="ff-base fw-medium">Edit Transaction</h4>
-                            <span>Date: <DatePicker
+                            <p> {this.state.startDate} </p>
+                            {/* <span>Date: <DatePicker
                                 selected={this.state.startDate}
                                 onChange={this.handleInputDate}
-                            /></span>
+                            /></span> */}
                         </div>
                         <form className="form-validate">
                             <div className="row g-4">
@@ -300,8 +343,9 @@ class AddTransaction extends Component {
                                         <div className="form-control-wrap ">
                                             <div className="form-control-select">
                                                 <select required onChange={this.handleInputSource} className="form-control" id="source">
-                                                    <option value=""></option>
-                                                    <option value="Employees">Employees</option>
+                                                    {/* <option value=""></option> */}
+                                                    <option defaultValue={this.state.source}>{this.state.source}</option>
+                                                    {/* <option value="Employees">Employees</option> */}
                                                     <option value="Supplier">Supplier</option>
                                                     <option value="Customer">Customer</option>
                                                 </select>
@@ -317,8 +361,9 @@ class AddTransaction extends Component {
                                         <div className="form-control-wrap ">
                                             <div className="form-control-select">
                                                 <select required onChange={this.handleInputSvalue} className="form-control ccap" id="svalue">
-                                                    <option value={-1}> Select {this.state.source}</option>
-
+                                                    {/* <option value={-1}> Select {this.state.source}</option> */}
+                                                    <option defaultValue={this.state.svalue}>{this.state.svalue}</option>
+                                                    {/* <option value={-1}> Select {this.state.svalue}</option> */}
                                                     {
                                                         this.state.source === "Supplier" ?
                                                             this.props.suppliersList ?
@@ -382,6 +427,7 @@ class AddTransaction extends Component {
                                                     <div className="form-control-select">
                                                         <select required onChange={this.handleInputFitem} className="form-control" id="fromitem" required>
                                                             <option value={-1}> From Item</option>
+                                                            <option defaultValue={this.state.fromitem}> {this.state.fromitem}</option>
                                                             {
                                                                 this.props.productsList ?
                                                                     this.props.productsList.map((item, key) => {
@@ -401,6 +447,7 @@ class AddTransaction extends Component {
                                                     <div className="form-control-select">
                                                         <select required onChange={this.handleInputTitem} className="form-control" id="toitem" required>
                                                             <option value={-1}> To Item</option>
+                                                            <option defaultValue={this.state.toitem}> {this.state.toitem}</option>
                                                             {
                                                                 this.props.productsList ?
                                                                     this.props.productsList.map((item, key) => {
@@ -492,7 +539,7 @@ class AddTransaction extends Component {
                                 <div className="col-12 mt-4 ml-2">
                                     <div className="form-group">
                                         <button onClick={this.submitForm} className="btn btn-lg btn-primary" disabled={this.checkValid()}>
-                                            <em className="icon ni ni-plus-c"></em> <span>  Save </span>
+                                            <em className="icon ni ni-plus-c"></em> <span>  Save Changes</span>
                                         </button>
                                     </div>
                                 </div>
@@ -512,13 +559,12 @@ class AddTransaction extends Component {
 
     render() {
 
+
         if (this.state.redirect === true) {
-            this.props.history.push('/transactions')
+            this.props.history.push('/customers')
         }
 
-        let total = 0;
         return (
-
             <div className="nk-body bg-lighter npc-default has-sidebar ">
                 <div className="nk-app-root">
                     <div className="nk-main"></div>
@@ -526,7 +572,7 @@ class AddTransaction extends Component {
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
-                            {this.renderBody(total)}
+                            {this.renderBody()}
                             <Footer />
                         </div>
                     </div>
@@ -537,13 +583,12 @@ class AddTransaction extends Component {
 }
 
 function mapStateToProps(state) {
+    console.log("state", state)
     return {
+        // editCustomer: state.customer,
         productsList: state.product.productList,
-        suppliersList: state.supplier.supplierList,
-        customerList: state.customer.customerList,
-        userList: state.user.userList,
-        addTransaction: state.transaction.transaction
+        editTransactions: state.transaction.transactionList
     }
 }
 
-export default connect(mapStateToProps)(AddTransaction)
+export default connect(mapStateToProps)(EditTransaction)
