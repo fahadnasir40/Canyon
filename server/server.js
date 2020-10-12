@@ -759,7 +759,7 @@ app.post('/api/addSale', auth2, (req, res) => {
                 const trans = {
                     transaction_date: new Date(),
                     primary_quantity: 0,
-                    rate: req.body.totalPaidAmount,
+                    rate: req.body.totalAmount,
                     transaction_source: 'Customer',
                     transaction_type: 'Sale',
                     transaction_action: 'Sale Added',
@@ -814,6 +814,26 @@ app.post('/api/addProduct', auth2, (req, res) => {
 app.post('/api/addTransaction', auth, (req, res) => {
 
     const transaction = new Transaction(req.body);
+
+    if (transaction.transaction_action === "Inventory Transfer") {
+        if (transaction.from_item && transaction.to_item && transaction.primary_quantity > 0) {
+            Product.findByIdAndUpdate(Transaction.to_item, {
+                $inc: { stock: transaction.primary_quantity }
+            }, (error) => {
+                if (error) {
+                    console.log("Error Adding Stock Transaction", error);
+                }
+            });
+
+            Product.findByIdAndUpdate(Transaction.from_item, {
+                $inc: { stock: -transaction.primary_quantity }
+            }, (error) => {
+                if (error) {
+                    console.log("Error transferring Stock", error);
+                }
+            });
+        }
+    }
 
     transaction.save((error, transaction) => {
         if (error) {
@@ -968,8 +988,28 @@ app.post('/api/customer_update', (req, res) => {
 })
 
 app.post('/api/transaction_update', (req, res) => {
-    console.log("req", req)
-    console.log("req", res)
+    const transaction = new Transaction(req.body);
+
+    if (transaction.transaction_action === "Inventory Transfer") {
+        if (transaction.from_item && transaction.to_item && transaction.primary_quantity > 0) {
+            Product.findByIdAndUpdate(Transaction.to_item, {
+                $inc: { stock: transaction.primary_quantity }
+            }, (error) => {
+                if (error) {
+                    console.log("Error Adding Stock Transaction", error);
+                }
+            });
+
+            Product.findByIdAndUpdate(Transaction.from_item, {
+                $inc: { stock: -transaction.primary_quantity }
+            }, (error) => {
+                if (error) {
+                    console.log("Error transferring Stock", error);
+                }
+            });
+        }
+    }
+
     Transaction.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, doc) => {
         if (err) return res.status(400).send(err);
         res.json({

@@ -4,7 +4,7 @@ import Header from '../Header/header'
 import Footer from '../Footer/footer'
 import Content from './Content/content';
 import { connect } from 'react-redux';
-import { getTransactions , deleteTransaction} from '../../actions';
+import { getTransactions, clearNewTransaction, updateTransaction } from '../../actions';
 import Swal from 'sweetalert2'
 
 class Transactions extends Component {
@@ -13,49 +13,36 @@ class Transactions extends Component {
         this.props.dispatch(getTransactions());
     }
 
-    deleteAlert = (transaction) => {
-
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.value) {
-                this.props.dispatch(deleteTransaction(transaction._id))
-            }
-        })
-    }
-
     static getDerivedStateFromProps(nextProps, prevState) {
 
-        // if (nextProps.editSupplier === true) {
-                    
-        //     Swal.fire({
-        //         position: 'center',
-        //         icon: 'success',
-        //         title: 'Supplier status has been changed',
-        //         showConfirmButton: false,
-        //         timer: 1500
-        //     }).then(function () {
-        //         nextProps.dispatch(clearNewSupplier());
-        //     });
-        // }
+        if (nextProps.editTransaction === true) {
 
-        if (nextProps.removeTransaction) {
-            Swal.fire(
-                'Deleted!',
-                'Transaction has been deleted.',
-                'success'
-            ).then((result) => {
-                if (result.value) { }
-                window.location.reload(false)
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Transaction status has been changed',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(function () {
+                nextProps.dispatch(clearNewTransaction());
             });
         }
+
         return null;
+    }
+
+    changeStatus = (transaction) => {
+        console.log("Function Calls", transaction)
+        if (transaction.status === 'active') {
+            transaction.status = 'Inactive'
+            console.log("dispatch Calls")
+            this.props.dispatch(updateTransaction(transaction))
+        }
+        else if (transaction.status === 'Inactive') {
+            transaction.status = 'active'
+            this.props.dispatch(updateTransaction(transaction))
+        }
+        window.location.reload(false)
     }
 
     render() {

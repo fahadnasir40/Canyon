@@ -28,6 +28,13 @@ class Content extends Component {
             name: 'Value',
             selector: 'transaction_value',
             sortable: true,
+            cell: row => (
+                <div>
+                    <span>
+                        {row.transaction_value}
+                    </span>
+                </div>
+            )
 
         },
         {
@@ -110,7 +117,7 @@ class Content extends Component {
                                 <a href="#" className="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
                                 <div className="dropdown-menu dropdown-menu-right">
                                     <ul className="link-list-opt no-bdr">
-                                        {
+                                        {/* {
                                             <li> <Link to={{
                                                 pathname: "/editTransaction",
                                                 state: {
@@ -118,9 +125,16 @@ class Content extends Component {
                                                 }
                                             }}>
                                                 <em className="icon ni ni-pen"></em><span>Edit details</span></Link></li>
+                                        } */}
+                                        {/* <li><a href="#"><em className="icon ni ni-eye"></em><span>View</span></a></li> */}
+                                        {
+                                            row.status === 'active' ?
+                                                <li><a onClick={() => { this.props.changeStatus(row) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }}>Inactive</span></a></li>
+
+                                                :
+                                                <li><a onClick={() => { this.props.changeStatus(row) }}><em class="icon ni ni-check-circle"></em><span style={{ cursor: "pointer" }}>Active</span></a></li>
+
                                         }
-                                        <li><a href="#"><em className="icon ni ni-eye"></em><span>View</span></a></li>
-                                        <li><a onClick={() => { this.props.inactiveTransaction(transactions) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }}>Inactive</span></a></li>
                                     </ul>
                                 </div>
                             </div>

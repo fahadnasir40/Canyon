@@ -37,7 +37,6 @@ class AddSale extends Component {
         discount: 0,
         paymethod: 'Cash',
         secpaid: '',
-        secpaidValidity: true,
         customerlimit: 0,
         totalAmount: 0,
         paidAmount: 0,
@@ -79,12 +78,25 @@ class AddSale extends Component {
 
     clearAllItems = () => {
         this.setState({
-            itemsList: []
+            itemsList: [],
+            Quantityrec: 0,
+            Quantitydel: 0,
+            excessBottles: 0,
+            discount: 0,
+            paymethod: 'Cash',
+            secpaid: '',
+            customerlimit: 0,
+            totalAmount: 0,
+            paidAmount: 0,
+            secamount: 0,
+            secLessAmount: 0,
+            customerBottles: 0,
+            secPaidAmount: 0
+
         })
     }
 
     removeSelectedItem = (index) => {
-        // console.log("Calling")
         let itemsArray = this.state.itemsList;
 
         itemsArray.splice(index, 1);
@@ -804,8 +816,6 @@ class AddSale extends Component {
                             <div className="row g-4">
 
                                 <div className="col-12 mt-4 ml-2">
-                                    <span>{this.state.secPaidAmount}</span> and <span>{this.state.secamount}</span>
-
                                     <div className="form-group">
                                         <button type="button" onClick={this.submitForm} className="btn btn-lg btn-primary" disabled={this.checkValid()}>
                                             <em className="icon ni ni-plus-c"></em> <span> Save</span>

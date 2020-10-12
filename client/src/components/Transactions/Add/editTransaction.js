@@ -37,11 +37,9 @@ class EditTransaction extends Component {
 
     componentDidMount() {
 
-        console.log("did mount", this.props.location.state)
         if (this.props.location.state) {
             if (this.props.location.state.transactionInfo) {
                 let transaction = this.props.location.state.transactionInfo;
-                // const salerate = customer.salePrice.length === 0 ? false : true;
 
                 this.setState({
                     startDate: transaction.transaction_date,
@@ -55,12 +53,8 @@ class EditTransaction extends Component {
                     fromitem: transaction.from_item,
                     toitem: transaction.to_item,
                     gTotal: Number(transaction.primary_quantity) * Number(transaction.rate),
-                    products: '',//customer.salePrice,
-                    // salerate: salerate
+                    products: ''
                 })
-
-                // if (salerate)
-                //     this.props.dispatch(getActiveProducts());
             }
         }
         else {
@@ -71,7 +65,6 @@ class EditTransaction extends Component {
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-
         if (nextProps.editTransactions) {
             if (nextProps.editTransactions.post === true) {
                 return {
@@ -109,14 +102,15 @@ class EditTransaction extends Component {
         transaction.transaction_date = this.state.startDate;
         transaction.primary_quantity = this.state.qty;
 
-        console.log("Transaction Details : ", transaction)
         this.props.dispatch(updateTransaction(transaction));
 
+        this.setState({
+            redirect: true
+        })
     }
 
     handleInputTaction = (event) => {
         this.setState({ taction: event.target.value })
-        // this.props.dispatch(getStockProducts())
         this.props.dispatch(getActiveProducts())
     }
 
@@ -245,7 +239,6 @@ class EditTransaction extends Component {
                 return (
                     <select required onChange={this.handleInputTtype} className="form-control" id="ttype" required>
                         <option defaultValue={this.state.ttype}>Other Expense</option>
-                        <option value="Other Expense">Other Expense</option>
                     </select>
                 )
             }
@@ -275,6 +268,7 @@ class EditTransaction extends Component {
                 return (
                     <select required onChange={this.handleInputTaction} className="form-control" id="taction" required>
                         <option defaultValue={this.state.taction} >{this.state.taction}</option>
+
                         <option value="Pay Salary" >Pay Salary</option>
                         <option value="Fuel Cost">Fuel Cost</option>
                         <option value="Vehicle Maintenance">Vehicle Maintenance</option>
@@ -561,7 +555,7 @@ class EditTransaction extends Component {
 
 
         if (this.state.redirect === true) {
-            this.props.history.push('/customers')
+            this.props.history.push('/transactions')
         }
 
         return (
