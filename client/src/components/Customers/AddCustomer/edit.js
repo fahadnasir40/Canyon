@@ -202,19 +202,12 @@ class EditCustomer extends Component {
     event.preventDefault();
 
     let customer = this.props.location.state.customerInfo;
-<<<<<<< HEAD
-    let newList = this.state.products;
-    this.state.products.forEach(element => {
-      if (element._id === '') {
-        newList.splice(this.state.products.indexOf(element), 1);
-=======
 
 
     let addressFound = false;
     this.state.address.forEach(element => {
       if (element.name.length > 0) {
         addressFound = true;
->>>>>>> c5e8d80ddb8a833f5f6c60354167bea7f86ab179
       }
     })
 
