@@ -3,7 +3,7 @@ import Sidebar from '../Sidebar/sidebar'
 import Header from '../Header/header'
 import Footer from '../Footer/footer'
 import Content from './Content/content'
-import { getSuppliers, deleteSupplier, updateSupplier,clearNewSupplier } from '../../actions'
+import { getSuppliers, deleteSupplier, updateSupplier, clearNewSupplier } from '../../actions'
 
 import Swal from 'sweetalert2'
 import { connect } from 'react-redux'
@@ -15,7 +15,7 @@ class Suppliers extends Component {
         redirect: false,
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.dispatch(getSuppliers());
     }
 
@@ -32,31 +32,31 @@ class Suppliers extends Component {
     }
 
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.props.dispatch(clearNewSupplier());
     }
 
-    deleteAlert = (supplier) => {
+    // deleteAlert = (supplier) => {
 
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.value) {
-                this.props.dispatch(deleteSupplier(supplier._id))
-            }
-        })
-    }
+    //     Swal.fire({
+    //         title: 'Are you sure?',
+    //         text: "You won't be able to revert this!",
+    //         icon: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonColor: '#3085d6',
+    //         cancelButtonColor: '#d33',
+    //         confirmButtonText: 'Yes, delete it!'
+    //     }).then((result) => {
+    //         if (result.value) {
+    //             this.props.dispatch(deleteSupplier(supplier._id))
+    //         }
+    //     })
+    // }
 
     static getDerivedStateFromProps(nextProps, prevState) {
 
         if (nextProps.editSupplier === true) {
-                    
+
             Swal.fire({
                 position: 'center',
                 icon: 'success',
@@ -93,7 +93,7 @@ class Suppliers extends Component {
                         <div className="custom-dashboard mt-5">
                             {
                                 this.props.suppliersList ?
-                                    <Content key={this.props.bar} {...this.props} deleteSupplier={this.deleteAlert} changeStatus={this.changeStatus} />
+                                    <Content key={this.props.bar} {...this.props} changeStatus={this.changeStatus} />
                                     : null
                             }
                             <Footer />

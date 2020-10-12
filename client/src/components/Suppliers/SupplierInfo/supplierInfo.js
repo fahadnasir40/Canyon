@@ -432,7 +432,6 @@ class supplierInfo extends Component {
 }
 
 function mapStateToProps(state) {
-    console.log("State Recieved", state)
     return {
         purchaseDetails: state.supplier.purchaseDetails,
         editSupplier: state.supplier

@@ -26,7 +26,6 @@ class EditProduct extends Component {
         if (this.props.location.state) {
             if (this.props.location.state.productInfo) {
                 let product = this.props.location.state.productInfo;
-                console.log("Product", product);
                 this.setState({
                     name: product.name,
                     sku: product.sku,

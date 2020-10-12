@@ -26,7 +26,6 @@ class Login extends Component {
 
     static getDerivedStateFromProps(nextProps, prevState) {
         if (nextProps.user.login) {
-            console.log(nextProps.user.login)
             if (nextProps.user.login.isAuth && nextProps.user.login.role == 'worker') {
                 nextProps.history.push('/orders')
             }
@@ -51,21 +50,6 @@ class Login extends Component {
             }
         }
     }
-
-    // componentDidMount(){
-    //     console.log("Component Did Mount Called");
-    //     console.log("Did mount props",this.props.location.redirect);
-    //     if(this.props.location.redirect){
-    //         console.log("Recieving Location");
-
-    //         this.setState({
-    //             redirectMessage: this.props.location.redirect.message
-    //         })
-    //         // if(!nextProps.location.redirect){
-    //         //     nextProps.location.redirect.message = this.props.location.redirect.message;
-    //         // }
-    //     }
-    // }
 
     submitForm = (e) => {
         e.preventDefault();
@@ -110,10 +94,6 @@ class Login extends Component {
                                                     <a className="link link-primary link-sm" href="#">Forgot Code?</a>
                                                 </div>
                                                 <div className="form-control-wrap">
-                                                    {/* <a href="#" className="form-icon form-icon-right passcode-switch" data-target="password">
-                                                    <em className="passcode-icon icon-show icon ni ni-eye"></em>
-                                                    <em className="passcode-icon icon-hide icon ni ni-eye-off"></em>
-                                                </a> */}
                                                     <input type="password" value={this.state.password} onChange={this.handleInputPassword} className="form-control form-control-lg" id="password" placeholder="Enter your password" />
                                                 </div>
                                             </div>
@@ -181,15 +161,6 @@ class Login extends Component {
             </div>
         )
     }
-
-    // static getDerivedStateFromError(error) {
-    //     // Update state so the next render will show the fallback UI.
-    //     return { hasError: true };
-    // }
-
-    // componentDidCatch(error, errorInfo) {
-    //     console.log("Error Found",error,errorInfo);
-    // }
 
     render() {
         let user = this.props.user;

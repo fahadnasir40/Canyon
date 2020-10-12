@@ -115,15 +115,33 @@ class EditSupplier extends Component {
 
     event.preventDefault();
 
-    let supplier = this.props.location.state.supplierInfo;
+    let addressFound = false;
+    this.state.address.forEach(element => {
+      if (element.name.length > 0) {
+        addressFound = true;
+      }
+    })
 
-    supplier.name = this.state.name;
-    supplier.email = this.state.email;
-    supplier.phone = this.state.phone;
-    supplier.address = this.state.address;
-    supplier.brand = this.state.brand;
+    if (!addressFound) {
+      this.setState({
+        error: "Address is required."
+      })
+    }
+    else if (!this.state.name) {
+      this.setState({ error: 'Name is required.' })
+    }
+    else {
 
-    this.props.dispatch(updateSupplier(supplier));
+      let supplier = this.props.location.state.supplierInfo;
+
+      supplier.name = this.state.name;
+      supplier.email = this.state.email;
+      supplier.phone = this.state.phone;
+      supplier.address = this.state.address;
+      supplier.brand = this.state.brand;
+
+      this.props.dispatch(updateSupplier(supplier));
+    }
   }
 
   componentWillUnmount() {

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { updateUser, changePassword } from '../../../../actions'
+import { changeUser, changePassword, changeUserPassword, clearUser } from '../../../../actions'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom';
-import axios from 'axios'
 import $ from 'jquery'
+import Swal from 'sweetalert2'
 import DatePicker from 'react-datepicker';
 import Moment from 'react-moment';
 class UserProfileContent extends Component {
@@ -28,22 +28,6 @@ class UserProfileContent extends Component {
         logout: false
     }
 
-    static getDerivedStateFromProps(nextProps, prevState) {
-        if (!prevState.name) {
-            if (nextProps.profile) {
-                return {
-                    id: nextProps.profile.id,
-                    email: nextProps.profile.email,
-                    name: nextProps.profile.name,
-                    dob: nextProps.profile.dob,
-                    address: nextProps.profile.address,
-                    phone: nextProps.profile.phone,
-                    city: nextProps.profile.city,
-                }
-            }
-        }
-        return null;
-    }
     setValidated(value) {
         this.setState({
             validated: value
@@ -87,65 +71,36 @@ class UserProfileContent extends Component {
 
     submitForm = (event) => {
 
-        // const form = event.currentTarget;
-
         event.preventDefault();
 
         this.setValidated(true);
 
-        // e.preventDefault();
-
-        this.props.dispatch(updateUser({
-            id: this.state.id,
+        this.props.dispatch(changeUser({
+            _id: this.state.id,
             name: this.state.name,
             dob: this.state.dob,
             address: this.state.address,
             phone: this.state.phone,
             city: this.state.city,
+            modifiedBy: this.props.user.login.id
         }))
-
-        window.location.reload(false);
-        // // perform all neccassary validations
-        // if (this.state.password !== this.state.cpassword) {
-        //     this.setState({error:'Passwords does not match'})
-        // } else {
-        //     // make API call        
-        //     this.setState({error:''});
-
-
-
     }
 
 
 
     submitPasswordChange = (event) => {
 
-        // const form = event.currentTarget;
-
         event.preventDefault();
 
-        // this.setValidated(true);
-
-        // e.preventDefault();
-
-        // this.props.dispatch(updateUser({
-        //     id:this.state.id,
-        //     name:this.state.name,
-        //     dob: this.state.dob,
-        //     address:this.state.address,
-        //     phone:this.state.phone,
-        //     city:this.state.city,
-        // }))
-
-        // window.location.reload(false);
         // perform all neccassary validations
         if (this.state.newPassword !== this.state.confirmPassword) {
             this.setState({ pwmessage: 'Confirm password does not match with new password' })
         } else {
             // make API call        
-            this.props.dispatch(changePassword({
-                oldPassword: this.state.oldPassword,
-                newPassword: this.state.newPassword
+            this.props.dispatch(changeUserPassword({
+                _id: this.state.id,
+                password: this.state.newPassword,
+                modifiedBy: this.props.user.login.id
             }));
             this.setState({
                 pwstatus: '',
@@ -160,37 +115,59 @@ class UserProfileContent extends Component {
     }
 
 
-    UNSAFE_componentWillReceiveProps(nextProps) {
+    static getDerivedStateFromProps(nextProps, prevState) {
 
-        if (this.props !== nextProps) {
+        if (nextProps.user.userUpdate) {
+            if (nextProps.user.userUpdate) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'User updated successfully',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(function () {
+                    nextProps.dispatch(clearUser())
 
-            if (nextProps.changePassword) {
-                if (!nextProps.changePassword.success) {
-                    this.setState({
-                        pwstatus: false,
-                        pwmessage: nextProps.changePassword.message
-                    })
+                });
+                return {
+                    redirect: true
                 }
-                else {
-                    this.setState({
-                        pwstatus: true,
-                        pwmessage: nextProps.changePassword.message
-                    })
-                    // this.signOut();
-                }
-            }
-            if (nextProps.profile.data) {
-                this.setState({
-                    id: nextProps.profile.data.id,
-                    email: nextProps.profile.data.email,
-                    name: nextProps.profile.data.name,
-                    dob: nextProps.profile.data.dob,
-                    address: nextProps.profile.data.address,
-                    phone: nextProps.profile.data.phone,
-                    city: nextProps.profile.data.city,
-                })
             }
         }
+
+        if (!prevState.id) {
+
+
+            if (nextProps.profile && nextProps.changePassword) {
+                let success = false;
+                if (nextProps.changePassword.success) {
+                    success = true;
+                }
+                return {
+                    id: nextProps.profile._id,
+                    email: nextProps.profile.email,
+                    name: nextProps.profile.name,
+                    dob: nextProps.profile.dob,
+                    address: nextProps.profile.address,
+                    phone: nextProps.profile.phone,
+                    city: nextProps.profile.city,
+                    pwstatus: success,
+                    pwmessage: nextProps.changePassword.message
+                }
+            }
+            else if (nextProps.profile) {
+                return {
+                    id: nextProps.profile._id,
+                    email: nextProps.profile.email,
+                    name: nextProps.profile.name,
+                    dob: nextProps.profile.dob,
+                    address: nextProps.profile.address,
+                    phone: nextProps.profile.phone,
+                    city: nextProps.profile.city,
+                }
+            }
+        }
+        return null;
     }
 
     getInitials = (name) => {
@@ -202,7 +179,6 @@ class UserProfileContent extends Component {
     }
 
     showSideBar = () => {
-        console.log("show")
         if (!$('#sidebarUserProfile').hasClass('content-active')) {
             console.log("Adding");
             $('#sidebarUserProfile').addClass('content-active')
@@ -348,7 +324,13 @@ class UserProfileContent extends Component {
                                                     <ul className="link-list-menu nav nav-tabs">
                                                         <li><a data-toggle="tab" href="#personalTab" className="active"><em className="icon ni ni-user-fill-c"></em><span>Personal Infomation</span></a></li>
 
-                                                        <li><a data-toggle="tab" href="#settingsTab" ><em className="icon ni ni-lock-alt-fill"></em><span>Security Settings</span></a></li>
+                                                        {
+                                                            this.props.user.login.role === 'administrator' && user.role !== 'administrator' ?
+                                                                <li><a data-toggle="tab" href="#settingsTab" ><em className="icon ni ni-lock-alt-fill"></em><span>Security Settings</span></a></li>
+                                                                : this.props.user.login.role === 'supervisor' && user.role === 'worker' ?
+                                                                    <li><a data-toggle="tab" href="#settingsTab" ><em className="icon ni ni-lock-alt-fill"></em><span>Security Settings</span></a></li>
+                                                                    : null
+                                                        }
                                                     </ul>
                                                 </div>
                                             </div>
@@ -363,7 +345,7 @@ class UserProfileContent extends Component {
 
             {/* <!-- @@ Profile Edit Modal @e --> */}
             {
-                this.props.user.login.role !== 'worker' ?
+                (this.props.user.login.role === 'administrator' || (this.props.user.login.role === 'supervisor' && user.role === 'worker')) && this.props.user.login.role !== user.role ?
                     <div className="modal fade" tabIndex="-1" role="dialog" id="profile-edit">
                         <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
                             <div className="modal-content">
@@ -470,16 +452,6 @@ class UserProfileContent extends Component {
                             <h5 className="modal-title">Change Password</h5>
                         </div>
                         <div className="modal-body modal-body-md">
-
-                            <div className="row  gy-4">
-                                <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label className="form-label" htmlFor="old-password">Old Password</label>
-                                        <input type="password" required value={this.state.oldPassword} onChange={this.handleInputOldPassword} className="form-control form-control-lg" id="old-password" placeholder="Enter old password" />
-                                    </div>
-                                </div>
-                            </div>
-
                             <div className="row mt-4 gy-4">
                                 <div className="col-md-6">
                                     <div className="form-group">
@@ -519,13 +491,12 @@ class UserProfileContent extends Component {
     render() {
         let user = this.props.profile;
 
-        if (this.state.logout === true) {
+        if (this.state.redirect === true) {
             $('body').removeClass('modal-open');
             $('#change-password-modal').hide();
             $('.modal-backdrop').remove();
             return <Redirect to={{
-                pathname: '/',
-                redirect: { message: this.state.pwmessage }
+                pathname: '/users',
             }} />
         }
 
@@ -537,10 +508,8 @@ class UserProfileContent extends Component {
 
 
 function mapStateToProps(state) {
-
     return {
-        register: state.user.profile,
-        changePassword: state.user.changePassword
+        userUpdated: state.user.success
     }
 }
 

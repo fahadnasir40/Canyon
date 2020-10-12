@@ -7,7 +7,7 @@ import { clearPurchase, getPurchaseProduct, getSupplier } from '../../actions'
 import { connect } from 'react-redux'
 import Moment from 'react-moment'
 import ReactToPrint from 'react-to-print'
-
+import NumberFormat from 'react-number-format'
 class PurchaseInvoice extends Component {
     state = {
         purchase: '',
@@ -154,7 +154,7 @@ class PurchaseInvoice extends Component {
                                                             <th>Name</th>
                                                             <th>Price</th>
                                                             <th>Qty</th>
-                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items'  || purchase.status === 'Returned Items Pending' ?
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' || purchase.status === 'Returned Items Pending' ?
                                                                 <th>Returned Qty</th>
                                                                 : null}
                                                             <th>Amount</th>
@@ -168,7 +168,7 @@ class PurchaseInvoice extends Component {
                                                                     <td>{item.pname}</td>
                                                                     <td>{item.pprice}</td>
                                                                     <td>{item.pqty}</td>
-                                                                    {purchase.status === 'Returned' || purchase.status === 'Returned Items'  || purchase.status === 'Returned Items Pending'?
+                                                                    {purchase.status === 'Returned' || purchase.status === 'Returned Items' || purchase.status === 'Returned Items Pending' ?
                                                                         <td>{item.returnQty}</td>
                                                                         : null}
                                                                     <td>{item.ptotal}</td>
@@ -178,18 +178,39 @@ class PurchaseInvoice extends Component {
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
-                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items'  || purchase.status === 'Returned Items Pending' ?
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' || purchase.status === 'Returned Items Pending' ?
                                                                 <td colSpan="4"></td> : <td colSpan="2"></td>}
-                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items'  || purchase.status === 'Returned Items Pending' ?
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' || purchase.status === 'Returned Items Pending' ?
                                                                 <td colSpan="1">Subtotal</td> : <td colSpan="2">Subtotal</td>}
-                                                            <td>{purchase.totalAmount}</td>
+                                                            <td><NumberFormat value={purchase.totalAmount} displayType={'text'} thousandSeparator={true} /></td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' || purchase.status === 'Returned Items Pending' ?
+                                                                <td colSpan="4"></td> : <td colSpan="2"></td>}
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' || purchase.status === 'Returned Items Pending' ?
+                                                                <td colSpan="1"><strong>Grand Total</strong></td> : <td colSpan="2"><strong>Grand Total</strong></td>}
+                                                            <td>Rs. <NumberFormat value={purchase.totalAmount} displayType={'text'} thousandSeparator={true} /></td>
                                                         </tr>
                                                         <tr>
-                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' || purchase.status === 'Returned Items Pending'?
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' || purchase.status === 'Returned Items Pending' ?
                                                                 <td colSpan="4"></td> : <td colSpan="2"></td>}
-                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items'  || purchase.status === 'Returned Items Pending'? 
-                                                                <td colSpan="1"><strong>Grand Total</strong></td> : <td colSpan="2"><strong>Grand Total</strong></td>}
-                                                            <td>Rs. {purchase.totalAmount}</td>
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' || purchase.status === 'Returned Items Pending' ?
+                                                                <td colSpan="1"><strong>Amount Paid</strong></td> : <td colSpan="2"><strong>Amount Paid</strong></td>}
+                                                            <td>Rs. <NumberFormat value={purchase.paidAmount} displayType={'text'} thousandSeparator={true} /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' || purchase.status === 'Returned Items Pending' ?
+                                                                <td colSpan="4"></td> : <td colSpan="2"></td>}
+                                                            {purchase.status === 'Returned' || purchase.status === 'Returned Items' || purchase.status === 'Returned Items Pending' ?
+                                                                <td colSpan="1"><strong>Due</strong></td> : <td colSpan="2"><strong>Due</strong></td>}
+                                                            {
+                                                                purchase.totalAmount - purchase.paidAmount > 0 ?
+                                                                    <td><strong className="text-danger fw-bold">Rs. <NumberFormat value={Number(purchase.totalAmount) - Number(purchase.paidAmount)} displayType={'text'} thousandSeparator={true} /></strong> </td>
+                                                                    :
+                                                                    <td><span> Nil. </span> </td>
+                                                            }
+
                                                         </tr>
                                                     </tfoot>
                                                 </table>

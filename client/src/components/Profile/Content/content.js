@@ -197,9 +197,7 @@ class ProfileContent extends Component {
     }
 
     showSideBar = () => {
-        console.log("show")
         if (!$('#sidebarUserProfile').hasClass('content-active')) {
-            console.log("Adding");
             $('#sidebarUserProfile').addClass('content-active')
         }
     }
