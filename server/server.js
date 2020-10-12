@@ -432,6 +432,7 @@ app.get('/api/getSaleProduct', auth, (req, res) => {
         if (doc.productDetails.length > 0)
             Product.find({ _id: { $in: doc.productDetails } }).select('_id name sku stock brand uom').exec((err, products) => {
                 if (err) return res.status(400).send(err);
+                console.log("object", products);
                 res.status(200).send({ doc, products });
             });
     })
@@ -692,55 +693,70 @@ app.post('/api/addPurchase', auth, (req, res) => {
 
 app.post('/api/addSale', auth2, (req, res) => {
 
+    const id = shortid.generate();
+    if (shortid.isValid(id)) {
+        shortid.worker(1);
+        req.body._id = id;
+    }
+
     let products = req.body.productDetails;
     let productTotalQty = 0;
-    let retProduct = 0;
-    let delProduct = 0;
-    let BottleswithCustomer = 0;
 
     products.forEach(element => {
         if (element.secpaid)
             productTotalQty += Number(element.secpaid);
-        if (element.customerBottles)
-            BottleswithCustomer += Number(element.customerBottles);
-        if (element.rqty)
-            retProduct += Number(element.rqty);
-        if (element.dqty)
-            delProduct -= Number(element.dqty);
     })
 
     const sale = new Sale(req.body);
-
+    // console.log("Customer Bottles : ", req.body.bottlesWithCustomer)
     sale.save((error, sale) => {
         if (error) {
+            console.log("Error", error);
             return res.status(400).send(error);
         }
 
         updateWallet(sale);
         async function updateWallet(sale) {
             const session = await Sale.startSession();
-            console.log("Server : ", BottleswithCustomer);
             session.startTransaction();
             try {
                 Customer.findByIdAndUpdate(sale.customerId, {
-                    $inc: { customerLimit: productTotalQty, customerBottles: BottleswithCustomer }
+                    $inc: { customerLimit: productTotalQty, customerBottles: req.body.bottlesWithCustomer }
                 }, (error) => {
                     if (error) {
-                        console.log("Error update stock", error);
+                        console.log("Error update customer", error);
                     }
                 });
 
                 await products.forEach(item => {
-
+                    // console.log("Item", item, item.rqty);
                     Product.findByIdAndUpdate(item._id, {
-                        $inc: { stock: item.rqty, stock: -item.dqty }
+                        $inc: { stock: (item.rqty - item.dqty) }
 
                     }, (error) => {
                         if (error) {
                             console.log("Error update stock", error);
                         }
+                        console.log("Item Updated");
                     })
                 });
+
+                const trans = {
+                    transaction_date: new Date(),
+                    primary_quantity: 0,
+                    rate: req.body.totalPaidAmount,
+                    transaction_source: 'Customer',
+                    transaction_type: 'Sale',
+                    transaction_action: 'Sale Added',
+                    primary_quantity: 0,
+                    transaction_value: req.body.customerName,
+                    transaction_value_id: sale._id,
+                    comments: req.body.description,
+                    addedBy: req.user._id
+                };
+
+                const transaction = new Transaction(trans);
+                await transaction.save();
 
                 await session.commitTransaction();
                 session.endSession();
