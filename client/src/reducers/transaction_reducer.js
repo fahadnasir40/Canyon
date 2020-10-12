@@ -7,7 +7,11 @@ export default function (state = {}, action) {
         case 'GET_TRANSACTIONS':
             return { ...state, transactionList: action.payload }
         case 'UPDATE_TRANSACTION':
-            return { ...state, transactionList: action.payload }
+            return {
+                ...state,
+                post: action.payload.success,
+                transaction: action.payload.doc
+            }
         case 'GET_TRANSACTION_DETAILS':
             return { ...state, transactionList: action.payload }
         case 'DELETE_TRANSACTION':

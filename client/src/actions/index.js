@@ -238,11 +238,11 @@ export function getCustomerDetails(_id) {
 export function getTransactionDetails(_id) {
     const request = axios.get(`/api/getTransactionDetails?id=${_id}`)
         .then(response => {
-            console.log("transaction Details: ", response.data)
+            // console.log("transaction Details: ", response.data)
             return response.data;
         })
         .catch(error => {
-            console.log("Error transaction Details: ", error)
+            // console.log("Error transaction Details: ", error)
         });
 
     return {
@@ -624,7 +624,7 @@ export function clearCustomerList() {
 }
 
 export function clearDashboard() {
-    console.log("Component Will Unmount Called")
+    // console.log("Component Will Unmount Called")
     return {
         type: 'CLEAR_DASHBOARD',
         payload: {}
@@ -731,9 +731,9 @@ export function updateSupplier(data) {
 
 //get single transaction
 export function updateTransaction(data) {
-    const request = axios.get(`/api/transaction_update`, data)
+    const request = axios.post(`/api/transaction_update`, data)
         .then(response => response.data);
-    console.log("Data Updated Successfully", data)
+    // console.log("Data Updated Successfully", data)
     return {
         type: 'UPDATE_TRANSACTION',
         payload: request
