@@ -32,22 +32,36 @@ class Content extends Component {
                         </div>
                     </div>
                     <div className="nk-tb-col">
-                        <Link to={{
-                            pathname: "/userInfo",
-                            state: {
-                                userInfo: user
-                            }
-                        }}>
+                        {this.props.user.login.id !== user._id ?
+                            <Link to={{
+                                pathname: "/userInfo",
+                                state: {
+                                    userInfo: user
+                                }
+                            }}>
+                                <div className="user-card">
+                                    <div className={"user-avatar " + this.getCustomBg()}>
+                                        <span>{this.getInitials(user.name)}</span>
+                                    </div>
+                                    <div className="user-info">
+                                        <span className="tb-lead ccap">{user.name}<span className="dot dot-success d-md-none ml-1"> </span></span>
+                                        <span>{user.email}</span>
+                                    </div>
+                                </div>
+                            </Link>
+                            :
                             <div className="user-card">
                                 <div className={"user-avatar " + this.getCustomBg()}>
                                     <span>{this.getInitials(user.name)}</span>
                                 </div>
                                 <div className="user-info">
-                                    <span className="tb-lead ccap">{user.name}<span className="dot dot-success d-md-none ml-1"> </span></span>
+                                    <span className="tb-lead ccap">{user.name} <span className="text-muted"> (You)</span><span className="dot dot-success d-md-none ml-1"> </span></span>
                                     <span>{user.email}</span>
                                 </div>
                             </div>
-                        </Link>
+
+                        }
+
                     </div>
                     <div className="nk-tb-col tb-col-mb">
                         <span className="tb-status ccap">{user.role}</span>
@@ -64,30 +78,43 @@ class Content extends Component {
                     <div className="nk-tb-col tb-col-md">
                         <span className="tb-status text-success">Active</span>
                     </div>
-                    <div className="nk-tb-col nk-tb-col-tools">
-                        <ul className="nk-tb-actions gx-1">
+                    {
+                        this.props.user.login.id != user._id ?
+                            <div className="nk-tb-col nk-tb-col-tools">
+                                <ul className="nk-tb-actions gx-1">
 
-                            <li>
-                                <div className="drodown">
-                                    <a href="#" className="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
-                                    <div className="dropdown-menu dropdown-menu-right">
-                                        <ul className="link-list-opt no-bdr">
-                                            <li>  <Link to={{
-                                                pathname: "/userInfo",
-                                                state: {
-                                                    userInfo: user
-                                                }
-                                            }}
-                                            ><em className="icon ni ni-eye"></em><span>View Details</span></Link></li>
+                                    <li>
 
-                                            <li className="divider"></li>
-                                            <li><a href="#"><em className="icon ni ni-na"></em><span>Suspend User</span></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                                        <div className="drodown">
+                                            <a href="#" className="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
+                                            <div className="dropdown-menu dropdown-menu-right">
+                                                <ul className="link-list-opt no-bdr">
+                                                    <li>  <Link to={{
+                                                        pathname: "/userInfo",
+                                                        state: {
+                                                            userInfo: user
+                                                        }
+                                                    }}
+                                                    ><em className="icon ni ni-eye"></em><span>View Details</span></Link></li>
+
+                                                    <li className="divider"></li>
+                                                    {
+
+                                                        this.props.user.login.role === 'supervisor' && user.role === 'worker' ?
+                                                            <li><a href="#"><em className="icon ni ni-na"></em><span>Suspend User</span></a></li>
+                                                            : this.props.user.login.role === 'administrator' && user.role != 'adminsitrator' ?
+                                                                <li><a href="#"><em className="icon ni ni-na"></em><span>Suspend User</span></a></li>
+                                                                : null
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            : null
+                    }
                 </div>
             ));
         }
@@ -100,7 +127,6 @@ class Content extends Component {
     }
 
     render() {
-
         return (
             <div>
                 <div className="nk-content ml-md-5 ">

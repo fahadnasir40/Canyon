@@ -158,7 +158,8 @@ app.get('/api/getDashboard', auth, (req, res) => {
                                 const anAsyncFunction = async item => {
                                     item.productDetails.forEach((element, key) => {
                                         if (!productsList.find(x => x._id === element._id)) {
-                                            productsList.push({ _id: element._id, totalAmount: element.ptotal, count: (element.dqty - element.rqty) })
+                                            if ((element.dqty - element.rqty) >= 0)
+                                                productsList.push({ _id: element._id, totalAmount: element.ptotal, count: (element.dqty - element.rqty) })
                                         }
                                         else {
                                             const index = productsList.indexOf(productsList.find(x => x._id === element._id));

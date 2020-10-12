@@ -21,7 +21,7 @@ class Users extends Component {
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
-                            <Content userList={this.props.userList} />
+                            <Content {...this.props} userList={this.props.userList} />
                             <Footer />
                         </div>
                     </div>

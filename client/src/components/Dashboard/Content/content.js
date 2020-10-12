@@ -45,9 +45,7 @@ class DashboardContent extends Component {
                 if (moment(element.createdAt).toDate().getDate() === (i + 1)) {
                     const elementDate = moment(element.createdAt);
                     if (currentDate.getMonth() == elementDate.toDate().getMonth()) {
-
                         const days = elementDate.diff(new Date(), 'days')
-                        console.log("Days", days, i, elementDate)
                         data[Math.abs(days)] += element.rate;
                     }
                     else
@@ -55,7 +53,6 @@ class DashboardContent extends Component {
                 }
             });
         }
-        console.log("List Data", data)
         return data.reverse();
     }
 
@@ -195,6 +192,17 @@ class DashboardContent extends Component {
 
     bgArray = ['bg-purple-dim', 'bg-azure-dim', 'bg-success-dim', 'bg-warning-dim', 'bg-primary-dim'];
     prArray = ['bg-warning-dim', 'bg-success-dim', 'bg-azure-dim', 'bg-purple-dim', 'bg-primary-dim'];
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props != prevProps) {
+            if (this.props.topProducts) {
+                this.props.topProducts.data.sort(function (a, b) {
+                    return a.totalAmount - b.totalAmount;
+                });
+
+            }
+        }
+    }
 
     render() {
         let data = this.props.data;
