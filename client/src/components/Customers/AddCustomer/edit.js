@@ -25,10 +25,11 @@ class EditCustomer extends Component {
 
   componentDidMount() {
 
+    console.log("did mount", this.props.location.state)
     if (this.props.location.state) {
       if (this.props.location.state.customerInfo) {
         let customer = this.props.location.state.customerInfo;
-        const salerate = customer.salePrice.length === 0? false: true;
+        const salerate = customer.salePrice.length === 0 ? false : true;
 
         this.setState({
           name: customer.name,
@@ -41,7 +42,7 @@ class EditCustomer extends Component {
           salerate: salerate
         })
 
-        if(salerate) 
+        if (salerate)
           this.props.dispatch(getActiveProducts());
       }
     }
@@ -69,7 +70,7 @@ class EditCustomer extends Component {
     return null;
   }
 
-  
+
   componentWillUnmount() {
     this.props.dispatch(clearNewCustomer());
   }
@@ -107,7 +108,7 @@ class EditCustomer extends Component {
     if (event.target.value != -1) {
       const newProduct = this.state.products.map((product, sidx) => {
         if (id !== sidx) return product;
-        return { ...product, _id: this.props.productsList[event.target.value]._id, rate: Number(this.props.productsList[event.target.value].price.total)};
+        return { ...product, _id: this.props.productsList[event.target.value]._id, rate: Number(this.props.productsList[event.target.value].price.total) };
       });
 
       this.setState({ products: newProduct });
@@ -120,10 +121,10 @@ class EditCustomer extends Component {
   };
 
   handleProductRateChange = id => event => {
-    if (event.target.value>= 0) {
+    if (event.target.value >= 0) {
       const newProduct = this.state.products.map((product, sidx) => {
         if (id !== sidx) return product;
-        return { ...product, rate: Number(event.target.value)};
+        return { ...product, rate: Number(event.target.value) };
       });
 
       this.setState({ products: newProduct });
@@ -166,8 +167,8 @@ class EditCustomer extends Component {
     if (value === true && !this.props.productsList) {
       this.props.dispatch(this.props.dispatch(getActiveProducts()))
     }
-    else if( value === false){
-      this.setState({products:[]})
+    else if (value === false) {
+      this.setState({ products: [] })
     }
   }
 
@@ -199,12 +200,12 @@ class EditCustomer extends Component {
     // const form = event.currentTarget;
 
     event.preventDefault();
-    
+
     let customer = this.props.location.state.customerInfo;
     let newList = this.state.products;
     this.state.products.forEach(element => {
-      if(element._id===''){
-          newList.splice(this.state.products.indexOf(element),1);
+      if (element._id === '') {
+        newList.splice(this.state.products.indexOf(element), 1);
       }
     })
 
@@ -318,7 +319,7 @@ class EditCustomer extends Component {
                   </div>
                 </div>
                 <div className="col-lg-4 mt-4 text-right">
-                  <div class="custom-control custom-control-sm custom-checkbox">
+                  <div className="custom-control custom-control-sm custom-checkbox">
                     <input
                       type="checkbox"
                       className="custom-control-input"
@@ -421,7 +422,7 @@ class EditCustomer extends Component {
                                       {
                                         this.props.productsList ?
                                           this.props.productsList.map((product, key) => {
-                                            return <option key={key} value={key} selected={item._id === product._id? true: false} disabled={this.state.products.find(x => x._id === product._id) ? true : null} className="ccap" >{product.name} ({product.brand})</option>;
+                                            return <option key={key} value={key} selected={item._id === product._id ? true : false} disabled={this.state.products.find(x => x._id === product._id) ? true : null} className="ccap" >{product.name} ({product.brand})</option>;
                                           })
                                           : null
                                       }

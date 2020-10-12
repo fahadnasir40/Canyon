@@ -235,6 +235,22 @@ export function getCustomerDetails(_id) {
     }
 }
 
+export function getTransactionDetails(_id) {
+    const request = axios.get(`/api/getTransactionDetails?id=${_id}`)
+        .then(response => {
+            console.log("transaction Details: ", response.data)
+            return response.data;
+        })
+        .catch(error => {
+            console.log("Error transaction Details: ", error)
+        });
+
+    return {
+        type: 'GET_TRANSACTION_DETAILS',
+        payload: request
+    }
+}
+
 
 export function getProducts(
     start = 0,
@@ -593,6 +609,13 @@ export function clearCustomer() {
     }
 }
 
+export function clearTransaction() {
+    return {
+        type: 'CLEAR_TRANSACTION',
+        payload: {}
+    }
+}
+
 export function clearCustomerList() {
     return {
         type: 'CLEAR_CUSTOMER_LIST',
@@ -706,8 +729,9 @@ export function updateSupplier(data) {
     }
 }
 
+//get single transaction
 export function updateTransaction(data) {
-    const request = axios.post(`/api/transaction_update`, data)
+    const request = axios.get(`/api/transaction_update`, data)
         .then(response => response.data);
 
     return {

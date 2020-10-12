@@ -8,6 +8,8 @@ export default function (state = {}, action) {
             return { ...state, transactionList: action.payload }
         case 'UPDATE_TRANSACTION':
             return { ...state, transactionList: action.payload }
+        case 'GET_TRANSACTION_DETAILS':
+            return { ...state, transactionList: action.payload }
         case 'DELETE_TRANSACTION':
             return {
                 ...state,

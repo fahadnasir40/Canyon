@@ -967,6 +967,17 @@ app.post('/api/customer_update', (req, res) => {
     });
 })
 
+app.post('/api/transaction_update', (req, res) => {
+    Transaction.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.json({
+            success: true,
+            doc
+        })
+    });
+})
+
+
 app.post("/api/user_update", (req, res) => {
     User.findByIdAndUpdate(req.body.id, req.body, { new: true }, (err, user) => {
         if (err) return res.status(400).send(err);
