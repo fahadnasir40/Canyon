@@ -5,7 +5,7 @@ import Footer from "../../Footer/footer";
 import { savePurchase, clearPurchase } from '../../../actions';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { getActiveSuppliers, getActiveProducts, saveTransaction } from '../../../actions';
+import { getActiveSuppliers, getActiveProducts } from '../../../actions';
 import PurchaseDetail from './purchaseDetails';
 import Moment from 'react-moment';
 import DatePicker from "react-datepicker";
@@ -84,6 +84,13 @@ class AddPurchase extends Component {
                 address: this.state.suppliersList[event.target.value].address[0]
             });
         }
+        else if (this.state.suppliersList && event.target.value == -1) {
+            this.setState({
+                currentSupplier: '',
+                address: '',
+                valid: false,
+            });
+        }
     }
 
     handleInputDescription = (event) => {
@@ -154,30 +161,20 @@ class AddPurchase extends Component {
                         productDetails[index].ptotal = Number(productDetails[index].ptotal) + Number(item.totalAmount);
                     }
                     else {
-                        productDetails.push({
-                            _id: item._id,
-                            pqty: item.qty,
-                            pprice: Number(item.price.total),
-                            ptotal: item.totalAmount,
-                            pname: item.name
-                        });
+                        if (item) {
+                            productDetails.push({
+                                _id: item._id,
+                                pqty: item.qty,
+                                pprice: Number(item.price.total),
+                                ptotal: item.totalAmount,
+                                pname: item.name
+                            });
+                        }
                     }
                 });
 
 
                 purchase = { ...purchase, productDetails };
-                const transaction = {
-                    transaction_date: new Date(),
-                    primary_quantity: 0,
-                    rate: this.totalAmount,
-                    transaction_source: 'Supplier',
-                    transaction_type: 'Purchase',
-                    transaction_action: 'Purchase Added',
-                    transaction_value: this.state.currentSupplier.name,
-                    transaction_value_id: this.state.currentSupplier._id,
-                    comments: this.state.description,
-                    addedBy: this.props.user.login.id
-                };
 
                 if (this.state.request === false) {
                     this.props.dispatch(savePurchase(purchase));
@@ -193,22 +190,6 @@ class AddPurchase extends Component {
                 })
             }
         }
-    }
-
-
-    saveTransaction = () => {
-        this.props.dispatch(saveTransaction({
-            transaction_date: new Date(),
-            primary_quantity: 0,
-            rate: this.totalAmount,
-            transaction_source: 'Supplier',
-            transaction_type: 'Purchase',
-            transaction_action: 'Purchase Added',
-            transaction_value: this.state.currentSupplier.name,
-            transaction_value_id: this.state.currentSupplier._id,
-            comments: this.state.description,
-            addedBy: this.props.user.login.id
-        }))
     }
 
     renderBody = () => {

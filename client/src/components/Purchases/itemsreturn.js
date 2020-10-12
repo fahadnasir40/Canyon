@@ -9,7 +9,7 @@ class Itemsreturn extends Component {
     handleProductDropdown = (event) => {
 
         if (this.props.productsList) {
-            if (event.target.value === -1 && this.state.currentProduct) {
+            if (event.target.value == -1 && this.state.currentProduct) {
                 this.setState({ currentProduct: '', currentQuantity: '' });
                 this.props.removeSelectedItem(this.props.index);
             }
@@ -21,18 +21,18 @@ class Itemsreturn extends Component {
                 if (this.state.currentProduct)
                     this.props.removeSelectedItem(this.props.index);
                 this.props.addSelectedItem(this.props.productsList[event.target.value]);
-                this.props.updateTotalAmount(this.props.index, 1, this.props.productsList[event.target.value].price.total);
+                this.props.updateTotalAmount(this.props.index, 1, this.props.productsList[event.target.value]);
             }
         }
     }
 
     handleInputQuantity = (event) => {
-        if (event.target.value <= 100000 && event.target.value >= 0) {
+        if (event.target.value <= 100000 && event.target.value > 0) {
             if (this.state.currentProduct) {
                 this.setState({
                     currentQuantity: Number(event.target.value)
                 })
-                this.props.updateTotalAmount(this.props.index, event.target.value, this.state.currentProduct.price.total);
+                this.props.updateTotalAmount(this.props.index, event.target.value, this.state.currentProduct);
             }
         }
     }

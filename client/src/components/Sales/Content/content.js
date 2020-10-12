@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import DataTable from 'react-data-table-component';
 import Moment from 'react-moment';
 import Swal from 'sweetalert2';
+import NumberFormat from 'react-number-format'
 import $ from 'jquery'
 class Content extends Component {
 
@@ -67,7 +68,7 @@ class Content extends Component {
                     <td className="tb-odr-amount">
                         <span className="tb-odr-total">
                             {/* <span className="amount">Rs. {row.totalAmount}</span> */}
-                            <span className="amount">Rs. {this.calculateTotalAmount(row)}</span>
+                            <span className="amount">Rs. <NumberFormat value={this.calculateTotalAmount(row)} displayType={'text'} thousandSeparator={true} /> </span>
                         </span>
                         <span className="tb-odr-status d-sm-none">
                             {
@@ -154,13 +155,13 @@ class Content extends Component {
                 </div>
                 <div className="row">
                     <div className="col">
-                        <span className=" fw-medium">Items Paid Amount: </span> <span className="fw-normal">Rs. {Number(data.paidAmount)}</span>
+                        <span className=" fw-medium">Items Paid Amount: </span> <span className="fw-normal">Rs. <NumberFormat value={Number(data.paidAmount)} displayType={'text'} thousandSeparator={true} /></span>
 
                     </div>
                 </div>
                 <div className="row">
                     <div className="col">
-                        <span className=" fw-medium">Total Paid Amount: </span> <span className="fw-normal">Rs. {Number(data.paidAmount) + (Number(this.calculateTotalSecurity(data)) - Number(data.secAmount))}</span>
+                        <span className=" fw-medium">Total Paid Amount: </span> <span className="fw-normal">Rs. <NumberFormat value={Number(data.paidAmount) + (Number(this.calculateTotalSecurity(data)) - Number(data.secAmount))} displayType={'text'} thousandSeparator={true} /></span>
                     </div>
                 </div>
                 <div className="row">

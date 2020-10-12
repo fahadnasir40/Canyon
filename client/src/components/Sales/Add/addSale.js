@@ -84,6 +84,7 @@ class AddSale extends Component {
     }
 
     removeSelectedItem = (index) => {
+        // console.log("Calling")
         let itemsArray = this.state.itemsList;
 
         itemsArray.splice(index, 1);
@@ -262,12 +263,14 @@ class AddSale extends Component {
 
     calculateSecurity = (value, items, currentProduct, key) => {
         if (currentProduct.sku === "O19L" && items[key].paymethod !== 'Cash') {
+            // if (item.paymethod !== 'Cash') {
 
             const item = items.find(x => x.currentProduct.sku === 'O19L');
             const paidBottles = item.Quantityrec;
             if (value <= (items[key].excessBottles - paidBottles) && value >= 0) {
                 items[key].secpaid = Number(value) + Number(paidBottles);
                 items[key].secamount = (Number(currentProduct.price.cost_security) * (Number(items[key].excessBottles) - Number(items[key].secpaid)));
+                // console.log("Updating Sec Paid Amount", Number(currentProduct.price.cost_security) * (Number(event.target.value)))
                 this.setState({ itemsList: items, secPaidAmount: Number(currentProduct.price.cost_security) * (Number(items[key].excessBottles)) })
             }
         }
@@ -275,6 +278,7 @@ class AddSale extends Component {
             if (value <= (items[key].excessBottles) && value >= 0) {
                 items[key].secpaid = value;
                 items[key].secamount = Number(currentProduct.price.cost_security) * (Number(items[key].excessBottles) - Number(items[key].secpaid));
+                // console.log("Updating Sec Paid Amount", Number(currentProduct.price.cost_security) * (Number(event.target.value)))
                 this.setState({ itemsList: items, secPaidAmount: Number(currentProduct.price.cost_security) * (Number(items[key].excessBottles)) })
             }
         }

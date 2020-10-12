@@ -7,6 +7,7 @@ import { clearSale, getCustomer, getSaleProduct } from '../../actions'
 import { connect } from 'react-redux'
 import Moment from 'react-moment'
 import ReactToPrint from 'react-to-print'
+import NumberFormat from 'react-number-format'
 
 class SaleInvoice extends Component {
     state = {
@@ -100,28 +101,7 @@ class SaleInvoice extends Component {
                                     </div>
                                     <div className="nk-block-head-content">
                                         <Link to="/orders" className="btn btn-outline-light bg-white d-none d-sm-inline-flex mr-md-3"><em className="icon ni ni-arrow-left"></em><span>Back</span></Link>
-                                        {/* {
 
-                                            purchase.status !== 'Returned' ?
-
-                                                <Link to={{
-                                                    pathname: "/purchaseReturn",
-                                                    state: {
-                                                        purchase: this.props.purchase
-                                                    }
-                                                }} className="btn btn-outline-light bg-white d-none d-sm-inline-flex"><em className="icon ni ni-histroy"></em><span>Return Purchase</span></Link>
-                                                : null
-                                        }
-                                        {
-                                            purchase.status !== 'Returned' ?
-                                                <Link to={{
-                                                    pathname: "/purchaseReturn",
-                                                    state: {
-                                                        purchase: this.props.purchase
-                                                    }
-                                                }} className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none mr-md-3"><em className="icon ni ni-histroy"></em></Link>
-                                                : null
-                                        } */}
                                         <Link to="/orders" className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none "><em className="icon ni ni-arrow-left"></em></Link>
                                     </div>
                                 </div>
@@ -158,8 +138,6 @@ class SaleInvoice extends Component {
                                                                     this.props.customer.phone ?
                                                                         <li><em className="icon ni ni-call-fill mt-1 "></em><span>{this.props.customer.phone}</span></li>
                                                                         : null
-                                                                    // this.props.customer.customer.phone ?
-                                                                    //     : null
                                                                     : null}
                                                             </ul>
                                                         </div>
@@ -216,13 +194,13 @@ class SaleInvoice extends Component {
                                                                 <td colSpan="5"></td> : <td colSpan="4"></td>}
 
                                                             <td colSpan="1">Subtotal</td>
-                                                            <td>{sale.paidAmount}</td>
+                                                            <td> {sale.totalAmount}</td>
                                                         </tr>
                                                         {this.state.totalSecurity > 0 ?
                                                             <tr>
                                                                 <td colSpan="5"></td>
                                                                 <td colSpan="1">Security</td>
-                                                                <td>{Math.trunc(this.state.totalSecurity)}</td>
+                                                                <td> <NumberFormat value={Math.trunc(this.state.totalSecurity)} displayType={'text'} thousandSeparator={true} /></td>
                                                             </tr>
                                                             : null
                                                         }
@@ -230,19 +208,19 @@ class SaleInvoice extends Component {
                                                             {this.state.totalSecurity ?
                                                                 <td colSpan="5"></td> : <td colSpan="4"></td>}
                                                             <td colSpan="1"><strong>Grand Total</strong></td>
-                                                            <td>Rs. {Math.trunc(Number(sale.totalAmount) + Number(this.state.totalSecurity))}</td>
+                                                            <td>Rs. <NumberFormat value={Math.trunc(Number(sale.totalAmount) + Number(this.state.totalSecurity))} displayType={'text'} thousandSeparator={true} /></td>
                                                         </tr>
                                                         <tr>
                                                             {this.state.totalSecurity ?
                                                                 <td colSpan="5"></td> : <td colSpan="4"></td>}
                                                             <td colSpan="1"><strong>Paid Amount</strong></td>
-                                                            <td>Rs. {Math.trunc(Number(sale.paidAmount) + Number(this.state.totalSecurity) - Number(sale.secAmount))}</td>
+                                                            <td>Rs. <NumberFormat value={Math.trunc(Number(sale.paidAmount) + Number(this.state.totalSecurity) - Number(sale.secAmount))} displayType={'text'} thousandSeparator={true} /></td>
                                                         </tr>
                                                         <tr>
                                                             {this.state.totalSecurity ?
                                                                 <td colSpan="5"></td> : <td colSpan="4"></td>}
                                                             <td colSpan="1"><strong>Due</strong></td>
-                                                            <td>{(Number(sale.totalAmount) + Number(this.state.totalSecurity) - (Number(sale.paidAmount) + Number(this.state.totalSecurity) - Number(sale.secAmount))) == 0 ? <span> Nil</span> : <span className="text-danger"><strong>Rs. {(Number(sale.totalAmount) + Number(this.state.totalSecurity) - (Number(sale.paidAmount) + Number(this.state.totalSecurity) - Number(sale.secAmount)))}</strong></span>}</td>
+                                                            <td>{(Number(sale.totalAmount) + Number(this.state.totalSecurity) - (Number(sale.paidAmount) + Number(this.state.totalSecurity) - Number(sale.secAmount))) == 0 ? <span> Nil</span> : <span className="text-danger"><strong>Rs. <NumberFormat value={(Number(sale.totalAmount) + Number(this.state.totalSecurity) - (Number(sale.paidAmount) + Number(this.state.totalSecurity) - Number(sale.secAmount)))} displayType={'text'} thousandSeparator={true} /></strong></span>}</td>
                                                         </tr>
                                                     </tfoot>
                                                 </table>

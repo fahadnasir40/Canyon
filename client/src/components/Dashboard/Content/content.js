@@ -280,7 +280,7 @@ class DashboardContent extends Component {
 
                                                                                     </div>
                                                                                     <div className="total">
-                                                                                        <div className="amount">Rs. {item.totalAmount}</div>
+                                                                                        <div className="amount">Rs. <NumberFormat value={item.totalAmount} displayType={'text'} thousandSeparator={true} /></div>
                                                                                         <div className="count">{item.count} Sold</div>
                                                                                     </div>
                                                                                 </li>
@@ -336,7 +336,7 @@ class DashboardContent extends Component {
                                                                         <span className="tb-sub"><Moment format="DD/MM/YYYY">{item.saleDate}</Moment></span>
                                                                     </div>
                                                                     <div className="nk-tb-col">
-                                                                        <span className="tb-sub tb-amount"> <span>Rs.</span> {item.totalAmount}</span>
+                                                                        <span className="tb-sub tb-amount"> <span>Rs.</span> <NumberFormat value={item.totalAmount} displayType={'text'} thousandSeparator={true} /></span>
                                                                     </div>
                                                                     <div className="nk-tb-col  tb-col-md">
                                                                         {

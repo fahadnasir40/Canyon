@@ -207,7 +207,7 @@ class SuppliersContent extends Component {
                                                         </a></li>
                                                 }
 
-                                                <li><a onClick={() => { this.props.deleteSupplier(supplier) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }} className="text-danger ">Remove Supplier</span></a></li>
+                                                {/* <li><a onClick={() => { this.props.deleteSupplier(supplier) }}><em className="icon ni ni-trash"></em><span style={{ cursor: "pointer" }} className="text-danger ">Remove Supplier</span></a></li> */}
                                             </ul>
                                         </div>
                                     </div>

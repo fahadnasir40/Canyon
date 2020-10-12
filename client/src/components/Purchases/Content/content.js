@@ -4,6 +4,7 @@ import DataTable from 'react-data-table-component';
 import Moment from 'react-moment';
 import $ from 'jquery';
 import Swal from 'sweetalert2';
+import NumberFormat from 'react-number-format'
 class Content extends Component {
 
     state = {
@@ -54,7 +55,7 @@ class Content extends Component {
                     <td className="tb-odr-amount">
                         <span className="tb-odr-total">
                             {
-                                <span className="amount">Rs. {row.totalAmount}</span>
+                                <span className="amount">Rs. <NumberFormat value={row.totalAmount} displayType={'text'} thousandSeparator={true} /></span>
                             }
 
                         </span>
