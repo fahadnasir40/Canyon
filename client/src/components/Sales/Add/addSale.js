@@ -643,25 +643,48 @@ class AddSale extends Component {
                                                             this.state.itemsList.map((item, key) => {
                                                                 return (
                                                                     <tr>
-                                                                        <th scope="row">
+                                                                        <td scope="row">
                                                                             <span className="text-primary">{key + 1}</span>
-                                                                        </th>
-                                                                        <div className="form-control-wrap">
-                                                                            <div className="form-control-select">
-                                                                                <select className="form-control" onChange={(event) => { this.handleProductDropdown(event, key) }} data-search="on">
-                                                                                    <option value={-1}>Select Item</option>
-                                                                                    {
-                                                                                        this.state.currentCustomer ?
-                                                                                            this.props.productsList ?
-                                                                                                this.props.productsList.map((item, key) => {
-                                                                                                    return <option key={key} value={key} className="ccap" disabled={(item.stock === 0 && item.sku !== 'O19L' || this.state.itemsList.find(x => x.currentProduct ? x.currentProduct._id === item._id : null)) ? true : false}>{item.stock === 0 && item.sku !== 'O19L' ? item.name + ' (Out of stock)' : item.name}</option>;
-                                                                                                })
-                                                                                                : null
-                                                                                            : null
-                                                                                    }
-                                                                                </select>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="d-none d-md-block">
+                                                                                <div className="form-control-wrap">
+                                                                                    <div className="form-control-select">
+                                                                                        <select className="form-control" onChange={(event) => { this.handleProductDropdown(event, key) }} data-search="on">
+                                                                                            <option value={-1}>Select Item</option>
+                                                                                            {
+                                                                                                this.state.currentCustomer ?
+                                                                                                    this.props.productsList ?
+                                                                                                        this.props.productsList.map((item, key) => {
+                                                                                                            return <option key={key} value={key} className="ccap" disabled={(item.stock === 0 && item.sku !== 'O19L' || this.state.itemsList.find(x => x.currentProduct ? x.currentProduct._id === item._id : null)) ? true : false}>{item.stock === 0 && item.sku !== 'O19L' ? item.name + ' (Out of stock)' : item.name}</option>;
+                                                                                                        })
+                                                                                                        : null
+                                                                                                    : null
+                                                                                            }
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
+                                                                            <div className="d-sm-block d-md-none ">
+                                                                                <div className="form-control-wrap">
+                                                                                    <div >
+                                                                                        <select onChange={(event) => { this.handleProductDropdown(event, key) }} data-search="on">
+                                                                                            <option value={-1}>Select Item</option>
+                                                                                            {
+                                                                                                this.state.currentCustomer ?
+                                                                                                    this.props.productsList ?
+                                                                                                        this.props.productsList.map((item, key) => {
+                                                                                                            return <option key={key} value={key} className="ccap" disabled={(item.stock === 0 && item.sku !== 'O19L' || this.state.itemsList.find(x => x.currentProduct ? x.currentProduct._id === item._id : null)) ? true : false}>{item.stock === 0 && item.sku !== 'O19L' ? item.name + ' (Out of stock)' : item.name}</option>;
+                                                                                                        })
+                                                                                                        : null
+                                                                                                    : null
+                                                                                            }
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+
                                                                         <td>{item.currentProduct ? item.currentProduct.uom : 'N/A'}</td>
                                                                         <td>{this.state.currentCustomer ? item.currentProduct.sku == "CN19LL" ? this.state.currentCustomer.customerBottles : 'N/A' : 0}</td>
                                                                         <td>{item.currentProduct.customerLimit ? item.currentProduct.customerLimit : 'N/A'}</td>
@@ -704,12 +727,26 @@ class AddSale extends Component {
                                                                         <td>
                                                                             <span>{item.currentProduct.stock ? item.currentProduct.stock : 'N/A'}</span>
                                                                         </td>
-                                                                        <td><input type="number" min={0} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(item.currentProduct, event, key) }} className="form-control" id="quantityrec" placeholder={0} disabled={item.currentProduct.sku === 'CN19LL' || item.currentProduct.sku === 'O19L' ? false : true} /></td>
 
-                                                                        <td><input type="number" min={0} max={item.currentProduct.stock} value={item.Quantitydel} onChange={(event) => { this.handleInputQuantitydel(item.currentProduct, event, key) }} className="form-control" id="quantitydel" placeholder={0} disabled={item.paymethod == 'Cash' ? false : true} /></td>
-                                                                        <td> {
-                                                                            this.getPaymentMethod(item, key)
-                                                                        }</td>
+
+                                                                        <td className="d-none d-md-block ">
+                                                                            <input type="number" min={0} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(item.currentProduct, event, key) }} className="form-control" id="quantityrec" placeholder={0} disabled={item.currentProduct.sku === 'CN19LL' || item.currentProduct.sku === 'O19L' ? false : true} />
+
+                                                                        </td>
+                                                                        <td className="d-none d-md-block">
+                                                                            <input type="number" min={0} max={item.currentProduct.stock} value={item.Quantitydel} onChange={(event) => { this.handleInputQuantitydel(item.currentProduct, event, key) }} className="form-control" id="quantitydel" placeholder={0} disabled={item.paymethod == 'Cash' ? false : true} />
+                                                                        </td>
+
+                                                                        <td className="d-sm-block d-md-none">
+                                                                            <input type="number" min={0} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(item.currentProduct, event, key) }} id="quantityrec" placeholder={0} disabled={item.currentProduct.sku === 'CN19LL' || item.currentProduct.sku === 'O19L' ? false : true} />
+                                                                        </td>
+                                                                        <td className="d-sm-block d-md-none">
+                                                                            <input type="number" min={0} max={item.currentProduct.stock} value={item.Quantitydel} onChange={(event) => { this.handleInputQuantitydel(item.currentProduct, event, key) }} id="quantitydel" placeholder={0} disabled={item.paymethod == 'Cash' ? false : true} />
+                                                                        </td>
+                                                                        <td>
+                                                                            {
+                                                                                this.getPaymentMethod(item, key)
+                                                                            }</td>
                                                                         <td>{item.excessBottles}</td>
 
                                                                     </tr>
@@ -749,7 +786,9 @@ class AddSale extends Component {
                                                                         <td><span>{item.currentProduct.name ? item.currentProduct.name : 'N/A'}</span></td>
                                                                         <td>{this.getProductRate(item.currentProduct)}</td>
                                                                         <td><input type="number" min={0} max={(this.getProductRate(item.currentProduct) * Number(item.Quantitydel))} maxLength={7} value={item.discount} onChange={(event) => { this.handleInputDiscount(event, key) }} className="form-control" id="discount" placeholder="discount" /></td>
-                                                                        <td><input type="number" min={0} max={Number(item.Quantitydel) - Number(item.bottles)} value={item.secpaid} onChange={(event) => { this.handleInputSecurityPaid(item.currentProduct, event, key) }} className="form-control" id="secpaid" placeholder="secpaid" disabled={this.disableSecCheck(item.currentProduct)} /></td>
+
+                                                                        <td className="d-none d-md-block"><input type="number" min={0} max={Number(item.Quantitydel) - Number(item.bottles)} value={item.secpaid} onChange={(event) => { this.handleInputSecurityPaid(item.currentProduct, event, key) }} className="form-control" id="secpaid" placeholder="secpaid" disabled={this.disableSecCheck(item.currentProduct)} /></td>
+                                                                        <td className="d-sm-block d-md-none"><input type="number" min={0} max={Number(item.Quantitydel) - Number(item.bottles)} value={item.secpaid} onChange={(event) => { this.handleInputSecurityPaid(item.currentProduct, event, key) }} id="secpaid" placeholder="secpaid" disabled={this.disableSecCheck(item.currentProduct)} /></td>
                                                                         <td>{item.totalAmount}</td>
                                                                         {/* <td><em class="icon ni ni-trash" onClick={this.currentProduct ? this.removeSelectedItem(key) : null}></em></td> */}
                                                                         {/* <td onClick={this.removeSelectedItem(key)} className="btn btn-primary"><em className="icon ni ni-plus"></em><span>Add Item</span></td> */}
