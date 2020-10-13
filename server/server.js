@@ -9,7 +9,6 @@ const app = express();
 const { auth } = require("./middleware/auth");
 const { auth2 } = require("./middleware/auth2");
 const shortid = require('shortid');
-const http = require("http");
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DATABASE, {
@@ -988,7 +987,7 @@ app.post('/api/customer_update', auth, (req, res) => {
     });
 })
 
-app.post('/api/transaction_update', (req, res) => {
+app.post('/api/transaction_update', auth, (req, res) => {
     const transaction = new Transaction(req.body);
 
     if (transaction.transaction_action === "Inventory Transfer") {
@@ -1021,8 +1020,8 @@ app.post('/api/transaction_update', (req, res) => {
 })
 
 
-app.post("/api/user_update", (req, res) => {
-    User.findByIdAndUpdate(req.body.id, req.body, { new: true }, (err, user) => {
+app.post("/api/user_profile_update", auth, (req, res) => {
+    User.findByIdAndUpdate(req.user._id, req.body, { new: true, select: "name role address dob city _id email phone" }, (err, user) => {
         if (err) return res.status(400).send(err);
         res.json({
             success: true,
@@ -1033,7 +1032,7 @@ app.post("/api/user_update", (req, res) => {
 
 app.post("/api/userchange", auth, (req, res) => {
 
-    User.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, user) => {
+    User.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err) => {
         if (err) return res.status(400).send(err);
         return res.status(200).send({ success: true })
     });

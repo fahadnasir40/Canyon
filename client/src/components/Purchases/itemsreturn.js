@@ -20,7 +20,7 @@ class Itemsreturn extends Component {
                 })
                 if (this.state.currentProduct)
                     this.props.removeSelectedItem(this.props.index);
-                this.props.addSelectedItem(this.props.productsList[event.target.value]);
+                this.props.addSelectedItem(this.props.productsList[event.target.value], this.props.index);
                 this.props.updateTotalAmount(this.props.index, 1, this.props.productsList[event.target.value]);
             }
         }
