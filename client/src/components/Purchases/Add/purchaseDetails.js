@@ -34,25 +34,26 @@ class PurchaseDetails extends Component {
         }
     }
 
-    addSelectedItem = (product) => {
-        this.productsList.push(product);
-
-        if (this.props.valid === false && !this.productsList.some(item => item == -1)) {
+    addSelectedItem = (product, i) => {
+        this.productsList.push({ ...product, index: Number(i) });
+        if (this.props.valid === false && this.productsList.length > 0) {
             this.props.setValid();
         }
     }
 
     removeSelectedItem = (index) => {
-        this.productsList[index] = -1;
+        const p = this.productsList.find(x => x.index === index);
+        this.productsList.splice(this.productsList.indexOf(p));
         if (this.productsList.length == 0 && this.props.valid === true) {
             this.props.setValid()
         }
     }
 
-    updateTotalAmount = (index2, qty, product) => {
-        const p = this.productsList.find(x => x._id === product._id);
-        const index = this.productsList.indexOf(p)
-        this.productsList[index] = { ...this.productsList[index], qty: qty, totalAmount: (Number(qty) * Number(product.price.total)) }
+    updateTotalAmount = (index, qty, product) => {
+
+        const p = this.productsList.find(x => x.index === index);
+        const index2 = this.productsList.indexOf(p)
+        this.productsList[index2] = { ...this.productsList[index2], qty: qty, totalAmount: (Number(qty) * Number(product.price.total)) }
         this.calculateTotal();
     }
 

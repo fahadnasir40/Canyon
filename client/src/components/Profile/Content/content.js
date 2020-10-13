@@ -79,14 +79,9 @@ class ProfileContent extends Component {
 
 
     submitForm = (event) => {
-
-        // const form = event.currentTarget;
-
         event.preventDefault();
 
         this.setValidated(true);
-
-        // e.preventDefault();
 
         this.props.dispatch(updateUser({
             id: this.state.id,
@@ -98,14 +93,6 @@ class ProfileContent extends Component {
         }))
 
         window.location.reload(false);
-        // // perform all neccassary validations
-        // if (this.state.password !== this.state.cpassword) {
-        //     this.setState({error:'Passwords does not match'})
-        // } else {
-        //     // make API call        
-        //     this.setState({error:''});
-
-
 
     }
 
@@ -113,24 +100,9 @@ class ProfileContent extends Component {
 
     submitPasswordChange = (event) => {
 
-        // const form = event.currentTarget;
-
         event.preventDefault();
 
-        // this.setValidated(true);
 
-        // e.preventDefault();
-
-        // this.props.dispatch(updateUser({
-        //     id:this.state.id,
-        //     name:this.state.name,
-        //     dob: this.state.dob,
-        //     address:this.state.address,
-        //     phone:this.state.phone,
-        //     city:this.state.city,
-        // }))
-
-        // window.location.reload(false);
         // perform all neccassary validations
         if (this.state.newPassword !== this.state.confirmPassword) {
             this.setState({ pwmessage: 'Confirm password does not match with new password' })

@@ -209,7 +209,6 @@ class Content extends Component {
 
 
     render() {
-        console.log("Content", this.props);
         return (
             <div className="nk-content ml-md-5 ">
                 <div className="container-fluid">
