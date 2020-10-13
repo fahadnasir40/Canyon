@@ -11,6 +11,9 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    poNumber: {
+        type: Number
+    },
     supplierId: {
         type: String,
         required: true,

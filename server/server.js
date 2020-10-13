@@ -646,6 +646,14 @@ app.post('/api/addPurchase', auth, (req, res) => {
 
     const purchase = new Purchase(req.body);
 
+    Purchase.count(function (err, countData) {
+        //you will get the count of number of documents in mongodb collection in the variable 
+        countdata
+    });
+
+
+    console.log("Count: ", countdata)
+
     let products = req.body.productDetails;
     let productTotalQty = 0;
 
