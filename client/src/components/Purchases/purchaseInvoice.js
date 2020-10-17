@@ -139,7 +139,7 @@ class PurchaseInvoice extends Component {
                                                         <ul className="list-plain">
                                                             <li className="invoice-id"><span>Invoice ID</span>: <span>{purchase._id}</span></li>
                                                             <li className="invoice-date"><span>Issue Date</span>: <span><Moment format="DD MMM, YYYY"></Moment></span></li>
-                                                            <li className="invoice-date"><span>Purchase Date</span>: <span><Moment format="DD MMM, YYYY">{purchase.date}</Moment></span></li>
+                                                            <li className="invoice-date"><span>Purchase Date</span>: <span><Moment format="DD MMM, YYYY">{purchase.purchaseDate}</Moment></span></li>
                                                         </ul>
                                                     </div>
                                                 </div>
