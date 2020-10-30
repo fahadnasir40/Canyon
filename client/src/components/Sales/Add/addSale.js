@@ -727,22 +727,15 @@ class AddSale extends Component {
                                                                         <td>
                                                                             <span>{item.currentProduct.stock ? item.currentProduct.stock : 'N/A'}</span>
                                                                         </td>
-
-
-                                                                        <td className="d-none d-md-block ">
-                                                                            <input type="number" min={0} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(item.currentProduct, event, key) }} className="form-control" id="quantityrec" placeholder={0} disabled={item.currentProduct.sku === 'CN19LL' || item.currentProduct.sku === 'O19L' ? false : true} />
-
+                                                                        <td>
+                                                                            <input type="number" min={0} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(item.currentProduct, event, key) }} className="form-control d-none d-md-block" id="quantityrec" placeholder={0} disabled={item.currentProduct.sku === 'CN19LL' || item.currentProduct.sku === 'O19L' ? false : true} />
+                                                                            <input type="number" min={0} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(item.currentProduct, event, key) }} className="d-sm-inline-flex d-md-none" id="quantityrec" placeholder={0} disabled={item.currentProduct.sku === 'CN19LL' || item.currentProduct.sku === 'O19L' ? false : true} />
                                                                         </td>
-                                                                        <td className="d-none d-md-block">
-                                                                            <input type="number" min={0} max={item.currentProduct.stock} value={item.Quantitydel} onChange={(event) => { this.handleInputQuantitydel(item.currentProduct, event, key) }} className="form-control" id="quantitydel" placeholder={0} disabled={item.paymethod == 'Cash' ? false : true} />
+                                                                        <td>
+                                                                            <input type="number" min={0} max={item.currentProduct.stock} value={item.Quantitydel} onChange={(event) => { this.handleInputQuantitydel(item.currentProduct, event, key) }} className="form-control d-none d-md-block" id="quantitydel" placeholder={0} disabled={item.paymethod == 'Cash' ? false : true} />
+                                                                            <input type="number" min={0} max={item.currentProduct.stock} value={item.Quantitydel} onChange={(event) => { this.handleInputQuantitydel(item.currentProduct, event, key) }} className="d-sm-inline d-md-none" id="quantitydel" placeholder={0} disabled={item.paymethod == 'Cash' ? false : true} />
                                                                         </td>
 
-                                                                        <td className="d-sm-block d-md-none">
-                                                                            <input type="number" min={0} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(item.currentProduct, event, key) }} id="quantityrec" placeholder={0} disabled={item.currentProduct.sku === 'CN19LL' || item.currentProduct.sku === 'O19L' ? false : true} />
-                                                                        </td>
-                                                                        <td className="d-sm-block d-md-none">
-                                                                            <input type="number" min={0} max={item.currentProduct.stock} value={item.Quantitydel} onChange={(event) => { this.handleInputQuantitydel(item.currentProduct, event, key) }} id="quantitydel" placeholder={0} disabled={item.paymethod == 'Cash' ? false : true} />
-                                                                        </td>
                                                                         <td>
                                                                             {
                                                                                 this.getPaymentMethod(item, key)
