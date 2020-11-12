@@ -92,7 +92,7 @@ class SaleInvoice extends Component {
                             <div className="nk-block-head">
                                 <div className="nk-block-between g-3">
                                     <div className="nk-block-head-content">
-                                        <h3 className="nk-block-title page-title">Invoice <strong className="text-primary small"># {sale._id}</strong></h3>
+                                        <h3 className="nk-block-title page-title">Invoice <strong className="text-primary small"># {sale._id}</strong>  {sale.status === 'Returned' ? ' (Returned)' : null}</h3>
                                         <div className="nk-block-des text-soft">
                                             <ul className="list-inline">
                                                 <li>Created At: <span className="text-base"><Moment format="DD MMM, YYYY hh:mm A"></Moment></span></li>

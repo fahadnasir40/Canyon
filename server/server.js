@@ -57,7 +57,7 @@ app.get('/api/getDashboard', auth, (req, res) => {
             if (err) return res.status(400).send(err);
             data = { recentOrders: [...doc] };
 
-            Transaction.find({ transaction_action: 'Sale Added', status: 'active' }).select('rate createdAt').exec((err, trans) => {
+            Transaction.find({ transaction_action: 'Sale Added', transaction_action: 'Sale Returned', status: 'active' }).select('rate createdAt').exec((err, trans) => {
                 if (err) return res.status(400).send(err);
 
                 var totalSales = 0;
@@ -66,7 +66,10 @@ app.get('/api/getDashboard', auth, (req, res) => {
                 var prevLastWeekSale = 0;
 
                 trans.forEach(element => {
-                    totalSales = totalSales + element.rate;
+                    if (element.transaction_action === 'Sale Returned')
+                        totalSales = totalSales - element.rate;
+                    else
+                        totalSales = totalSales + element.rate;
                 })
 
                 const currentDate = new Date();
@@ -155,16 +158,20 @@ app.get('/api/getDashboard', auth, (req, res) => {
                                 }
 
                                 const anAsyncFunction = async item => {
-                                    item.productDetails.forEach((element, key) => {
-                                        if (!productsList.find(x => x._id === element._id)) {
-                                            productsList.push({ _id: element._id, totalAmount: element.ptotal, count: (element.dqty - element.rqty) })
-                                        }
-                                        else {
-                                            const index = productsList.indexOf(productsList.find(x => x._id === element._id));
-                                            productsList[index].totalAmount += element.ptotal;
-                                            productsList[index].count += (element.dqty - element.rqty);
-                                        }
-                                    })
+                                    if (item.status !== 'Returned') {
+                                        item.productDetails.forEach((element, key) => {
+                                            if (!productsList.find(x => x._id === element._id)) {
+                                                productsList.push({ _id: element._id, totalAmount: element.ptotal, count: (element.dqty - element.rqty) })
+
+                                            }
+                                            else {
+                                                const index = productsList.indexOf(productsList.find(x => x._id === element._id));
+                                                productsList[index].totalAmount += element.ptotal;
+                                                productsList[index].count += (element.dqty - element.rqty);
+
+                                            }
+                                        })
+                                    }
                                     return functionWithPromise(item)
                                 }
 
@@ -912,6 +919,55 @@ app.post('/api/sale_paid_update', auth, (req, res) => {
             success: true
         });
     });
+})
+
+app.post('/api/sale_refund', auth, (req, res) => {
+
+    let sale = req.body;
+    let products = sale.productDetails;
+
+    if (sale.status !== 'Returned') {
+        update(sale, products)
+
+        async function update(sale, products) {
+            await products.forEach(item => {
+
+                const totalItems = item.dqty - item.rqty;
+                Product.findByIdAndUpdate(item._id, {
+                    $inc: { stock: totalItems }
+                }, (error) => {
+                    if (error) {
+                        console.log("Error update stock", error);
+                    }
+                })
+            })
+            const trans = {
+                transaction_date: new Date(),
+                primary_quantity: 0,
+                rate: sale.totalAmount,
+                transaction_source: 'Customer',
+                transaction_type: 'Sale',
+                transaction_action: 'Sale Returned',
+                transaction_value: sale.customerName,
+                transaction_value_id: sale._id,
+                comments: sale.description,
+                addedBy: req.user._id
+            };
+
+            const transaction = new Transaction(trans);
+            await transaction.save();
+
+            sale.status = 'Returned';
+            await Sale.findByIdAndUpdate(sale._id, sale, { new: true });
+
+            return res.status(200).json({
+                success: true
+            });
+        }
+    }
+    else {
+        return res.status(400).send("Error returning sale");
+    }
 })
 
 

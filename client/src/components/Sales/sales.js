@@ -4,8 +4,8 @@ import Header from '../Header/header'
 import Footer from '../Footer/footer'
 import Content from './Content/content';
 import { connect } from 'react-redux';
-import { getSales, updateSalePaid } from '../../actions';
-
+import { getSales, updateSalePaid, updateSaleRefund } from '../../actions';
+import Swal from 'sweetalert2';
 
 class Sale extends Component {
 
@@ -15,6 +15,24 @@ class Sale extends Component {
 
     updateSale = (sale) => {
         this.props.dispatch(updateSalePaid(sale))
+    }
+
+    refundSale = (sale) => {
+        Swal.fire({
+            title: 'Refund Sale?',
+            text: "Returning the sale will update the stock according to delivered and returned items. 'Others Product' returns may reduce your stock below 0.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Return it!'
+        }).then((result) => {
+            if (result.value) {
+
+                this.props.dispatch(updateSaleRefund(sale));
+                window.location.reload(false);
+            }
+        })
     }
 
     static getDerivedStateFromProps(nextProps) {
@@ -35,7 +53,7 @@ class Sale extends Component {
                     <div className="wrap container-fluid">
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
-                            <Content updateSale={this.updateSale} saleList={this.props.saleList} />
+                            <Content updateSale={this.updateSale} refundSale={this.refundSale} saleList={this.props.saleList} />
                             <Footer />
                         </div>
                     </div>
