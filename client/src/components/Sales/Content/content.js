@@ -5,7 +5,6 @@ import Moment from 'react-moment';
 import Swal from 'sweetalert2';
 import NumberFormat from 'react-number-format'
 import $ from 'jquery'
-import { Button } from 'bootstrap';
 
 class Content extends Component {
 
