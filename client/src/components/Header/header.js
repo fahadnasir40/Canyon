@@ -56,52 +56,56 @@ class Header extends Component {
                             </Link>
                         </div>
 
-                        <div className="nk-header-tools my-n1">
 
-                            <NavDropdown title={
-                                this.props.user.login ?
-                                    <div className="user-toggle">
-                                        <div className="user-avatar sm">
-                                            <em className="icon ni ni-user-alt"></em>
-                                        </div>
-                                        <div className="user-info d-none d-xl-block">
-                                            <div className="user-status user-status-primary ccap">{this.props.user.login.role}</div>
-                                            <div className="user-name dropdown-indicator ccap">{this.props.user.login.name}</div>
-                                        </div>
-                                    </div>
-                                    : null
-                            } className="nk-quick-nav " >
+                        <div className="nk-header-tools">
+                            <ul className="nk-quick-nav">
 
-                                <div className="dropdown-menu-right ">
-                                    <NavDropdown.Item className="user-dropdown dropdown mx-n1" href="/" ><div className="dropdown-inner user-card-wrap bg-lighter ">
+                                <li className="dropdown user-dropdown">
+                                    <a href="#" className="dropdown-toggle mr-n1" data-toggle="dropdown">
                                         {
                                             this.props.user.login ?
-                                                <div className="user-card">
-                                                    <div className="user-avatar">
-                                                        <span>{this.getInitials(this.props.user.login.name)}</span>
+                                                <div className="user-toggle">
+                                                    <div className="user-avatar sm">
+                                                        <em className="icon ni ni-user-alt"></em>
                                                     </div>
-                                                    <div className="user-info">
-                                                        <span className="lead-text">{this.props.user.login.name}</span>
-                                                        <span className="sub-text">{this.props.user.login.email}</span>
+                                                    <div className="user-info d-none d-xl-block">
+                                                        <div className="user-status user-status-primary ccap">{this.props.user.login.role}</div>
+                                                        <div className="user-name dropdown-indicator ccap">{this.props.user.login.name}</div>
                                                     </div>
                                                 </div>
                                                 : null
-
                                         }
-
-                                    </div></NavDropdown.Item>
-                                    <div></div>
-                                    <div className="dropdown-inner">
-                                        <NavDropdown.Item href="/profile"><em className="icon ni ni-user-alt"></em><span>View Profile</span></NavDropdown.Item>
-                                        <NavDropdown.Item href="/profile"><em className="icon ni ni-setting-alt"></em><span>Account Setting</span></NavDropdown.Item>
-
+                                    </a>
+                                    <div className="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                                        <div className="dropdown-inner user-card-wrap bg-lighter ">
+                                            {
+                                                this.props.user.login ?
+                                                    <div className="user-card">
+                                                        <div className="user-avatar">
+                                                            <span>{this.getInitials(this.props.user.login.name)}</span>
+                                                        </div>
+                                                        <div className="user-info">
+                                                            <span className="lead-text">{this.props.user.login.name}</span>
+                                                            <span className="sub-text">{this.props.user.login.email}</span>
+                                                        </div>
+                                                    </div>
+                                                    : null
+                                            }
+                                        </div>
+                                        <div className="dropdown-inner">
+                                            <ul className="link-list">
+                                                <li><Link to="/profile"><em className="icon ni ni-user-alt"></em><span>View Profile</span></Link></li>
+                                                <li><Link to="/profile"><em className="icon ni ni-setting-alt"></em><span>Account Setting</span></Link></li>
+                                            </ul>
+                                        </div>
+                                        <div className="dropdown-inner">
+                                            <ul className="link-list">
+                                                <li><a style={{ cursor: "pointer" }} onClick={this.signOut}><em className="icon ni ni-signout"></em><span>Sign out</span></a></li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <NavDropdown.Divider />
-                                    <div className="dropdown-inner">
-                                        <NavDropdown.Item ><a style={{ cursor: "pointer" }} onClick={this.signOut}><em className="icon ni ni-signout"></em><span>Sign out</span></a></NavDropdown.Item>
-                                    </div>
-                                </div>
-                            </NavDropdown>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
