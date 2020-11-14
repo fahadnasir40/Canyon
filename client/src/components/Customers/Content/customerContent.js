@@ -325,12 +325,6 @@ class CustomersContent extends Component {
                                                     nextClassName={"page-item"}
                                                     activeClassName={"active"}
                                                     disabledClassName={"disabled"} />
-                                                {/* <ul className="pagination jpagination">
-                                                    <li className="page-item"><a className="page-link" href="#"><em className="icon ni ni-chevrons-left"></em></a></li>
-                                                    <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                                    <li className="page-item"><span className="page-link"><em className="icon ni ni-more-h"></em></span></li>
-                                                    <li className="page-item"><a className="page-link" href="#"><em className="icon ni ni-chevrons-right"></em></a></li>
-                                                </ul> */}
                                             </div>
                                         </div>
                                     </div>

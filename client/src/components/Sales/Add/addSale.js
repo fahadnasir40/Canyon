@@ -382,6 +382,7 @@ class AddSale extends Component {
                 currentCustomer: this.state.customersList[event.target.value],
                 address: this.state.customersList[event.target.value].address[0]
             });
+            this.clearAllItems();
         }
         else if (event.target.value == -1) {
             this.clearAllItems();
@@ -708,8 +709,8 @@ class AddSale extends Component {
                                                             <th scope="col">#</th>
                                                             <th scope="col">Item Name</th>
                                                             <th scope="col">Current Stock</th>
-                                                            <th scope="col">Qty. Rec</th>
                                                             <th scope="col">Qty. Del</th>
+                                                            <th scope="col">Qty. Rec</th>
                                                             <th scope="col">Payment Method</th>
                                                             <th scope="col">Excess</th>
                                                         </tr>
@@ -728,6 +729,7 @@ class AddSale extends Component {
                                                                         <td>
                                                                             <span>{item.currentProduct.stock ? item.currentProduct.stock : 'N/A'}</span>
                                                                         </td>
+
                                                                         <td>
                                                                             <input type="number" min={0} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(item.currentProduct, event, key) }} className="form-control d-none d-md-block" id="quantityrec" placeholder={0} disabled={item.currentProduct.sku === 'CN19LL' || item.currentProduct.sku === 'O19L' ? false : true} />
                                                                             <input type="number" min={0} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(item.currentProduct, event, key) }} className="d-sm-inline-flex d-md-none" id="quantityrec" placeholder={0} disabled={item.currentProduct.sku === 'CN19LL' || item.currentProduct.sku === 'O19L' ? false : true} />

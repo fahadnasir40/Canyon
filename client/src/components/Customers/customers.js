@@ -4,7 +4,6 @@ import Header from '../Header/header'
 import Footer from '../Footer/footer'
 import Content from './Content/customerContent'
 import { getCustomers, deleteCustomer, updateCustomer, clearNewCustomer } from '../../actions'
-
 import Swal from 'sweetalert2'
 import { connect } from 'react-redux'
 
@@ -106,6 +105,7 @@ class Customers extends Component {
 }
 
 function mapStateToProps(state) {
+    console.log("State: ", state)
     return {
         customersList: state.customer.customerList,
         removeCustomer: state.customer.postDeleted,

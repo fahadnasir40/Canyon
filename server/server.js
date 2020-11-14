@@ -790,7 +790,6 @@ app.post('/api/addSale', auth2, (req, res) => {
             } catch (error) {
                 // If an error occurred, abort the whole transaction and
                 // undo any changes that might have happened
-                console.log("Transaction Error", error)
                 await session.abortTransaction();
                 session.endSession();
                 return res.status(400).send(error);
@@ -902,23 +901,108 @@ app.post('/api/purchase_paid_update', auth, (req, res) => {
     });
 })
 
-app.post('/api/sale_paid_update', auth, (req, res) => {
+app.post('/api/sale_paid_update', auth, async function (req, res) {
     let sale = req.body;
 
-    if (sale.paidAmount < sale.totalAmount && sale.totalAmount > 0) {
-        if (sale.status === 'Complete')
-            sale.status = 'Pending'
-    }
-    else if (sale.paidAmount >= sale.totalAmount) {
-        if (sale.status === 'Pending')
-            sale.status = 'Complete'
-    }
-    Sale.findByIdAndUpdate(req.body._id, sale, { new: true }, (err, doc) => {
-        if (err) return res.status(400).send(err);
+
+    let rate = 0;
+    let excessBottles = 0;
+    let secBottles = 0;
+
+    try {
+        if (sale.type === 'security_update') {
+            await sale.productDetails.forEach(element => {
+                Product.findById(element._id, (err, prod) => {
+                    if (prod) {
+                        if (prod.sku == "CN19LL") {
+                            if (Number(sale.secAmount) >= 0) {
+                                rate += Number(element.secRate);
+                            }
+
+                            if (Number(sale.custExBottles) > 0) {
+                                if (Number(sale.secAmount) > 0) {
+                                    excessBottles = Number(sale.custExBottles) * Number(rate);
+                                }
+                            }
+
+                            let totalSecruityAmount = Number(sale.custExBottles) * Number(rate);
+                            let paidSecurity = totalSecruityAmount - sale.secAmount;
+                            let currentBottles = Math.floor(Number(paidSecurity) / rate);
+                            paidSecurity += sale.payment_amount;
+
+                            const paidBottles = Math.floor(Number(paidSecurity) / rate);
+
+                            sale.secAmount -= sale.payment_amount
+                            element.secpaid = paidBottles;
+
+                            Customer.findByIdAndUpdate(sale.customerId, {
+                                $inc: { customerLimit: paidBottles - currentBottles }
+                            }, (error) => {
+                                if (error) {
+                                    console.log("Error update customer", error);
+                                }
+                            });
+
+                            if (sale.paidAmount < sale.totalAmount && sale.totalAmount > 0) {
+                                if (sale.status === 'Complete')
+                                    sale.status = 'Pending'
+                            }
+                            else if (sale.paidAmount >= sale.totalAmount) {
+                                if (sale.status === 'Pending')
+                                    sale.status = 'Complete'
+                            }
+                            Sale.findByIdAndUpdate(req.body._id, sale, { new: true }, (err, doc) => {
+                                if (err) return res.status(400).send(err);
+                                return res.status(200).json({
+                                    success: true
+                                });
+                            });
+                        }
+                    }
+                })
+
+            })
+        }
+        else if (sale.type === 'due_update') {
+
+            if (sale.paidAmount < sale.totalAmount && sale.totalAmount > 0) {
+                if (sale.status === 'Complete')
+                    sale.status = 'Pending'
+            }
+            else if (sale.paidAmount >= sale.totalAmount) {
+                if (sale.status === 'Pending')
+                    sale.status = 'Complete'
+            }
+            Sale.findByIdAndUpdate(req.body._id, sale, { new: true }, (err, doc) => {
+                if (err) return res.status(400).send(err);
+                return res.status(200).json({
+                    success: true
+                });
+            });
+        }
+        else if (sale.type === 'paid_amount_update') {
+            if (sale.paidAmount < sale.totalAmount && sale.totalAmount > 0) {
+                if (sale.status === 'Complete')
+                    sale.status = 'Pending'
+            }
+            else if (sale.paidAmount >= sale.totalAmount) {
+                if (sale.status === 'Pending')
+                    sale.status = 'Complete'
+            }
+            Sale.findByIdAndUpdate(req.body._id, sale, { new: true }, (err, doc) => {
+                if (err) return res.status(400).send(err);
+                return res.status(200).json({
+                    success: true
+                });
+            });
+
+        }
+    } catch (error) {
         return res.status(200).json({
-            success: true
-        });
-    });
+            success: false
+        })
+    }
+
 })
 
 app.post('/api/sale_refund', auth, (req, res) => {
