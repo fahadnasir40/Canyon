@@ -163,8 +163,7 @@ class SaleInvoice extends Component {
                                                             <th>Item ID</th>
                                                             <th>Name</th>
                                                             <th>Price</th>
-                                                            {/* {this.state.totalSecurity ? <th>Received Qty</th> : null} */}
-                                                            <th>Qty Rec</th>
+                                                            {this.state.totalSecurity ? <th>Qty Rec</th> : null}
                                                             <th>Qty Del</th>
                                                             <th>Discount</th>
                                                             <th>Amount</th>
@@ -179,8 +178,7 @@ class SaleInvoice extends Component {
                                                                         <td>{products.find(x => x._id === item._id).sku}</td>
                                                                         <td>{item.pname}</td>
                                                                         <td>{item.pprice}</td>
-                                                                        {/* {this.state.totalSecurity ? <td>{item.rqty}</td> : null} */}
-                                                                        <td>{item.rqty}</td>
+                                                                        {this.state.totalSecurity ? <td>{item.rqty}</td> : null}
                                                                         <td>{item.dqty}</td>
                                                                         <td>{item.disc}</td>
                                                                         <td>{item.ptotal}</td>
