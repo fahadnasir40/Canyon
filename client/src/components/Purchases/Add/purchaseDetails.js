@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ItemRow from '../itemsreturn'
+import NumberFormat from 'react-number-format';
 
 class PurchaseDetails extends Component {
 
@@ -111,8 +112,8 @@ class PurchaseDetails extends Component {
                                     <th scope="col">SKU</th>
                                     <th scope="col">Brand</th>
                                     <th scope="col">Quantity.</th>
-                                    <th scope="col">Rate</th>
                                     <th scope="col">UOM</th>
+                                    <th scope="col">Rate</th>
                                     <th scope="col">Total</th>
                                 </tr>
                             </thead>
@@ -137,7 +138,7 @@ class PurchaseDetails extends Component {
                 <div className="row mt-5">
                     <div className="d-flex col-md-6 ml-md-auto">
                         <label className="col-md-4 offset-md-2 form-label">Amount to be paid</label>
-                        <span className="col-md-8 offset-md-2"> Rs. {Number(this.state.totalAmount)} </span>
+                        <span className="col-md-8 offset-md-2"> Rs. <NumberFormat value={Number(this.state.totalAmount)} displayType={'text'} thousandSeparator={true} /></span>
                     </div>
                 </div>
 

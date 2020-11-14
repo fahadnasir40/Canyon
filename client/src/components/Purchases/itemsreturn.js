@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import NumberFormat from 'react-number-format'
 class Itemsreturn extends Component {
 
     state = {
@@ -63,9 +64,9 @@ class Itemsreturn extends Component {
                 <td>{currentProduct ? currentProduct.sku : 'N/A'}</td>
                 <td className="ccap">{currentProduct ? currentProduct.brand : 'N/A'}</td>
                 <td><input type="number" min={1} maxLength={7} value={this.state.currentQuantity} onChange={this.handleInputQuantity} className="form-control" id="quantity" placeholder="Quantity" /></td>
-                <td>{currentProduct ? currentProduct.price.total : 'N/A'}</td>
                 <td>{currentProduct ? currentProduct.uom : 'N/A'}</td>
-                <td>{currentProduct ? (Number(currentProduct.price.total) * Number(this.state.currentQuantity)) : 'N/A'} </td>
+                <td>{currentProduct ? <NumberFormat value={currentProduct.price.total} displayType={'text'} thousandSeparator={true} /> : 'N/A'}</td>
+                <td>{currentProduct ? <NumberFormat value={(Number(currentProduct.price.total) * Number(this.state.currentQuantity))} displayType={'text'} thousandSeparator={true} /> : 'N/A'} </td>
                 {/* <td className="tb-tnx-action">
                     <div className="dropdown">
                         <a className="text-soft dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em className="icon ni ni-more-h"></em></a>
