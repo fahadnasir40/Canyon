@@ -427,6 +427,17 @@ export function saveSale(document) {
         payload: request
     }
 }
+
+export function updateSaleRefund(data) {
+    const request = axios.post(`/api/sale_refund`, data)
+        .then(response => response.data);
+
+    return {
+        type: 'UPDATE_SALE_REFUND',
+        payload: request
+    }
+}
+
 export function updatePurchase(data) {
     const request = axios.post(`/api/purchase_update`, data)
         .then(response => response.data);
@@ -784,7 +795,6 @@ export function updateUser(user) {
             })
         })
     }
-
 }
 
 
