@@ -92,7 +92,7 @@ class SaleInvoice extends Component {
                             <div className="nk-block-head">
                                 <div className="nk-block-between g-3">
                                     <div className="nk-block-head-content">
-                                        <h3 className="nk-block-title page-title">Invoice <strong className="text-primary small"># {sale._id}</strong></h3>
+                                        <h3 className="nk-block-title page-title">Invoice <strong className="text-primary small"># {sale._id}</strong>  {sale.status === 'Returned' ? ' (Returned)' : null}</h3>
                                         <div className="nk-block-des text-soft">
                                             <ul className="list-inline">
                                                 <li>Created At: <span className="text-base"><Moment format="DD MMM, YYYY hh:mm A"></Moment></span></li>
@@ -123,7 +123,7 @@ class SaleInvoice extends Component {
 
                                     <div className="invoice-wrap">
                                         <div className="invoice-brand text-center">
-                                            <img src="./images/logo-dark.png" srcSet="./images/logo-dark2x.png 2x" alt="" />
+                                            <img src="./images/logo-dark.png" style={{ width: "140px", height: "56px" }} srcSet="./images/logo-dark.png" alt="" />
                                         </div>
                                         <div className="invoice-head mb-2 mt-4">
                                             <div className="row mt-2">
@@ -149,7 +149,7 @@ class SaleInvoice extends Component {
                                                         <ul className="list-plain">
                                                             <li className="invoice-id"><span>Invoice ID</span>: <span>{sale._id}</span></li>
                                                             <li className="invoice-date"><span>Issue Date</span>: <span><Moment format="DD MMM, YYYY"></Moment></span></li>
-                                                            <li className="invoice-date"><span>Sale Date</span>: <span><Moment format="DD MMM, YYYY">{sale.date}</Moment></span></li>
+                                                            <li className="invoice-date"><span>Sale Date</span>: <span><Moment format="DD MMM, YYYY">{sale.saleDate}</Moment></span></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -230,6 +230,16 @@ class SaleInvoice extends Component {
                                             </div>
                                         </div>
                                     </div>
+                                    <footer className="footer mt-auto ml-0"  >
+                                        <div className="my-5 text-center">
+                                            <p>
+                                                13-B, Public Health Society, Main Boulevard LDA Avenue-1, Raiwind Road, Lahore
+                                                    Cell: +92 300 9117673 <br />
+                                                    Email: saadkhan138@hotmail.com
+                                                </p>
+
+                                        </div>
+                                    </footer>
                                 </div>
                             </div>
                         </div>
@@ -254,7 +264,7 @@ class SaleInvoice extends Component {
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
                             {this.renderBody(sale, products)}
-                            <Footer />
+
                         </div>
                     </div>
                 </div>

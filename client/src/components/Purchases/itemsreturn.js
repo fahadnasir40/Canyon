@@ -20,7 +20,7 @@ class Itemsreturn extends Component {
                 })
                 if (this.state.currentProduct)
                     this.props.removeSelectedItem(this.props.index);
-                this.props.addSelectedItem(this.props.productsList[event.target.value]);
+                this.props.addSelectedItem(this.props.productsList[event.target.value], this.props.index);
                 this.props.updateTotalAmount(this.props.index, 1, this.props.productsList[event.target.value]);
             }
         }
@@ -63,8 +63,8 @@ class Itemsreturn extends Component {
                 <td>{currentProduct ? currentProduct.sku : 'N/A'}</td>
                 <td className="ccap">{currentProduct ? currentProduct.brand : 'N/A'}</td>
                 <td><input type="number" min={1} maxLength={7} value={this.state.currentQuantity} onChange={this.handleInputQuantity} className="form-control" id="quantity" placeholder="Quantity" /></td>
-                <td>{currentProduct ? currentProduct.price.total : 'N/A'}</td>
                 <td>{currentProduct ? currentProduct.uom : 'N/A'}</td>
+                <td>{currentProduct ? currentProduct.price.total : 'N/A'}</td>
                 <td>{currentProduct ? (Number(currentProduct.price.total) * Number(this.state.currentQuantity)) : 'N/A'} </td>
                 {/* <td className="tb-tnx-action">
                     <div className="dropdown">

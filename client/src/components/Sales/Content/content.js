@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import NumberFormat from 'react-number-format'
 import $ from 'jquery'
 import { Button } from 'bootstrap';
+
 class Content extends Component {
 
     state = {
@@ -75,7 +76,12 @@ class Content extends Component {
                                 row.status === 'Pending' ?
                                     <span className="badge badge-dot badge-warning">{row.status}</span>
                                     :
-                                    <span className="badge badge-dot badge-success">{row.status}</span>
+                                    row.status === 'Complete' ?
+                                        <span className="badge badge-dot badge-success">{row.status}</span>
+                                        :
+                                        row.status === 'Returned' ?
+                                            <span className="badge badge-dot badge-success">{row.status}</span>
+                                            : null
                             }
                         </span>
                     </td>
@@ -137,12 +143,16 @@ class Content extends Component {
                     <td className="tb-odr-amount">
                         <span className="tb-odr-status">
                             {
-                                row.paidAmount < row.totalAmount ?
-                                    <span className="badge badge-dot badge-warning">Pending</span>
+                                row.status === 'Pending' ?
+                                    <span className="badge badge-dot badge-warning">{row.status}</span>
                                     :
-                                    Number(row.totalAmount) == 0 ?
-                                        <span className="badge badge-dot badge-success">Received</span> :
-                                        <span className="badge badge-dot badge-success">Complete</span>
+
+                                    row.status === 'Complete' ?
+                                        <span className="badge badge-dot badge-success">{row.status}</span>
+                                        :
+                                        row.status === 'Returned' ?
+                                            <span className="badge badge-dot badge-info">{row.status}</span>
+                                            : null
                             }
                         </span>
                     </td>
@@ -266,6 +276,15 @@ class Content extends Component {
                         <span className=" fw-medium">Sale Date: </span> <span className="fw-normal"><Moment format="DD MMM, YYYY hh:mm A">{data.saleDate}</Moment></span>
                     </div>
                 </div>
+                {
+                    data.status !== 'Returned' ?
+                        <div className="row my-3">
+                            <div width="20px">
+                                <div onClick={() => { this.props.refundSale(data) }} class="btn btn-icon  btn-danger    ml-3 d-sm-block px-2"><em class="iconicon ni ni-edit"> Refund</em></div>
+                            </div>
+                        </div>
+                        : null
+                }
                 <div className="row d-md-none">
                     <div width="20px">
                         <div onClick={() => { this.editPaidAmount(data) }} class="btn btn-icon btn-white btn-dim btn-lg  btn-primary  ml-3 d-sm-block px-2"><em class="iconicon ni ni-edit"> Edit</em></div>
@@ -369,6 +388,7 @@ class Content extends Component {
 
 
     markLineAmountComplete = (sale) => {
+
         openModal(this);
         async function openModal(object) {
             const { value: formValues } = await Swal.fire({

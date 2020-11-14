@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { getActiveProducts, saveTransaction, getCustomers } from '../../../actions';
 import Moment from 'react-moment';
+import NumberFormat from 'react-number-format'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -525,7 +526,7 @@ class AddSale extends Component {
         let currentProduct = this.state.currentProduct;
         return (
             <div className="container mt-5">
-                <div className="card ml-md-3">
+                <div className="card ml-md-5">
                     <div className="card-inner">
                         <div className="card-head mt-1">
                             <h4 className="ff-base fw-medium">Add Sale</h4>
@@ -644,25 +645,48 @@ class AddSale extends Component {
                                                             this.state.itemsList.map((item, key) => {
                                                                 return (
                                                                     <tr>
-                                                                        <th scope="row">
+                                                                        <td scope="row">
                                                                             <span className="text-primary">{key + 1}</span>
-                                                                        </th>
-                                                                        <div className="form-control-wrap">
-                                                                            <div className="form-control-select">
-                                                                                <select className="form-control" onChange={(event) => { this.handleProductDropdown(event, key) }} data-search="on">
-                                                                                    <option value={-1}>Select Item</option>
-                                                                                    {
-                                                                                        this.state.currentCustomer ?
-                                                                                            this.props.productsList ?
-                                                                                                this.props.productsList.map((item, key) => {
-                                                                                                    return <option key={key} value={key} className="ccap" disabled={(item.stock === 0 && item.sku !== 'O19L' || this.state.itemsList.find(x => x.currentProduct ? x.currentProduct._id === item._id : null)) ? true : false}>{item.stock === 0 && item.sku !== 'O19L' ? item.name + ' (Out of stock)' : item.name}</option>;
-                                                                                                })
-                                                                                                : null
-                                                                                            : null
-                                                                                    }
-                                                                                </select>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="d-none d-md-block">
+                                                                                <div className="form-control-wrap">
+                                                                                    <div className="form-control-select">
+                                                                                        <select className="form-control" onChange={(event) => { this.handleProductDropdown(event, key) }} data-search="on">
+                                                                                            <option value={-1}>Select Item</option>
+                                                                                            {
+                                                                                                this.state.currentCustomer ?
+                                                                                                    this.props.productsList ?
+                                                                                                        this.props.productsList.map((item, key) => {
+                                                                                                            return <option key={key} value={key} className="ccap" disabled={(item.stock === 0 && item.sku !== 'O19L' || this.state.itemsList.find(x => x.currentProduct ? x.currentProduct._id === item._id : null)) ? true : false}>{item.stock === 0 && item.sku !== 'O19L' ? item.name + ' (Out of stock)' : item.name}</option>;
+                                                                                                        })
+                                                                                                        : null
+                                                                                                    : null
+                                                                                            }
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
+                                                                            <div className="d-sm-block d-md-none ">
+                                                                                <div className="form-control-wrap">
+                                                                                    <div >
+                                                                                        <select onChange={(event) => { this.handleProductDropdown(event, key) }} data-search="on">
+                                                                                            <option value={-1}>Select Item</option>
+                                                                                            {
+                                                                                                this.state.currentCustomer ?
+                                                                                                    this.props.productsList ?
+                                                                                                        this.props.productsList.map((item, key) => {
+                                                                                                            return <option key={key} value={key} className="ccap" disabled={(item.stock === 0 && item.sku !== 'O19L' || this.state.itemsList.find(x => x.currentProduct ? x.currentProduct._id === item._id : null)) ? true : false}>{item.stock === 0 && item.sku !== 'O19L' ? item.name + ' (Out of stock)' : item.name}</option>;
+                                                                                                        })
+                                                                                                        : null
+                                                                                                    : null
+                                                                                            }
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+
                                                                         <td>{item.currentProduct ? item.currentProduct.uom : 'N/A'}</td>
                                                                         <td>{this.state.currentCustomer ? item.currentProduct.sku == "CN19LL" ? this.state.currentCustomer.customerBottles : 'N/A' : 0}</td>
                                                                         <td>{item.currentProduct.customerLimit ? item.currentProduct.customerLimit : 'N/A'}</td>
@@ -705,11 +729,20 @@ class AddSale extends Component {
                                                                         <td>
                                                                             <span>{item.currentProduct.stock ? item.currentProduct.stock : 'N/A'}</span>
                                                                         </td>
-                                                                        <td><input type="number" min={0} max={item.currentProduct.stock} value={item.Quantitydel} onChange={(event) => { this.handleInputQuantitydel(item.currentProduct, event, key) }} className="form-control" id="quantitydel" placeholder={0} disabled={item.paymethod == 'Cash' ? false : true} /></td>
-                                                                        <td><input type="number" min={0} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(item.currentProduct, event, key) }} className="form-control" id="quantityrec" placeholder={0} disabled={item.currentProduct.sku === 'CN19LL' || item.currentProduct.sku === 'O19L' ? false : true} /></td>
-                                                                        <td> {
-                                                                            this.getPaymentMethod(item, key)
-                                                                        }</td>
+
+                                                                        <td>
+                                                                            <input type="number" min={0} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(item.currentProduct, event, key) }} className="form-control d-none d-md-block" id="quantityrec" placeholder={0} disabled={item.currentProduct.sku === 'CN19LL' || item.currentProduct.sku === 'O19L' ? false : true} />
+                                                                            <input type="number" min={0} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(item.currentProduct, event, key) }} className="d-sm-inline-flex d-md-none" id="quantityrec" placeholder={0} disabled={item.currentProduct.sku === 'CN19LL' || item.currentProduct.sku === 'O19L' ? false : true} />
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="number" min={0} max={item.currentProduct.stock} value={item.Quantitydel} onChange={(event) => { this.handleInputQuantitydel(item.currentProduct, event, key) }} className="form-control d-none d-md-block" id="quantitydel" placeholder={0} disabled={item.paymethod == 'Cash' ? false : true} />
+                                                                            <input type="number" min={0} max={item.currentProduct.stock} value={item.Quantitydel} onChange={(event) => { this.handleInputQuantitydel(item.currentProduct, event, key) }} className="d-sm-inline d-md-none" id="quantitydel" placeholder={0} disabled={item.paymethod == 'Cash' ? false : true} />
+                                                                        </td>
+
+                                                                        <td>
+                                                                            {
+                                                                                this.getPaymentMethod(item, key)
+                                                                            }</td>
                                                                         <td>{item.excessBottles}</td>
 
                                                                     </tr>
@@ -749,7 +782,9 @@ class AddSale extends Component {
                                                                         <td><span>{item.currentProduct.name ? item.currentProduct.name : 'N/A'}</span></td>
                                                                         <td>{this.getProductRate(item.currentProduct)}</td>
                                                                         <td><input type="number" min={0} max={(this.getProductRate(item.currentProduct) * Number(item.Quantitydel))} maxLength={7} value={item.discount} onChange={(event) => { this.handleInputDiscount(event, key) }} className="form-control" id="discount" placeholder="discount" /></td>
-                                                                        <td><input type="number" min={0} max={Number(item.Quantitydel) - Number(item.bottles)} value={item.secpaid} onChange={(event) => { this.handleInputSecurityPaid(item.currentProduct, event, key) }} className="form-control" id="secpaid" placeholder="secpaid" disabled={this.disableSecCheck(item.currentProduct)} /></td>
+
+                                                                        <td className="d-none d-md-block"><input type="number" min={0} max={Number(item.Quantitydel) - Number(item.bottles)} value={item.secpaid} onChange={(event) => { this.handleInputSecurityPaid(item.currentProduct, event, key) }} className="form-control" id="secpaid" placeholder="secpaid" disabled={this.disableSecCheck(item.currentProduct)} /></td>
+                                                                        <td className="d-sm-block d-md-none"><input type="number" min={0} max={Number(item.Quantitydel) - Number(item.bottles)} value={item.secpaid} onChange={(event) => { this.handleInputSecurityPaid(item.currentProduct, event, key) }} id="secpaid" placeholder="secpaid" disabled={this.disableSecCheck(item.currentProduct)} /></td>
                                                                         <td>{item.totalAmount}</td>
                                                                         {/* <td><em class="icon ni ni-trash" onClick={this.currentProduct ? this.removeSelectedItem(key) : null}></em></td> */}
                                                                         {/* <td onClick={this.removeSelectedItem(key)} className="btn btn-primary"><em className="icon ni ni-plus"></em><span>Add Item</span></td> */}
@@ -767,7 +802,7 @@ class AddSale extends Component {
                             <div className="row mt-5">
                                 <div className="d-flex col-md-6 ml-md-auto">
                                     <label className="col-md-4 offset-md-2 form-label">Items Total</label>
-                                    <span className="col-md-8 offset-md-1"> Rs. {this.state.totalAmount} </span>
+                                    <span className="col-md-8 offset-md-1"> Rs. <NumberFormat value={this.state.totalAmount} displayType={'text'} thousandSeparator={true} /> </span>
                                 </div>
                             </div>
                             <div className="mt-1 row ">
@@ -788,26 +823,26 @@ class AddSale extends Component {
                             <div className="row  mt-3">
                                 <div className="d-flex col-md-6 ml-md-auto">
                                     <label className="col-md-4 offset-md-2 form-label">Security Paid</label>
-                                    <span className="col-md-4 offset-md-1"> Rs. {Number(this.state.secPaidAmount) - Number(this.state.secamount)} </span>
+                                    <span className="col-md-4 offset-md-1"> Rs. <NumberFormat value={Number(this.state.secPaidAmount) - Number(this.state.secamount)} displayType={'text'} thousandSeparator={true} /> </span>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="d-flex col-md-6 ml-md-auto">
                                     <label className="col-md-4 offset-md-2 form-label">Security Due</label>
-                                    <span className="col-md-4 offset-md-1"> Rs. {Number(this.state.secamount)} </span>
+                                    <span className="col-md-4 offset-md-1"> Rs. <NumberFormat value={Number(this.state.secamount)} displayType={'text'} thousandSeparator={true} /> </span>
                                 </div>
                             </div>
 
                             <div className="row mt-2">
                                 <div className="d-flex col-md-6 ml-md-auto">
                                     <label className="col-md-4 offset-md-2 form-label">Total Paid Amount </label>
-                                    <span className="col-md-8 offset-md-1"> Rs. {Number(this.state.paidAmount) + Number(this.state.secPaidAmount) - Number(this.state.secamount)} </span>
+                                    <span className="col-md-8 offset-md-1"> Rs. <NumberFormat value={Number(this.state.paidAmount) + Number(this.state.secPaidAmount) - Number(this.state.secamount)} displayType={'text'} thousandSeparator={true} /> </span>
                                 </div>
                             </div>
                             <div className="row mt-2">
                                 <div className="d-flex col-md-6 ml-md-auto">
                                     <label className="col-md-4 offset-md-2 form-label">Sale Total </label>
-                                    <span className="col-md-8 offset-md-1 fw-bold"> Rs. {Number(this.state.totalAmount) + (Number(this.state.secPaidAmount) - Number(this.state.secamount)) + Number(this.state.secamount)} </span>
+                                    <span className="col-md-8 offset-md-1 fw-bold"> Rs. <NumberFormat value={Number(this.state.totalAmount) + (Number(this.state.secPaidAmount) - Number(this.state.secamount)) + Number(this.state.secamount)} displayType={'text'} thousandSeparator={true} />  </span>
                                 </div>
                             </div>
                             <div className="row g-4">

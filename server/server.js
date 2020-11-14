@@ -9,7 +9,6 @@ const app = express();
 const { auth } = require("./middleware/auth");
 const { auth2 } = require("./middleware/auth2");
 const shortid = require('shortid');
-const http = require("http");
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DATABASE, {
@@ -58,7 +57,7 @@ app.get('/api/getDashboard', auth, (req, res) => {
             if (err) return res.status(400).send(err);
             data = { recentOrders: [...doc] };
 
-            Transaction.find({ transaction_action: 'Sale Added', status: 'active' }).select('rate createdAt').exec((err, trans) => {
+            Transaction.find({ transaction_action: 'Sale Added', transaction_action: 'Sale Returned', status: 'active' }).select('rate createdAt').exec((err, trans) => {
                 if (err) return res.status(400).send(err);
 
                 var totalSales = 0;
@@ -67,7 +66,10 @@ app.get('/api/getDashboard', auth, (req, res) => {
                 var prevLastWeekSale = 0;
 
                 trans.forEach(element => {
-                    totalSales = totalSales + element.rate;
+                    if (element.transaction_action === 'Sale Returned')
+                        totalSales = totalSales - element.rate;
+                    else
+                        totalSales = totalSales + element.rate;
                 })
 
                 const currentDate = new Date();
@@ -156,16 +158,20 @@ app.get('/api/getDashboard', auth, (req, res) => {
                                 }
 
                                 const anAsyncFunction = async item => {
-                                    item.productDetails.forEach((element, key) => {
-                                        if (!productsList.find(x => x._id === element._id)) {
-                                            productsList.push({ _id: element._id, totalAmount: element.ptotal, count: (element.dqty - element.rqty) })
-                                        }
-                                        else {
-                                            const index = productsList.indexOf(productsList.find(x => x._id === element._id));
-                                            productsList[index].totalAmount += element.ptotal;
-                                            productsList[index].count += (element.dqty - element.rqty);
-                                        }
-                                    })
+                                    if (item.status !== 'Returned') {
+                                        item.productDetails.forEach((element, key) => {
+                                            if (!productsList.find(x => x._id === element._id)) {
+                                                productsList.push({ _id: element._id, totalAmount: element.ptotal, count: (element.dqty - element.rqty) })
+
+                                            }
+                                            else {
+                                                const index = productsList.indexOf(productsList.find(x => x._id === element._id));
+                                                productsList[index].totalAmount += element.ptotal;
+                                                productsList[index].count += (element.dqty - element.rqty);
+
+                                            }
+                                        })
+                                    }
                                     return functionWithPromise(item)
                                 }
 
@@ -999,6 +1005,88 @@ app.post('/api/sale_paid_update', auth, async function (req, res) {
 
 })
 
+app.post('/api/sale_refund', auth, (req, res) => {
+
+    let sale = req.body;
+    let products = sale.productDetails;
+    let productTotalQty = 0;
+    let linesQuantity = 0;
+    let bottlesWithCustomer = 0;
+
+    products.forEach(element => {
+        if (element.secpaid)
+            productTotalQty += Number(element.secpaid);
+        linesQuantity += Number(element.dqty);
+    })
+
+    if (sale.status !== 'Returned') {
+        update(sale, products)
+
+        async function update(sale, products) {
+
+            await products.forEach(item => {
+                const totalItems = item.dqty - item.rqty;
+
+                Product.findById(item._id, (err, prod) => {
+
+                    if (prod) {
+                        if (prod.sku == "CN19LL") {
+                            bottlesWithCustomer = (Number(item.dqty) - (Number(item.rqty)))
+
+                            Customer.findByIdAndUpdate(sale.customerId, {
+                                $inc: { customerLimit: -productTotalQty, customerBottles: -bottlesWithCustomer }
+                            }, (error) => {
+                                if (error) {
+                                    console.log("Error update customer", error);
+                                }
+                            });
+                        }
+                    }
+                })
+
+                Product.findByIdAndUpdate(item._id, {
+                    $inc: { stock: totalItems }
+                }, (error) => {
+                    if (error) {
+                        console.log("Error update stock", error);
+                    }
+                })
+            })
+
+
+
+
+
+
+            const trans = {
+                transaction_date: new Date(),
+                primary_quantity: linesQuantity,
+                rate: sale.totalAmount,
+                transaction_source: 'Customer',
+                transaction_type: 'Sale',
+                transaction_action: 'Sale Returned',
+                transaction_value: sale.customerName,
+                transaction_value_id: sale._id,
+                comments: sale.description,
+                addedBy: req.user._id
+            };
+
+            const transaction = new Transaction(trans);
+            await transaction.save();
+
+            sale.status = 'Returned';
+            await Sale.findByIdAndUpdate(sale._id, sale, { new: true });
+
+            return res.status(200).json({
+                success: true
+            });
+        }
+    }
+    else {
+        return res.status(400).send("Error returning sale");
+    }
+})
+
 
 app.post('/api/purchase_update', auth, async function (req, res) {
 
@@ -1072,7 +1160,7 @@ app.post('/api/customer_update', auth, (req, res) => {
     });
 })
 
-app.post('/api/transaction_update', (req, res) => {
+app.post('/api/transaction_update', auth, (req, res) => {
     const transaction = new Transaction(req.body);
 
     if (transaction.transaction_action === "Inventory Transfer") {
@@ -1105,8 +1193,8 @@ app.post('/api/transaction_update', (req, res) => {
 })
 
 
-app.post("/api/user_update", (req, res) => {
-    User.findByIdAndUpdate(req.body.id, req.body, { new: true }, (err, user) => {
+app.post("/api/user_profile_update", auth, (req, res) => {
+    User.findByIdAndUpdate(req.user._id, req.body, { new: true, select: "name role address dob city _id email phone" }, (err, user) => {
         if (err) return res.status(400).send(err);
         res.json({
             success: true,
@@ -1117,7 +1205,7 @@ app.post("/api/user_update", (req, res) => {
 
 app.post("/api/userchange", auth, (req, res) => {
 
-    User.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, user) => {
+    User.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err) => {
         if (err) return res.status(400).send(err);
         return res.status(200).send({ success: true })
     });

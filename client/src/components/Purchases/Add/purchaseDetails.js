@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ItemRow from '../itemsreturn'
+import NumberFormat from 'react-number-format';
 
 class PurchaseDetails extends Component {
 
@@ -34,25 +35,26 @@ class PurchaseDetails extends Component {
         }
     }
 
-    addSelectedItem = (product) => {
-        this.productsList.push(product);
-
-        if (this.props.valid === false && !this.productsList.some(item => item == -1)) {
+    addSelectedItem = (product, i) => {
+        this.productsList.push({ ...product, index: Number(i) });
+        if (this.props.valid === false && this.productsList.length > 0) {
             this.props.setValid();
         }
     }
 
     removeSelectedItem = (index) => {
-        this.productsList[index] = -1;
+        const p = this.productsList.find(x => x.index === index);
+        this.productsList.splice(this.productsList.indexOf(p));
         if (this.productsList.length == 0 && this.props.valid === true) {
             this.props.setValid()
         }
     }
 
-    updateTotalAmount = (index2, qty, product) => {
-        const p = this.productsList.find(x => x._id === product._id);
-        const index = this.productsList.indexOf(p)
-        this.productsList[index] = { ...this.productsList[index], qty: qty, totalAmount: (Number(qty) * Number(product.price.total)) }
+    updateTotalAmount = (index, qty, product) => {
+
+        const p = this.productsList.find(x => x.index === index);
+        const index2 = this.productsList.indexOf(p)
+        this.productsList[index2] = { ...this.productsList[index2], qty: qty, totalAmount: (Number(qty) * Number(product.price.total)) }
         this.calculateTotal();
     }
 
@@ -110,8 +112,8 @@ class PurchaseDetails extends Component {
                                     <th scope="col">SKU</th>
                                     <th scope="col">Brand</th>
                                     <th scope="col">Quantity.</th>
-                                    <th scope="col">Rate</th>
                                     <th scope="col">UOM</th>
+                                    <th scope="col">Rate</th>
                                     <th scope="col">Total</th>
                                 </tr>
                             </thead>
@@ -136,7 +138,7 @@ class PurchaseDetails extends Component {
                 <div className="row mt-5">
                     <div className="d-flex col-md-6 ml-md-auto">
                         <label className="col-md-4 offset-md-2 form-label">Amount to be paid</label>
-                        <span className="col-md-8 offset-md-2"> Rs. {Number(this.state.totalAmount)} </span>
+                        <span className="col-md-8 offset-md-2"> Rs. <NumberFormat value={Number(this.state.totalAmount)} displayType={'text'} thousandSeparator={true} /></span>
                     </div>
                 </div>
 

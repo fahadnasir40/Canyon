@@ -32,10 +32,9 @@ class Transactions extends Component {
     }
 
     changeStatus = (transaction) => {
-        console.log("Function Calls", transaction)
+
         if (transaction.status === 'active') {
             transaction.status = 'Inactive'
-            console.log("dispatch Calls")
             this.props.dispatch(updateTransaction(transaction))
         }
         else if (transaction.status === 'Inactive') {
