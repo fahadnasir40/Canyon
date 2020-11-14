@@ -16,18 +16,18 @@ class Content extends Component {
     columns = [
 
         // {
-        //     // name: 'Sale Order',
-        //     // selector: '_id',
-        //     // sortable: true,
-        //     // style: {
-        //     //     color: '#202124',
-        //     //     fontSize: '14px',
-        //     //     fontWeight: 500,
-        //     // },
+        //     name: 'Sale Order',
+        //     selector: '_id',
+        //     sortable: true,
+        //     style: {
+        //         color: '#202124',
+        //         fontSize: '14px',
+        //         fontWeight: 500,
+        //     },
         //     cell: row => (
         //         <div className="tb-odr-item">
         //             <td className="tb-odr-info">
-        //                 {/* <span className="tb-odr-id text-azure">{row._id}</span> */}
+
         //                 <span className="tb-odr-date d-sm-none"><Moment format={'DD MMM YYYY'}>{row.saleDate}</Moment></span>
         //             </td>
         //         </div>
@@ -37,10 +37,12 @@ class Content extends Component {
             name: 'Date',
             selector: 'saleDate',
             sortable: true,
-            hide: 'lg',
+
             cell: row => (
+
                 <div className="tb-odr-item">
                     <td className="tb-odr-info">
+                        <span className="tb-odr-id text-azure d-md-none">{row.customerName}</span>
                         <span className="tb-odr-date"><Moment format={'DD MMM YYYY'}>{row.saleDate}</Moment></span>
                     </td>
                 </div>
@@ -92,6 +94,7 @@ class Content extends Component {
             name: 'Due Line Amt',
             selector: 'Due Line Amt',
             sortable: true,
+            hide: 'md',
             style: {
                 color: 'rgba(0,0,0,.54)',
             },
@@ -121,6 +124,7 @@ class Content extends Component {
         , {
             name: 'Sec Due',
             selector: 'Sec Due',
+            hide: 'md',
             sortable: true,
             style: {
                 color: 'rgba(0,0,0,.54)',
@@ -146,13 +150,12 @@ class Content extends Component {
                                 row.status === 'Pending' ?
                                     <span className="badge badge-dot badge-warning">{row.status}</span>
                                     :
-
-                                    row.status === 'Complete' ?
-                                        <span className="badge badge-dot badge-success">{row.status}</span>
+                                    row.status === 'Returned' ?
+                                        <span className="badge badge-dot badge-info">{row.status}</span>
                                         :
-                                        row.status === 'Returned' ?
-                                            <span className="badge badge-dot badge-info">{row.status}</span>
-                                            : null
+                                        <span className="badge badge-dot badge-success">{row.status}</span>
+
+
                             }
                         </span>
                     </td>
@@ -160,24 +163,11 @@ class Content extends Component {
             )
         },
 
-        // {
-        //     name: 'Action',
-        //     selector: 'action',
-
-        //     cell: row => (
-        //         <div>
-        //             <div className="d-none d-md-inline">
-        //                 <Link to={{
-        //                     pathname: `/sale_invoice_id=${row._id}`,
-        //                 }} className="btn btn-dim btn-sm btn-primary">View</Link>
-        //             </div>
-        //         </div>
-        //     ),
-        // },
         {
             name: 'Mark Line Amt Complete',
             selector: 'mark',
             sortable: true,
+            hide: 'md',
             cell: row => (
                 <div>
                     {
@@ -191,6 +181,7 @@ class Content extends Component {
         {
             name: 'Mark Security Complete',
             selector: 'security',
+            hide: 'md',
             sortable: true,
             cell: row => (
                 <div>
@@ -213,6 +204,9 @@ class Content extends Component {
                             pathname: `/sale_invoice_id=${row._id}`,
                         }} className="btn btn-dim btn-sm btn-primary">View</Link>
                     </div>
+                    <Link to={{
+                        pathname: `/sale_invoice_id=${row._id}`,
+                    }} className="btn btn-pd-auto d-md-none"><em className="icon ni ni-chevron-right"></em></Link>
                 </div>
             ),
         },
@@ -276,6 +270,40 @@ class Content extends Component {
                         <span className=" fw-medium">Sale Date: </span> <span className="fw-normal"><Moment format="DD MMM, YYYY hh:mm A">{data.saleDate}</Moment></span>
                     </div>
                 </div>
+                <div className="row d-md-none">
+                    <div className="col">
+                        <span className=" fw-medium">Mark Line Amount As Complete    </span>
+                    </div>
+                    <div className="col">
+                        <span>
+                            {
+                                Number(data.totalAmount) - Number(data.paidAmount) > 0 ?
+                                    <button className="btn btn-dim btn-sm btn-danger" onClick={() => { this.markLineAmountComplete(data) }}
+                                        disabled={false}>Due</button>
+                                    : <button className="btn btn-sm btn-info" disabled={true}>Paid</button>}
+                        </span>
+                    </div>
+                </div>
+                <div className="row d-md-none">
+                    <div className="col">
+                        <span className=" fw-medium">Mark Security As Complete   </span>
+                    </div>
+                    <div className="col">
+                        <span>
+                            {
+                                Number(data.secAmount) > 0 ?
+                                    <button className="btn btn-dim btn-sm btn-danger" onClick={() => { this.markSecurityComplete(data) }}
+                                        disabled={false}>Due </button>
+                                    : <button className="btn btn-sm btn-info" disabled={true}>Paid</button>}
+
+                        </span>
+                    </div>
+                </div>
+                <div className="row d-md-none">
+                    <div width="20px">
+                        <div onClick={() => { this.editPaidAmount(data) }} class="btn btn-icon btn-white btn-dim btn-lg  btn-primary  ml-3 d-sm-block px-2"><em class="iconicon ni ni-edit"> Edit</em></div>
+                    </div>
+                </div>
                 {
                     data.status !== 'Returned' ?
                         <div className="row my-3">
@@ -285,11 +313,7 @@ class Content extends Component {
                         </div>
                         : null
                 }
-                <div className="row d-md-none">
-                    <div width="20px">
-                        <div onClick={() => { this.editPaidAmount(data) }} class="btn btn-icon btn-white btn-dim btn-lg  btn-primary  ml-3 d-sm-block px-2"><em class="iconicon ni ni-edit"> Edit</em></div>
-                    </div>
-                </div>
+
             </div>
         )
     };

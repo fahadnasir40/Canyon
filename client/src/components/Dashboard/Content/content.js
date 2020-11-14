@@ -236,7 +236,7 @@ class DashboardContent extends Component {
                                                                     <h6 className="sub-title">This week so far</h6>
                                                                     <div className="data-group">
                                                                         <div className="amount">Rs. <NumberFormat value={data.lastWeekSale} displayType={'text'} thousandSeparator={true} /></div>
-                                                                        <div className="info text-right"><span className="change up text-danger"><em className="icon ni ni-arrow-long-up"></em>{data.lastWeekSale === 0 ? 0 : (((data.lastWeekSale - data.prevWeekSale) / data.lastWeekSale) * 100).toFixed(2)}%</span><br /><span>vs. last week</span></div>
+                                                                        <div className="info text-right"><span className="change up text-danger"><em className="icon ni ni-arrow-long-up"></em>{data.lastWeekSale === 0 ? 0 : Math.min(Math.max(parseInt((((data.lastWeekSale - data.prevWeekSale) / data.lastWeekSale) * 100).toFixed(2)), 0), 100)}%</span><br /><span>vs. last week</span></div>
                                                                     </div>
                                                                 </div>
                                                             </div>

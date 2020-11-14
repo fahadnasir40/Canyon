@@ -1053,11 +1053,6 @@ app.post('/api/sale_refund', auth, (req, res) => {
                 })
             })
 
-
-
-
-
-
             const trans = {
                 transaction_date: new Date(),
                 primary_quantity: linesQuantity,
