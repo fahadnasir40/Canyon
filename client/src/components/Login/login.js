@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { loginUser } from '../../actions'
-
-
+import Moment from 'react-moment'
+import $ from 'jquery'
 class Login extends Component {
 
     state = {
@@ -67,10 +67,10 @@ class Login extends Component {
                         <div className="nk-content ">
                             <div className="nk-block nk-block-middle nk-auth-body  wide-xs">
                                 <div className="brand-logo pb-4 text-center">
-                                    <a href="html/index.html" className="logo-link">
+                                    <Link to="/" className="logo-link">
                                         <img className="logo-light logo-img logo-img-lg" src="./images/logo.png" srcSet="./images/logo2x.png 2x" alt="logo" />
                                         <img className="logo-dark logo-img logo-img-lg" src="./images/logo-dark.png" srcSet="./images/logo-dark2x.png 2x" alt="logo-dark" />
-                                    </a>
+                                    </Link>
                                 </div>
                                 <div className="card">
                                     <div className="card-inner card-inner-lg">
@@ -91,7 +91,7 @@ class Login extends Component {
                                             <div className="form-group">
                                                 <div className="form-label-group">
                                                     <label className="form-label" htmlFor="password">Password</label>
-                                                    <a className="link link-primary link-sm" href="#">Forgot Code?</a>
+                                                    <a data-toggle="tooltip" data-placement="top" title="Email: saadkhan138@hotmail.com " className="link link-primary link-sm" aria-disabled >Forgot Code?</a>
                                                 </div>
                                                 <div className="form-control-wrap">
                                                     <input type="password" value={this.state.password} onChange={this.handleInputPassword} className="form-control form-control-lg" id="password" placeholder="Enter your password" />
@@ -101,7 +101,7 @@ class Login extends Component {
                                                 <button type="submit" className="btn btn-lg btn-primary btn-block">Sign in</button>
                                             </div>
                                         </form>
-                                        <div className="form-note-s2 text-center pt-4"> New on our platform? <a href="#">Contact Canyon Pty Ltd.</a>
+                                        <div className="form-note-s2 text-center pt-4"> New on our platform? <Link to="privacy_and_policy">Contact Canyon Pty Ltd.</Link>
                                         </div>
                                         <div className="text-danger  mt-2 text-center">
                                             {user.login ?
@@ -133,20 +133,14 @@ class Login extends Component {
                                         <div className="col-lg-6 order-lg-last">
                                             <ul className="nav nav-sm justify-content-center justify-content-lg-end">
                                                 <li className="nav-item">
-                                                    <a className="nav-link" href="#">Terms and Condition</a>
-                                                </li>
-                                                <li className="nav-item">
-                                                    <a className="nav-link" href="#">Privacy Policy</a>
-                                                </li>
-                                                <li className="nav-item">
-                                                    <a className="nav-link" href="#">Help</a>
+                                                    <Link className="nav-link" to="privacy_and_policy">Privacy Policy {'&'} Contact Us</Link>
                                                 </li>
 
                                             </ul>
                                         </div>
                                         <div className="col-lg-6">
                                             <div className="nk-block-content text-center text-lg-left">
-                                                <p className="text-soft">&copy; 2020 Canyon Waters. All Rights Reserved.</p>
+                                                <p className="text-soft">&copy; <Moment format="YYYY"></Moment>  Canyon Mineral Water. All Rights Reserved.</p>
                                             </div>
                                         </div>
                                     </div>

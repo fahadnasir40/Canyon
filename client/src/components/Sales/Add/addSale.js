@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { getActiveProducts, saveTransaction, getCustomers } from '../../../actions';
 import Moment from 'react-moment';
+import NumberFormat from 'react-number-format'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -799,7 +800,7 @@ class AddSale extends Component {
                             <div className="row mt-5">
                                 <div className="d-flex col-md-6 ml-md-auto">
                                     <label className="col-md-4 offset-md-2 form-label">Items Total</label>
-                                    <span className="col-md-8 offset-md-1"> Rs. {this.state.totalAmount} </span>
+                                    <span className="col-md-8 offset-md-1"> Rs. <NumberFormat value={this.state.totalAmount} displayType={'text'} thousandSeparator={true} /> </span>
                                 </div>
                             </div>
                             <div className="mt-1 row ">
@@ -820,26 +821,26 @@ class AddSale extends Component {
                             <div className="row  mt-3">
                                 <div className="d-flex col-md-6 ml-md-auto">
                                     <label className="col-md-4 offset-md-2 form-label">Security Paid</label>
-                                    <span className="col-md-4 offset-md-1"> Rs. {Number(this.state.secPaidAmount) - Number(this.state.secamount)} </span>
+                                    <span className="col-md-4 offset-md-1"> Rs. <NumberFormat value={Number(this.state.secPaidAmount) - Number(this.state.secamount)} displayType={'text'} thousandSeparator={true} /> </span>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="d-flex col-md-6 ml-md-auto">
                                     <label className="col-md-4 offset-md-2 form-label">Security Due</label>
-                                    <span className="col-md-4 offset-md-1"> Rs. {Number(this.state.secamount)} </span>
+                                    <span className="col-md-4 offset-md-1"> Rs. <NumberFormat value={Number(this.state.secamount)} displayType={'text'} thousandSeparator={true} /> </span>
                                 </div>
                             </div>
 
                             <div className="row mt-2">
                                 <div className="d-flex col-md-6 ml-md-auto">
                                     <label className="col-md-4 offset-md-2 form-label">Total Paid Amount </label>
-                                    <span className="col-md-8 offset-md-1"> Rs. {Number(this.state.paidAmount) + Number(this.state.secPaidAmount) - Number(this.state.secamount)} </span>
+                                    <span className="col-md-8 offset-md-1"> Rs. <NumberFormat value={Number(this.state.paidAmount) + Number(this.state.secPaidAmount) - Number(this.state.secamount)} displayType={'text'} thousandSeparator={true} /> </span>
                                 </div>
                             </div>
                             <div className="row mt-2">
                                 <div className="d-flex col-md-6 ml-md-auto">
                                     <label className="col-md-4 offset-md-2 form-label">Sale Total </label>
-                                    <span className="col-md-8 offset-md-1 fw-bold"> Rs. {Number(this.state.totalAmount) + (Number(this.state.secPaidAmount) - Number(this.state.secamount)) + Number(this.state.secamount)} </span>
+                                    <span className="col-md-8 offset-md-1 fw-bold"> Rs. <NumberFormat value={Number(this.state.totalAmount) + (Number(this.state.secPaidAmount) - Number(this.state.secamount)) + Number(this.state.secamount)} displayType={'text'} thousandSeparator={true} />  </span>
                                 </div>
                             </div>
                             <div className="row g-4">

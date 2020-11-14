@@ -123,7 +123,7 @@ class SaleInvoice extends Component {
 
                                     <div className="invoice-wrap">
                                         <div className="invoice-brand text-center">
-                                            <img src="./images/logo-dark.png" srcSet="./images/logo-dark2x.png 2x" alt="" />
+                                            <img src="./images/logo-dark.png" style={{ width: "140px", height: "56px" }} srcSet="./images/logo-dark.png" alt="" />
                                         </div>
                                         <div className="invoice-head mb-2 mt-4">
                                             <div className="row mt-2">
@@ -228,6 +228,16 @@ class SaleInvoice extends Component {
                                             </div>
                                         </div>
                                     </div>
+                                    <footer className="footer mt-auto ml-0"  >
+                                        <div className="my-5 text-center">
+                                            <p>
+                                                13-B, Public Health Society, Main Boulevard LDA Avenue-1, Raiwind Road, Lahore
+                                                    Cell: +92 300 9117673 <br />
+                                                    Email: saadkhan138@hotmail.com
+                                                </p>
+
+                                        </div>
+                                    </footer>
                                 </div>
                             </div>
                         </div>
@@ -252,7 +262,7 @@ class SaleInvoice extends Component {
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
                             {this.renderBody(sale, products)}
-                            <Footer />
+
                         </div>
                     </div>
                 </div>
