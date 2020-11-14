@@ -901,6 +901,53 @@ app.post('/api/purchase_paid_update', auth, (req, res) => {
 app.post('/api/sale_paid_update', auth, (req, res) => {
     let sale = req.body;
 
+    let products = sale.productDetails;
+    let rate = 0;
+    let excessBottles = 0;
+    let secBottles = 0;
+
+    Product.forEach(element => {
+        if (element._id === '5f80d4916f361c74eca8ddb9') {
+            if (Number(sale.secAmount) > 0) {
+                rate += Number(element.secRate);
+            }
+        }
+    })
+
+    products.forEach(element => {
+        if (element._id === '5f80d4916f361c74eca8ddb9') {
+            if (Number(sale.secAmount) > 0) {
+                rate += Number(element.secRate);
+            }
+        }
+    })
+
+    if (Number(sale.custExBottles) > 0) {
+        if (Number(sale.secAmount) > 0) {
+            excessBottles = Number(sale.custExBottles) * Number(rate);
+        }
+    }
+
+
+    console.log("Sale Server Info", sale)
+    console.log("Total Excess Bottles", Math.floor(((Number(sale.custExBottles) * Number(rate)) - Number(sale.secAmount)) / Number(rate)))
+    console.log("Security Due: ", sale.secAmount)
+    console.log("Total Security: ", excessBottles)
+
+    secBottles = Math.floor(((Number(sale.custExBottles) * Number(rate)) - Number(sale.secAmount)) / Number(rate));
+
+    products.forEach(element => {
+        if (element._id === '5f80d4916f361c74eca8ddb9') {
+            if (Number(sale.secAmount) > 0) {
+                rate += Number(element.secRate);
+            }
+        }
+    })
+
+    sale.productDetails.secpaid = 2;
+
+    console.log("Sale Product Details", sale.productDetails.secpaid)
+
     if (sale.paidAmount < sale.totalAmount && sale.totalAmount > 0) {
         if (sale.status === 'Complete')
             sale.status = 'Pending'
