@@ -744,7 +744,6 @@ app.post('/api/addSale', auth2, (req, res) => {
             const session = await Sale.startSession();
             session.startTransaction();
             try {
-                console.log("Sale Add", productTotalQty, req.body.bottlesWithCustomer)
                 Customer.findByIdAndUpdate(sale.customerId, {
                     $inc: { customerLimit: productTotalQty, customerBottles: req.body.bottlesWithCustomer }
                 }, (error) => {
@@ -927,6 +926,8 @@ app.post('/api/sale_refund', auth, (req, res) => {
     let sale = req.body;
     let products = sale.productDetails;
     let productTotalQty = 0;
+    let linesQuantity = 0;
+    let bottlesWithCustomer = 0;
 
     products.forEach(element => {
         if (element.secpaid)
@@ -939,16 +940,26 @@ app.post('/api/sale_refund', auth, (req, res) => {
 
         async function update(sale, products) {
 
-            await Customer.findByIdAndUpdate(sale.customerId, {
-                $inc: { customerLimit: -productTotalQty, customerBottles: -req.body.bottlesWithCustomer }
-            }, (error) => {
-                if (error) {
-                    console.log("Error update customer", error);
-                }
-            });
-
             await products.forEach(item => {
                 const totalItems = item.dqty - item.rqty;
+
+                Product.findById(item._id, (err, prod) => {
+
+                    if (prod) {
+                        if (prod.sku == "CN19LL") {
+                            bottlesWithCustomer = (Number(item.dqty) - (Number(item.rqty)))
+
+                            Customer.findByIdAndUpdate(sale.customerId, {
+                                $inc: { customerLimit: -productTotalQty, customerBottles: -bottlesWithCustomer }
+                            }, (error) => {
+                                if (error) {
+                                    console.log("Error update customer", error);
+                                }
+                            });
+                        }
+                    }
+                })
+
                 Product.findByIdAndUpdate(item._id, {
                     $inc: { stock: totalItems }
                 }, (error) => {
@@ -957,6 +968,12 @@ app.post('/api/sale_refund', auth, (req, res) => {
                     }
                 })
             })
+
+
+
+
+
+
             const trans = {
                 transaction_date: new Date(),
                 primary_quantity: linesQuantity,

@@ -51,7 +51,7 @@ class Header extends Component {
                         <div className="nk-header-brand d-xl-none">
                             <Link to="/" className="logo-link">
                                 <img className="logo-light logo-img" srcSet="./images/logo.png" srcSet="./images/logo2x.png 2x" alt="logo" />
-                                <img className="logo-dark logo-img" srcSet="./images/logo-dark.png" srcSet="./images/logo-dark2x.png 2x" alt="logo-dark" />
+                                <img className="logo-dark logo-img" srcSet="./images/logo-dark.png" alt="logo-dark" />
                             </Link>
                         </div>
 

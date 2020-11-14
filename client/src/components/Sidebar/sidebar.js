@@ -54,9 +54,8 @@ class SideBar extends Component {
                     <div className="nk-sidebar-element nk-sidebar-head">
                         <div className="nk-sidebar-brand">
                             <Link to="/" className="logo-link nk-sidebar-logo">
-                                <img className="logo-light logo-img" srcSet="./images/logo.png" srcSet="./images/logo2x.png 2x" alt="logo" />
-                                <img className="logo-dark logo-img" srcSet="./images/logo-dark.png" srcSet="./images/logo-dark2x.png 2x" alt="logo-dark" />
-                                <img className="logo-small logo-img logo-img-small" srcSet="./images/logo-small.png" srcSet="./images/logo-small2x.png 2x" alt="logo-small" />
+                                <img className="logo-light logo-img ml-5" srcSet="./images/logo.png" srcSet="./images/logo2x.png 2x" alt="logo" />
+                                <img className="logo-small logo-img logo-img-small" srcSet="./images/logo-small.png" alt="logo-small" />
                             </Link>
                         </div>
                         <div className="nk-menu-trigger mr-n2">

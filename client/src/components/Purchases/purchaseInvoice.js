@@ -218,7 +218,18 @@ class PurchaseInvoice extends Component {
                                             </div>
                                         </div>
                                     </div>
+                                    <footer className="footer mt-auto ml-0"  >
+                                        <div className="my-5 text-center">
+                                            <p>
+                                                13-B, Public Health Society, Main Boulevard LDA Avenue-1, Raiwind Road, Lahore
+                                                    Cell: +92 300 9117673 <br />
+                                                    Email: saadkhan138@hotmail.com
+                                                </p>
+
+                                        </div>
+                                    </footer>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -240,7 +251,7 @@ class PurchaseInvoice extends Component {
                         <Header user={this.props.user} />
                         <div className="custom-dashboard mt-5">
                             {this.renderBody(purchase, products)}
-                            <Footer />
+
                         </div>
                     </div>
                 </div>
