@@ -207,9 +207,6 @@ class Content extends Component {
             ),
         },
         {
-            // name: 'Edit',
-            // selector: 'edit',
-
             cell: row => (
                 <div>
                     <div className="d-none d-md-inline">
@@ -228,6 +225,11 @@ class Content extends Component {
     SampleExpandedComponent = ({ data }) => {
         return (
             <div className="container-fluid">
+                <div className="row d-lg-none">
+                    <div className="col">
+                        <span className="title fw-medium">Id# </span> <span className="fw-normal"> {data._id}</span>
+                    </div>
+                </div>
                 <div className="row d-lg-none">
                     <div className="col">
                         <span className="title fw-medium">Name: </span> <span className="fw-normal"> {data.customerName}</span>
@@ -348,6 +350,7 @@ class Content extends Component {
                 inputValidator: (value) => {
                     if (value) {
                         sale.paidAmount = Number(value);
+                        sale = { ...sale, type: "paid_amount_update" }
                         object.props.updateSale(sale)
                     }
                 },
@@ -383,6 +386,7 @@ class Content extends Component {
                 inputValidator: (value) => {
                     if (value) {
                         sale.paidAmount += Number(value);
+                        sale = { ...sale, type: "due_update" }
                         object.props.updateSale(sale)
                     }
                 },
@@ -418,7 +422,8 @@ class Content extends Component {
                 showCancelButton: true,
                 inputValidator: (value) => {
                     if (value) {
-                        sale.secAmount -= Number(value);
+                        // sale.secAmount = Number(value);
+                        sale = { ...sale, type: "security_update", payment_amount: Number(value) }
                         object.props.updateSale(sale)
                     }
                 },

@@ -381,6 +381,7 @@ class AddSale extends Component {
                 currentCustomer: this.state.customersList[event.target.value],
                 address: this.state.customersList[event.target.value].address[0]
             });
+            this.clearAllItems();
         }
         else if (event.target.value == -1) {
             this.clearAllItems();
