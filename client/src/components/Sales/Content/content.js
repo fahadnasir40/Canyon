@@ -40,9 +40,11 @@ class Content extends Component {
 
             cell: row => (
 
-                <div className="tb-odr-item">
+                <div className="tb-odr-item ml-n2">
+
                     <td className="tb-odr-info">
-                        <span className="tb-odr-id text-azure d-md-none">{row.customerName}</span>
+
+                        <span className="tb-odr-id text-azure d-md-none ">{row._id}</span>
                         <span className="tb-odr-date"><Moment format={'DD MMM YYYY'}>{row.saleDate}</Moment></span>
                     </td>
                 </div>
@@ -68,7 +70,7 @@ class Content extends Component {
                 color: 'rgba(0,0,0,.54)',
             },
             cell: row => (
-                <div className="tb-odr-item">
+                <div className="tb-odr-item ">
                     <td className="tb-odr-amount">
                         <span className="tb-odr-total">
                             <span className="amount">Rs. <NumberFormat value={this.calculateTotalAmount(row)} displayType={'text'} thousandSeparator={true} /> </span>
@@ -203,6 +205,7 @@ class Content extends Component {
                         <Link to={{
                             pathname: `/sale_invoice_id=${row._id}`,
                         }} className="btn btn-dim btn-sm btn-primary">View</Link>
+                        <div onClick={() => { this.editPaidAmount(row) }} class="btn btn-icon btn-white btn-dim btn-lg  btn-primary py-n1 ml-3"><em class="iconicon ni ni-edit"></em></div>
                     </div>
                     <Link to={{
                         pathname: `/sale_invoice_id=${row._id}`,
@@ -210,20 +213,7 @@ class Content extends Component {
                 </div>
             ),
         },
-        {
-            cell: row => (
-                <div>
-                    <div className="d-none d-md-inline">
-                        {
-                            Number(row.totalAmount) > 0 ?
-                                <button className="btn btn-icon btn-white btn-dim btn-lg  btn-primary py-n1" onClick={() => { this.editPaidAmount(row) }}
-                                    disabled={false}><em className="iconicon ni ni-edit"></em></button>
-                                : <div className="btn btn-icon btn-white btn-dim btn-lg  btn-primary py-n1"><em className="iconicon ni ni-edit"></em></div>
-                        }
-                    </div>
-                </div>
-            )
-        },
+
     ];
 
     SampleExpandedComponent = ({ data }) => {
