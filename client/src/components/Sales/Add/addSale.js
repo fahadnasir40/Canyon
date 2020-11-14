@@ -684,8 +684,8 @@ class AddSale extends Component {
                                                             <th scope="col">#</th>
                                                             <th scope="col">Item Name</th>
                                                             <th scope="col">Current Stock</th>
-                                                            <th scope="col">Qty. Rec</th>
                                                             <th scope="col">Qty. Del</th>
+                                                            <th scope="col">Qty. Rec</th>
                                                             <th scope="col">Payment Method</th>
                                                             <th scope="col">Excess</th>
                                                         </tr>
@@ -704,9 +704,8 @@ class AddSale extends Component {
                                                                         <td>
                                                                             <span>{item.currentProduct.stock ? item.currentProduct.stock : 'N/A'}</span>
                                                                         </td>
-                                                                        <td><input type="number" min={0} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(item.currentProduct, event, key) }} className="form-control" id="quantityrec" placeholder={0} disabled={item.currentProduct.sku === 'CN19LL' || item.currentProduct.sku === 'O19L' ? false : true} /></td>
-
                                                                         <td><input type="number" min={0} max={item.currentProduct.stock} value={item.Quantitydel} onChange={(event) => { this.handleInputQuantitydel(item.currentProduct, event, key) }} className="form-control" id="quantitydel" placeholder={0} disabled={item.paymethod == 'Cash' ? false : true} /></td>
+                                                                        <td><input type="number" min={0} value={item.Quantityrec} onChange={(event) => { this.handleInputQuantityrec(item.currentProduct, event, key) }} className="form-control" id="quantityrec" placeholder={0} disabled={item.currentProduct.sku === 'CN19LL' || item.currentProduct.sku === 'O19L' ? false : true} /></td>
                                                                         <td> {
                                                                             this.getPaymentMethod(item, key)
                                                                         }</td>

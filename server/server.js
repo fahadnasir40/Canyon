@@ -646,13 +646,7 @@ app.post('/api/addPurchase', auth, (req, res) => {
 
     const purchase = new Purchase(req.body);
 
-    Purchase.count(function (err, countData) {
-        //you will get the count of number of documents in mongodb collection in the variable 
-        countdata
-    });
-
-
-    console.log("Count: ", countdata)
+    console.log("Purchase ", Purchase)
 
     let products = req.body.productDetails;
     let productTotalQty = 0;
@@ -792,7 +786,7 @@ app.post('/api/addSale', auth2, (req, res) => {
             } catch (error) {
                 // If an error occurred, abort the whole transaction and
                 // undo any changes that might have happened
-                console.log("Transaction Error", error)
+                // console.log("Transaction Error", error)
                 await session.abortTransaction();
                 session.endSession();
                 return res.status(400).send(error);

@@ -5,6 +5,7 @@ import Moment from 'react-moment';
 import Swal from 'sweetalert2';
 import NumberFormat from 'react-number-format'
 import $ from 'jquery'
+import { Button } from 'bootstrap';
 class Content extends Component {
 
     state = {
@@ -13,24 +14,24 @@ class Content extends Component {
 
     columns = [
 
-        {
-            name: 'Sale Order',
-            selector: '_id',
-            sortable: true,
-            style: {
-                color: '#202124',
-                fontSize: '14px',
-                fontWeight: 500,
-            },
-            cell: row => (
-                <div className="tb-odr-item">
-                    <td className="tb-odr-info">
-                        <span className="tb-odr-id text-azure">{row._id}</span>
-                        <span className="tb-odr-date d-sm-none"><Moment format={'DD MMM YYYY'}>{row.saleDate}</Moment></span>
-                    </td>
-                </div>
-            )
-        },
+        // {
+        //     // name: 'Sale Order',
+        //     // selector: '_id',
+        //     // sortable: true,
+        //     // style: {
+        //     //     color: '#202124',
+        //     //     fontSize: '14px',
+        //     //     fontWeight: 500,
+        //     // },
+        //     cell: row => (
+        //         <div className="tb-odr-item">
+        //             <td className="tb-odr-info">
+        //                 {/* <span className="tb-odr-id text-azure">{row._id}</span> */}
+        //                 <span className="tb-odr-date d-sm-none"><Moment format={'DD MMM YYYY'}>{row.saleDate}</Moment></span>
+        //             </td>
+        //         </div>
+        //     )
+        // },
         {
             name: 'Date',
             selector: 'saleDate',
@@ -67,7 +68,6 @@ class Content extends Component {
                 <div className="tb-odr-item">
                     <td className="tb-odr-amount">
                         <span className="tb-odr-total">
-                            {/* <span className="amount">Rs. {row.totalAmount}</span> */}
                             <span className="amount">Rs. <NumberFormat value={this.calculateTotalAmount(row)} displayType={'text'} thousandSeparator={true} /> </span>
                         </span>
                         <span className="tb-odr-status d-sm-none">
@@ -82,24 +82,55 @@ class Content extends Component {
                 </div>
             ),
         },
-        {
-            name: 'Description',
-            selector: 'description',
+        , {
+            name: 'Due Line Amt',
+            selector: 'Due Line Amt',
             sortable: true,
-            hide: 'md',
+            style: {
+                color: 'rgba(0,0,0,.54)',
+            },
             cell: row => (
-                <div>
-                    {
-                        row.description.length > 20 ?
-                            <p className="fw-normal">{row.description.substr(0, 20) + ' ...'}</p> :
-                            <p className="text-muted">No description added</p>
-                    }
+                <div className="tb-odr-item">
+                    <td className="tb-odr-amount">
+                        <span className="amount">Rs. <NumberFormat value={Number(row.totalAmount) - Number(row.paidAmount) > 0 ? Number(row.totalAmount) - Number(row.paidAmount) : 0} displayType={'text'} thousandSeparator={true} /> </span>
+                    </td>
+                </div>
+            ),
+        },
+        // {
+        //     name: 'Description',
+        //     selector: 'description',
+        //     sortable: true,
+        //     hide: 'md',
+        //     cell: row => (
+        //         <div>
+        //             {
+        //                 row.description.length > 20 ?
+        //                     <p className="fw-normal">{row.description.substr(0, 20) + ' ...'}</p> :
+        //                     <p className="text-muted">No description added</p>
+        //             }
+        //         </div>
+        //     ),
+        // },
+        , {
+            name: 'Sec Due',
+            selector: 'Sec Due',
+            sortable: true,
+            style: {
+                color: 'rgba(0,0,0,.54)',
+            },
+            cell: row => (
+                <div className="tb-odr-item">
+                    <td className="tb-odr-amount">
+                        <span className="amount">Rs. <NumberFormat value={Number(row.secAmount) > 0 ? Number(row.secAmount) : 0} displayType={'text'} thousandSeparator={true} /> </span>
+                    </td>
                 </div>
             ),
         },
         {
             name: 'Status',
             selector: 'status',
+            sortable: true,
             hide: 'sm',
             cell: row => (
                 <div className="tb-odr-item">
@@ -109,7 +140,9 @@ class Content extends Component {
                                 row.paidAmount < row.totalAmount ?
                                     <span className="badge badge-dot badge-warning">Pending</span>
                                     :
-                                    <span className="badge badge-dot badge-success">Complete</span>
+                                    Number(row.totalAmount) == 0 ?
+                                        <span className="badge badge-dot badge-success">Received</span> :
+                                        <span className="badge badge-dot badge-success">Complete</span>
                             }
                         </span>
                     </td>
@@ -117,6 +150,48 @@ class Content extends Component {
             )
         },
 
+        // {
+        //     name: 'Action',
+        //     selector: 'action',
+
+        //     cell: row => (
+        //         <div>
+        //             <div className="d-none d-md-inline">
+        //                 <Link to={{
+        //                     pathname: `/sale_invoice_id=${row._id}`,
+        //                 }} className="btn btn-dim btn-sm btn-primary">View</Link>
+        //             </div>
+        //         </div>
+        //     ),
+        // },
+        {
+            name: 'Mark Line Amt Complete',
+            selector: 'mark',
+            sortable: true,
+            cell: row => (
+                <div>
+                    {
+                        Number(row.totalAmount) - Number(row.paidAmount) > 0 ?
+                            <button className="btn btn-dim btn-sm btn-danger" onClick={() => { this.markLineAmountComplete(row) }}
+                                disabled={false}>Due</button>
+                            : <button className="btn btn-sm btn-info" disabled={true}>Paid</button>}
+                </div>
+            )
+        },
+        {
+            name: 'Mark Security Complete',
+            selector: 'security',
+            sortable: true,
+            cell: row => (
+                <div>
+                    {
+                        Number(row.secAmount) > 0 ?
+                            <button className="btn btn-dim btn-sm btn-danger" onClick={() => { this.markSecurityComplete(row) }}
+                                disabled={false}>Due </button>
+                            : <button className="btn btn-sm btn-info" disabled={true}>Paid</button>}
+                </div>
+            )
+        },
         {
             name: 'Action',
             selector: 'action',
@@ -127,18 +202,28 @@ class Content extends Component {
                         <Link to={{
                             pathname: `/sale_invoice_id=${row._id}`,
                         }} className="btn btn-dim btn-sm btn-primary">View</Link>
-
-                        <div onClick={() => { this.editPaidAmount(row) }} className="btn btn-icon btn-white btn-dim btn-lg  btn-primary py-n1 ml-3"><em className="iconicon ni ni-edit"></em></div>
                     </div>
-                    <Link to={{
-                        pathname: `/sale_invoice_id=${row._id}`,
-                    }} className="btn btn-pd-auto d-md-none"><em className="icon ni ni-chevron-right"></em></Link>
+                </div>
+            ),
+        },
+        {
+            // name: 'Edit',
+            // selector: 'edit',
+
+            cell: row => (
+                <div>
+                    <div className="d-none d-md-inline">
+                        {
+                            Number(row.totalAmount) > 0 ?
+                                <button className="btn btn-icon btn-white btn-dim btn-lg  btn-primary py-n1" onClick={() => { this.editPaidAmount(row) }}
+                                    disabled={false}><em className="iconicon ni ni-edit"></em></button>
+                                : <div className="btn btn-icon btn-white btn-dim btn-lg  btn-primary py-n1"><em className="iconicon ni ni-edit"></em></div>
+                        }
+                    </div>
                 </div>
             )
         },
-
     ];
-
 
     SampleExpandedComponent = ({ data }) => {
         return (
@@ -162,6 +247,11 @@ class Content extends Component {
                 <div className="row">
                     <div className="col">
                         <span className=" fw-medium">Total Paid Amount: </span> <span className="fw-normal">Rs. <NumberFormat value={Number(data.paidAmount) + (Number(this.calculateTotalSecurity(data)) - Number(data.secAmount))} displayType={'text'} thousandSeparator={true} /></span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <span className=" fw-medium">Line Amount Due: </span> <span className="fw-normal">Rs. {Number(data.totalAmount) - Number(data.paidAmount) > 0 ? Number(data.totalAmount) - Number(data.paidAmount) : 0}</span>
                     </div>
                 </div>
                 <div className="row">
@@ -240,34 +330,24 @@ class Content extends Component {
     }
 
 
-
-
     editPaidAmount = (sale) => {
         openModal(this);
         async function openModal(object) {
             const { value: formValues } = await Swal.fire({
-                title: 'Edit Sale',
+                title: 'Paid Amount',
                 input: 'number',
                 inputAttributes: {
-                    max: sale.totalAmount,
-                    min: 0,
+                    max: Number(sale.totalAmount),
+                    min: 1,
                     maxlength: 2
                 },
 
-                inputPlaceholder: 'Enter Paid Amount',
-                inputValue: sale.paidAmount,
+                inputPlaceholder: 0,
+                inputValue: Number(sale.totalAmount),
                 showCancelButton: true,
                 inputValidator: (value) => {
-                    if (!value) {
-                        return 'You need to write something!'
-                    }
-                    else if (value > sale.totalAmount)
-                        return 'Paid Amount must be less than total amount'
-                    else if (value < 0) {
-                        return 'Paid Amount must be greater or equal to zero'
-                    }
                     if (value) {
-                        sale.paidAmount = value;
+                        sale.paidAmount = Number(value);
                         object.props.updateSale(sale)
                     }
                 },
@@ -278,11 +358,84 @@ class Content extends Component {
                 focusConfirm: false,
             })
             if (formValues) {
-                Swal.fire("Paid Amount Changed", JSON.stringify(formValues))
+                Swal.fire("Sale Marked as Complete", JSON.stringify(formValues))
             }
         }
 
     }
+
+
+    markLineAmountComplete = (sale) => {
+        openModal(this);
+        async function openModal(object) {
+            const { value: formValues } = await Swal.fire({
+                title: 'Mark Line Complete',
+                input: 'number',
+                inputAttributes: {
+                    max: Number(sale.totalAmount) - Number(sale.paidAmount),
+                    min: 0,
+                    maxlength: 2
+                },
+
+                inputPlaceholder: 'Due Amount',
+                inputValue: Number(sale.totalAmount) - Number(sale.paidAmount),
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (value) {
+                        sale.paidAmount += Number(value);
+                        object.props.updateSale(sale)
+                    }
+                },
+                html:
+                    `<div><span className="fs-10">Sale # </span><span>${sale._id}</span></div >
+                    <div className="mt-3"><span className="fw-bold">Line Due Amount: </span><span> Rs. ${Number(sale.totalAmount) - Number(sale.paidAmount)}</span></div >
+                    <div className="fw-bold mt-2">Paid Amount</div>
+                    </div>`,
+                focusConfirm: false,
+            })
+            if (formValues) {
+                Swal.fire("Sale Marked as Complete", JSON.stringify(formValues))
+            }
+        }
+
+    }
+
+    markSecurityComplete = (sale) => {
+        console.log("Sale Object", sale)
+        openModal(this);
+        async function openModal(object) {
+            const { value: formValues } = await Swal.fire({
+                title: 'Mark Security Complete',
+                input: 'number',
+                inputAttributes: {
+                    max: Number(sale.secAmount),
+                    min: 0,
+                    maxlength: 2
+                },
+
+                inputPlaceholder: 'Due Security',
+                inputValue: Number(sale.secAmount),
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (value) {
+                        sale.secAmount -= Number(value);
+                        object.props.updateSale(sale)
+                    }
+                },
+                html:
+                    `<div><span className="fs-10">Sale # </span><span>${sale._id}</span></div >
+                    <div className="mt-3"><span className="fw-bold">Security Due Amount: </span><span> Rs. ${sale.secAmount}</span></div >
+                    <div className="fw-bold mt-2">Paid Amount</div>
+                    </div>`,
+                focusConfirm: false,
+            })
+            if (formValues) {
+                Swal.fire("Sale Marked as Complete", JSON.stringify(formValues))
+            }
+        }
+
+    }
+
     calculateTotalAmount = (row) => {
         if (row.productDetails.some(x => x.secRate > 0)) {
 
