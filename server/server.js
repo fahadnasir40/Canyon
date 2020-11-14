@@ -744,6 +744,7 @@ app.post('/api/addSale', auth2, (req, res) => {
             const session = await Sale.startSession();
             session.startTransaction();
             try {
+                console.log("Sale Add", productTotalQty, req.body.bottlesWithCustomer)
                 Customer.findByIdAndUpdate(sale.customerId, {
                     $inc: { customerLimit: productTotalQty, customerBottles: req.body.bottlesWithCustomer }
                 }, (error) => {
@@ -925,13 +926,28 @@ app.post('/api/sale_refund', auth, (req, res) => {
 
     let sale = req.body;
     let products = sale.productDetails;
+    let productTotalQty = 0;
+
+    products.forEach(element => {
+        if (element.secpaid)
+            productTotalQty += Number(element.secpaid);
+        linesQuantity += Number(element.dqty);
+    })
 
     if (sale.status !== 'Returned') {
         update(sale, products)
 
         async function update(sale, products) {
-            await products.forEach(item => {
 
+            await Customer.findByIdAndUpdate(sale.customerId, {
+                $inc: { customerLimit: -productTotalQty, customerBottles: -req.body.bottlesWithCustomer }
+            }, (error) => {
+                if (error) {
+                    console.log("Error update customer", error);
+                }
+            });
+
+            await products.forEach(item => {
                 const totalItems = item.dqty - item.rqty;
                 Product.findByIdAndUpdate(item._id, {
                     $inc: { stock: totalItems }
@@ -943,7 +959,7 @@ app.post('/api/sale_refund', auth, (req, res) => {
             })
             const trans = {
                 transaction_date: new Date(),
-                primary_quantity: 0,
+                primary_quantity: linesQuantity,
                 rate: sale.totalAmount,
                 transaction_source: 'Customer',
                 transaction_type: 'Sale',
