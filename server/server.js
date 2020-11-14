@@ -57,14 +57,13 @@ app.get('/api/getDashboard', auth, (req, res) => {
             if (err) return res.status(400).send(err);
             data = { recentOrders: [...doc] };
 
-            Transaction.find({ transaction_action: 'Sale Added', transaction_action: 'Sale Returned', status: 'active' }).select('rate createdAt').exec((err, trans) => {
+            Transaction.find({ transaction_action: { $in: ['Sale Added', 'Sale Returned'] }, status: 'active' }).select('rate createdAt transaction_action').exec((err, trans) => {
                 if (err) return res.status(400).send(err);
 
                 var totalSales = 0;
                 var lastMonthSale = 0;
                 var lastWeekSale = 0;
                 var prevLastWeekSale = 0;
-
                 trans.forEach(element => {
                     if (element.transaction_action === 'Sale Returned')
                         totalSales = totalSales - element.rate;
@@ -79,11 +78,12 @@ app.get('/api/getDashboard', auth, (req, res) => {
 
                 const last30DaysList = trans.filter(x => {
                     const elementDateTime = new Date(x.createdAt).getTime();
-                    if (elementDateTime <= currentDateTime && elementDateTime > last30DaysDateTime) {
-                        return true;
-                    }
-                    else
-                        return false
+                    if (x.transaction_action == 'Sale Added')
+                        if (elementDateTime <= currentDateTime && elementDateTime > last30DaysDateTime) {
+                            return true;
+                        }
+                        else
+                            return false
                 }).sort((a, b) => {
                     return new Date(b.createdAt) - new Date(a.createdAt);
                 });
@@ -97,16 +97,20 @@ app.get('/api/getDashboard', auth, (req, res) => {
 
                 const prevMonthList = trans.filter(x => {
                     const elementDateTime = new Date(x.createdAt).getTime();
-                    if (elementDateTime <= prev30DaysDateTime && elementDateTime > prevMonthFirstDateTime) {
-                        return true;
-                    }
+                    if (x.transaction_action == 'Sale Added')
+                        if (elementDateTime <= prev30DaysDateTime && elementDateTime > prevMonthFirstDateTime) {
+                            return true;
+                        }
                     return false
                 }).sort((a, b) => {
                     return new Date(b.createdAt) - new Date(a.createdAt);
                 });
 
                 prevMonthList.forEach(element => {
-                    lastMonthSale += element.rate;
+                    if (element.transaction_action === 'Sale Returned')
+                        lastMonthSale -= element.rate;
+                    else
+                        lastMonthSale -= element.rate;
                 })
 
                 const lastWeekList = trans.filter(x => {
@@ -130,11 +134,17 @@ app.get('/api/getDashboard', auth, (req, res) => {
                 });
 
                 lastWeekList.forEach(element => {
-                    lastWeekSale += element.rate;
+                    if (element.transaction_action === 'Sale Returned')
+                        lastWeekSale -= element.rate;
+                    else
+                        lastWeekSale += element.rate;
                 })
 
                 prevLastWeekList.forEach(element => {
-                    prevLastWeekSale += element.rate;
+                    if (element.transaction_action === 'Sale Returned')
+                        prevLastWeekSale += element.rate;
+                    else
+                        lastWeekSale += element.rate;
                 })
 
                 Customer.find({ status: 'active' }).countDocuments((err, count) => {
