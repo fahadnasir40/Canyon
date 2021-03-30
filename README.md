@@ -18,7 +18,7 @@
 
 # 6. 'npm run dev' // To run client and server
 
-# Run this command in mongodb command shell using canyon database
+# Run this command for creating new adminsitrator account in mongodb command shell using 'canyon' database
 
 # db.users.insert({name: "Test User",role: "administrator",email:"test@canyonpk.com",password:"$2b$10$zJCbqAaDGOkcIBr8b1Iihu4z0Xb/iMcY6.lvOrHEHPvJeHNf.9Wci"})
 
