@@ -2,7 +2,7 @@
 
  Pre Requisites
 
-Mongodb, NodeJs, Robomongo
+Mongodb, NodeJs, Robomongo and Nodemon
 
 # Installation
 
